@@ -13,7 +13,9 @@ import {
   Compass, 
   AlertCircle,
   ExternalLink,
-  MessageSquare
+  MessageSquare,
+  Smile,
+  Bold
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useSystemTasks } from '../context/SystemTasksContext';
@@ -69,7 +71,69 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
   const [inputVal, setInputVal] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const chatScrollRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const POPULAR_EMOJIS = ['😀', '😂', '😍', '🎉', '🚀', '✨', '💡', '🔥', '👍', '❤️', '👏', '🤖', '🌟', '📌', '💬', '🔍', '⚙️', '💻'];
+
+  const renderFormattedText = (text: string) => {
+    const parts = text.split(/(\*\*.*?\*\*)/g);
+    return parts.map((part, i) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return (
+          <strong key={i} className="font-bold underline decoration-[#0078d4]/40 decoration-1">
+            {part.slice(2, -2)}
+          </strong>
+        );
+      }
+      return part;
+    });
+  };
+
+  const handleToggleBold = () => {
+    const input = inputRef.current;
+    if (!input) {
+      setInputVal(prev => prev ? `${prev} **in đậm**` : '**in đậm**');
+      return;
+    }
+    const start = input.selectionStart ?? inputVal.length;
+    const end = input.selectionEnd ?? inputVal.length;
+    if (start !== end) {
+      const selected = inputVal.substring(start, end);
+      const newVal = inputVal.substring(0, start) + `**${selected}**` + inputVal.substring(end);
+      setInputVal(newVal);
+      setTimeout(() => {
+        input.setSelectionRange(start + 2, end + 2);
+        input.focus();
+      }, 20);
+    } else {
+      const newVal = inputVal.substring(0, start) + '**in đậm**' + inputVal.substring(end);
+      setInputVal(newVal);
+      setTimeout(() => {
+        input.setSelectionRange(start + 2, start + 8);
+        input.focus();
+      }, 20);
+    }
+  };
+
+  const handleInsertEmoji = (emoji: string) => {
+    const input = inputRef.current;
+    if (!input) {
+      setInputVal(prev => prev + emoji);
+    } else {
+      const start = input.selectionStart ?? inputVal.length;
+      const end = input.selectionEnd ?? inputVal.length;
+      const newVal = inputVal.substring(0, start) + emoji + inputVal.substring(end);
+      setInputVal(newVal);
+      setTimeout(() => {
+        input.setSelectionRange(start + emoji.length, start + emoji.length);
+        input.focus();
+      }, 20);
+    }
+    setShowEmojiPicker(false);
+  };
+
 
   // Auto-scroll to bottom of chat when new message arrives
   useEffect(() => {
@@ -308,7 +372,7 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
                       : 'bg-[#f3f4f6] dark:bg-[#282c31] text-[#111827] dark:text-[#f3f4f6] border border-black/5 dark:border-white/10 rounded-tl-none'
                   }`}
                 >
-                  <p className="whitespace-pre-wrap">{msg.text}</p>
+                  <p className="whitespace-pre-wrap">{renderFormattedText(msg.text)}</p>
                 </div>
 
                 <div className={`flex items-center gap-2 px-1 text-[10px] text-[#6b7280] dark:text-[#9ca3af] ${isUser ? 'justify-end' : 'justify-start'}`}>
@@ -363,8 +427,36 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
         </div>
       )}
 
-      {/* 5. Bottom Input Area */}
-      <div className="p-2.5 border-t border-black/10 dark:border-white/10 bg-[#fafafa] dark:bg-[#1a1d21] shrink-0 select-none">
+      {/* 5. Bottom Input Area with Emoji & Bold */}
+      <div className="p-2.5 border-t border-black/10 dark:border-white/10 bg-[#fafafa] dark:bg-[#1a1d21] shrink-0 select-none relative">
+        {/* Emoji Picker Popover */}
+        {showEmojiPicker && (
+          <div className="absolute bottom-14 left-3 z-50 p-2.5 rounded-xl bg-white dark:bg-[#202428] border border-black/15 dark:border-white/15 shadow-2xl animate-in fade-in slide-in-from-bottom-2">
+            <div className="flex items-center justify-between pb-1.5 mb-1.5 border-b border-black/10 dark:border-white/10 text-[11px] font-semibold text-neutral-600 dark:text-neutral-300">
+              <span>Chọn biểu cảm</span>
+              <button
+                type="button"
+                onClick={() => setShowEmojiPicker(false)}
+                className="text-neutral-400 hover:text-black dark:hover:text-white cursor-pointer px-1"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="grid grid-cols-6 gap-1 max-w-[240px]">
+              {POPULAR_EMOJIS.map((emoji) => (
+                <button
+                  key={emoji}
+                  type="button"
+                  onClick={() => handleInsertEmoji(emoji)}
+                  className="w-7 h-7 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 flex items-center justify-center text-base cursor-pointer transition-transform hover:scale-120"
+                >
+                  {emoji}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {!isCopilotRunning ? (
           <div className="flex items-center justify-between p-2 rounded-[6px] bg-rose-500/10 border border-rose-500/20 text-xs text-rose-600 dark:text-rose-400">
             <span>⚠️ Copilot Runtime Engine đã bị dừng trong Task Manager. Không thể gửi tin nhắn.</span>
@@ -382,15 +474,46 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
               e.preventDefault();
               handleSendMessage();
             }}
-            className="flex items-center gap-2"
+            className="flex items-center gap-1.5"
           >
+            {/* Format Tools */}
+            <div className="flex items-center gap-0.5 shrink-0">
+              <button
+                type="button"
+                onClick={handleToggleBold}
+                className="p-1.5 rounded-[4px] hover:bg-black/10 dark:hover:bg-white/10 text-[#6b7280] dark:text-neutral-300 transition-colors cursor-pointer"
+                title="In đậm (Ctrl+B / **text**)"
+              >
+                <Bold className="w-3.5 h-3.5 stroke-[2.75]" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowEmojiPicker(prev => !prev)}
+                className={`p-1.5 rounded-[4px] transition-colors cursor-pointer ${
+                  showEmojiPicker
+                    ? 'bg-[#0078d4]/10 text-[#0078d4] dark:text-[#4cc2ff]'
+                    : 'hover:bg-black/10 dark:hover:bg-white/10 text-[#6b7280] dark:text-neutral-300'
+                }`}
+                title="Chèn biểu cảm Emoji"
+              >
+                <Smile className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
             <div className="relative flex-1">
               <input
+                ref={inputRef}
                 type="text"
                 value={inputVal}
                 onChange={(e) => setInputVal(e.target.value)}
+                onKeyDown={(e) => {
+                  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
+                    e.preventDefault();
+                    handleToggleBold();
+                  }
+                }}
                 placeholder="Nhập câu hỏi hoặc yêu cầu cho Copilot..."
-                className="w-full h-9 pl-3 pr-8 rounded-[6px] bg-white dark:bg-[#282c31] border border-black/15 dark:border-white/15 text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#9ca3af] outline-none focus:border-[#0078d4] dark:focus:border-[#4cc2ff] transition-all"
+                className="w-full h-9 pl-3 pr-4 rounded-[6px] bg-white dark:bg-[#282c31] border border-black/15 dark:border-white/15 text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#9ca3af] outline-none focus:border-[#0078d4] dark:focus:border-[#4cc2ff] transition-all"
               />
             </div>
 

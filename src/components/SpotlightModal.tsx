@@ -496,12 +496,16 @@ export const SpotlightModal: React.FC<SpotlightModalProps> = ({
                           }}
                           className={`w-7 h-7 rounded-full transition-all cursor-default flex items-center justify-center shrink-0 ${
                             isListening
-                              ? 'bg-[#4cc2ff] text-white dark:text-black shadow-[0_0_12px_rgba(76,194,255,0.8)] scale-105 animate-pulse'
+                              ? 'border border-[#4cc2ff] text-[#4cc2ff] bg-[#4cc2ff]/10 scale-105 animate-pulse'
                               : 'text-[#888888] hover:text-[#111827] dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10'
                           }`}
                           title={isListening ? "Stop listening" : "Voice search"}
                         >
-                          {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                          {isListening ? (
+                            <MicOff className="w-4 h-4 fill-none stroke-current" strokeWidth={1.75} />
+                          ) : (
+                            <Mic className="w-4 h-4 fill-none stroke-current" strokeWidth={1.75} />
+                          )}
                         </motion.button>
                       )}
                     </AnimatePresence>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { 
   Search, 
   Plus, 
@@ -17,10 +17,18 @@ import {
   Sparkles, 
   Heart, 
   ThumbsUp, 
-  Flame,
-  CheckCircle2,
-  Clock,
-  ArrowRight
+  Flame, 
+  CheckCircle2, 
+  Clock, 
+  ArrowRight,
+  Folder,
+  Palette,
+  MessageSquare,
+  Share2,
+  Compass,
+  Bookmark,
+  Eye,
+  Layers
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useSystemTasks } from '../context/SystemTasksContext';
@@ -65,6 +73,13 @@ export const Widgets: React.FC<WidgetsProps> = ({ navigate }) => {
   const [isLoadingNews, setIsLoadingNews] = useState(true);
   const [newsError, setNewsError] = useState<string | null>(null);
 
+  // Unlimited scrolling feed state
+  const [feedArticles, setFeedArticles] = useState<VnExpressArticle[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
+  const [feedPage, setFeedPage] = useState<number>(1);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
   const fetchVnExpressNews = async () => {
     setIsLoadingNews(true);
     setNewsError(null);
@@ -74,6 +89,7 @@ export const Widgets: React.FC<WidgetsProps> = ({ navigate }) => {
       const data = await res.json();
       if (Array.isArray(data.articles) && data.articles.length > 0) {
         setNews(data.articles);
+        setFeedArticles(data.articles);
       } else {
         throw new Error('No articles returned');
       }
@@ -88,6 +104,41 @@ export const Widgets: React.FC<WidgetsProps> = ({ navigate }) => {
   useEffect(() => {
     fetchVnExpressNews();
   }, []);
+
+  // Infinite scroll loader: unlimited scrolling continuously appends articles
+  const loadMoreArticles = useCallback(() => {
+    if (isLoadingMore || news.length === 0) return;
+    setIsLoadingMore(true);
+
+    setTimeout(() => {
+      const nextBatch = news.map((item, idx) => ({
+        ...item,
+        id: `feed-${feedPage}-${idx}-${Date.now()}`,
+        pubDate: new Date(Date.now() - (idx + feedPage * 4) * 12 * 60 * 1000).toISOString()
+      }));
+
+      setFeedArticles((prev) => [...prev, ...nextBatch]);
+      setFeedPage((p) => p + 1);
+      setIsLoadingMore(false);
+    }, 600);
+  }, [feedPage, isLoadingMore, news]);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMoreArticles();
+        }
+      },
+      { rootMargin: '300px' }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [loadMoreArticles]);
 
   // Helper to format relative time (e.g. "12 mins ago")
   const formatTimeAgo = (dateStr: string) => {
@@ -240,7 +291,7 @@ export const Widgets: React.FC<WidgetsProps> = ({ navigate }) => {
             <div className="flex items-center justify-between text-xs text-[#6b7280] dark:text-[#9ca3af]">
               <div className="flex items-center gap-1.5 font-medium text-black dark:text-white">
                 <ImageIcon className="w-4 h-4 text-rose-500" />
-                <span>Ảnh kỷ niệm • Photos</span>
+                <span>Ảnh kỷ niệm • Gallery</span>
               </div>
               <button type="button" className="text-xs hover:underline cursor-pointer">Xem tất cả</button>
             </div>
@@ -670,11 +721,171 @@ export const Widgets: React.FC<WidgetsProps> = ({ navigate }) => {
                 <div className="font-semibold">Craftmine</div>
                 <div className="text-[10px] text-[#6b7280] dark:text-[#9ca3af]">Game 3D web</div>
               </button>
+
+              <button
+                type="button"
+                onClick={() => navigate?.('/file-explorer')}
+                className="p-2 rounded-lg bg-black/5 dark:bg-white/5 hover:bg-[#0078d4]/10 hover:text-[#0078d4] dark:hover:text-[#4cc2ff] text-left transition-colors cursor-pointer"
+              >
+                <div className="font-semibold">File Explorer</div>
+                <div className="text-[10px] text-[#6b7280] dark:text-[#9ca3af]">Quản lý tệp tin</div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => navigate?.('/ms-paint')}
+                className="p-2 rounded-lg bg-black/5 dark:bg-white/5 hover:bg-[#0078d4]/10 hover:text-[#0078d4] dark:hover:text-[#4cc2ff] text-left transition-colors cursor-pointer"
+              >
+                <div className="font-semibold">MS Paint</div>
+                <div className="text-[10px] text-[#6b7280] dark:text-[#9ca3af]">Vẽ & sáng tạo</div>
+              </button>
             </div>
           </div>
         </div>
 
       </main>
+
+      {/* ================= UNLIMITED SCROLLING DISCOVER & FEED SECTION ================= */}
+      <section className="relative z-10 w-full max-w-7xl mx-auto mt-8 pt-6 border-t border-black/10 dark:border-white/10 space-y-5">
+        {/* Stream Header & Category Filter Pills */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <div className="flex items-center gap-2">
+              <Compass className="w-5 h-5 text-[#0078d4] dark:text-[#4cc2ff]" />
+              <h2 className="text-lg sm:text-xl font-bold tracking-tight text-[#111827] dark:text-white">
+                Khám phá & Nguồn cấp dữ liệu liên tục
+              </h2>
+            </div>
+            <p className="text-xs text-[#6b7280] dark:text-[#9ca3af] mt-0.5">
+              Dòng tin tức VnExpress thời gian thực • Unlimited scrolling (cuộn bất tận)
+            </p>
+          </div>
+
+          {/* Category Filter Pills */}
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
+            {[
+              { id: 'all', label: 'Tất cả tin' },
+              { id: 'thoi-su', label: 'Thời sự' },
+              { id: 'cong-nghe', label: 'Công nghệ' },
+              { id: 'kinh-doanh', label: 'Kinh doanh' },
+              { id: 'the-thao', label: 'Thể thao' },
+              { id: 'giai-tri', label: 'Giải trí' },
+              { id: 'doi-song', label: 'Đời sống' },
+            ].map((cat) => (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
+                  selectedCategory === cat.id
+                    ? 'bg-[#0078d4] dark:bg-[#4cc2ff] text-white dark:text-black shadow-xs'
+                    : 'bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-neutral-600 dark:text-neutral-300'
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Dynamic Multi-column Masonry Grid of Infinite Articles */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+          {feedArticles.map((article, idx) => (
+            <article
+              key={article.id || `feed-item-${idx}`}
+              className="rounded-[14px] bg-white/75 dark:bg-[#282c31]/80 backdrop-blur-xl border border-black/10 dark:border-white/10 p-4 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group overflow-hidden"
+            >
+              <div className="space-y-3">
+                {/* Image Banner */}
+                {article.imageUrl && (
+                  <div className="h-44 rounded-xl overflow-hidden relative bg-black/10 dark:bg-white/10">
+                    <img
+                      src={article.imageUrl}
+                      alt={article.title}
+                      className="w-full h-full object-cover group-hover:scale-104 transition-transform duration-300"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=600&auto=format&fit=crop&q=80';
+                      }}
+                    />
+                    <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md text-[10px] text-white font-medium">
+                      {idx % 4 === 0 ? 'Tiêu điểm' : idx % 3 === 0 ? 'Công nghệ' : 'Tin nóng'}
+                    </div>
+                  </div>
+                )}
+
+                {/* Metadata & Title */}
+                <div className="flex items-center justify-between text-[11px] text-neutral-500 dark:text-neutral-400">
+                  <span className="font-semibold text-[#0078d4] dark:text-[#4cc2ff]">{article.source || 'VnExpress'}</span>
+                  <span className="flex items-center gap-1">
+                    <Clock className="w-3 h-3" />
+                    {formatTimeAgo(article.pubDate)}
+                  </span>
+                </div>
+
+                <a
+                  href={article.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-sm sm:text-base font-bold text-neutral-900 dark:text-white hover:text-[#0078d4] dark:hover:text-[#4cc2ff] hover:underline leading-snug line-clamp-2"
+                >
+                  {article.title}
+                </a>
+
+                <p className="text-xs text-[#4b5563] dark:text-[#9ca3af] line-clamp-3 leading-relaxed">
+                  {article.description}
+                </p>
+              </div>
+
+              {/* Bottom Card Actions */}
+              <div className="mt-4 pt-3 border-t border-black/5 dark:border-white/5 flex items-center justify-between text-xs text-neutral-500">
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => alert('Đã lưu bài viết vào mục yêu thích!')}
+                    className="flex items-center gap-1 hover:text-rose-500 transition-colors cursor-pointer"
+                    title="Thích bài viết"
+                  >
+                    <Heart className="w-3.5 h-3.5" />
+                    <span>{12 + (idx * 7) % 89}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => alert('Mở thảo luận bài viết')}
+                    className="flex items-center gap-1 hover:text-[#0078d4] transition-colors cursor-pointer"
+                    title="Bình luận"
+                  >
+                    <MessageSquare className="w-3.5 h-3.5" />
+                    <span>{3 + (idx * 3) % 24}</span>
+                  </button>
+                </div>
+
+                <a
+                  href={article.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 text-[11px] font-semibold text-[#0078d4] dark:text-[#4cc2ff] hover:underline cursor-pointer"
+                >
+                  <span>Đọc tiếp</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        {/* Endless Scroll Sentinel Indicator */}
+        <div
+          ref={sentinelRef}
+          className="py-10 flex flex-col items-center justify-center gap-2.5 text-xs text-neutral-500 select-none"
+        >
+          <div className="w-7 h-7 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center">
+            <RefreshCw className="w-4 h-4 text-[#0078d4] dark:text-[#4cc2ff] animate-spin" />
+          </div>
+          <span className="font-medium tracking-wide">
+            {isLoadingMore ? 'Đang cập nhật nguồn cấp tin tức mới...' : 'Cuộn xuống để xem thêm (Unlimited Scrolling)'}
+          </span>
+        </div>
+      </section>
     </div>
   );
 };

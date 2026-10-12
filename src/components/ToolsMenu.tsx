@@ -18,7 +18,7 @@ import {
   Wrench,
   FileText
 } from 'lucide-react';
-import { FluentNotesIcon, FluentSearchIcon } from './FluentIcons';
+import { FluentNotesIcon, FluentSearchIcon, FluentFileExplorerIcon, FluentPaintIcon, FluentPhotosIcon, FluentEdgeIcon, FluentCameraIcon } from './FluentIcons';
 import { Channel, NewsArticle } from '../types';
 import { useFavorites } from '../hooks/useFavorites';
 import { useSettings } from '../hooks/useSettings';
@@ -682,6 +682,96 @@ export const ToolsMenu: React.FC<ToolsMenuProps> = ({
                   <span className="truncate">Notes</span>
                 </div>
                 <span className="text-[10px] px-1.5 py-0.5 rounded-[2px] bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-medium">Ghi chú</span>
+              </button>
+
+              {/* Microsoft Edge */}
+              <button
+                id="tool-edge"
+                type="button"
+                onClick={() => {
+                  setIsOpen(false);
+                  onNavigate('/edge');
+                }}
+                className="fluent-reveal-item w-full h-[34px] px-2.5 rounded-[4px] flex items-center justify-between text-[13px] font-normal transition-colors text-left cursor-default text-[#1b1b1b] dark:text-[#f3f3f3] hover:bg-black/5 dark:hover:bg-white/[0.08] active:bg-black/10 dark:active:bg-white/[0.05]"
+                {...revealProps}
+              >
+                <div className="flex items-center gap-2.5 truncate">
+                  <FluentEdgeIcon className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
+                  <span className="truncate">Microsoft Edge</span>
+                </div>
+                <span className="text-[10px] px-1.5 py-0.5 rounded-[2px] bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-medium">Trình duyệt</span>
+              </button>
+
+              {/* File Explorer */}
+              <button
+                id="tool-file-explorer"
+                type="button"
+                onClick={() => {
+                  setIsOpen(false);
+                  onNavigate('/file-explorer');
+                }}
+                className="fluent-reveal-item w-full h-[34px] px-2.5 rounded-[4px] flex items-center justify-between text-[13px] font-normal transition-colors text-left cursor-default text-[#1b1b1b] dark:text-[#f3f3f3] hover:bg-black/5 dark:hover:bg-white/[0.08] active:bg-black/10 dark:active:bg-white/[0.05]"
+                {...revealProps}
+              >
+                <div className="flex items-center gap-2.5 truncate">
+                  <FluentFileExplorerIcon className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
+                  <span className="truncate">File Explorer</span>
+                </div>
+                <span className="text-[10px] px-1.5 py-0.5 rounded-[2px] bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-medium">Tệp tin</span>
+              </button>
+
+              {/* Gallery (formerly Photos) */}
+              <button
+                id="tool-gallery"
+                type="button"
+                onClick={() => {
+                  setIsOpen(false);
+                  onNavigate('/photos');
+                }}
+                className="fluent-reveal-item w-full h-[34px] px-2.5 rounded-[4px] flex items-center justify-between text-[13px] font-normal transition-colors text-left cursor-default text-[#1b1b1b] dark:text-[#f3f3f3] hover:bg-black/5 dark:hover:bg-white/[0.08] active:bg-black/10 dark:active:bg-white/[0.05]"
+                {...revealProps}
+              >
+                <div className="flex items-center gap-2.5 truncate">
+                  <FluentPhotosIcon className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
+                  <span className="truncate">Gallery</span>
+                </div>
+                <span className="text-[10px] px-1.5 py-0.5 rounded-[2px] bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-medium">Ảnh & Video</span>
+              </button>
+
+              {/* Camera */}
+              <button
+                id="tool-camera"
+                type="button"
+                onClick={() => {
+                  setIsOpen(false);
+                  onNavigate('/camera');
+                }}
+                className="fluent-reveal-item w-full h-[34px] px-2.5 rounded-[4px] flex items-center justify-between text-[13px] font-normal transition-colors text-left cursor-default text-[#1b1b1b] dark:text-[#f3f3f3] hover:bg-black/5 dark:hover:bg-white/[0.08] active:bg-black/10 dark:active:bg-white/[0.05]"
+                {...revealProps}
+              >
+                <div className="flex items-center gap-2.5 truncate">
+                  <FluentCameraIcon className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
+                  <span className="truncate">Camera</span>
+                </div>
+                <span className="text-[10px] px-1.5 py-0.5 rounded-[2px] bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-medium">Chụp ảnh</span>
+              </button>
+
+              {/* MS Paint */}
+              <button
+                id="tool-ms-paint"
+                type="button"
+                onClick={() => {
+                  setIsOpen(false);
+                  onNavigate('/ms-paint');
+                }}
+                className="fluent-reveal-item w-full h-[34px] px-2.5 rounded-[4px] flex items-center justify-between text-[13px] font-normal transition-colors text-left cursor-default text-[#1b1b1b] dark:text-[#f3f3f3] hover:bg-black/5 dark:hover:bg-white/[0.08] active:bg-black/10 dark:active:bg-white/[0.05]"
+                {...revealProps}
+              >
+                <div className="flex items-center gap-2.5 truncate">
+                  <FluentPaintIcon className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
+                  <span className="truncate">MS Paint</span>
+                </div>
+                <span className="text-[10px] px-1.5 py-0.5 rounded-[2px] bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-medium">Vẽ tranh</span>
               </button>
             </div>
 

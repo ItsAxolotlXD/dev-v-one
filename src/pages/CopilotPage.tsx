@@ -11,12 +11,20 @@ import {
   ChevronRight,
   Tv,
   Newspaper,
-  Layers
+  Layers,
+  Smile,
+  Bold
 } from 'lucide-react';
 import { useSystemTasks } from '../context/SystemTasksContext';
 import { SpinningRing } from '../components/SpinningRing';
 
 export const COPILOT_ICON_SRC = 'https://upload.wikimedia.org/wikipedia/vi/a/aa/Microsoft_Copilot_Icon.svg';
+
+const POPULAR_EMOJIS = [
+  '😀', '😂', '😍', '🎉', '🚀', '✨', '💡', '🔥', 
+  '👍', '❤️', '👏', '🤖', '🌟', '📌', '💬', '🔍', 
+  '⚙️', '💻', '📱', '📝', '🇻🇳', '🎯', '💯', '☕'
+];
 
 interface ChatMessage {
   id: string;
@@ -37,7 +45,7 @@ export const CopilotPage: React.FC<CopilotPageProps> = ({ navigate }) => {
     {
       id: 'welcome-1',
       role: 'model',
-      text: 'Xin chào! Tôi là Copilot - trợ lý AI đồng hành của bạn trên V-One (Dev). Tôi có thể giúp bạn tìm kiếm kênh truyền hình, đọc và tóm tắt tin tức thời sự từ VnExpress, giải đáp thắc mắc hoặc hỗ trợ các công cụ văn phòng Notes & Sticky Notes. Bạn muốn tìm hiểu gì hôm nay?',
+      text: 'Xin chào! Tôi là **Copilot** - trợ lý AI đồng hành của bạn trên **V-One (Dev)**. Tôi có thể giúp bạn tìm kiếm kênh truyền hình, đọc và tóm tắt tin tức thời sự từ VnExpress, giải đáp thắc mắc hoặc hỗ trợ các công cụ văn phòng Notes & Sticky Notes. Bạn muốn tìm hiểu gì hôm nay? ✨',
       timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -46,8 +54,11 @@ export const CopilotPage: React.FC<CopilotPageProps> = ({ navigate }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [isListening, setIsListening] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const recognitionRef = useRef<any>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
 
   // Auto-scroll to bottom of messages
   useEffect(() => {
@@ -187,12 +198,73 @@ export const CopilotPage: React.FC<CopilotPageProps> = ({ navigate }) => {
     { label: 'Quản lý tiến trình trong Task Manager', query: 'Task Manager trong V-One (Dev) có những tiến trình gì và hoạt động ra sao?' },
   ];
 
+  // Helper to render bold markdown and formatting
+  const renderFormattedText = (text: string) => {
+    const parts = text.split(/(\*\*.*?\*\*)/g);
+    return parts.map((part, i) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return (
+          <strong key={i} className="font-bold underline decoration-[#0078d4]/40 decoration-1">
+            {part.slice(2, -2)}
+          </strong>
+        );
+      }
+      return part;
+    });
+  };
+
+  // Toggle bold formatting
+  const handleToggleBold = () => {
+    const input = inputRef.current;
+    if (!input) {
+      setInputVal(prev => prev ? `${prev} **in đậm**` : '**in đậm**');
+      return;
+    }
+    const start = input.selectionStart ?? inputVal.length;
+    const end = input.selectionEnd ?? inputVal.length;
+    if (start !== end) {
+      const selected = inputVal.substring(start, end);
+      const newVal = inputVal.substring(0, start) + `**${selected}**` + inputVal.substring(end);
+      setInputVal(newVal);
+      setTimeout(() => {
+        input.setSelectionRange(start + 2, end + 2);
+        input.focus();
+      }, 20);
+    } else {
+      const newVal = inputVal.substring(0, start) + '**in đậm**' + inputVal.substring(end);
+      setInputVal(newVal);
+      setTimeout(() => {
+        input.setSelectionRange(start + 2, start + 8);
+        input.focus();
+      }, 20);
+    }
+  };
+
+  // Insert emoji
+  const handleInsertEmoji = (emoji: string) => {
+    const input = inputRef.current;
+    if (!input) {
+      setInputVal(prev => prev + emoji);
+    } else {
+      const start = input.selectionStart ?? inputVal.length;
+      const end = input.selectionEnd ?? inputVal.length;
+      const newVal = inputVal.substring(0, start) + emoji + inputVal.substring(end);
+      setInputVal(newVal);
+      setTimeout(() => {
+        input.setSelectionRange(start + emoji.length, start + emoji.length);
+        input.focus();
+      }, 20);
+    }
+    setShowEmojiPicker(false);
+  };
+
+
   return (
-    <div className="w-full min-h-screen bg-transparent text-[#111827] dark:text-[#f3f4f6] flex flex-col p-3 sm:p-6 md:p-8 select-none font-sans">
+    <div className="w-full h-[calc(100vh-3.5rem)] bg-transparent text-[#111827] dark:text-[#f3f4f6] flex flex-col p-3 sm:px-6 sm:pt-4 sm:pb-3 select-none font-sans overflow-hidden">
       {/* 1. Header Banner */}
-      <div className="max-w-4xl w-full mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-black/10 dark:border-white/10 shrink-0">
+      <div className="max-w-4xl w-full mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-black/10 dark:border-white/10 shrink-0">
         <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-black/5 dark:bg-white/10 flex items-center justify-center p-2 shrink-0 border border-black/10 dark:border-white/15 shadow-xs">
+          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-black/5 dark:bg-white/10 flex items-center justify-center p-2 shrink-0 border border-black/10 dark:border-white/15 shadow-xs">
             <img
               src={COPILOT_ICON_SRC}
               alt="Microsoft Copilot"
@@ -234,25 +306,25 @@ export const CopilotPage: React.FC<CopilotPageProps> = ({ navigate }) => {
 
       {/* 2. Warning Banner if Copilot Runtime is Terminated */}
       {!isCopilotRunning && (
-        <div className="max-w-4xl w-full mx-auto my-4 p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-between gap-3 text-rose-700 dark:text-rose-300">
-          <div className="flex items-center gap-3">
-            <AlertTriangle className="w-5 h-5 shrink-0 text-rose-600 dark:text-rose-400" />
-            <div className="text-xs sm:text-sm">
-              <strong className="font-semibold">Copilot Runtime Engine đã bị dừng</strong> trong Task Manager. Bạn không thể gửi câu hỏi hoặc trò chuyện cho đến khi khởi động lại tiến trình.
+        <div className="max-w-4xl w-full mx-auto my-2 p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-between gap-3 text-rose-700 dark:text-rose-300 shrink-0">
+          <div className="flex items-center gap-2.5">
+            <AlertTriangle className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400" />
+            <div className="text-xs">
+              <strong className="font-semibold">Copilot Runtime Engine đã bị dừng</strong> trong Task Manager.
             </div>
           </div>
           <button
             type="button"
             onClick={() => restartTask('task-copilot')}
-            className="px-3.5 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs transition-colors shrink-0 cursor-pointer shadow-xs"
+            className="px-3 py-1 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs transition-colors shrink-0 cursor-pointer shadow-xs"
           >
             Khởi động lại Runtime
           </button>
         </div>
       )}
 
-      {/* 3. Messages Chat Area */}
-      <div className="max-w-4xl w-full mx-auto flex-1 flex flex-col my-4 select-text overflow-y-auto space-y-4 pr-1 min-h-[360px]">
+      {/* 3. Messages Chat Area (Internal scroll, does not cause input to scroll) */}
+      <div className="max-w-4xl w-full mx-auto flex-1 flex flex-col my-2 select-text overflow-y-auto space-y-4 pr-1 min-h-0">
         {messages.map((msg) => {
           const isUser = msg.role === 'user';
           return (
@@ -283,7 +355,7 @@ export const CopilotPage: React.FC<CopilotPageProps> = ({ navigate }) => {
                       : 'bg-white/80 dark:bg-[#22252a]/80 border border-black/10 dark:border-white/10 text-[#111827] dark:text-[#f3f4f6] backdrop-blur-md rounded-tl-xs'
                   }`}
                 >
-                  <p className="whitespace-pre-line break-words">{msg.text}</p>
+                  <p className="whitespace-pre-line break-words">{renderFormattedText(msg.text)}</p>
                 </div>
 
                 <div className={`flex items-center gap-2 px-1 text-[10px] text-neutral-400 ${isUser ? 'justify-end' : 'justify-start'}`}>
@@ -331,7 +403,7 @@ export const CopilotPage: React.FC<CopilotPageProps> = ({ navigate }) => {
 
       {/* 4. Suggested Prompts Chips */}
       {messages.length <= 2 && (
-        <div className="max-w-4xl w-full mx-auto mb-3 flex items-center gap-2 flex-wrap shrink-0">
+        <div className="max-w-4xl w-full mx-auto mb-2 flex items-center gap-2 flex-wrap shrink-0">
           <div className="text-[11px] font-semibold text-neutral-500 flex items-center gap-1 mr-1">
             <Sparkles className="w-3.5 h-3.5 text-[#0078d4] dark:text-[#4cc2ff]" />
             <span>Gợi ý:</span>
@@ -351,58 +423,128 @@ export const CopilotPage: React.FC<CopilotPageProps> = ({ navigate }) => {
         </div>
       )}
 
-      {/* 5. Bottom Input Area */}
-      <div className="max-w-4xl w-full mx-auto shrink-0 select-none">
+      {/* 5. Bottom Pinned Input Area: styled like Let's chat Copilot with Emoji & Bold */}
+      <div className="max-w-4xl w-full mx-auto shrink-0 select-none pt-2 border-t border-black/10 dark:border-white/10 relative">
+        {/* Emoji Picker Popover */}
+        {showEmojiPicker && (
+          <div className="absolute bottom-12 left-2 z-50 p-2.5 rounded-xl bg-white dark:bg-[#202428] border border-black/15 dark:border-white/15 shadow-2xl animate-in fade-in slide-in-from-bottom-2">
+            <div className="flex items-center justify-between pb-1.5 mb-1.5 border-b border-black/10 dark:border-white/10 text-[11px] font-semibold text-neutral-600 dark:text-neutral-300">
+              <span>Biểu tượng cảm xúc (Emoji)</span>
+              <button
+                type="button"
+                onClick={() => setShowEmojiPicker(false)}
+                className="text-neutral-400 hover:text-black dark:hover:text-white cursor-pointer px-1"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="grid grid-cols-6 sm:grid-cols-8 gap-1 max-w-[280px]">
+              {POPULAR_EMOJIS.map((emoji) => (
+                <button
+                  key={emoji}
+                  type="button"
+                  onClick={() => handleInsertEmoji(emoji)}
+                  className="w-8 h-8 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 flex items-center justify-center text-lg cursor-pointer transition-transform hover:scale-120"
+                >
+                  {emoji}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         <form
           onSubmit={(e) => {
             e.preventDefault();
             handleSendMessage();
           }}
-          className="relative flex items-center bg-white dark:bg-[#22252a] rounded-xl border border-black/15 dark:border-white/15 shadow-[0_4px_16px_rgba(0,0,0,0.06)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.3)] p-1.5 focus-within:ring-2 focus-within:ring-[#0078d4]/40 transition-all"
+          className="group relative w-full h-10 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-2.5 gap-2 rounded-[6px] transition-all focus-within:ring-1 focus-within:ring-[#0078d4] dark:focus-within:ring-[#4cc2ff] focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]"
         >
-          <button
-            type="button"
-            onClick={toggleListening}
-            title={isListening ? 'Dừng lắng nghe' : 'Nói với Copilot'}
-            className={`w-9 h-9 rounded-lg flex items-center justify-center transition-colors cursor-pointer shrink-0 ${
-              isListening 
-                ? 'bg-rose-500 text-white animate-pulse'
-                : 'text-neutral-500 hover:text-neutral-800 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10'
-            }`}
-          >
-            {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-          </button>
+          {/* Left Text Format Tools: Bold & Emoji */}
+          <div className="flex items-center gap-0.5 shrink-0">
+            <button
+              type="button"
+              onClick={handleToggleBold}
+              className="p-1.5 rounded-[4px] hover:bg-black/10 dark:hover:bg-white/10 text-[#6b7280] dark:text-neutral-300 transition-colors cursor-pointer flex items-center justify-center font-bold"
+              title="In đậm chữ (Ctrl+B / **in đậm**)"
+            >
+              <Bold className="w-3.5 h-3.5 stroke-[2.75]" />
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowEmojiPicker(prev => !prev)}
+              className={`p-1.5 rounded-[4px] transition-colors cursor-pointer flex items-center justify-center ${
+                showEmojiPicker
+                  ? 'bg-[#0078d4]/10 text-[#0078d4] dark:text-[#4cc2ff]'
+                  : 'hover:bg-black/10 dark:hover:bg-white/10 text-[#6b7280] dark:text-neutral-300'
+              }`}
+              title="Chèn biểu cảm Emoji"
+            >
+              <Smile className="w-3.5 h-3.5" />
+            </button>
+          </div>
 
+          <div className="w-[1px] h-4 bg-black/10 dark:bg-white/10 shrink-0" />
+
+          {/* Main Input Text */}
           <input
+            ref={inputRef}
             type="text"
             value={inputVal}
             onChange={(e) => setInputVal(e.target.value)}
+            onKeyDown={(e) => {
+              if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
+                e.preventDefault();
+                handleToggleBold();
+              }
+            }}
             disabled={!isCopilotRunning}
             placeholder={
               !isCopilotRunning
                 ? 'Copilot Runtime Engine đã bị dừng trong Task Manager'
                 : isListening
                 ? 'Đang nghe... Hãy nói yêu cầu của bạn'
-                : "Hỏi Copilot bất cứ điều gì (tin tức, kênh TV, ghi chú...)"
+                : 'Hỏi Copilot bất cứ điều gì (tin tức, kênh TV, ghi chú...)'
             }
-            className="flex-1 bg-transparent px-3 py-2 text-xs sm:text-[13.5px] text-[#111827] dark:text-white placeholder-neutral-400 outline-none border-none"
+            className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#9ca3af] outline-none border-none py-1 pr-16"
           />
 
-          <button
-            type="submit"
-            disabled={!isCopilotRunning || !inputVal.trim() || isLoading}
-            className={`w-9 h-9 rounded-lg flex items-center justify-center transition-colors cursor-pointer shrink-0 ${
-              !isCopilotRunning || !inputVal.trim() || isLoading
-                ? 'opacity-30 cursor-not-allowed text-neutral-400'
-                : 'bg-[#0078d4] dark:bg-[#4cc2ff] text-white dark:text-black hover:opacity-90 shadow-xs'
-            }`}
-            title="Gửi câu hỏi"
-          >
-            <Send className="w-4 h-4" />
-          </button>
+          {/* Right Action Icons matching Let's chat Copilot with outline mic */}
+          <div className="absolute right-1.5 flex items-center gap-1">
+            <button
+              type="button"
+              onClick={toggleListening}
+              title={isListening ? 'Dừng lắng nghe' : 'Nói với Copilot'}
+              className={`p-1.5 rounded-full transition-colors cursor-pointer flex items-center justify-center ${
+                isListening
+                  ? 'border border-rose-500 text-rose-500 bg-rose-500/10 animate-pulse'
+                  : 'text-[#71717a] dark:text-neutral-300 hover:text-[#0078d4] dark:hover:text-[#4cc2ff] hover:bg-black/5 dark:hover:bg-white/10'
+              }`}
+            >
+              {isListening ? (
+                <MicOff className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth={1.75} />
+              ) : (
+                <Mic className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth={1.75} />
+              )}
+            </button>
+
+            <button
+              type="submit"
+              disabled={!isCopilotRunning || !inputVal.trim() || isLoading}
+              className={`p-1.5 rounded-[4px] transition-colors cursor-pointer flex items-center justify-center ${
+                !isCopilotRunning || !inputVal.trim() || isLoading
+                  ? 'opacity-30 cursor-not-allowed text-neutral-400'
+                  : 'text-[#0078d4] dark:text-[#4cc2ff] hover:bg-[#0078d4]/10'
+              }`}
+              title="Gửi câu hỏi"
+            >
+              <Send className="w-3.5 h-3.5" />
+            </button>
+          </div>
         </form>
 
-        <div className="flex items-center justify-between text-[11px] text-neutral-400 px-2 pt-2">
+
+        <div className="flex items-center justify-between text-[11px] text-neutral-400 px-2 pt-1.5 pb-0.5">
           <span>Copilot được tiếp sức bởi Google Gemini AI & VnExpress Real-time Data</span>
           <div className="flex items-center gap-3">
             {navigate && (

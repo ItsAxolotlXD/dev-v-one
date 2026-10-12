@@ -34,6 +34,11 @@ import { Updates } from './pages/Updates';
 import { TaskManager } from './pages/TaskManager';
 import { Widgets } from './pages/Widgets';
 import { CopilotPage } from './pages/CopilotPage';
+import { FileExplorer } from './pages/FileExplorer';
+import { MSPaint } from './pages/MSPaint';
+import { PhotosApp } from './pages/PhotosApp';
+import { EdgeBrowser } from './pages/EdgeBrowser';
+import { CameraApp } from './pages/CameraApp';
 import { SpinningRing } from './components/SpinningRing';
 import { CHANNELS_DATA } from './data/channels';
 import { NEWS_DATA } from './data/news';
@@ -82,6 +87,12 @@ export default function App() {
   const tabLoadingTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
+    setIsTabLoading(true);
+    tabLoadingTimerRef.current = setTimeout(() => {
+      setIsTabLoading(false);
+      setTabLoadCount((c) => c + 1);
+    }, 1000);
+
     return () => {
       if (tabLoadingTimerRef.current) clearTimeout(tabLoadingTimerRef.current);
     };
@@ -278,21 +289,16 @@ export default function App() {
     // Scroll to top on navigation
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Page loading: displays a spinning ring for 1 second before finishing loading if enabled
+    // 1-second splash screen on entering a new tab
     if (isDifferentTab) {
       if (tabLoadingTimerRef.current) clearTimeout(tabLoadingTimerRef.current);
-      if (settings.pageLoading) {
-        setIsTabLoading(true);
-        tabLoadingTimerRef.current = setTimeout(() => {
-          setIsTabLoading(false);
-          setTabLoadCount((c) => c + 1);
-        }, 1000);
-      } else {
+      setIsTabLoading(true);
+      tabLoadingTimerRef.current = setTimeout(() => {
         setIsTabLoading(false);
         setTabLoadCount((c) => c + 1);
-      }
+      }, 1000);
     }
-  }, [channels, currentRoute, settings.pageLoading]);
+  }, [channels, currentRoute]);
 
   // Navigation handler
   const navigate = useCallback((path: string, state?: any) => {
@@ -410,22 +416,17 @@ export default function App() {
 
       if (isTabSwitch) {
         if (tabLoadingTimerRef.current) clearTimeout(tabLoadingTimerRef.current);
-        if (settings.pageLoading) {
-          setIsTabLoading(true);
-          tabLoadingTimerRef.current = setTimeout(() => {
-            setIsTabLoading(false);
-            setTabLoadCount((c) => c + 1);
-          }, 1000);
-        } else {
+        setIsTabLoading(true);
+        tabLoadingTimerRef.current = setTimeout(() => {
           setIsTabLoading(false);
           setTabLoadCount((c) => c + 1);
-        }
+        }, 1000);
       }
     };
 
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, [channels, currentRoute, hasChanges, triggerUnsavedTooltip, settings.pageLoading]);
+  }, [channels, currentRoute, hasChanges, triggerUnsavedTooltip]);
 
   // Handle page reload / unload when settings are unsaved
   useEffect(() => {
@@ -593,6 +594,25 @@ export default function App() {
 
       case '/widgets':
         return <Widgets navigate={navigate} />;
+
+      case '/files':
+      case '/file-explorer':
+        return <FileExplorer navigate={navigate} />;
+
+      case '/paint':
+      case '/ms-paint':
+        return <MSPaint navigate={navigate} />;
+
+      case '/photos':
+      case '/gallery':
+        return <PhotosApp navigate={navigate} />;
+
+      case '/edge':
+      case '/browser':
+        return <EdgeBrowser navigate={navigate} />;
+
+      case '/camera':
+        return <CameraApp navigate={navigate} />;
 
       case '/copilot':
         return <CopilotPage navigate={navigate} />;
@@ -790,7 +810,7 @@ export default function App() {
 
         {/* Dynamic Page Content with smooth slide-up transition - Bo cong 10px góc trên trái */}
         <main className={`main-tab-page flex-1 w-full mx-auto rounded-tl-[10px] rounded-tr-none rounded-br-none rounded-bl-none overflow-hidden bg-[#f9f9f9] dark:bg-[#282c31] ${
-          currentRoute === '/' || currentRoute === '/home' || isOfficeRoute || currentRoute === '/craftmine'
+          currentRoute === '/' || currentRoute === '/home' || isOfficeRoute || currentRoute === '/craftmine' || currentRoute === '/edge' || currentRoute === '/browser' || currentRoute === '/camera' || currentRoute === '/photos' || currentRoute === '/gallery' || currentRoute === '/paint' || currentRoute === '/ms-paint' || currentRoute === '/file-explorer' || currentRoute === '/files' || currentRoute === '/copilot'
             ? 'p-0 max-w-none pt-0' 
             : 'px-4 sm:px-6 md:px-8 py-5 max-w-7xl'
         } ${
@@ -801,7 +821,7 @@ export default function App() {
           {/* Dynamic Page Content: Slide up individual elements of the loaded tab, not the entire page as a block */}
           {isTabLoading ? (
             <div key={`tab-loading-${currentRoute}`} className="tab-loading-slide-up w-full flex-1 flex flex-col items-center justify-center min-h-[60vh] sm:min-h-[70vh]">
-              <TabLoadingScreen />
+              <TabLoadingScreen route={currentRoute} />
             </div>
           ) : (
             <div

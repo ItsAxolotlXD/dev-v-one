@@ -103,5 +103,67 @@ export const FluentWidgetsIcon: React.FC<{ className?: string; style?: React.CSS
   </svg>
 );
 
+export const FluentFileExplorerIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <path d="M2.5 5.5C2.5 4.39543 3.39543 3.5 4.5 3.5H9.17157C9.70201 3.5 10.2107 3.71071 10.5858 4.08579L12.5 6H19.5C20.6046 6 21.5 6.89543 21.5 8V18.5C21.5 19.6046 20.6046 20.5 19.5 20.5H4.5C3.39543 20.5 2.5 19.6046 2.5 18.5V5.5Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"/>
+    <path d="M2.5 9.5H21.5" stroke="currentColor" strokeWidth="1.6"/>
+    <path d="M6 13.5H10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+  </svg>
+);
 
+export const FluentPaintIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <path d="M12 2.5C6.75 2.5 2.5 6.75 2.5 12C2.5 15.48 4.45 18.51 7.33 20.1C7.82 20.37 8.44 20.18 8.63 19.65C8.83 19.11 8.69 18.5 8.37 18.04C7.97 17.48 7.75 16.8 7.75 16.05C7.75 14.35 9.13 12.98 10.83 12.98H12C16.14 12.98 19.5 9.62 19.5 5.48C19.5 3.83 18.17 2.5 16.52 2.5H12Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"/>
+    <circle cx="6.5" cy="11.5" r="1.25" fill="currentColor"/>
+    <circle cx="9.5" cy="7.5" r="1.25" fill="currentColor"/>
+    <circle cx="14.5" cy="6.5" r="1.25" fill="currentColor"/>
+    <path d="M17.5 11.5L21.5 15.5M16 21L19.5 17.5M16 21L14 21.5L14.5 19.5L18 16" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 
+export const FluentPhotosIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" strokeWidth="1.6"/>
+    <circle cx="8.5" cy="8.5" r="1.75" stroke="currentColor" strokeWidth="1.6"/>
+    <path d="M3.5 16.5L7.79 12.21C8.18 11.82 8.82 11.82 9.21 12.21L14.5 17.5M13.5 15.5L15.79 13.21C16.18 12.82 16.82 12.82 17.21 13.21L20.5 16.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+export const FluentPhotosColorIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-4 h-4', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <defs>
+      <linearGradient id="fluentPhotosGradient" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#0078D4" />
+        <stop offset="0.55" stopColor="#00B294" />
+        <stop offset="1" stopColor="#107C41" />
+      </linearGradient>
+      <radialGradient id="fluentPhotosSun" cx="7.5" cy="7.5" r="3.5" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#FFD800" />
+        <stop offset="1" stopColor="#FF8C00" />
+      </radialGradient>
+    </defs>
+    <rect x="2.5" y="2.5" width="19" height="19" rx="4" fill="url(#fluentPhotosGradient)" />
+    <circle cx="7.5" cy="7.5" r="2.2" fill="url(#fluentPhotosSun)" />
+    <path d="M3 18.5L8.5 13C9 12.5 9.8 12.5 10.3 13L15.5 18.5" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M12.5 16.5L14.8 14.2C15.3 13.7 16.1 13.7 16.6 14.2L21 18.5" stroke="#E1DFDD" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+export const FluentCameraIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <path d="M4 7C2.89543 7 2 7.89543 2 9V18C2 19.1046 2.89543 20 4 20H20C21.1046 20 22 19.1046 22 18V9C22 7.89543 21.1046 7 20 7H16.8284L15.4142 4.58579C15.0391 4.21071 14.5304 4 14 4H10C9.46957 4 8.96086 4.21071 8.58579 4.58579L7.17157 7H4Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"/>
+    <circle cx="12" cy="13.5" r="3.75" stroke="currentColor" strokeWidth="1.6"/>
+    <circle cx="18.5" cy="10" r="1" fill="currentColor"/>
+  </svg>
+);
+
+export const FluentEdgeIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <img
+    src="https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b8/Microsoft_Edge_logo_%282015%E2%80%932019%29.svg/960px-Microsoft_Edge_logo_%282015%E2%80%932019%29.svg.png?utm_source=vi.wikipedia.org&utm_campaign=index&utm_content=thumbnail"
+    alt="Microsoft Edge"
+    className={`fluent-edge-icon object-contain inline-block shrink-0 transition-[filter] select-none dark:brightness-0 dark:invert ${className}`}
+    style={style}
+    loading="eager"
+    draggable={false}
+  />
+);

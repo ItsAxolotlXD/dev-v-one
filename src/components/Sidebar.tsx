@@ -31,7 +31,12 @@ import {
   FluentCraftmineIcon,
   FluentUpdatesIcon,
   FluentTaskManagerIcon,
-  FluentWidgetsIcon
+  FluentWidgetsIcon,
+  FluentFileExplorerIcon,
+  FluentPaintIcon,
+  FluentPhotosIcon,
+  FluentEdgeIcon,
+  FluentCameraIcon
 } from './FluentIcons';
 import { useFavorites } from '../hooks/useFavorites';
 import { useSettings } from '../hooks/useSettings';
@@ -372,6 +377,48 @@ export const Sidebar: React.FC<SidebarProps> = ({
         route: '/news',
         icon: FluentArticlesIcon,
       },
+      {
+        id: 'widgets',
+        label: 'Widgets',
+        secondary: 'Widgets',
+        route: '/widgets',
+        icon: FluentWidgetsIcon,
+      },
+      {
+        id: 'edge',
+        label: 'Microsoft Edge',
+        secondary: 'Edge',
+        route: '/edge',
+        icon: FluentEdgeIcon,
+      },
+      {
+        id: 'file-explorer',
+        label: 'File Explorer',
+        secondary: 'Files',
+        route: '/file-explorer',
+        icon: FluentFileExplorerIcon,
+      },
+      {
+        id: 'photos',
+        label: 'Gallery',
+        secondary: 'Gallery',
+        route: '/photos',
+        icon: FluentPhotosIcon,
+      },
+      {
+        id: 'camera',
+        label: 'Camera',
+        secondary: 'Camera',
+        route: '/camera',
+        icon: FluentCameraIcon,
+      },
+      {
+        id: 'ms-paint',
+        label: 'Paint',
+        secondary: 'Paint',
+        route: '/ms-paint',
+        icon: FluentPaintIcon,
+      },
     ];
 
     if (settings.developerMode) {
@@ -396,6 +443,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
     if (route === '/notes' && (currentRoute === '/notes' || currentRoute === '/write' || currentRoute === '/present' || currentRoute === '/table')) return true;
     if (route === '/task-manager' && (currentRoute === '/task-manager' || currentRoute.startsWith('/task-manager'))) return true;
     if (route === '/widgets' && (currentRoute === '/widgets' || currentRoute.startsWith('/widgets'))) return true;
+    if ((route === '/file-explorer' || route === '/files') && (currentRoute === '/files' || currentRoute === '/file-explorer' || currentRoute.startsWith('/file-explorer'))) return true;
+    if ((route === '/ms-paint' || route === '/paint') && (currentRoute === '/paint' || currentRoute === '/ms-paint' || currentRoute.startsWith('/ms-paint'))) return true;
+    if (route === '/photos' && (currentRoute === '/photos' || currentRoute.startsWith('/photos'))) return true;
     if (route === '/craftmine' && currentRoute === '/craftmine') return true;
     if (route === '/settings' && (currentRoute === '/settings' || currentRoute.startsWith('/settings'))) return true;
     if (route === '/about' && (currentRoute === '/about' || currentRoute.startsWith('/about'))) return true;
@@ -533,6 +583,40 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <span>Notes</span>
           </div>
           <span className="text-[10px] px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-medium">Ghi chú</span>
+        </button>
+
+        {/* File Explorer */}
+        <button
+          type="button"
+          id="tool-file-explorer"
+          onClick={() => {
+            setIsToolsFlyoutOpen(false);
+            handleNavClick('/file-explorer');
+          }}
+          className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-pointer text-left"
+        >
+          <div className="flex items-center gap-2.5">
+            <FluentFileExplorerIcon className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
+            <span>File Explorer</span>
+          </div>
+          <span className="text-[10px] px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-medium">Tệp tin</span>
+        </button>
+
+        {/* MS Paint */}
+        <button
+          type="button"
+          id="tool-ms-paint"
+          onClick={() => {
+            setIsToolsFlyoutOpen(false);
+            handleNavClick('/ms-paint');
+          }}
+          className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-pointer text-left"
+        >
+          <div className="flex items-center gap-2.5">
+            <FluentPaintIcon className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
+            <span>MS Paint</span>
+          </div>
+          <span className="text-[10px] px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-medium">Vẽ tranh</span>
         </button>
 
         {/* Article contextual tools */}
@@ -833,7 +917,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </h2>
           </div>
 
-          {/* Copilot - First Item in Apps Section */}
+          {/* 1. Copilot */}
           <div className="shrink-0">
             <button
               type="button"
@@ -854,6 +938,48 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 className="w-5 h-5 shrink-0 object-contain"
               />
               <span className="truncate text-[13.5px]">Copilot</span>
+            </button>
+          </div>
+
+          {/* 2. Microsoft Edge */}
+          <div className="w-full">
+            <button
+              type="button"
+              id={isMobile ? 'mobile-nav-edge' : 'sidebar-nav-edge'}
+              data-nav-active={(currentRoute === '/edge' || currentRoute === '/browser' || currentRoute.startsWith('/edge')) ? 'true' : undefined}
+              onClick={() => handleNavClick('/edge')}
+              title="Microsoft Edge"
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                (currentRoute === '/edge' || currentRoute === '/browser' || currentRoute.startsWith('/edge'))
+                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-3.5 truncate">
+                <FluentEdgeIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <span className="truncate text-[13.5px]">Microsoft Edge</span>
+              </div>
+            </button>
+          </div>
+
+          {/* 3. File Explorer */}
+          <div className="w-full">
+            <button
+              type="button"
+              id={isMobile ? 'mobile-nav-file-explorer' : 'sidebar-nav-file-explorer'}
+              data-nav-active={(currentRoute === '/file-explorer' || currentRoute === '/files' || currentRoute.startsWith('/file-explorer')) ? 'true' : undefined}
+              onClick={() => handleNavClick('/file-explorer')}
+              title="File Explorer"
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                (currentRoute === '/file-explorer' || currentRoute === '/files' || currentRoute.startsWith('/file-explorer'))
+                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-3.5 truncate">
+                <FluentFileExplorerIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <span className="truncate text-[13.5px]">File Explorer</span>
+              </div>
             </button>
           </div>
 
@@ -943,7 +1069,78 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
           </div>
 
-          {/* 6. Task Manager */}
+          {/* 6. Gallery (formerly Photos) */}
+          <div className="w-full">
+            <button
+              type="button"
+              id={isMobile ? 'mobile-nav-photos' : 'sidebar-nav-photos'}
+              data-nav-active={(currentRoute === '/photos' || currentRoute === '/gallery' || currentRoute.startsWith('/photos') || currentRoute.startsWith('/gallery')) ? 'true' : undefined}
+              onClick={() => handleNavClick('/photos')}
+              title="Gallery"
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                (currentRoute === '/photos' || currentRoute === '/gallery' || currentRoute.startsWith('/photos') || currentRoute.startsWith('/gallery'))
+                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-3.5 truncate">
+                <FluentPhotosIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <span className="truncate text-[13.5px]">Gallery</span>
+              </div>
+            </button>
+          </div>
+
+          {/* 7. Camera */}
+          <div className="w-full">
+            <button
+              type="button"
+              id={isMobile ? 'mobile-nav-camera' : 'sidebar-nav-camera'}
+              data-nav-active={(currentRoute === '/camera' || currentRoute.startsWith('/camera')) ? 'true' : undefined}
+              onClick={() => handleNavClick('/camera')}
+              title="Camera"
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                (currentRoute === '/camera' || currentRoute.startsWith('/camera'))
+                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-3.5 truncate">
+                <FluentCameraIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <span className="truncate text-[13.5px]">Camera</span>
+              </div>
+            </button>
+          </div>
+
+          {/* 8. Paint */}
+          <div className="w-full">
+            <button
+              type="button"
+              id={isMobile ? 'mobile-nav-ms-paint' : 'sidebar-nav-ms-paint'}
+              data-nav-active={(currentRoute === '/ms-paint' || currentRoute === '/paint' || currentRoute.startsWith('/ms-paint')) ? 'true' : undefined}
+              onClick={() => handleNavClick('/ms-paint')}
+              title="Paint"
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                (currentRoute === '/ms-paint' || currentRoute === '/paint' || currentRoute.startsWith('/ms-paint'))
+                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-3.5 truncate">
+                <FluentPaintIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <span className="truncate text-[13.5px]">Paint</span>
+              </div>
+            </button>
+          </div>
+
+          {/* Divider & Category Heading: System */}
+          <div className="my-2 mx-1 h-[1px] bg-black/10 dark:bg-white/10" />
+          <div className="px-1.5 pt-0.5 pb-1 shrink-0">
+            <h2 className="text-black dark:text-[#a1a1aa] text-[11px] font-semibold tracking-wider uppercase select-none">
+              System
+            </h2>
+          </div>
+
+          {/* Task Manager */}
           <div className="w-full">
             <button
               type="button"
@@ -1198,7 +1395,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               {/* Divider: Apps */}
               <div className="w-6 h-[1px] bg-black/10 dark:bg-white/10 my-1" />
 
-              {/* Copilot Icon */}
+              {/* 1. Copilot Icon */}
               <button
                 type="button"
                 id="sidebar-collapsed-copilot"
@@ -1217,6 +1414,38 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   referrerPolicy="no-referrer"
                   className="w-5 h-5 object-contain"
                 />
+              </button>
+
+              {/* 2. Microsoft Edge Icon */}
+              <button
+                type="button"
+                id="sidebar-collapsed-edge"
+                data-nav-active={(currentRoute === '/edge' || currentRoute === '/browser' || currentRoute.startsWith('/edge')) ? 'true' : undefined}
+                onClick={() => handleNavClick('/edge')}
+                title="Microsoft Edge"
+                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  (currentRoute === '/edge' || currentRoute === '/browser' || currentRoute.startsWith('/edge'))
+                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                }`}
+              >
+                <FluentEdgeIcon className="w-5 h-5 text-black dark:text-white" />
+              </button>
+
+              {/* 3. File Explorer Icon */}
+              <button
+                type="button"
+                id="sidebar-collapsed-file-explorer"
+                data-nav-active={(currentRoute === '/file-explorer' || currentRoute === '/files' || currentRoute.startsWith('/file-explorer')) ? 'true' : undefined}
+                onClick={() => handleNavClick('/file-explorer')}
+                title="File Explorer"
+                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  (currentRoute === '/file-explorer' || currentRoute === '/files' || currentRoute.startsWith('/file-explorer'))
+                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                }`}
+              >
+                <FluentFileExplorerIcon className="w-5 h-5 text-black dark:text-white" />
               </button>
 
               {/* 4. Watch Icon */}
@@ -1251,7 +1480,58 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <FluentNotesIcon className="w-5 h-5 text-black dark:text-white" />
               </button>
 
-              {/* 6. Task Manager Icon */}
+              {/* 6. Gallery Icon */}
+              <button
+                type="button"
+                id="sidebar-collapsed-photos"
+                data-nav-active={(currentRoute === '/photos' || currentRoute === '/gallery' || currentRoute.startsWith('/photos') || currentRoute.startsWith('/gallery')) ? 'true' : undefined}
+                onClick={() => handleNavClick('/photos')}
+                title="Gallery"
+                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  (currentRoute === '/photos' || currentRoute === '/gallery' || currentRoute.startsWith('/photos') || currentRoute.startsWith('/gallery'))
+                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                }`}
+              >
+                <FluentPhotosIcon className="w-5 h-5 text-black dark:text-white" />
+              </button>
+
+              {/* 7. Camera Icon */}
+              <button
+                type="button"
+                id="sidebar-collapsed-camera"
+                data-nav-active={(currentRoute === '/camera' || currentRoute.startsWith('/camera')) ? 'true' : undefined}
+                onClick={() => handleNavClick('/camera')}
+                title="Camera"
+                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  (currentRoute === '/camera' || currentRoute.startsWith('/camera'))
+                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                }`}
+              >
+                <FluentCameraIcon className="w-5 h-5 text-black dark:text-white" />
+              </button>
+
+              {/* 8. Paint Icon */}
+              <button
+                type="button"
+                id="sidebar-collapsed-ms-paint"
+                data-nav-active={(currentRoute === '/ms-paint' || currentRoute === '/paint' || currentRoute.startsWith('/ms-paint')) ? 'true' : undefined}
+                onClick={() => handleNavClick('/ms-paint')}
+                title="Paint"
+                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  (currentRoute === '/ms-paint' || currentRoute === '/paint' || currentRoute.startsWith('/ms-paint'))
+                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                }`}
+              >
+                <FluentPaintIcon className="w-5 h-5 text-black dark:text-white" />
+              </button>
+
+              {/* Divider: System */}
+              <div className="w-6 h-[1px] bg-black/10 dark:bg-white/10 my-1" />
+
+              {/* Task Manager Icon */}
               <button
                 type="button"
                 id="sidebar-collapsed-taskmanager"

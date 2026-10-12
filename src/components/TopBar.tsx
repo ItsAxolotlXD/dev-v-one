@@ -470,18 +470,22 @@ export const TopBar: React.FC<TopBarProps> = ({
 
               {/* Right Action Icons: Microphone + Search / Clear */}
               <div className="absolute right-1.5 flex items-center gap-1">
-                {/* Microphone Icon Button */}
+                {/* Microphone Icon Button (Unfilled / Stroke only) */}
                 <button
                   type="button"
                   onClick={toggleListening}
                   title={isListening ? 'Dừng micro' : 'Nhận diện giọng nói với Copilot'}
                   className={`p-1 rounded-full transition-colors cursor-pointer flex items-center justify-center ${
                     isListening
-                      ? 'bg-rose-500 text-white animate-pulse'
+                      ? 'border border-rose-500 text-rose-500 bg-rose-500/10 animate-pulse'
                       : 'text-[#71717a] dark:text-neutral-300 hover:text-[#0078d4] dark:hover:text-[#4cc2ff] hover:bg-black/5 dark:hover:bg-white/10'
                   }`}
                 >
-                  {isListening ? <MicOff className="w-3.5 h-3.5" /> : <Mic className="w-3.5 h-3.5" />}
+                  {isListening ? (
+                    <MicOff className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth={1.75} />
+                  ) : (
+                    <Mic className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth={1.75} />
+                  )}
                 </button>
 
                 {searchQuery ? (

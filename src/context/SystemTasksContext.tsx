@@ -114,6 +114,76 @@ const INITIAL_SYSTEM_TASKS: SystemTask[] = [
     gpu: 4.6,
     pid: 7380,
     isCritical: false // nếu end task Widgets tab ko hoạt động
+  },
+  {
+    id: 'task-edge',
+    name: 'Microsoft Edge Browser',
+    description: 'Trình duyệt web nhân Chromium đa luồng và bảo mật',
+    category: 'Apps',
+    status: 'Running',
+    cpu: 3.5,
+    memory: 142.0,
+    disk: 1.8,
+    network: 860,
+    gpu: 14.2,
+    pid: 7920,
+    isCritical: false
+  },
+  {
+    id: 'task-file-explorer',
+    name: 'Windows File Explorer',
+    description: 'Trình quản lý tệp tin và lưu trữ hệ thống tệp Fluent',
+    category: 'Apps',
+    status: 'Running',
+    cpu: 1.1,
+    memory: 64.2,
+    disk: 1.2,
+    network: 20,
+    gpu: 1.2,
+    pid: 8120,
+    isCritical: false
+  },
+  {
+    id: 'task-photos',
+    name: 'Gallery Media Library',
+    description: 'Trình quản lý và lưu trữ thư viện hình ảnh và video Gallery',
+    category: 'Apps',
+    status: 'Running',
+    cpu: 2.1,
+    memory: 86.4,
+    disk: 2.1,
+    network: 320,
+    gpu: 8.4,
+    pid: 8990,
+    isCritical: false
+  },
+  {
+    id: 'task-camera',
+    name: 'Windows Camera Engine',
+    description: 'Bộ điều khiển phần cứng quang học và chụp ảnh trực tiếp',
+    category: 'Apps',
+    status: 'Running',
+    cpu: 2.8,
+    memory: 98.6,
+    disk: 1.4,
+    network: 0,
+    gpu: 16.5,
+    pid: 9140,
+    isCritical: false
+  },
+  {
+    id: 'task-ms-paint',
+    name: 'Microsoft Paint',
+    description: 'Ứng dụng vẽ và chỉnh sửa đồ họa đa năng',
+    category: 'Apps',
+    status: 'Running',
+    cpu: 1.8,
+    memory: 72.5,
+    disk: 0.4,
+    network: 0,
+    gpu: 6.8,
+    pid: 8460,
+    isCritical: false
   }
 ];
 

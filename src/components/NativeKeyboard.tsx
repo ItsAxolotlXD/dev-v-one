@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Delete, Smile, ArrowBigUp, X, Check, Globe, Keyboard, ClipboardList, Copy, Trash2, Search } from 'lucide-react';
+import { Delete, Smile, ArrowBigUp, X, Check, Globe, Keyboard, ClipboardList, Copy, Trash2, Search, Mic, MicOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useNativeKeyboard } from '../context/NativeKeyboardContext';
 import { useSettings } from '../hooks/useSettings';
@@ -890,7 +890,7 @@ export const NativeKeyboard: React.FC = () => {
             </div>
           </div>
 
-          {/* Right section: SF Symbol Microphone - Pure black icon */}
+          {/* Right section: Outline Microphone */}
           <div className="flex items-center gap-1">
             <button
               type="button"
@@ -902,23 +902,17 @@ export const NativeKeyboard: React.FC = () => {
               onClick={toggleMic}
               className={`p-1.5 rounded-full transition-colors cursor-default flex items-center justify-center ${
                 isMicListening
-                  ? 'bg-red-500/25 ring-2 ring-red-500/50'
-                  : 'hover:bg-black/10'
+                  ? 'border border-red-500 text-red-500 bg-red-500/10 animate-pulse'
+                  : 'hover:bg-black/10 text-neutral-800 dark:text-neutral-200'
               }`}
               title={isMicListening ? 'Đang nghe...' : 'Nhập bằng giọng nói'}
               aria-label="Microphone"
             >
-              <img
-                src={SF_MIC_ICON_URL}
-                alt="Mic"
-                className={`w-5 h-5 sm:w-5.5 sm:h-5.5 object-contain select-none pointer-events-none transition-opacity filter brightness-0 ${
-                  isMicListening ? 'opacity-100' : 'opacity-90 hover:opacity-100'
-                }`}
-                referrerPolicy="no-referrer"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = '/icons/sf-mic.png';
-                }}
-              />
+              {isMicListening ? (
+                <MicOff className="w-5 h-5 fill-none stroke-current" strokeWidth={1.75} />
+              ) : (
+                <Mic className="w-5 h-5 fill-none stroke-current" strokeWidth={1.75} />
+              )}
             </button>
           </div>
         </div>

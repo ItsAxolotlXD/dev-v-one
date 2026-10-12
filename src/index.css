@@ -374,6 +374,36 @@ html.light-mode [class*="FluentCraftmineIcon"] * {
   stroke: #000000 !important;
 }
 
+/* Microsoft Edge logo (2015-2019): Monochrome white in dark mode, normal in light mode */
+html:not(.light-mode) .fluent-edge-icon,
+html.dark .fluent-edge-icon {
+  filter: brightness(0) invert(1) !important;
+}
+html.light-mode .fluent-edge-icon {
+  filter: none !important;
+}
+
+/* Subtle zoom-in animation for tab splash screen icon */
+@keyframes splashIconZoomIn {
+  0% {
+    opacity: 0.2;
+    transform: scale(0.82);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.03);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.splash-icon-zoom-in {
+  animation: splashIconZoomIn 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
+}
+
 /* Tab Elements Slide-Up Animation: Sau loading state tab khi load các content sẽ có hiệu ứng slide up từng element (không slide cả trang) */
 @keyframes tabElementSlideUp {
   0% {
