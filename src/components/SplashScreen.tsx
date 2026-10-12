@@ -4,31 +4,38 @@ import { SpinningRing } from './SpinningRing';
 const LOGO_SRC = 'https://static.wikia.nocookie.net/ep-deo/images/d/d4/V-one-dev.png/revision/latest?cb=20261012151735';
 
 interface SplashScreenProps {
-  duration?: number; // duration in ms, default 3000 (3 seconds)
+  duration?: number; // duration in ms, default 700ms for fast startup
   onFinish?: () => void;
   subtitle?: string;
   isClosable?: boolean;
 }
 
 export const SplashScreen: React.FC<SplashScreenProps> = ({
-  duration = 3000,
+  duration = 700,
   onFinish,
   subtitle,
   isClosable = true
 }) => {
   const [isVisible, setIsVisible] = useState(true);
+  const [isFadingOut, setIsFadingOut] = useState(false);
   const [logoError, setLogoError] = useState(false);
+
+  const dismiss = () => {
+    setIsFadingOut(true);
+    setTimeout(() => {
+      setIsVisible(false);
+      onFinish?.();
+    }, 180);
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsVisible(false);
-      onFinish?.();
+      dismiss();
     }, duration);
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (isClosable && e.key === 'Escape') {
-        setIsVisible(false);
-        onFinish?.();
+      if (isClosable) {
+        dismiss();
       }
     };
 
@@ -38,14 +45,19 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
       clearTimeout(timer);
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [duration, onFinish, isClosable]);
+  }, [duration, isClosable]);
 
   if (!isVisible) return null;
 
   return (
     <div
       id="vplay-splash-screen"
-      className="fixed inset-0 z-[99999] bg-[#1b1f24] dark:bg-[#1b1f24] text-white dark:text-white flex flex-col items-center justify-center select-none transition-colors duration-200"
+      onClick={() => {
+        if (isClosable) dismiss();
+      }}
+      className={`fixed inset-0 z-[99999] bg-[#1b1f24] dark:bg-[#1b1f24] text-white dark:text-white flex flex-col items-center justify-center select-none transition-all duration-200 ${
+        isFadingOut ? 'opacity-0 pointer-events-none' : 'opacity-100'
+      } ${isClosable ? 'cursor-pointer' : ''}`}
     >
       {/* Splash content: logo, spinning ring and subtitle all centered together with enlarged gap */}
       <div className="flex flex-col items-center justify-center gap-12 sm:gap-16 text-center px-6 max-w-md w-full">

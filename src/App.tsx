@@ -91,7 +91,7 @@ export default function App() {
     tabLoadingTimerRef.current = setTimeout(() => {
       setIsTabLoading(false);
       setTabLoadCount((c) => c + 1);
-    }, 1000);
+    }, 400);
 
     return () => {
       if (tabLoadingTimerRef.current) clearTimeout(tabLoadingTimerRef.current);
@@ -941,13 +941,13 @@ export default function App() {
       {/* App Native Virtual Keyboard for Touch Devices */}
       <NativeKeyboard />
 
-      {/* Startup Splash Screen (3 seconds) */}
-      <SplashScreen duration={3000} onFinish={() => setIsSplashFinished(true)} />
+      {/* Startup Splash Screen (nhanh, mượt mà: 700ms) */}
+      <SplashScreen duration={700} onFinish={() => setIsSplashFinished(true)} />
 
-      {/* Update V-One Splash Screen (1 minute: 60s) */}
+      {/* Update V-One Splash Screen */}
       {isUpdating && (
         <SplashScreen
-          duration={60000}
+          duration={2500}
           subtitle="V-One (Dev) needs an update - Working on it"
           onFinish={() => setIsUpdating(false)}
         />
