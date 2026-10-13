@@ -18,7 +18,7 @@ import {
   Wrench,
   FileText
 } from 'lucide-react';
-import { FluentNotesIcon, FluentSearchIcon, FluentFileExplorerIcon, FluentPaintIcon, FluentPhotosIcon, FluentEdgeIcon, FluentCameraIcon } from './FluentIcons';
+import { FluentNotesIcon, FluentSearchIcon, FluentFileExplorerIcon, FluentPaintIcon, FluentPhotosIcon, FluentEdgeIcon, FluentCameraIcon, FluentDirectCutIcon, FluentSwiftBankIcon } from './FluentIcons';
 import { Channel, NewsArticle } from '../types';
 import { useFavorites } from '../hooks/useFavorites';
 import { useSettings } from '../hooks/useSettings';
@@ -772,6 +772,42 @@ export const ToolsMenu: React.FC<ToolsMenuProps> = ({
                   <span className="truncate">MS Paint</span>
                 </div>
                 <span className="text-[10px] px-1.5 py-0.5 rounded-[2px] bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-medium">Vẽ tranh</span>
+              </button>
+
+              {/* Direct Cut (Pro Video Editor) */}
+              <button
+                id="tool-direct-cut"
+                type="button"
+                onClick={() => {
+                  setIsOpen(false);
+                  onNavigate('/direct-cut');
+                }}
+                className="fluent-reveal-item w-full h-[34px] px-2.5 rounded-[4px] flex items-center justify-between text-[13px] font-normal transition-colors text-left cursor-default text-[#1b1b1b] dark:text-[#f3f3f3] hover:bg-black/5 dark:hover:bg-white/[0.08] active:bg-black/10 dark:active:bg-white/[0.05]"
+                {...revealProps}
+              >
+                <div className="flex items-center gap-2.5 truncate">
+                  <FluentDirectCutIcon className="w-4 h-4 text-[#6366f1] dark:text-[#a5b4fc] shrink-0" />
+                  <span className="truncate font-medium text-[#6366f1] dark:text-[#a5b4fc]">Direct Cut</span>
+                </div>
+                <span className="text-[10px] px-1.5 py-0.5 rounded-[2px] bg-[#6366f1]/20 text-[#6366f1] dark:text-[#a5b4fc] font-bold">Dựng phim</span>
+              </button>
+
+              {/* Swift Bank (Digital Banking) */}
+              <button
+                id="tool-swift-bank"
+                type="button"
+                onClick={() => {
+                  setIsOpen(false);
+                  onNavigate('/swift-bank');
+                }}
+                className="fluent-reveal-item w-full h-[34px] px-2.5 rounded-[4px] flex items-center justify-between text-[13px] font-normal transition-colors text-left cursor-default text-[#1b1b1b] dark:text-[#f3f3f3] hover:bg-black/5 dark:hover:bg-white/[0.08] active:bg-black/10 dark:active:bg-white/[0.05]"
+                {...revealProps}
+              >
+                <div className="flex items-center gap-2.5 truncate">
+                  <FluentSwiftBankIcon className="w-4 h-4 text-emerald-500 dark:text-emerald-400 shrink-0" />
+                  <span className="truncate font-medium text-emerald-600 dark:text-emerald-400">Swift Bank</span>
+                </div>
+                <span className="text-[10px] px-1.5 py-0.5 rounded-[2px] bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold">Ngân hàng</span>
               </button>
             </div>
 

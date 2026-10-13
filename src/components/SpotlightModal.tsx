@@ -18,7 +18,9 @@ import {
   FluentHomeIcon, 
   FluentLiveTvIcon, 
   FluentNewsIcon, 
-  FluentSearchIcon 
+  FluentSearchIcon,
+  FluentMicOutlineIcon,
+  FluentMicOffOutlineIcon
 } from './FluentIcons';
 import { CHANNELS_DATA } from '../data/channels';
 import { NEWS_DATA } from '../data/news';
@@ -502,9 +504,9 @@ export const SpotlightModal: React.FC<SpotlightModalProps> = ({
                           title={isListening ? "Stop listening" : "Voice search"}
                         >
                           {isListening ? (
-                            <MicOff className="w-4 h-4 fill-none stroke-current" strokeWidth={1.75} />
+                            <FluentMicOffOutlineIcon className="w-4 h-4" />
                           ) : (
-                            <Mic className="w-4 h-4 fill-none stroke-current" strokeWidth={1.75} />
+                            <FluentMicOutlineIcon className="w-4 h-4" />
                           )}
                         </motion.button>
                       )}

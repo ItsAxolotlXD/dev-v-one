@@ -283,21 +283,21 @@ export const EdgeBrowser: React.FC<EdgeBrowserProps> = ({ navigate }) => {
           </button>
         </div>
 
-        {/* Omnibox / Address Bar */}
+        {/* Omnibox / Address Bar matching Let's chat Copilot */}
         <form
           onSubmit={(e) => {
             e.preventDefault();
             goToUrl(addressInput);
           }}
-          className="flex-1 h-8 px-3 rounded-full bg-[#181c20] border border-white/10 focus-within:border-[#0078d4] focus-within:ring-1 focus-within:ring-[#0078d4] flex items-center gap-2 transition-all"
+          className="flex-1 h-8 sm:h-8.5 px-3 rounded-[6px] bg-black/5 dark:bg-[#181c20] border border-black/10 dark:border-white/10 focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff] flex items-center gap-2 transition-all"
         >
           <Lock className="w-3 h-3 text-emerald-400 shrink-0" />
           <input
             type="text"
             value={addressInput}
             onChange={(e) => setAddressInput(e.target.value)}
-            placeholder="Tìm kiếm bằng Google hoặc nhập URL..."
-            className="w-full bg-transparent text-xs text-white placeholder-neutral-500 outline-none"
+            placeholder="Nhập URL hoặc tìm kiếm với /search..."
+            className="w-full bg-transparent text-xs sm:text-[13px] text-white placeholder-neutral-400 outline-none border-none py-1 no-fluent-line"
           />
           <button
             type="button"

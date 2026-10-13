@@ -288,13 +288,13 @@ export const ImmersiveSearch: React.FC<ImmersiveSearchProps> = ({
       <div className="max-w-6xl mx-auto space-y-7 sm:space-y-9">
         {/* Top Search Bar Row */}
         <div className="flex items-center justify-center gap-3 w-full">
-          {/* Search Box matching Find and search V-One */}
+          {/* Search Box matching Let's chat Copilot */}
           <div 
             id="immersive-search-capsule"
             onClick={() => {
               inputRef.current?.focus();
             }}
-            className="group relative w-full max-w-md sm:max-w-lg h-9 sm:h-9.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3.5 gap-2.5 rounded-[6px] transition-all cursor-text select-none"
+            className="group relative w-full max-w-md sm:max-w-lg h-9 sm:h-9.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-4 gap-2.5 rounded-full transition-all cursor-text select-none focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]"
           >
             <input
               ref={inputRef}
@@ -302,8 +302,8 @@ export const ImmersiveSearch: React.FC<ImmersiveSearchProps> = ({
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder={isMobile ? "Search" : "Find and search"}
-              className="w-full bg-transparent text-xs sm:text-[13.5px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-white outline-none border-none py-1 pr-7 no-fluent-line"
+              placeholder="Let's chat or use /search"
+              className="w-full bg-transparent text-xs sm:text-[13.5px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#9ca3af] outline-none border-none py-1 pr-14 no-fluent-line"
             />
             {query ? (
               <button

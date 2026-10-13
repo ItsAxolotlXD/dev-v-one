@@ -25,7 +25,7 @@ export const LiveTV: React.FC<LiveTVProps> = ({
   onOpenCustomStreamModal,
   searchQuery,
   onSearchChange,
-  navigate = () => {}
+  navigate = (_route?: string) => {}
 }) => {
   const { settings } = useSettings();
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
@@ -120,13 +120,13 @@ export const LiveTV: React.FC<LiveTVProps> = ({
               All
             </button>
 
-            {/* Colored button with calendar icon placed right next to All button to open right sidebar */}
+            {/* Direct button to open dedicated Schedule Tab */}
             <button
               id="btn-livetv-open-epg-sidebar"
               type="button"
-              onClick={() => setIsEpgSidebarOpen(true)}
-              className="px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer select-none flex items-center gap-1.5 shrink-0 bg-gradient-to-r from-[#0078d4] via-[#0284c7] to-[#4cc2ff] hover:from-[#006cbd] hover:to-[#38bdf8] active:scale-95 text-white shadow-sm hover:shadow border border-white/25"
-              title="Xem lịch phát sóng các kênh (EPG)"
+              onClick={() => navigate?.('/schedule')}
+              className="px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer select-none flex items-center gap-1.5 shrink-0 bg-gradient-to-r from-[#0078d4] via-[#0284c7] to-[#4cc2ff] hover:from-[#006cbd] hover:to-[#38bdf8] active:scale-95 text-white shadow-sm hover:shadow border border-white/25"
+              title="Mở tab Lịch phát sóng truyền hình (EPG)"
             >
               <Calendar className="w-3.5 h-3.5" />
               <span>Lịch phát sóng</span>

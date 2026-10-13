@@ -39,6 +39,17 @@ import { MSPaint } from './pages/MSPaint';
 import { PhotosApp } from './pages/PhotosApp';
 import { EdgeBrowser } from './pages/EdgeBrowser';
 import { CameraApp } from './pages/CameraApp';
+import { DirectCut } from './pages/DirectCut';
+import { SwiftBank } from './pages/SwiftBank';
+import { ClockApp } from './pages/ClockApp';
+import { VlcPlayer } from './pages/VlcPlayer';
+import { Photopea } from './pages/Photopea';
+import { ScheduleApp } from './pages/ScheduleApp';
+import { Cookbook } from './pages/Cookbook';
+import { SwiftSocial } from './pages/SwiftSocial';
+import { FriendsApp } from './pages/FriendsApp';
+import { LogosFandom } from './pages/LogosFandom';
+import { MinecraftWiki } from './pages/MinecraftWiki';
 import { SpinningRing } from './components/SpinningRing';
 import { CHANNELS_DATA } from './data/channels';
 import { NEWS_DATA } from './data/news';
@@ -589,6 +600,45 @@ export default function App() {
       case '/craftmine':
         return <Craftmine />;
 
+      case '/photopea':
+      case '/photoshop':
+        return <Photopea />;
+
+      case '/logos-fandom':
+      case '/logos-wiki':
+      case '/fandom':
+        return <LogosFandom />;
+
+      case '/minecraft-wiki':
+      case '/mc-wiki':
+      case '/wiki':
+        return <MinecraftWiki />;
+
+      case '/vlc':
+      case '/vlc-player':
+      case '/media-player':
+        return <VlcPlayer />;
+
+      case '/schedule':
+      case '/tv-guide':
+      case '/epg':
+      case '/lich-phat-song':
+        return <ScheduleApp navigate={navigate} />;
+
+      case '/cookbook':
+      case '/recipes':
+      case '/nau-an':
+        return <Cookbook />;
+
+      case '/swift':
+      case '/swift-social':
+      case '/social':
+        return <SwiftSocial />;
+
+      case '/friends':
+      case '/ban-be':
+        return <FriendsApp navigate={navigate} />;
+
       case '/task-manager':
         return <TaskManager navigate={navigate} />;
 
@@ -602,6 +652,23 @@ export default function App() {
       case '/paint':
       case '/ms-paint':
         return <MSPaint navigate={navigate} />;
+
+      case '/direct-cut':
+      case '/video-editor':
+      case '/edit':
+        return <DirectCut navigate={navigate} />;
+
+      case '/swift-bank':
+      case '/bank':
+      case '/swiftbank':
+        return <SwiftBank navigate={navigate} />;
+
+      case '/clock':
+      case '/alarm':
+      case '/timer':
+      case '/stopwatch':
+      case '/world-clock':
+        return <ClockApp navigate={navigate} />;
 
       case '/photos':
       case '/gallery':
@@ -809,10 +876,12 @@ export default function App() {
         )}
 
         {/* Dynamic Page Content with smooth slide-up transition - Bo cong 10px góc trên trái */}
-        <main className={`main-tab-page flex-1 w-full mx-auto rounded-tl-[10px] rounded-tr-none rounded-br-none rounded-bl-none overflow-hidden bg-[#f9f9f9] dark:bg-[#282c31] ${
-          currentRoute === '/' || currentRoute === '/home' || isOfficeRoute || currentRoute === '/craftmine' || currentRoute === '/edge' || currentRoute === '/browser' || currentRoute === '/camera' || currentRoute === '/photos' || currentRoute === '/gallery' || currentRoute === '/paint' || currentRoute === '/ms-paint' || currentRoute === '/file-explorer' || currentRoute === '/files' || currentRoute === '/copilot'
-            ? 'p-0 max-w-none pt-0' 
-            : 'px-4 sm:px-6 md:px-8 py-5 max-w-7xl'
+        <main className={`main-tab-page flex-1 w-full mx-auto rounded-tl-[10px] rounded-tr-none rounded-br-none rounded-bl-none overflow-hidden ${
+          isTabLoading
+            ? 'bg-[#f3f4f6] dark:bg-[#202024] p-0 max-w-none pt-0 text-neutral-800 dark:text-neutral-100'
+            : (currentRoute === '/' || currentRoute === '/home' || isOfficeRoute || currentRoute === '/craftmine' || currentRoute === '/photopea' || currentRoute === '/logos-fandom' || currentRoute === '/logos-wiki' || currentRoute === '/minecraft-wiki' || currentRoute === '/mc-wiki' || currentRoute === '/vlc' || currentRoute.startsWith('/vlc') || currentRoute === '/media-player' || currentRoute === '/schedule' || currentRoute.startsWith('/schedule') || currentRoute === '/cookbook' || currentRoute === '/swift' || currentRoute === '/friends' || currentRoute === '/edge' || currentRoute === '/browser' || currentRoute === '/camera' || currentRoute === '/photos' || currentRoute === '/gallery' || currentRoute === '/paint' || currentRoute === '/ms-paint' || currentRoute === '/file-explorer' || currentRoute === '/files' || currentRoute === '/copilot' || currentRoute === '/direct-cut' || currentRoute === '/video-editor' || currentRoute === '/edit' || currentRoute === '/swift-bank' || currentRoute === '/bank' || currentRoute === '/swiftbank' || currentRoute === '/clock' || currentRoute === '/alarm' || currentRoute === '/timer' || currentRoute === '/stopwatch' || currentRoute === '/world-clock'
+              ? 'p-0 max-w-none pt-0 bg-[#f9f9f9] dark:bg-[#282c31]' 
+              : 'px-4 sm:px-6 md:px-8 py-5 max-w-7xl bg-[#f9f9f9] dark:bg-[#282c31]')
         } ${
           settings.navigationMode === 'floaty' && !isOfficeRoute
             ? 'pb-28 sm:pb-32'
@@ -820,7 +889,7 @@ export default function App() {
         }`}>
           {/* Dynamic Page Content: Slide up individual elements of the loaded tab, not the entire page as a block */}
           {isTabLoading ? (
-            <div key={`tab-loading-${currentRoute}`} className="tab-loading-slide-up w-full flex-1 flex flex-col items-center justify-center min-h-[60vh] sm:min-h-[70vh]">
+            <div key={`tab-loading-${currentRoute}`} className="tab-loading-slide-up w-full h-full flex-1 flex flex-col items-center justify-center min-h-[calc(100vh-3.5rem)] bg-[#f3f4f6] dark:bg-[#202024]">
               <TabLoadingScreen route={currentRoute} />
             </div>
           ) : (

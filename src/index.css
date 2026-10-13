@@ -120,6 +120,25 @@
   }
 }
 
+/* Universal input box and search box styles matching Let's chat Copilot */
+.copilot-style-input,
+[id*="search-box"],
+[id*="search-capsule"] {
+  border-radius: 6px;
+  transition: all 0.15s ease-in-out;
+}
+
+[id*="search-box"]:focus-within,
+[id*="search-capsule"]:focus-within {
+  border-bottom-width: 2px !important;
+  border-bottom-color: #005fb8 !important;
+}
+
+:where(.dark, .dark *) [id*="search-box"]:focus-within,
+:where(.dark, .dark *) [id*="search-capsule"]:focus-within {
+  border-bottom-color: #4cc2ff !important;
+}
+
 /* Global Interactive Cursor Hand (pointer) */
 button,
 a,
@@ -135,6 +154,36 @@ input[type="submit"],
 input[type="reset"],
 [tabindex="0"] {
   cursor: pointer !important;
+}
+
+/* ========================================================
+   TOÀN BỘ INPUT BOX / SEARCH BOX TRONG APP DẠNG PILL (RADIUS 100% / ROUNDED-FULL)
+   ======================================================== */
+input[type="text"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+input[type="search"],
+input[type="url"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="number"],
+.copilot-style-input,
+.fluent-search-box,
+[id*="search-box"],
+[id*="search-bar"],
+[id*="search-container"],
+[id*="search-capsule"],
+[id*="search-input"],
+[class*="search-box"],
+[class*="search-bar"],
+[class*="search-container"],
+[class*="search-input"],
+#topbar-search-box:not([data-flyout-open="true"]),
+#sidebar-search-box,
+#channels-search-box,
+#settings-search-box,
+#immersive-search-capsule,
+#floating-search-bar-pill {
+  border-radius: 9999px !important;
 }
 
 /* Light Mode Global Overrides: Main tab page is #f9f9f9, Sidebar & TopBar are #f3f3f3 */
@@ -646,19 +695,25 @@ html.dark #find-words-bar input::placeholder {
   opacity: 0.85 !important;
 }
 html.dark #topbar-search-box button,
-html.dark #topbar-search-box svg,
 html.dark #channels-search-box button,
-html.dark #channels-search-box svg,
 html.dark #settings-search-box button,
-html.dark #settings-search-box svg,
 html.dark #immersive-search-capsule button,
-html.dark #immersive-search-capsule svg,
 html.dark #spotlight-search-container button,
-html.dark #spotlight-search-container svg,
-html.dark #find-words-bar button,
-html.dark #find-words-bar svg {
+html.dark #find-words-bar button {
   color: #FFFFFF !important;
-  fill: currentColor !important;
+}
+
+/* Microphone & outline icons must be pure stroke outline, never filled */
+.mic-outline-icon,
+.mic-outline-icon *,
+svg.mic-outline-icon,
+svg.mic-outline-icon *,
+svg.lucide-mic,
+svg.lucide-mic *,
+svg.lucide-mic-off,
+svg.lucide-mic-off * {
+  fill: none !important;
+  stroke: currentColor !important;
 }
 
 /* All Search Boxes: text & icon in light mode, matching Find and search V-One */
@@ -3996,15 +4051,67 @@ html.light-mode .fluent-btn-secondary:active {
   background-color: #EFEFEF !important;
 }
 
-/* Fluent Design Input Box & Search Box: Line xám dưới chân, khi click/focus chuyển sang màu #4cc2ff */
-.fluent-input,
-.fluent-search-box,
+/* Fluent Design Search Boxes: Thanh line ngang phẳng chạy hết chiều ngang thanh search, không cong lên hay chạy sang 2 bên */
+#topbar-search-box,
 #spotlight-search-container,
 #immersive-search-capsule,
 #sidebar-search-box,
 #channels-search-box,
 #settings-search-box,
-#topbar-search-box,
+.fluent-search-box {
+  border-bottom: none !important;
+  background-image: linear-gradient(to right, #777777, #777777) !important;
+  background-size: 100% 2px !important;
+  background-position: left bottom !important;
+  background-repeat: no-repeat !important;
+  transition: background-image 0.15s ease-in-out !important;
+}
+
+#topbar-search-box:focus-within,
+#spotlight-search-container:focus-within,
+#immersive-search-capsule:focus-within,
+#sidebar-search-box:focus-within,
+#channels-search-box:focus-within,
+#settings-search-box:focus-within,
+.fluent-search-box:focus-within {
+  border-bottom: none !important;
+  background-image: linear-gradient(to right, #4cc2ff, #4cc2ff) !important;
+  background-size: 100% 2px !important;
+  background-position: left bottom !important;
+  background-repeat: no-repeat !important;
+  outline: none !important;
+}
+
+html.light-mode #topbar-search-box,
+html.light-mode #spotlight-search-container,
+html.light-mode #immersive-search-capsule,
+html.light-mode #sidebar-search-box,
+html.light-mode #channels-search-box,
+html.light-mode #settings-search-box,
+html.light-mode .fluent-search-box {
+  border-bottom: none !important;
+  background-image: linear-gradient(to right, #8e8e93, #8e8e93) !important;
+  background-size: 100% 2px !important;
+  background-position: left bottom !important;
+  background-repeat: no-repeat !important;
+}
+
+html.light-mode #topbar-search-box:focus-within,
+html.light-mode #spotlight-search-container:focus-within,
+html.light-mode #immersive-search-capsule:focus-within,
+html.light-mode #sidebar-search-box:focus-within,
+html.light-mode #channels-search-box:focus-within,
+html.light-mode #settings-search-box:focus-within,
+html.light-mode .fluent-search-box:focus-within {
+  border-bottom: none !important;
+  background-image: linear-gradient(to right, #005fb8, #005fb8) !important;
+  background-size: 100% 2px !important;
+  background-position: left bottom !important;
+  background-repeat: no-repeat !important;
+}
+
+/* Standard inline text inputs with horizontal bottom line */
+.fluent-input,
 input[type="text"]:not(.no-fluent-line):not(#spotlight-search-container input):not(#immersive-search-capsule input):not(#sidebar-search-box input):not(#settings-search-box input):not(#channels-search-box input):not(#topbar-search-box input),
 input[type="url"]:not(.no-fluent-line),
 input[type="password"]:not(.no-fluent-line) {
@@ -4014,13 +4121,6 @@ input[type="password"]:not(.no-fluent-line) {
 
 .fluent-input:focus,
 .fluent-input:focus-within,
-.fluent-search-box:focus-within,
-#spotlight-search-container:focus-within,
-#immersive-search-capsule:focus-within,
-#sidebar-search-box:focus-within,
-#channels-search-box:focus-within,
-#settings-search-box:focus-within,
-#topbar-search-box:focus-within,
 input[type="text"]:not(.no-fluent-line):not(#spotlight-search-container input):not(#immersive-search-capsule input):not(#sidebar-search-box input):not(#settings-search-box input):not(#channels-search-box input):not(#topbar-search-box input):focus,
 input[type="url"]:not(.no-fluent-line):focus,
 input[type="password"]:not(.no-fluent-line):focus {
@@ -4029,13 +4129,6 @@ input[type="password"]:not(.no-fluent-line):focus {
 }
 
 html.light-mode .fluent-input,
-html.light-mode .fluent-search-box,
-html.light-mode #spotlight-search-container,
-html.light-mode #immersive-search-capsule,
-html.light-mode #sidebar-search-box,
-html.light-mode #channels-search-box,
-html.light-mode #settings-search-box,
-html.light-mode #topbar-search-box,
 html.light-mode input[type="text"]:not(.no-fluent-line):not(#spotlight-search-container input):not(#immersive-search-capsule input):not(#sidebar-search-box input):not(#settings-search-box input):not(#channels-search-box input):not(#topbar-search-box input),
 html.light-mode input[type="url"]:not(.no-fluent-line),
 html.light-mode input[type="password"]:not(.no-fluent-line) {
@@ -4044,13 +4137,6 @@ html.light-mode input[type="password"]:not(.no-fluent-line) {
 
 html.light-mode .fluent-input:focus,
 html.light-mode .fluent-input:focus-within,
-html.light-mode .fluent-search-box:focus-within,
-html.light-mode #spotlight-search-container:focus-within,
-html.light-mode #immersive-search-capsule:focus-within,
-html.light-mode #sidebar-search-box:focus-within,
-html.light-mode #channels-search-box:focus-within,
-html.light-mode #settings-search-box:focus-within,
-html.light-mode #topbar-search-box:focus-within,
 html.light-mode input[type="text"]:not(.no-fluent-line):not(#spotlight-search-container input):not(#immersive-search-capsule input):not(#sidebar-search-box input):not(#settings-search-box input):not(#channels-search-box input):not(#topbar-search-box input):focus,
 html.light-mode input[type="url"]:not(.no-fluent-line):focus,
 html.light-mode input[type="password"]:not(.no-fluent-line):focus {

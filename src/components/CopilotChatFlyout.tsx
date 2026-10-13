@@ -166,6 +166,9 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
     onSearchQueryChange('');
     setIsLoading(true);
 
+    const isSearchCmd = /^\/(find|search)\b/i.test(message);
+    const searchKeyword = isSearchCmd ? message.replace(/^\/(find|search)\s*/i, '').trim() : '';
+
     try {
       const historyPayload = messages.slice(-6).map((m) => ({
         role: m.role,
@@ -195,10 +198,25 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
       setMessages((prev) => [...prev, modelMsg]);
     } catch (err: any) {
       console.warn('Copilot request failed:', err);
+
+      // Intelligent local search fallback if command is /find or /search
+      let fallbackText = '';
+      if (isSearchCmd && searchKeyword) {
+        const matches = appAspects.filter((a) =>
+          a.title.toLowerCase().includes(searchKeyword.toLowerCase())
+        );
+        const matchTitles = matches.map((m) => `• [${m.type.toUpperCase()}] **${m.title}**`).join('\n');
+        fallbackText = `🔍 **Kết quả tìm kiếm Copilot cho:** "${searchKeyword}"\n\n` +
+          (matchTitles ? `Các mục tìm thấy trong hệ thống:\n${matchTitles}\n\n` : `Không tìm thấy mục khớp chính xác trong hệ sinh thái.\n\n`) +
+          `💡 Gợi ý: Bạn có thể tìm nhanh kênh truyền hình trong mục **Live TV**, xem **Tin tức VnExpress** hoặc tra cứu trong **Cài đặt**.`;
+      } else {
+        fallbackText = `Chào bạn! Tôi đã nhận được yêu cầu: "${message}". Bạn có thể gõ **/find <từ khóa>** hoặc **/search <từ khóa>** để tìm kiếm mọi nội dung, hoặc mở Live TV, Widgets, Task Manager từ thanh điều hướng nhé!`;
+      }
+
       const fallbackMsg: ChatMessage = {
         id: `ai-err-${Date.now()}`,
         role: 'model',
-        text: `Chào bạn! Tôi đã nhận được yêu cầu: "${message}". Bạn có thể truy cập nhanh kênh Live TV, xem Bảng tiện ích Widgets hoặc kiểm tra Task Manager từ thanh điều hướng nhé!`,
+        text: fallbackText,
         timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
       };
       setMessages((prev) => [...prev, fallbackMsg]);
@@ -500,7 +518,7 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
               </button>
             </div>
 
-            <div className="relative flex-1">
+            <div className="relative flex-1 group h-9 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3.5 rounded-full transition-all focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]">
               <input
                 ref={inputRef}
                 type="text"
@@ -512,8 +530,8 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
                     handleToggleBold();
                   }
                 }}
-                placeholder="Nhập câu hỏi hoặc yêu cầu cho Copilot..."
-                className="w-full h-9 pl-3 pr-4 rounded-[6px] bg-white dark:bg-[#282c31] border border-black/15 dark:border-white/15 text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#9ca3af] outline-none focus:border-[#0078d4] dark:focus:border-[#4cc2ff] transition-all"
+                placeholder="Let's chat or use /search"
+                className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#9ca3af] outline-none border-none py-1 no-fluent-line"
               />
             </div>
 

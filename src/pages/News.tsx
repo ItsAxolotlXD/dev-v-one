@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NEWS_DATA } from '../data/news';
 import { NewsCard } from '../components/NewsCard';
-import { TrendingUp, Lock } from 'lucide-react';
+import { TrendingUp, Lock, Search, X } from 'lucide-react';
 import { DEFAULT_BANNER_PLACEHOLDER } from '../data/heroSlides';
 import { SequentialSection } from '../components/SequentialSection';
 import { useSettings } from '../hooks/useSettings';
@@ -15,11 +15,12 @@ interface NewsProps {
 export const News: React.FC<NewsProps> = ({ navigate, searchQuery, onSearchChange }) => {
   const { settings } = useSettings();
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [localSearch, setLocalSearch] = useState('');
 
   const distinctCats = Array.from(new Set(NEWS_DATA.map((a) => a.category)));
   const categories = ['All', ...distinctCats];
 
-  const query = (searchQuery || '').trim().toLowerCase();
+  const query = (localSearch || searchQuery || '').trim().toLowerCase();
   const filteredNews = NEWS_DATA.filter((article) => {
     const matchesCat = selectedCategory === 'All' || article.category === selectedCategory;
     const matchesSearch = !query ||
@@ -113,23 +114,59 @@ export const News: React.FC<NewsProps> = ({ navigate, searchQuery, onSearchChang
         </div>
       )}
 
-      {/* Category Pills */}
-      <div id="news-category-tabs" className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
-        {categories.map((cat, idx) => (
-          <button
-            key={cat}
-            id={`news-cat-btn-${idx}`}
-            type="button"
-            onClick={() => setSelectedCategory(cat)}
-            className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer select-none ${
-              selectedCategory === cat
-                ? 'bg-[#E50914] text-white shadow-sm'
-                : 'bg-[#F1F3F5] hover:bg-[#E5E7EB] text-[#4B5563] hover:text-[#111827] dark:bg-[#27121d] dark:hover:bg-[#331726] dark:text-[#A1A1AA] dark:hover:text-white border border-[#E5E7EB] dark:border-white/10'
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
+      {/* Category Pills & Search Bar matching Let's chat Copilot */}
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+        <div id="news-category-tabs" className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar flex-1">
+          {categories.map((cat, idx) => (
+            <button
+              key={cat}
+              id={`news-cat-btn-${idx}`}
+              type="button"
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer select-none ${
+                selectedCategory === cat
+                  ? 'bg-[#E50914] text-white shadow-sm'
+                  : 'bg-[#F1F3F5] hover:bg-[#E5E7EB] text-[#4B5563] hover:text-[#111827] dark:bg-[#27121d] dark:hover:bg-[#331726] dark:text-[#A1A1AA] dark:hover:text-white border border-[#E5E7EB] dark:border-white/10'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* Search matching Let's chat Copilot */}
+        <div
+          id="news-search-box"
+          className="group relative w-full md:w-72 h-8 sm:h-8.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3 gap-2 transition-all rounded-[6px] shrink-0 focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]"
+        >
+          <input
+            type="text"
+            value={localSearch}
+            onChange={(e) => {
+              setLocalSearch(e.target.value);
+              if (onSearchChange) onSearchChange(e.target.value);
+            }}
+            placeholder="Search news or use /search..."
+            className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#9ca3af] outline-none border-none py-1 pr-7 no-fluent-line"
+          />
+          {localSearch ? (
+            <button
+              type="button"
+              onClick={() => {
+                setLocalSearch('');
+                if (onSearchChange) onSearchChange('');
+              }}
+              title="Clear search"
+              className="absolute right-1.5 text-[#71717a] dark:text-white hover:text-[#111827] dark:hover:text-white p-0.5 transition-colors cursor-pointer"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          ) : (
+            <div className="absolute right-2 text-[#71717a] dark:text-white pointer-events-none flex items-center justify-center">
+              <Search className="w-3.5 h-3.5 text-[#71717a] dark:text-[#a1a1aa]" />
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Articles Grid */}

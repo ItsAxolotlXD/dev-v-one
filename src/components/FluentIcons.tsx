@@ -167,3 +167,377 @@ export const FluentEdgeIcon: React.FC<{ className?: string; style?: React.CSSPro
     draggable={false}
   />
 );
+
+export const FluentDirectCutIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    {/* Clapperboard / Timeline scissors video editing pro icon */}
+    <rect x="3" y="4" width="18" height="16" rx="3" stroke="currentColor" strokeWidth="1.6" />
+    <path d="M3 9.5H21" stroke="currentColor" strokeWidth="1.6" />
+    <path d="M7 4L5.5 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <path d="M12 4L10.5 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <path d="M17 4L15.5 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    {/* Scissors cut symbol */}
+    <circle cx="8" cy="15" r="1.5" stroke="currentColor" strokeWidth="1.4" />
+    <circle cx="8" cy="17" r="1.5" stroke="currentColor" strokeWidth="1.4" />
+    <path d="M9.5 15.5L16.5 16.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <path d="M9.5 16.5L13.5 13.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <path d="M13.5 13.5L16.5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+  </svg>
+);
+
+export const FluentDirectCutColorIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <defs>
+      <linearGradient id="fluentDirectCutGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#6366F1" />
+        <stop offset="0.5" stopColor="#8B5CF6" />
+        <stop offset="1" stopColor="#EC4899" />
+      </linearGradient>
+      <linearGradient id="fluentDirectCutCyan" x1="0" y1="0" x2="1" y2="1">
+        <stop stopColor="#38BDF8" />
+        <stop offset="1" stopColor="#0284C7" />
+      </linearGradient>
+    </defs>
+    <rect x="2.5" y="2.5" width="19" height="19" rx="4.5" fill="url(#fluentDirectCutGrad)" />
+    <path d="M3 8.5H21" stroke="white" strokeWidth="1.4" strokeOpacity="0.7" />
+    <path d="M7 3L5.5 8.5" stroke="white" strokeWidth="1.4" strokeLinecap="round" strokeOpacity="0.8" />
+    <path d="M12 3L10.5 8.5" stroke="white" strokeWidth="1.4" strokeLinecap="round" strokeOpacity="0.8" />
+    <path d="M17 3L15.5 8.5" stroke="white" strokeWidth="1.4" strokeLinecap="round" strokeOpacity="0.8" />
+    {/* Center play / timeline cut */}
+    <circle cx="8" cy="14.5" r="1.6" stroke="white" strokeWidth="1.4" />
+    <circle cx="8" cy="17.5" r="1.6" stroke="white" strokeWidth="1.4" />
+    <path d="M9.5 15L16.5 16.5" stroke="white" strokeWidth="1.6" strokeLinecap="round" />
+    <path d="M9.5 17L14 13.5L16.5 15" stroke="white" strokeWidth="1.6" strokeLinecap="round" />
+  </svg>
+);
+
+export const FluentSwiftBankIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    {/* Bank Columns / Building & Shield with Swift Lightning */}
+    <path d="M2.5 8.5L12 3L21.5 8.5H2.5Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+    <path d="M4 19H20" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    <path d="M3 21H21" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    <path d="M6 10V17" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    <path d="M10 10V17" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    <path d="M14 10V17" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    <path d="M18 10V17" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+  </svg>
+);
+
+export const FluentSwiftBankColorIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <defs>
+      <linearGradient id="swiftBankNavyGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#0F172A" />
+        <stop offset="0.6" stopColor="#1E3A8A" />
+        <stop offset="1" stopColor="#0284C7" />
+      </linearGradient>
+      <linearGradient id="swiftBankGoldGrad" x1="0" y1="0" x2="1" y2="1">
+        <stop stopColor="#F59E0B" />
+        <stop offset="1" stopColor="#FCD34D" />
+      </linearGradient>
+    </defs>
+    <rect x="2" y="2" width="20" height="20" rx="4.5" fill="url(#swiftBankNavyGrad)" />
+    {/* Roof */}
+    <path d="M4.5 8.5L12 4.5L19.5 8.5H4.5Z" fill="url(#swiftBankGoldGrad)" />
+    {/* Columns */}
+    <rect x="6" y="10" width="1.8" height="6.5" rx="0.5" fill="white" />
+    <rect x="9.6" y="10" width="1.8" height="6.5" rx="0.5" fill="white" />
+    <rect x="13.2" y="10" width="1.8" height="6.5" rx="0.5" fill="white" />
+    <rect x="16.8" y="10" width="1.8" height="6.5" rx="0.5" fill="white" />
+    {/* Base */}
+    <rect x="4.5" y="17.5" width="15" height="1.8" rx="0.5" fill="url(#swiftBankGoldGrad)" />
+  </svg>
+);
+
+export const FluentClockIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6" />
+    <path d="M12 7V12L15.5 14" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+export const FluentClockColorIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <defs>
+      <linearGradient id="fluentClockGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#0078D4" />
+        <stop offset="1" stopColor="#004E8C" />
+      </linearGradient>
+    </defs>
+    <rect x="2" y="2" width="20" height="20" rx="5" fill="url(#fluentClockGrad)" />
+    <circle cx="12" cy="12" r="7.5" fill="white" fillOpacity="0.15" stroke="white" strokeWidth="1.5" />
+    <path d="M12 7.5V12L15 13.8" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    <circle cx="12" cy="12" r="1.2" fill="white" />
+  </svg>
+);
+
+/* VLC Media Player Icon (Traffic Cone Outline) */
+export const FluentVlcIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    {/* Base plate */}
+    <path d="M3 20.5H21" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    {/* Traffic Cone Body */}
+    <path d="M5.5 19.5L10.5 4.5C10.8 3.6 11.4 3 12 3C12.6 3 13.2 3.6 13.5 4.5L18.5 19.5H5.5Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" fill="none" />
+    {/* Top reflective stripe */}
+    <path d="M9.5 11H14.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    {/* Bottom reflective stripe */}
+    <path d="M7.5 15.5H16.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+  </svg>
+);
+
+export const FluentVlcColorIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <defs>
+      <linearGradient id="vlcOrangeGrad" x1="12" y1="3" x2="12" y2="21" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#FF8A00" />
+        <stop offset="0.6" stopColor="#FF6600" />
+        <stop offset="1" stopColor="#E65100" />
+      </linearGradient>
+      <filter id="vlcGlow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="1" stdDeviation="1" floodColor="#E65100" floodOpacity="0.3" />
+      </filter>
+    </defs>
+    {/* Base Plate */}
+    <rect x="2.5" y="18.5" width="19" height="3" rx="1.5" fill="#E65100" />
+    <rect x="4" y="18" width="16" height="2" rx="1" fill="#FF8A00" />
+    {/* Cone Main Shape */}
+    <path d="M6 18.5L10.6 4.3C10.9 3.4 11.4 2.8 12 2.8C12.6 2.8 13.1 3.4 13.4 4.3L18 18.5H6Z" fill="url(#vlcOrangeGrad)" filter="url(#vlcGlow)" />
+    {/* White Stripes */}
+    {/* Upper Stripe */}
+    <path d="M9.6 10.8L10.3 8.5H13.7L14.4 10.8H9.6Z" fill="#FFFFFF" fillOpacity="0.95" />
+    {/* Lower Stripe */}
+    <path d="M8 15.5L8.9 12.8H15.1L16 15.5H8Z" fill="#FFFFFF" fillOpacity="0.95" />
+    {/* Cone Tip */}
+    <ellipse cx="12" cy="4.2" rx="1.5" ry="1.2" fill="#FFA726" />
+  </svg>
+);
+
+/* Photopea Icon (P with Photo Pea emblem Outline) */
+export const FluentPhotopeaIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <rect x="3" y="3" width="18" height="18" rx="4.5" stroke="currentColor" strokeWidth="1.6" fill="none" />
+    <path d="M8.5 7H13.2C15.2 7 16.5 8.2 16.5 10C16.5 11.8 15.2 13 13.2 13H10.5V17H8.5V7Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" fill="none" />
+    <circle cx="12.5" cy="10" r="1.2" stroke="currentColor" strokeWidth="1.3" fill="none" />
+  </svg>
+);
+
+export const FluentPhotopeaColorIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <defs>
+      <linearGradient id="photopeaGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#0F383D" />
+        <stop offset="0.5" stopColor="#146067" />
+        <stop offset="1" stopColor="#18A096" />
+      </linearGradient>
+    </defs>
+    <rect x="2" y="2" width="20" height="20" rx="5" fill="url(#photopeaGrad)" />
+    {/* White & Turquoise Pea Stylized Letter P */}
+    <path d="M7.5 6.5H13C15.5 6.5 17 8 17 10.2C17 12.4 15.5 13.9 13 13.9H10.2V17.5H7.5V6.5Z" fill="white" />
+    <path d="M10.2 8.7V11.7H12.8C13.8 11.7 14.5 11.1 14.5 10.2C14.5 9.3 13.8 8.7 12.8 8.7H10.2Z" fill="#146067" />
+    <circle cx="12.6" cy="10.2" r="1" fill="#4ade80" />
+  </svg>
+);
+
+/* Schedule / Lịch phát sóng TV Guide Icon */
+export const FluentScheduleIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <rect x="3" y="4" width="18" height="17" rx="3.5" stroke="currentColor" strokeWidth="1.6" fill="none" />
+    <path d="M3 9H21" stroke="currentColor" strokeWidth="1.6" />
+    <path d="M8 2.5V5.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    <path d="M16 2.5V5.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    <circle cx="8" cy="13" r="1.1" stroke="currentColor" strokeWidth="1.2" fill="none" />
+    <circle cx="12" cy="13" r="1.1" stroke="currentColor" strokeWidth="1.2" fill="none" />
+    <circle cx="16" cy="13" r="1.1" stroke="currentColor" strokeWidth="1.2" fill="none" />
+    <circle cx="8" cy="17" r="1.1" stroke="currentColor" strokeWidth="1.2" fill="none" />
+    <circle cx="12" cy="17" r="1.1" stroke="currentColor" strokeWidth="1.2" fill="none" />
+  </svg>
+);
+
+export const FluentScheduleColorIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <defs>
+      <linearGradient id="scheduleGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#0284C7" />
+        <stop offset="0.6" stopColor="#0369A1" />
+        <stop offset="1" stopColor="#075985" />
+      </linearGradient>
+    </defs>
+    <rect x="2" y="3" width="20" height="18.5" rx="4.5" fill="url(#scheduleGrad)" />
+    <path d="M2 8.5H22" stroke="white" strokeWidth="1.4" strokeOpacity="0.4" />
+    <rect x="6.5" y="1.5" width="2.5" height="4.5" rx="1.2" fill="#38BDF8" />
+    <rect x="15" y="1.5" width="2.5" height="4.5" rx="1.2" fill="#38BDF8" />
+    <circle cx="7" cy="12.5" r="1.3" fill="white" />
+    <circle cx="12" cy="12.5" r="1.3" fill="#38BDF8" />
+    <circle cx="17" cy="12.5" r="1.3" fill="white" />
+    <circle cx="7" cy="16.5" r="1.3" fill="white" />
+    <circle cx="12" cy="16.5" r="1.3" fill="white" />
+    <path d="M15.5 16.5H18.5" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" />
+  </svg>
+);
+
+/* Cookbook Icon (Chef Hat & Open Recipe Book Outline) */
+export const FluentCookbookIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <path d="M4 19.5C4 18.1193 5.11929 17 6.5 17H20V4H6.5C5.11929 4 4 5.11929 4 6.5V19.5ZM4 19.5C4 20.8807 5.11929 22 6.5 22H20V17H6.5C5.11929 17 4 18.1193 4 19.5Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" fill="none" />
+    <path d="M8.5 7.5H15.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <path d="M8.5 11H13.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <path d="M15 15L18.5 11.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <circle cx="18.5" cy="11.5" r="1.5" stroke="currentColor" strokeWidth="1.3" fill="none" />
+  </svg>
+);
+
+export const FluentCookbookColorIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <defs>
+      <linearGradient id="cookbookGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#F97316" />
+        <stop offset="0.5" stopColor="#EA580C" />
+        <stop offset="1" stopColor="#C2410C" />
+      </linearGradient>
+    </defs>
+    <rect x="2" y="2" width="20" height="20" rx="5" fill="url(#cookbookGrad)" />
+    {/* Book Pages */}
+    <path d="M6 6H18C18.6 6 19 6.4 19 7V17C19 17.6 18.6 18 18 18H6.5C5.7 18 5 17.3 5 16.5V7.5C5 6.7 5.7 6 6 6Z" fill="white" />
+    <path d="M5 16.5C5 15.7 5.7 15 6.5 15H19V18H6.5C5.7 18 5 17.3 5 16.5Z" fill="#FDBA74" />
+    {/* Chef Fork & Spoon Icon in gold */}
+    <path d="M9 9H15" stroke="#EA580C" strokeWidth="1.5" strokeLinecap="round" />
+    <path d="M9 12H13" stroke="#EA580C" strokeWidth="1.5" strokeLinecap="round" />
+    <circle cx="15.5" cy="12" r="1.5" fill="#EA580C" />
+  </svg>
+);
+
+/* Swift Social Network Icon (Combined Bird / Spark / Bubble Outline) */
+export const FluentSwiftSocialIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <path d="M12 2C6.48 2 2 6.48 2 12C2 13.85 2.5 15.55 3.38 17L2.5 21.5L7.2 20.67C8.6 21.5 10.25 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" fill="none" />
+    {/* Swift Lightning Bolt Outline */}
+    <path d="M13.5 6L7.5 13H12L10.5 18L16.5 11H12L13.5 6Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" fill="none" />
+  </svg>
+);
+
+export const FluentSwiftSocialColorIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <defs>
+      <linearGradient id="swiftSocialGrad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#6366F1" />
+        <stop offset="0.3" stopColor="#8B5CF6" />
+        <stop offset="0.7" stopColor="#EC4899" />
+        <stop offset="1" stopColor="#F43F5E" />
+      </linearGradient>
+    </defs>
+    <rect x="2" y="2" width="20" height="20" rx="5.5" fill="url(#swiftSocialGrad)" />
+    {/* Lightning Bolt */}
+    <path d="M13.5 5.5L7 13.5H12L10.5 18.5L17 10.5H12L13.5 5.5Z" fill="white" />
+  </svg>
+);
+
+/* Friends / Community Icon (100 Users Outline) */
+export const FluentFriendsIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <circle cx="9" cy="8" r="3" stroke="currentColor" strokeWidth="1.6" fill="none" />
+    <path d="M3 18C3 15 5.7 13 9 13C12.3 13 15 15 15 18" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" fill="none" />
+    <circle cx="16.5" cy="7.5" r="2.2" stroke="currentColor" strokeWidth="1.5" fill="none" />
+    <path d="M15 13.5C16.8 13.8 19.5 14.8 20 17.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+  </svg>
+);
+
+export const FluentFriendsColorIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <defs>
+      <linearGradient id="friendsGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#10B981" />
+        <stop offset="0.6" stopColor="#059669" />
+        <stop offset="1" stopColor="#047857" />
+      </linearGradient>
+    </defs>
+    <rect x="2" y="2" width="20" height="20" rx="5" fill="url(#friendsGrad)" />
+    {/* Main friend circle */}
+    <circle cx="10" cy="8" r="3" fill="white" />
+    <path d="M4 17.5C4 14.5 6.8 13 10 13C13.2 13 16 14.5 16 17.5" stroke="white" strokeWidth="1.8" strokeLinecap="round" fill="white" fillOpacity="0.2" />
+    {/* Second friend */}
+    <circle cx="16" cy="7.5" r="2" fill="#A7F3D0" />
+    <path d="M15.5 13.5C17.2 13.8 19 14.8 19.5 17" stroke="#A7F3D0" strokeWidth="1.6" strokeLinecap="round" />
+  </svg>
+);
+
+/* MSN Feed Icon (Fluent Butterfly Outline) */
+export const FluentMsnIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    {/* Upper wings */}
+    <path d="M12 7.5C10.5 4 6.5 3 4 5.5C2 7.5 3 11.5 7 13C8.5 13.5 10.5 13 12 11.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    <path d="M12 7.5C13.5 4 17.5 3 20 5.5C22 7.5 21 11.5 17 13C15.5 13.5 13.5 13 12 11.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    {/* Lower wings */}
+    <path d="M11 12.5C9.5 14 6.5 15.5 5.5 18C4.5 20.5 7.5 21.5 9.5 20C11 19 11.5 16.5 12 15" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    <path d="M13 12.5C14.5 14 17.5 15.5 18.5 18C19.5 20.5 16.5 21.5 14.5 20C13 19 12.5 16.5 12 15" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    {/* Center subtle antennae */}
+    <circle cx="12" cy="7" r="0.75" stroke="currentColor" strokeWidth="1.2" fill="none" />
+  </svg>
+);
+
+export const FluentMsnColorIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <defs>
+      <linearGradient id="msnBlueGrad" x1="0" y1="0" x2="1" y2="1">
+        <stop stopColor="#0078D4" />
+        <stop offset="1" stopColor="#005A9E" />
+      </linearGradient>
+    </defs>
+    <rect x="2" y="2" width="20" height="20" rx="5" fill="#0078D4" />
+    <path d="M11.5 8C10.2 4.5 6.8 3.5 4.5 5.8C2.8 7.5 3.5 11 7 12.5C8.3 13 10.2 12.6 11.5 11.2" stroke="white" strokeWidth="1.8" strokeLinecap="round" fill="none" />
+    <path d="M12.5 8C13.8 4.5 17.2 3.5 19.5 5.8C21.2 7.5 20.5 11 17 12.5C15.7 13 13.8 12.6 12.5 11.2" stroke="#FFB900" strokeWidth="1.8" strokeLinecap="round" fill="none" />
+    <path d="M11 12C9.5 13.5 6.8 15 5.8 17.2C4.8 19.5 7.5 20.5 9.5 19C11 18 11.5 15.8 12 14.5" stroke="#107C41" strokeWidth="1.8" strokeLinecap="round" fill="none" />
+    <path d="M13 12C14.5 13.5 17.2 15 18.2 17.2C19.2 19.5 16.5 20.5 14.5 19C13 18 12.5 15.8 12 14.5" stroke="#D83B01" strokeWidth="1.8" strokeLinecap="round" fill="none" />
+  </svg>
+);
+
+/* Outline Microphone Icons (Microsoft Fluent Regular Outline) */
+export const FluentMicOutlineIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-4 h-4', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={`${className} mic-outline-icon`} style={style}>
+    {/* Capsule */}
+    <rect x="8.5" y="2" width="7" height="12" rx="3.5" stroke="currentColor" strokeWidth="1.6" fill="none" />
+    {/* Cradle */}
+    <path d="M4.5 10.5C4.5 14.64 7.86 18 12 18C16.14 18 19.5 14.64 19.5 10.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" fill="none" />
+    {/* Stand & Base */}
+    <path d="M12 18V22M8 22H16" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+  </svg>
+);
+
+export const FluentMicOffOutlineIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-4 h-4', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={`${className} mic-outline-icon`} style={style}>
+    {/* Slashed line */}
+    <line x1="2" y1="2" x2="22" y2="22" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    {/* Capsule parts */}
+    <path d="M8.5 9.5V10.5C8.5 12.43 10.07 14 12 14C12.87 14 13.67 13.68 14.28 13.15" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" fill="none" />
+    <path d="M15.5 9.5V5.5C15.5 3.57 13.93 2 12 2C10.6 2 9.4 2.82 8.85 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" fill="none" />
+    {/* Cradle parts */}
+    <path d="M4.5 10.5C4.5 14.64 7.86 18 12 18C13.2 18 14.33 17.72 15.33 17.22M18.8 13.5C19.25 12.6 19.5 11.6 19.5 10.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" fill="none" />
+    {/* Stand */}
+    <path d="M12 18V22M8 22H16" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+  </svg>
+);
+
+/* Logos Fandom Outline Icon */
+export const FluentLogosFandomIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    {/* Shield outline */}
+    <path d="M12 2.5L4.5 5.8V11.5C4.5 16.2 7.8 20.2 12 21.5C16.2 20.2 19.5 16.2 19.5 11.5V5.8L12 2.5Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" fill="none" />
+    {/* Stylized L / Logo glyph */}
+    <path d="M9 7.5V16.5H15" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    <circle cx="15" cy="11.5" r="1.2" stroke="currentColor" strokeWidth="1.3" fill="none" />
+  </svg>
+);
+
+/* Minecraft Wiki Outline Icon (Isometric Grass Block Cube) */
+export const FluentMinecraftWikiIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    {/* Isometric cube outline */}
+    <path d="M12 2.5L20 7.2V16.8L12 21.5L4 16.8V7.2L12 2.5Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" fill="none" />
+    <path d="M12 2.5V21.5" stroke="currentColor" strokeWidth="1.5" />
+    <path d="M12 12L20 7.2" stroke="currentColor" strokeWidth="1.5" />
+    <path d="M12 12L4 7.2" stroke="currentColor" strokeWidth="1.5" />
+    {/* Stepped pixel block pattern */}
+    <path d="M6 13L8 14.2L10 13L12 14.2L14 13L16 14.2L18 13" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" fill="none" />
+  </svg>
+);
+

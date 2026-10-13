@@ -219,20 +219,20 @@ export const TaskManager: React.FC<TaskManagerProps> = ({ navigate }) => {
         <div className="flex-1 flex flex-col bg-white/70 dark:bg-[#282c31]/80 backdrop-blur-md rounded-[8px] border border-black/10 dark:border-white/10 shadow-xs overflow-hidden">
           {/* Search & Filter Header */}
           <div className="p-3 border-b border-black/10 dark:border-white/10 flex items-center justify-between gap-3 bg-black/[0.02] dark:bg-black/20">
-            <div className="relative flex-1 max-w-sm">
+            <div className="group relative flex-1 max-w-sm h-8 sm:h-8.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 rounded-full flex items-center px-3.5 gap-2 transition-all focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]">
+              <Search className="w-3.5 h-3.5 text-[#71717a] dark:text-[#a1a1aa] shrink-0 pointer-events-none" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Tìm kiếm tác vụ (A-Z, PID)..."
-                className="w-full h-8 pl-8 pr-3 rounded-[5px] bg-white/80 dark:bg-[#1b1f24] border border-black/10 dark:border-white/10 text-xs text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#888] outline-none"
+                placeholder="Tìm kiếm tác vụ (A-Z, PID) hoặc dùng /search..."
+                className="w-full bg-transparent text-xs text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#9ca3af] outline-none border-none py-1 pr-6 no-fluent-line"
               />
-              <Search className="w-3.5 h-3.5 text-[#71717a] dark:text-[#888] absolute left-2.5 top-2.5 pointer-events-none" />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-2 top-2 text-[#71717a] hover:text-black dark:hover:text-white"
+                  className="absolute right-2 text-[#71717a] hover:text-black dark:hover:text-white p-0.5 cursor-pointer"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>

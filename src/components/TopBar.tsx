@@ -5,6 +5,8 @@ import {
   FluentLiveTvIcon, 
   FluentNewsIcon, 
   FluentSearchIcon, 
+  FluentMicOutlineIcon,
+  FluentMicOffOutlineIcon,
   FLUENT_ICON_URLS 
 } from './FluentIcons';
 import { motion, AnimatePresence } from 'motion/react';
@@ -209,6 +211,13 @@ export const TopBar: React.FC<TopBarProps> = ({
       { id: 'page-favs', title: 'Favorites', keywords: 'kênh yêu thích favorites favs', type: 'page', onSelect: () => navigate('/favorites') },
       { id: 'page-updates', title: 'Updates', keywords: 'cập nhật phiên bản updates changelog', type: 'page', onSelect: () => navigate('/updates') },
       { id: 'page-craftmine', title: 'Craftmine', keywords: 'minecraft preview web game', type: 'page', onSelect: () => navigate('/craftmine') },
+      { id: 'page-photopea', title: 'Photopea', keywords: 'photopea photoshop chỉnh sửa ảnh đồ họa psd photo editor web app', type: 'page', onSelect: () => navigate('/photopea') },
+      { id: 'page-msn', title: 'MSN Feed', keywords: 'msn feed tin tức báo chí thời tiết giải trí web msn.com', type: 'page', onSelect: () => navigate('/msn') },
+      { id: 'page-vlc', title: 'VLC Media Player', keywords: 'vlc media player video audio stream movie phát nhạc video âm thanh', type: 'page', onSelect: () => navigate('/vlc') },
+      { id: 'page-schedule', title: 'Lịch phát sóng', keywords: 'lịch phát sóng schedule epg tv guide truyền hình vtv htv', type: 'page', onSelect: () => navigate('/schedule') },
+      { id: 'page-cookbook', title: 'Cookbook', keywords: 'cookbook công thức nấu ăn ẩm thực món ngon recipes', type: 'page', onSelect: () => navigate('/cookbook') },
+      { id: 'page-swift', title: 'Swift Social', keywords: 'swift mạng xã hội social threads twitter facebook instagram discord feed chat', type: 'page', onSelect: () => navigate('/swift') },
+      { id: 'page-friends', title: 'Friends (Bạn bè)', keywords: 'friends bạn bè 100 người dùng cộng đồng nicknames', type: 'page', onSelect: () => navigate('/friends') },
       { id: 'page-notes', title: 'Notes', keywords: 'ghi chú soạn thảo notes office', type: 'page', onSelect: () => navigate('/notes') },
       { id: 'page-taskmanager', title: 'Task Manager', keywords: 'task manager quản lý tác vụ processes system performance', type: 'page', onSelect: () => navigate('/task-manager') },
       { id: 'page-widgets', title: 'Widgets', keywords: 'widgets tiện ích bảng tiện ích weather thời tiết lịch vnexpress tin tức', type: 'page', onSelect: () => navigate('/widgets') },
@@ -323,10 +332,20 @@ export const TopBar: React.FC<TopBarProps> = ({
 
   const handleSearchSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    if (searchQuery.trim()) {
-      saveToHistory(searchQuery.trim());
-      setIsSearchFlyoutOpen(false);
-      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    const query = searchQuery.trim();
+    if (query) {
+      saveToHistory(query);
+      if (query.startsWith('/find') || query.startsWith('/search')) {
+        // Action command /find hoặc /search: tìm kiếm với copilot
+        if (window.innerWidth < 768) {
+          navigate(`/copilot?query=${encodeURIComponent(query)}`);
+        } else {
+          setIsSearchFlyoutOpen(true);
+        }
+      } else {
+        setIsSearchFlyoutOpen(false);
+        navigate(`/search?q=${encodeURIComponent(query)}`);
+      }
     } else {
       setIsSearchFlyoutOpen(false);
       onOpenSearch();
@@ -431,12 +450,22 @@ export const TopBar: React.FC<TopBarProps> = ({
                   navigate('/copilot');
                 }
               }}
-              className={`group relative w-full h-8 sm:h-8.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3 gap-2 transition-all ${
+              data-flyout-open={isSearchFlyoutOpen ? "true" : "false"}
+              className={`group relative w-full h-8 sm:h-8.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3.5 gap-2 transition-all ${
                 isSearchFlyoutOpen
-                  ? 'rounded-t-[6px] rounded-b-none border-b-2 border-b-[#005fb8] dark:border-b-[#4cc2ff]'
-                  : 'rounded-[6px]'
+                  ? 'rounded-t-[18px] rounded-b-none'
+                  : 'rounded-full'
               }`}
             >
+              {/* Thanh line ngang phẳng chạy hết chiều ngang thanh search, không cong lên hay chạy sang 2 bên */}
+              <div
+                className={`absolute bottom-0 left-0 right-0 h-[2px] pointer-events-none transition-colors duration-150 ${
+                  isSearchFlyoutOpen
+                    ? 'bg-[#005fb8] dark:bg-[#4cc2ff]'
+                    : 'bg-[#8e8e93] dark:bg-[#777777] group-focus-within:bg-[#005fb8] dark:group-focus-within:bg-[#4cc2ff]'
+                }`}
+              />
+
               <input
                 type="text"
                 value={searchQuery}
@@ -464,13 +493,13 @@ export const TopBar: React.FC<TopBarProps> = ({
                     setIsSearchFlyoutOpen(true);
                   }
                 }}
-                placeholder="Let's chat Copilot"
+                placeholder="Let's chat or use /search"
                 className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-white outline-none border-none py-1 pr-14 no-fluent-line"
               />
 
               {/* Right Action Icons: Microphone + Search / Clear */}
-              <div className="absolute right-1.5 flex items-center gap-1">
-                {/* Microphone Icon Button (Unfilled / Stroke only) */}
+              <div className="absolute right-1.5 flex items-center gap-1 z-10">
+                {/* Microphone Icon Button (Unfilled / Pure Outline) */}
                 <button
                   type="button"
                   onClick={toggleListening}
@@ -482,9 +511,9 @@ export const TopBar: React.FC<TopBarProps> = ({
                   }`}
                 >
                   {isListening ? (
-                    <MicOff className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth={1.75} />
+                    <FluentMicOffOutlineIcon className="w-3.5 h-3.5" />
                   ) : (
-                    <Mic className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth={1.75} />
+                    <FluentMicOutlineIcon className="w-3.5 h-3.5" />
                   )}
                 </button>
 

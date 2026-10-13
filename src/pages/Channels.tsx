@@ -92,32 +92,34 @@ export const Channels: React.FC<ChannelsProps> = ({
           ))}
         </div>
 
-        {/* Search matching Find and search V-One */}
+        {/* Search matching Let's chat Copilot */}
         <div
           id="channels-search-box"
-          className="group relative w-full md:w-80 h-8 sm:h-8.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3 gap-2 transition-all rounded-[6px]"
+          className="group relative w-full md:w-80 h-8 sm:h-8.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3.5 gap-2 transition-all rounded-full focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]"
         >
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search in Channels"
-            className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-white outline-none border-none py-1 pr-6 no-fluent-line"
+            placeholder="Search channels or use /search..."
+            className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#9ca3af] outline-none border-none py-1 pr-14 no-fluent-line"
           />
-          {searchQuery ? (
-            <button
-              type="button"
-              onClick={() => setSearchQuery('')}
-              title="Clear search"
-              className="absolute right-1.5 text-[#71717a] dark:text-white hover:text-[#111827] dark:hover:text-white p-0.5 transition-colors cursor-pointer"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
-          ) : (
-            <div className="absolute right-2 text-[#71717a] dark:text-white pointer-events-none">
-              <FluentSearchIcon className="w-3.5 h-3.5 text-[#71717a] dark:text-white" />
-            </div>
-          )}
+          <div className="absolute right-1.5 flex items-center gap-1">
+            {searchQuery ? (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                title="Clear search"
+                className="text-[#71717a] dark:text-white hover:text-[#111827] dark:hover:text-white p-0.5 transition-colors cursor-pointer"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            ) : (
+              <div className="text-[#71717a] dark:text-white pointer-events-none p-0.5 flex items-center justify-center">
+                <FluentSearchIcon className="w-3.5 h-3.5 text-[#71717a] dark:text-white" />
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

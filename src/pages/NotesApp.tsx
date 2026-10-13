@@ -557,7 +557,7 @@ export const NotesApp: React.FC<NotesAppProps> = ({ navigate }) => {
             type="text"
             value={noteTitle}
             onChange={(e) => setNoteTitle(e.target.value)}
-            className="bg-black/30 border border-white/10 px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold text-white outline-none focus:border-[#4cc2ff] w-36 sm:w-56 text-center"
+            className="bg-black/30 border border-white/10 px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold text-white outline-none focus:border-[#4cc2ff] w-36 sm:w-56 text-center"
             placeholder="Tiêu đề ghi chú..."
           />
 

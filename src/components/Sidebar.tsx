@@ -36,7 +36,25 @@ import {
   FluentPaintIcon,
   FluentPhotosIcon,
   FluentEdgeIcon,
-  FluentCameraIcon
+  FluentCameraIcon,
+  FluentDirectCutIcon,
+  FluentSwiftBankIcon,
+  FluentClockIcon,
+  FluentClockColorIcon,
+  FluentVlcIcon,
+  FluentVlcColorIcon,
+  FluentPhotopeaIcon,
+  FluentPhotopeaColorIcon,
+  FluentScheduleIcon,
+  FluentScheduleColorIcon,
+  FluentCookbookIcon,
+  FluentCookbookColorIcon,
+  FluentSwiftSocialIcon,
+  FluentSwiftSocialColorIcon,
+  FluentFriendsIcon,
+  FluentFriendsColorIcon,
+  FluentLogosFandomIcon,
+  FluentMinecraftWikiIcon
 } from './FluentIcons';
 import { useFavorites } from '../hooks/useFavorites';
 import { useSettings } from '../hooks/useSettings';
@@ -419,6 +437,76 @@ export const Sidebar: React.FC<SidebarProps> = ({
         route: '/ms-paint',
         icon: FluentPaintIcon,
       },
+      {
+        id: 'direct-cut',
+        label: 'Direct Cut',
+        secondary: 'Video Editor',
+        route: '/direct-cut',
+        icon: FluentDirectCutIcon,
+      },
+      {
+        id: 'swift-bank',
+        label: 'Swift Bank',
+        secondary: 'Ngân hàng số',
+        route: '/swift-bank',
+        icon: FluentSwiftBankIcon,
+      },
+      {
+        id: 'clock',
+        label: 'Clock',
+        secondary: 'Đồng hồ & Báo thức',
+        route: '/clock',
+        icon: FluentClockIcon,
+      },
+      {
+        id: 'vlc',
+        label: 'VLC Media Player',
+        secondary: 'Trình phát đa phương tiện',
+        route: '/vlc',
+        icon: FluentVlcIcon,
+      },
+      {
+        id: 'schedule',
+        label: 'Lịch phát sóng',
+        secondary: 'Lịch phát sóng TV EPG',
+        route: '/schedule',
+        icon: FluentScheduleIcon,
+      },
+      {
+        id: 'cookbook',
+        label: 'Cookbook',
+        secondary: 'Ẩm thực & Món ngon',
+        route: '/cookbook',
+        icon: FluentCookbookIcon,
+      },
+      {
+        id: 'swift',
+        label: 'Swift',
+        secondary: 'Mạng xã hội đa năng',
+        route: '/swift',
+        icon: FluentSwiftSocialIcon,
+      },
+      {
+        id: 'friends',
+        label: 'Friends',
+        secondary: '100 Bạn bè V-One',
+        route: '/friends',
+        icon: FluentFriendsIcon,
+      },
+      {
+        id: 'logos-fandom',
+        label: 'Logos Fandom',
+        secondary: 'Bách khoa toàn thư thương hiệu & logo',
+        route: '/logos-fandom',
+        icon: FluentLogosFandomIcon,
+      },
+      {
+        id: 'minecraft-wiki',
+        label: 'Minecraft Wiki',
+        secondary: 'Bách khoa toàn thư minecraft.wiki',
+        route: '/minecraft-wiki',
+        icon: FluentMinecraftWikiIcon,
+      },
     ];
 
     if (settings.developerMode) {
@@ -447,6 +535,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
     if ((route === '/ms-paint' || route === '/paint') && (currentRoute === '/paint' || currentRoute === '/ms-paint' || currentRoute.startsWith('/ms-paint'))) return true;
     if (route === '/photos' && (currentRoute === '/photos' || currentRoute.startsWith('/photos'))) return true;
     if (route === '/craftmine' && currentRoute === '/craftmine') return true;
+    if ((route === '/photopea' || route === '/photoshop') && (currentRoute === '/photopea' || currentRoute.startsWith('/photopea') || currentRoute === '/photoshop')) return true;
+    if ((route === '/vlc' || route === '/media-player') && (currentRoute === '/vlc' || currentRoute.startsWith('/vlc') || currentRoute === '/media-player')) return true;
+    if ((route === '/schedule' || route === '/epg') && (currentRoute === '/schedule' || currentRoute.startsWith('/schedule') || currentRoute === '/epg' || currentRoute === '/lich-phat-song')) return true;
+    if ((route === '/cookbook' || route === '/recipes') && (currentRoute === '/cookbook' || currentRoute.startsWith('/cookbook') || currentRoute === '/recipes')) return true;
+    if ((route === '/swift' || route === '/swift-social') && (currentRoute === '/swift' || currentRoute.startsWith('/swift') || currentRoute === '/swift-social')) return true;
+    if ((route === '/friends' || route === '/ban-be') && (currentRoute === '/friends' || currentRoute.startsWith('/friends') || currentRoute === '/ban-be')) return true;
+    if ((route === '/logos-fandom' || route === '/logos-wiki' || route === '/fandom') && (currentRoute === '/logos-fandom' || currentRoute.startsWith('/logos-fandom') || currentRoute === '/logos-wiki' || currentRoute === '/fandom')) return true;
+    if ((route === '/minecraft-wiki' || route === '/mc-wiki' || route === '/wiki') && (currentRoute === '/minecraft-wiki' || currentRoute.startsWith('/minecraft-wiki') || currentRoute === '/mc-wiki' || currentRoute === '/wiki')) return true;
     if (route === '/settings' && (currentRoute === '/settings' || currentRoute.startsWith('/settings'))) return true;
     if (route === '/about' && (currentRoute === '/about' || currentRoute.startsWith('/about'))) return true;
     if (route !== '/' && currentRoute.startsWith(route)) return true;
@@ -909,6 +1005,130 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
           </div>
 
+          {/* Divider & Category Heading: Social (Bên trên category Apps) */}
+          <div className="my-2 mx-1 h-[1px] bg-black/10 dark:bg-white/10" />
+          <div className="px-1.5 pt-0.5 pb-1 shrink-0">
+            <h2 className="text-black dark:text-[#a1a1aa] text-[11px] font-semibold tracking-wider uppercase select-none">
+              Social
+            </h2>
+          </div>
+
+          {/* 1. Swift Bank */}
+          <div className="w-full">
+            <button
+              type="button"
+              id={isMobile ? 'mobile-nav-swift-bank' : 'sidebar-nav-swift-bank'}
+              data-nav-active={(currentRoute === '/swift-bank' || currentRoute.startsWith('/swift-bank') || currentRoute === '/bank') ? 'true' : undefined}
+              onClick={() => handleNavClick('/swift-bank')}
+              title="Swift Bank - Ngân hàng số bảo mật"
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                (currentRoute === '/swift-bank' || currentRoute.startsWith('/swift-bank') || currentRoute === '/bank')
+                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-3.5 truncate">
+                <FluentSwiftBankIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <span className="truncate text-[13.5px]">Swift Bank</span>
+              </div>
+              <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 shrink-0">
+                24/7
+              </span>
+            </button>
+          </div>
+
+          {/* 2. Swift Social */}
+          <div className="w-full">
+            <button
+              type="button"
+              id={isMobile ? 'mobile-nav-swift-social' : 'sidebar-nav-swift-social'}
+              data-nav-active={(currentRoute === '/swift' || currentRoute.startsWith('/swift') || currentRoute === '/swift-social') ? 'true' : undefined}
+              onClick={() => handleNavClick('/swift')}
+              title="Swift - Mạng xã hội đa năng"
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                (currentRoute === '/swift' || currentRoute.startsWith('/swift') || currentRoute === '/swift-social')
+                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-3.5 truncate">
+                <FluentSwiftSocialIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <span className="truncate text-[13.5px]">Swift Social</span>
+              </div>
+              <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-600 dark:text-purple-400 shrink-0">
+                MẠNG XÃ HỘI
+              </span>
+            </button>
+          </div>
+
+          {/* 3. Friends */}
+          <div className="w-full">
+            <button
+              type="button"
+              id={isMobile ? 'mobile-nav-friends' : 'sidebar-nav-friends'}
+              data-nav-active={(currentRoute === '/friends' || currentRoute.startsWith('/friends')) ? 'true' : undefined}
+              onClick={() => handleNavClick('/friends')}
+              title="Friends - Danh sách 100 người dùng V-One"
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                (currentRoute === '/friends' || currentRoute.startsWith('/friends'))
+                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-3.5 truncate">
+                <FluentFriendsIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <span className="truncate text-[13.5px]">Friends</span>
+              </div>
+              <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 shrink-0">
+                100 USERS
+              </span>
+            </button>
+          </div>
+
+          {/* 4. Logos Fandom */}
+          <div className="w-full">
+            <button
+              type="button"
+              id={isMobile ? 'mobile-nav-logos-fandom' : 'sidebar-nav-logos-fandom'}
+              data-nav-active={(currentRoute === '/logos-fandom' || currentRoute === '/logos-wiki' || currentRoute === '/fandom') ? 'true' : undefined}
+              onClick={() => handleNavClick('/logos-fandom')}
+              title="Logos Fandom - Bách khoa toàn thư nhận diện thương hiệu"
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                (currentRoute === '/logos-fandom' || currentRoute === '/logos-wiki' || currentRoute === '/fandom')
+                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-3.5 truncate">
+                <FluentLogosFandomIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <span className="truncate text-[13.5px]">Logos Fandom</span>
+              </div>
+              <span className="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-600 dark:text-amber-400 font-semibold uppercase">Wiki</span>
+            </button>
+          </div>
+
+          {/* 5. Minecraft Wiki */}
+          <div className="w-full">
+            <button
+              type="button"
+              id={isMobile ? 'mobile-nav-minecraft-wiki' : 'sidebar-nav-minecraft-wiki'}
+              data-nav-active={(currentRoute === '/minecraft-wiki' || currentRoute === '/mc-wiki' || currentRoute === '/wiki') ? 'true' : undefined}
+              onClick={() => handleNavClick('/minecraft-wiki')}
+              title="Minecraft Wiki - Bách khoa toàn thư chính thức minecraft.wiki"
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                (currentRoute === '/minecraft-wiki' || currentRoute === '/mc-wiki' || currentRoute === '/wiki')
+                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-3.5 truncate">
+                <FluentMinecraftWikiIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <span className="truncate text-[13.5px]">Minecraft Wiki</span>
+              </div>
+              <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-semibold uppercase">Wiki</span>
+            </button>
+          </div>
+
           {/* Divider & Category Heading: Apps */}
           <div className="my-2 mx-1 h-[1px] bg-black/10 dark:bg-white/10" />
           <div className="px-1.5 pt-0.5 pb-1 shrink-0">
@@ -1132,6 +1352,32 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
           </div>
 
+          {/* 9. Direct Cut (Pro Video Editor) */}
+          <div className="w-full">
+            <button
+              type="button"
+              id={isMobile ? 'mobile-nav-direct-cut' : 'sidebar-nav-direct-cut'}
+              data-nav-active={(currentRoute === '/direct-cut' || currentRoute.startsWith('/direct-cut') || currentRoute === '/video-editor') ? 'true' : undefined}
+              onClick={() => handleNavClick('/direct-cut')}
+              title="Direct Cut - Dựng phim chuyên nghiệp"
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                (currentRoute === '/direct-cut' || currentRoute.startsWith('/direct-cut') || currentRoute === '/video-editor')
+                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-3.5 truncate">
+                <FluentDirectCutIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <span className="truncate text-[13.5px]">Direct Cut</span>
+              </div>
+              <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-[#6366f1]/20 text-[#6366f1] dark:text-[#a5b4fc] shrink-0">
+                PRO
+              </span>
+            </button>
+          </div>
+
+          {/* Direct Cut */}
+
           {/* Divider & Category Heading: System */}
           <div className="my-2 mx-1 h-[1px] bg-black/10 dark:bg-white/10" />
           <div className="px-1.5 pt-0.5 pb-1 shrink-0">
@@ -1188,6 +1434,28 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <span className="truncate text-[13.5px]">Craftmine</span>
               </div>
               <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-semibold uppercase">Web</span>
+            </button>
+          </div>
+
+          {/* Photopea (Photo Editor Web App) */}
+          <div className="w-full">
+            <button
+              type="button"
+              id={isMobile ? 'mobile-nav-photopea' : 'sidebar-nav-photopea'}
+              data-nav-active={(currentRoute === '/photopea' || currentRoute === '/photoshop') ? 'true' : undefined}
+              onClick={() => handleNavClick('/photopea')}
+              title="Photopea - Trình chỉnh sửa ảnh PSD & Vector"
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                (currentRoute === '/photopea' || currentRoute === '/photoshop')
+                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-3.5 truncate">
+                <FluentPhotopeaIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <span className="truncate text-[13.5px]">Photopea</span>
+              </div>
+              <span className="text-[9px] px-1.5 py-0.5 rounded bg-teal-500/15 text-teal-600 dark:text-teal-400 font-semibold uppercase">Web</span>
             </button>
           </div>
 
@@ -1392,6 +1660,89 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <FluentWidgetsIcon className="w-5 h-5 text-black dark:text-white" />
               </button>
 
+              {/* Divider: Social */}
+              <div className="w-6 h-[1px] bg-black/10 dark:bg-white/10 my-1" />
+
+              {/* Swift Bank Icon */}
+              <button
+                type="button"
+                id="sidebar-collapsed-swift-bank"
+                data-nav-active={(currentRoute === '/swift-bank' || currentRoute.startsWith('/swift-bank') || currentRoute === '/bank') ? 'true' : undefined}
+                onClick={() => handleNavClick('/swift-bank')}
+                title="Swift Bank - Ngân hàng số"
+                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  (currentRoute === '/swift-bank' || currentRoute.startsWith('/swift-bank') || currentRoute === '/bank')
+                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                }`}
+              >
+                <FluentSwiftBankIcon className="w-5 h-5 text-black dark:text-white" />
+              </button>
+
+              {/* Swift Social Icon */}
+              <button
+                type="button"
+                id="sidebar-collapsed-swift-social"
+                data-nav-active={(currentRoute === '/swift' || currentRoute.startsWith('/swift') || currentRoute === '/swift-social') ? 'true' : undefined}
+                onClick={() => handleNavClick('/swift')}
+                title="Swift Social"
+                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  (currentRoute === '/swift' || currentRoute.startsWith('/swift') || currentRoute === '/swift-social')
+                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                }`}
+              >
+                <FluentSwiftSocialIcon className="w-5 h-5 text-black dark:text-white" />
+              </button>
+
+              {/* Friends Icon */}
+              <button
+                type="button"
+                id="sidebar-collapsed-friends"
+                data-nav-active={(currentRoute === '/friends' || currentRoute.startsWith('/friends')) ? 'true' : undefined}
+                onClick={() => handleNavClick('/friends')}
+                title="Friends - 100 Người dùng"
+                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  (currentRoute === '/friends' || currentRoute.startsWith('/friends'))
+                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                }`}
+              >
+                <FluentFriendsIcon className="w-5 h-5 text-black dark:text-white" />
+              </button>
+
+              {/* Logos Fandom Icon */}
+              <button
+                type="button"
+                id="sidebar-collapsed-logos-fandom"
+                data-nav-active={(currentRoute === '/logos-fandom' || currentRoute === '/logos-wiki' || currentRoute === '/fandom') ? 'true' : undefined}
+                onClick={() => handleNavClick('/logos-fandom')}
+                title="Logos Fandom"
+                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  (currentRoute === '/logos-fandom' || currentRoute === '/logos-wiki' || currentRoute === '/fandom')
+                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                }`}
+              >
+                <FluentLogosFandomIcon className="w-5 h-5 text-black dark:text-white" />
+              </button>
+
+              {/* Minecraft Wiki Icon */}
+              <button
+                type="button"
+                id="sidebar-collapsed-minecraft-wiki"
+                data-nav-active={(currentRoute === '/minecraft-wiki' || currentRoute === '/mc-wiki' || currentRoute === '/wiki') ? 'true' : undefined}
+                onClick={() => handleNavClick('/minecraft-wiki')}
+                title="Minecraft Wiki"
+                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  (currentRoute === '/minecraft-wiki' || currentRoute === '/mc-wiki' || currentRoute === '/wiki')
+                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                }`}
+              >
+                <FluentMinecraftWikiIcon className="w-5 h-5 text-black dark:text-white" />
+              </button>
+
               {/* Divider: Apps */}
               <div className="w-6 h-[1px] bg-black/10 dark:bg-white/10 my-1" />
 
@@ -1528,6 +1879,90 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <FluentPaintIcon className="w-5 h-5 text-black dark:text-white" />
               </button>
 
+              {/* 9. Direct Cut Icon */}
+              <button
+                type="button"
+                id="sidebar-collapsed-direct-cut"
+                data-nav-active={(currentRoute === '/direct-cut' || currentRoute.startsWith('/direct-cut') || currentRoute === '/video-editor') ? 'true' : undefined}
+                onClick={() => handleNavClick('/direct-cut')}
+                title="Direct Cut - Video Editor"
+                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  (currentRoute === '/direct-cut' || currentRoute.startsWith('/direct-cut') || currentRoute === '/video-editor')
+                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                }`}
+              >
+                <FluentDirectCutIcon className="w-5 h-5 text-black dark:text-white" />
+              </button>
+
+              {/* Clock Icon */}
+
+              {/* 11. Clock Icon */}
+              <button
+                type="button"
+                id="sidebar-collapsed-clock"
+                data-nav-active={(currentRoute === '/clock' || currentRoute.startsWith('/clock') || currentRoute === '/alarm' || currentRoute === '/timer' || currentRoute === '/stopwatch') ? 'true' : undefined}
+                onClick={() => handleNavClick('/clock')}
+                title="Clock - Đặt báo thức & Bấm giờ"
+                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  (currentRoute === '/clock' || currentRoute.startsWith('/clock') || currentRoute === '/alarm' || currentRoute === '/timer' || currentRoute === '/stopwatch')
+                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                }`}
+              >
+                <FluentClockIcon className="w-5 h-5 text-black dark:text-white" />
+              </button>
+
+              {/* 12. VLC Media Player Icon */}
+              <button
+                type="button"
+                id="sidebar-collapsed-vlc"
+                data-nav-active={(currentRoute === '/vlc' || currentRoute.startsWith('/vlc') || currentRoute === '/media-player') ? 'true' : undefined}
+                onClick={() => handleNavClick('/vlc')}
+                title="VLC Media Player"
+                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  (currentRoute === '/vlc' || currentRoute.startsWith('/vlc') || currentRoute === '/media-player')
+                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                }`}
+              >
+                <FluentVlcIcon className="w-5 h-5 text-black dark:text-white" />
+              </button>
+
+              {/* 13. Schedule Icon */}
+              <button
+                type="button"
+                id="sidebar-collapsed-schedule"
+                data-nav-active={(currentRoute === '/schedule' || currentRoute.startsWith('/schedule') || currentRoute === '/epg') ? 'true' : undefined}
+                onClick={() => handleNavClick('/schedule')}
+                title="Lịch phát sóng"
+                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  (currentRoute === '/schedule' || currentRoute.startsWith('/schedule') || currentRoute === '/epg')
+                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                }`}
+              >
+                <FluentScheduleIcon className="w-5 h-5 text-black dark:text-white" />
+              </button>
+
+              {/* 14. Cookbook Icon */}
+              <button
+                type="button"
+                id="sidebar-collapsed-cookbook"
+                data-nav-active={(currentRoute === '/cookbook' || currentRoute.startsWith('/cookbook')) ? 'true' : undefined}
+                onClick={() => handleNavClick('/cookbook')}
+                title="Cookbook - Ẩm thực"
+                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  (currentRoute === '/cookbook' || currentRoute.startsWith('/cookbook'))
+                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                }`}
+              >
+                <FluentCookbookIcon className="w-5 h-5 text-black dark:text-white" />
+              </button>
+
+              {/* Cookbook Icon */}
+
               {/* Divider: System */}
               <div className="w-6 h-[1px] bg-black/10 dark:bg-white/10 my-1" />
 
@@ -1564,6 +1999,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 }`}
               >
                 <FluentCraftmineIcon className="w-5 h-5 text-black dark:text-white" />
+              </button>
+
+              {/* Photopea Icon */}
+              <button
+                type="button"
+                id="sidebar-collapsed-photopea"
+                data-nav-active={(currentRoute === '/photopea' || currentRoute === '/photoshop') ? 'true' : undefined}
+                onClick={() => handleNavClick('/photopea')}
+                title="Photopea"
+                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  (currentRoute === '/photopea' || currentRoute === '/photoshop')
+                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                }`}
+              >
+                <FluentPhotopeaIcon className="w-5 h-5 text-black dark:text-white" />
               </button>
 
               {/* 7. Discord Icon */}

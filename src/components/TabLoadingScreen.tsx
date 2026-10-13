@@ -13,9 +13,20 @@ import {
   FluentWidgetsIcon,
   FluentFileExplorerIcon,
   FluentPaintIcon,
-  FluentPhotosColorIcon,
+  FluentPhotosIcon,
   FluentEdgeIcon,
-  FluentCameraIcon
+  FluentCameraIcon,
+  FluentDirectCutIcon,
+  FluentSwiftBankIcon,
+  FluentClockIcon,
+  FluentVlcIcon,
+  FluentPhotopeaIcon,
+  FluentScheduleIcon,
+  FluentCookbookIcon,
+  FluentSwiftSocialIcon,
+  FluentFriendsIcon,
+  FluentLogosFandomIcon,
+  FluentMinecraftWikiIcon
 } from './FluentIcons';
 
 interface TabLoadingScreenProps {
@@ -26,11 +37,12 @@ interface TabLoadingScreenProps {
 export const TabLoadingScreen: React.FC<TabLoadingScreenProps> = ({ route = '', className = '' }) => {
   const getTabMeta = (r: string) => {
     const cleanRoute = (r || '').split('?')[0].split('#')[0];
+    const iconClass = "w-20 h-20 sm:w-24 sm:h-24 shrink-0 text-neutral-800 dark:text-neutral-100 drop-shadow-sm select-none splash-icon-zoom-in";
 
     if (cleanRoute === '/edge' || cleanRoute === '/browser') {
       return {
         title: 'Microsoft Edge',
-        icon: <FluentEdgeIcon className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 drop-shadow-md select-none" />
+        icon: <FluentEdgeIcon className={iconClass} />
       };
     }
 
@@ -41,7 +53,7 @@ export const TabLoadingScreen: React.FC<TabLoadingScreenProps> = ({ route = '', 
           <img
             src="https://upload.wikimedia.org/wikipedia/vi/a/aa/Microsoft_Copilot_Icon.svg"
             alt="Copilot"
-            className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 object-contain drop-shadow-md select-none"
+            className={`${iconClass} object-contain`}
           />
         )
       };
@@ -50,111 +62,188 @@ export const TabLoadingScreen: React.FC<TabLoadingScreenProps> = ({ route = '', 
     if (cleanRoute === '/file-explorer' || cleanRoute === '/files') {
       return {
         title: 'File Explorer',
-        icon: <FluentFileExplorerIcon className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 text-black dark:text-white drop-shadow-md select-none" />
+        icon: <FluentFileExplorerIcon className={iconClass} />
       };
     }
 
     if (cleanRoute === '/live-tv' || cleanRoute === '/watch') {
       return {
         title: 'Watch & Live TV',
-        icon: <FluentWatchIcon className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 text-black dark:text-white drop-shadow-md select-none" />
+        icon: <FluentWatchIcon className={iconClass} />
       };
     }
 
     if (cleanRoute === '/notes' || cleanRoute === '/write' || cleanRoute === '/present' || cleanRoute === '/table') {
       return {
         title: 'Notes',
-        icon: <FluentNotesIcon className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 text-black dark:text-white drop-shadow-md select-none" />
+        icon: <FluentNotesIcon className={iconClass} />
       };
     }
 
     if (cleanRoute === '/gallery' || cleanRoute === '/photos') {
       return {
         title: 'Gallery',
-        icon: <FluentPhotosColorIcon className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 drop-shadow-md select-none" />
+        icon: <FluentPhotosIcon className={iconClass} />
       };
     }
 
     if (cleanRoute === '/camera') {
       return {
         title: 'Camera',
-        icon: <FluentCameraIcon className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 text-black dark:text-white drop-shadow-md select-none" />
+        icon: <FluentCameraIcon className={iconClass} />
       };
     }
 
     if (cleanRoute === '/paint' || cleanRoute === '/ms-paint') {
       return {
         title: 'Paint',
-        icon: <FluentPaintIcon className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 text-black dark:text-white drop-shadow-md select-none" />
+        icon: <FluentPaintIcon className={iconClass} />
+      };
+    }
+
+    if (cleanRoute === '/direct-cut' || cleanRoute === '/video-editor' || cleanRoute === '/edit') {
+      return {
+        title: 'Direct Cut',
+        icon: <FluentDirectCutIcon className={iconClass} />
+      };
+    }
+
+    if (cleanRoute === '/swift-bank' || cleanRoute === '/bank' || cleanRoute === '/swiftbank') {
+      return {
+        title: 'Swift Bank',
+        icon: <FluentSwiftBankIcon className={iconClass} />
+      };
+    }
+
+    if (cleanRoute === '/vlc' || cleanRoute === '/vlc-player' || cleanRoute === '/media-player') {
+      return {
+        title: 'VLC Media Player',
+        icon: <FluentVlcIcon className={iconClass} />
+      };
+    }
+
+    if (cleanRoute === '/photopea' || cleanRoute === '/photoshop') {
+      return {
+        title: 'Photopea',
+        icon: <FluentPhotopeaIcon className={iconClass} />
+      };
+    }
+
+    if (cleanRoute === '/logos-fandom' || cleanRoute === '/logos-wiki' || cleanRoute === '/fandom') {
+      return {
+        title: 'Logos Fandom',
+        icon: <FluentLogosFandomIcon className={iconClass} />
+      };
+    }
+
+    if (cleanRoute === '/minecraft-wiki' || cleanRoute === '/mc-wiki' || cleanRoute === '/wiki') {
+      return {
+        title: 'Minecraft Wiki',
+        icon: <FluentMinecraftWikiIcon className={iconClass} />
+      };
+    }
+
+    if (cleanRoute === '/schedule' || cleanRoute === '/tv-guide' || cleanRoute === '/epg' || cleanRoute === '/lich-phat-song') {
+      return {
+        title: 'Lịch phát sóng',
+        icon: <FluentScheduleIcon className={iconClass} />
+      };
+    }
+
+    if (cleanRoute === '/cookbook' || cleanRoute === '/recipes' || cleanRoute === '/nau-an') {
+      return {
+        title: 'Cookbook',
+        icon: <FluentCookbookIcon className={iconClass} />
+      };
+    }
+
+    if (cleanRoute === '/swift' || cleanRoute === '/swift-social' || cleanRoute === '/social') {
+      return {
+        title: 'Swift Social',
+        icon: <FluentSwiftSocialIcon className={iconClass} />
+      };
+    }
+
+    if (cleanRoute === '/friends' || cleanRoute === '/ban-be') {
+      return {
+        title: 'Bạn bè & Cộng đồng',
+        icon: <FluentFriendsIcon className={iconClass} />
       };
     }
 
     if (cleanRoute === '/craftmine') {
       return {
         title: 'Craftmine',
-        icon: <FluentCraftmineIcon className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 text-black dark:text-white drop-shadow-md select-none" />
+        icon: <FluentCraftmineIcon className={iconClass} />
       };
     }
 
     if (cleanRoute === '/task-manager') {
       return {
         title: 'Task Manager',
-        icon: <FluentTaskManagerIcon className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 text-black dark:text-white drop-shadow-md select-none" />
+        icon: <FluentTaskManagerIcon className={iconClass} />
       };
     }
 
     if (cleanRoute === '/widgets') {
       return {
         title: 'Widgets',
-        icon: <FluentWidgetsIcon className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 text-black dark:text-white drop-shadow-md select-none" />
+        icon: <FluentWidgetsIcon className={iconClass} />
       };
     }
 
     if (cleanRoute === '/news' || cleanRoute.startsWith('/news/')) {
       return {
         title: 'Tin tức',
-        icon: <FluentNewsIcon className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 text-black dark:text-white drop-shadow-md select-none" />
+        icon: <FluentNewsIcon className={iconClass} />
       };
     }
 
     if (cleanRoute === '/channels') {
       return {
         title: 'Kênh truyền hình',
-        icon: <FluentLiveTvIcon className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 text-black dark:text-white drop-shadow-md select-none" />
+        icon: <FluentLiveTvIcon className={iconClass} />
       };
     }
 
     if (cleanRoute === '/favorites') {
       return {
         title: 'Kênh yêu thích',
-        icon: <FluentWatchIcon className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 text-black dark:text-white drop-shadow-md select-none" />
+        icon: <FluentWatchIcon className={iconClass} />
       };
     }
 
     if (cleanRoute === '/settings') {
       return {
         title: 'Cài đặt',
-        icon: <FluentSettingsIcon className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 text-black dark:text-white drop-shadow-md select-none" />
+        icon: <FluentSettingsIcon className={iconClass} />
       };
     }
 
     if (cleanRoute === '/updates') {
       return {
         title: 'Cập nhật',
-        icon: <FluentUpdatesIcon className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 text-black dark:text-white drop-shadow-md select-none" />
+        icon: <FluentUpdatesIcon className={iconClass} />
       };
     }
 
     if (cleanRoute === '/search') {
       return {
         title: 'Tìm kiếm',
-        icon: <FluentSearchIcon className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 text-black dark:text-white drop-shadow-md select-none" />
+        icon: <FluentSearchIcon className={iconClass} />
+      };
+    }
+
+    if (cleanRoute === '/clock' || cleanRoute === '/alarm' || cleanRoute === '/timer' || cleanRoute === '/stopwatch') {
+      return {
+        title: 'Clock',
+        icon: <FluentClockIcon className={iconClass} />
       };
     }
 
     return {
       title: 'V-One (Dev)',
-      icon: <FluentHomeIcon className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 text-black dark:text-white drop-shadow-md select-none" />
+      icon: <FluentHomeIcon className={iconClass} />
     };
   };
 
@@ -165,10 +254,10 @@ export const TabLoadingScreen: React.FC<TabLoadingScreenProps> = ({ route = '', 
       role="status"
       aria-live="polite"
       aria-label={meta.title}
-      className={`w-full flex-1 flex flex-col items-center justify-center min-h-[60vh] sm:min-h-[70vh] py-12 select-none my-auto pointer-events-none ${className}`}
+      className={`w-full h-full flex-1 flex flex-col items-center justify-center min-h-[60vh] sm:min-h-[70vh] py-12 select-none my-auto pointer-events-none bg-[#f3f4f6] dark:bg-[#202024] text-neutral-800 dark:text-neutral-100 rounded-tl-[10px] ${className}`}
     >
-      {/* Icon only: Không nền, không tên tab, không text đang tải, hiệu ứng zoom-in nhẹ */}
-      <div className="flex items-center justify-center splash-icon-zoom-in">
+      {/* Icon outline with smooth zoom animation on neutral gray background */}
+      <div className="flex items-center justify-center">
         {meta.icon}
       </div>
     </div>
