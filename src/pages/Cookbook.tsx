@@ -336,7 +336,7 @@ export const Cookbook: React.FC = () => {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-neutral-900 dark:text-white">
-                  Cookbook V-One
+                  Cookbook Sparkle (Dev)
                 </h1>
                 <span className="px-2 py-0.5 rounded-full bg-orange-500/15 text-orange-600 dark:text-orange-400 text-[10px] font-bold uppercase tracking-wider">
                   Ẩm thực Việt & Quốc tế
@@ -348,8 +348,8 @@ export const Cookbook: React.FC = () => {
             </div>
           </div>
 
-          {/* Pill Search Input */}
-          <div className="relative w-full md:w-80 lg:w-96 h-10 flex items-center px-4 rounded-full bg-black/5 dark:bg-white/[0.06] border border-black/10 dark:border-white/10 focus-within:border-orange-500 focus-within:ring-1 focus-within:ring-orange-500 transition-all shadow-2xs">
+          {/* Search Input with 5px radius */}
+          <div className="relative w-full md:w-80 lg:w-96 h-10 flex items-center px-4 rounded-[5px] bg-black/5 dark:bg-white/[0.06] border border-black/10 dark:border-white/10 focus-within:border-orange-500 focus-within:ring-1 focus-within:ring-orange-500 transition-all shadow-2xs">
             <Search className="w-4 h-4 text-neutral-400 mr-2.5 shrink-0" />
             <input
               type="text"

@@ -13,7 +13,7 @@ export const FarewellAnnouncement: React.FC = () => {
         <div className="flex items-center justify-between border-b border-[#e5e5e5] dark:border-[#383838] pb-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[4px] bg-[#4cc2ff]/10 text-[#0078d4] dark:bg-[#4cc2ff]/20 dark:text-[#4cc2ff] text-xs font-semibold uppercase tracking-wider">
             <Heart className="w-3.5 h-3.5 fill-current" />
-            <span>ANNOUNCEMENT • V-ONE (DEV)</span>
+            <span>ANNOUNCEMENT • SPARKLE (DEV)</span>
           </div>
         </div>
 
@@ -35,7 +35,7 @@ export const FarewellAnnouncement: React.FC = () => {
           </p>
 
           <div className="farewell-quote p-4 sm:p-5 rounded-xl bg-black/[0.04] dark:bg-white/5 border-l-4 border-[#4cc2ff] text-[#111827] dark:text-white font-medium leading-relaxed my-3">
-            <span className="font-bold text-[#0078d4] dark:text-[#4cc2ff]">NOTE:</span> Sparkle (Dev) là dự án phát triển độc lập, không liên quan đến Vplay tiền nhiệm cũng như các dự án sắp tới của VNRT.
+            <span className="font-bold text-[#0078d4] dark:text-[#4cc2ff]">NOTE:</span> Sparkle (Dev) là dự án phát triển độc lập, không liên quan đến Vplay tiền nhiệm.
           </div>
         </div>
 

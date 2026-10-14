@@ -101,7 +101,7 @@ const INITIAL_TRANSACTIONS: Transaction[] = [
     id: 'FT261012998801',
     type: 'transfer_in',
     amount: 35000000,
-    senderName: 'CÔNG TY CP TRUYỀN HÌNH V-ONE',
+    senderName: 'CÔNG TY CP TRUYỀN HÌNH SPARKLE (DEV)',
     receiverName: 'NGUYỄN VĂN AN',
     receiverBank: 'Swift Bank',
     receiverAccount: '8888 6868 9999',
@@ -115,10 +115,10 @@ const INITIAL_TRANSACTIONS: Transaction[] = [
     type: 'bill_pay',
     amount: 249000,
     senderName: 'NGUYỄN VĂN AN',
-    receiverName: 'V-ONE OTT PLATFORM',
+    receiverName: 'SPARKLE (DEV) OTT PLATFORM',
     receiverBank: 'Swift Bank',
     receiverAccount: '1900 8888',
-    message: 'Gia hạn gói cước V-One VIP 4K Truyền hình 6 tháng',
+    message: 'Gia hạn gói cước Sparkle (Dev) VIP 4K Truyền hình 6 tháng',
     timestamp: '11/10/2026 20:15',
     category: 'Truyền hình',
     status: 'Thành công'
@@ -276,8 +276,8 @@ export const SwiftBank: React.FC<SwiftBankProps> = ({ navigate }) => {
   useEffect(() => {
     if (targetAccount.length >= 6) {
       if (selectedBank === 'SWIFT') {
-        if (targetAccount.includes('1900') || targetAccount.includes('vone')) {
-          setTargetName('CÔNG TY CP TRUYỀN HÌNH V-ONE');
+        if (targetAccount.includes('1900') || targetAccount.includes('sparkle') || targetAccount.includes('vone')) {
+          setTargetName('CÔNG TY CP TRUYỀN HÌNH SPARKLE (DEV)');
         } else {
           setTargetName('TRẦN VĂN HOÀNG (SWIFT BANK)');
         }
@@ -351,7 +351,7 @@ export const SwiftBank: React.FC<SwiftBankProps> = ({ navigate }) => {
     showToast(`Chuyển ${formatVND(numAmount)} thành công!`);
   };
 
-  // Bill Pay quick action (e.g. V-One subscription or phone top-up)
+  // Bill Pay quick action (e.g. Sparkle (Dev) subscription or phone top-up)
   const handlePayBill = (billName: string, amount: number) => {
     if (amount > account.balance) {
       showToast('Số dư tài khoản không đủ');
@@ -460,7 +460,7 @@ export const SwiftBank: React.FC<SwiftBankProps> = ({ navigate }) => {
                 </span>
               </div>
               <p className="text-xs text-neutral-400 mt-0.5">
-                Hệ thống ngân hàng số bảo mật cao cấp dành riêng cho hệ sinh thái V-One
+                Hệ thống ngân hàng số bảo mật cao cấp dành riêng cho hệ sinh thái Sparkle (Dev)
               </p>
             </div>
           </div>
@@ -694,7 +694,7 @@ export const SwiftBank: React.FC<SwiftBankProps> = ({ navigate }) => {
                     <div className="w-9 h-9 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                       <Tv className="w-5 h-5" />
                     </div>
-                    <div className="font-bold text-sm text-white">Gói cước V-One</div>
+                    <div className="font-bold text-sm text-white">Gói cước Sparkle (Dev)</div>
                     <div className="text-[11px] text-neutral-400 mt-0.5">Hoàn tiền 5% hóa đơn</div>
                   </button>
                 </div>
@@ -1232,18 +1232,18 @@ export const SwiftBank: React.FC<SwiftBankProps> = ({ navigate }) => {
               </p>
             </div>
 
-            {/* V-One Subscriptions */}
+            {/* Sparkle (Dev) Subscriptions */}
             <div className="space-y-3">
               <h3 className="text-xs font-bold text-sky-400 uppercase tracking-wider flex items-center gap-1.5">
                 <Tv className="w-4 h-4" />
-                Gói Cước Nền Tảng V-One & Đối Tác Bản Quyền
+                Gói Cước Nền Tảng Sparkle (Dev) & Đối Tác Bản Quyền
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {[
-                  { id: 'vone-1m', title: 'V-One VIP 4K (1 Tháng)', price: 49000, desc: 'Xem truyền hình 4K HDR không quảng cáo, mở toàn bộ kênh thể thao.' },
-                  { id: 'vone-6m', title: 'V-One Family (6 Tháng)', price: 249000, desc: 'Chia sẻ 4 thiết bị đồng thời, xem lại 7 ngày, lưu trữ bản tin.' },
-                  { id: 'vone-life', title: 'V-One Trọn Đời (Lifetime)', price: 599000, desc: 'Đặc quyền trọn đời, biểu tượng VIP vàng, tải video lưu trữ không giới hạn.' },
+                  { id: 'vone-1m', title: 'Sparkle (Dev) VIP 4K (1 Tháng)', price: 49000, desc: 'Xem truyền hình 4K HDR không quảng cáo, mở toàn bộ kênh thể thao.' },
+                  { id: 'vone-6m', title: 'Sparkle (Dev) Family (6 Tháng)', price: 249000, desc: 'Chia sẻ 4 thiết bị đồng thời, xem lại 7 ngày, lưu trữ bản tin.' },
+                  { id: 'vone-life', title: 'Sparkle (Dev) Trọn Đời (Lifetime)', price: 599000, desc: 'Đặc quyền trọn đời, biểu tượng VIP vàng, tải video lưu trữ không giới hạn.' },
                 ].map((pack) => (
                   <div key={pack.id} className="p-5 rounded-2xl bg-[#111827] border border-white/10 flex flex-col justify-between hover:border-sky-500/50 transition-colors">
                     <div>
@@ -1391,7 +1391,7 @@ export const SwiftBank: React.FC<SwiftBankProps> = ({ navigate }) => {
 
               {/* Search & Filter */}
               <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1.5 bg-[#1e293b] border border-white/10 rounded-xl px-3 py-1.5 text-xs text-white">
+                <div className="flex items-center gap-1.5 bg-[#1e293b] border border-white/10 rounded-[5px] px-3 py-1.5 text-xs text-white">
                   <Search className="w-3.5 h-3.5 text-neutral-400" />
                   <input
                     type="text"

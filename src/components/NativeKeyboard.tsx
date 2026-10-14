@@ -359,7 +359,7 @@ export const NativeKeyboard: React.FC = () => {
   return (
     <div
       id="vplay-native-keyboard"
-      aria-label="VNRT Online Native Keyboard"
+      aria-label="Sparkle (Dev) Native Keyboard"
       style={{
         height: `${keyboardHeight}px`,
         backgroundColor: 'rgba(255, 255, 255, 0.70)',
@@ -401,7 +401,7 @@ export const NativeKeyboard: React.FC = () => {
 
           {/* Emoji search bar placed right next to switch button when in emoji board */}
           {showEmojiPicker && (
-            <div className="relative flex items-center shrink-0 w-44 xs:w-52 sm:w-64 md:w-80 h-7 bg-white/70 dark:bg-[#282c31] border border-black/10 dark:border-white/10 rounded-[6px] px-2 gap-1.5 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff] transition-all animate-in fade-in duration-150">
+            <div className="relative flex items-center shrink-0 w-44 xs:w-52 sm:w-64 md:w-80 h-7 bg-white/70 dark:bg-[#282c31] border border-black/10 dark:border-white/10 rounded-[5px] px-2 gap-1.5 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff] transition-all animate-in fade-in duration-150">
               <input
                 type="text"
                 value={emojiSearchQuery}
@@ -430,7 +430,7 @@ export const NativeKeyboard: React.FC = () => {
           <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center gap-2">
             {!showEmojiPicker && (
               <span className="text-[11px] font-medium text-black truncate max-w-[100px] sm:max-w-[180px] select-none hidden xs:inline">
-                {activeInput?.placeholder || 'VNRT Online Keyboard'}
+                {activeInput?.placeholder || 'Sparkle (Dev) Keyboard'}
               </span>
             )}
 

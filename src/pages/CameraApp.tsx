@@ -178,7 +178,7 @@ export const CameraApp: React.FC<CameraAppProps> = ({ navigate }) => {
       ctx.fillStyle = '#ffffff';
       ctx.font = 'bold 48px sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText('V-ONE OPTICAL CAMERA 2026', width / 2, height / 2 - 20);
+      ctx.fillText('SPARKLE (DEV) OPTICAL CAMERA 2026', width / 2, height / 2 - 20);
       ctx.font = '24px sans-serif';
       ctx.fillText(new Date().toLocaleString('vi-VN'), width / 2, height / 2 + 30);
     }
@@ -353,7 +353,7 @@ export const CameraApp: React.FC<CameraAppProps> = ({ navigate }) => {
               <div className="w-20 h-20 rounded-full bg-[#0078d4]/20 border border-[#0078d4]/40 flex items-center justify-center mb-4 text-[#4cc2ff] animate-pulse">
                 <CameraIcon className="w-10 h-10" />
               </div>
-              <h3 className="text-base font-bold text-white mb-1">Ống kính ảo V-One Studio</h3>
+              <h3 className="text-base font-bold text-white mb-1">Ống kính ảo Sparkle (Dev) Studio</h3>
               <p className="text-xs text-neutral-400 max-w-md mb-4">{cameraError}</p>
               <span className="text-[11px] px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
                 Sẵn sàng chụp & tự động lưu vào Gallery

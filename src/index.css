@@ -124,7 +124,7 @@
 .copilot-style-input,
 [id*="search-box"],
 [id*="search-capsule"] {
-  border-radius: 6px;
+  border-radius: 5px;
   transition: all 0.15s ease-in-out;
 }
 
@@ -157,7 +157,7 @@ input[type="reset"],
 }
 
 /* ========================================================
-   TOÀN BỘ INPUT BOX / SEARCH BOX TRONG APP DẠNG PILL (RADIUS 100% / ROUNDED-FULL)
+   TOÀN BỘ SEARCH BOX / INPUT BOX TRONG APP CÓ CORNER RADIUS 5PX
    ======================================================== */
 input[type="text"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
 input[type="search"],
@@ -182,8 +182,18 @@ input[type="number"],
 #channels-search-box,
 #settings-search-box,
 #immersive-search-capsule,
-#floating-search-bar-pill {
-  border-radius: 9999px !important;
+#floating-search-bar-pill,
+#copilot-search-box,
+#copilot-flyout-search-box,
+#spotlight-search-container {
+  border-radius: 5px !important;
+}
+
+#topbar-search-box[data-flyout-open="true"] {
+  border-top-left-radius: 5px !important;
+  border-top-right-radius: 5px !important;
+  border-bottom-left-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
 }
 
 /* Light Mode Global Overrides: Main tab page is #f9f9f9, Sidebar & TopBar are #f3f3f3 */
@@ -676,7 +686,7 @@ html.light-mode #vplay-splash-screen {
   animation: tabElementSlideUp 0.44s cubic-bezier(0.16, 1, 0.3, 1) both !important;
 }
 
-/* All Search Boxes: text & icon white in dark mode, matching Find and search V-One */
+/* All Search Boxes: text & icon white in dark mode, matching Find and search Sparkle (Dev) */
 html.dark #topbar-search-box input,
 html.dark #channels-search-box input,
 html.dark #settings-search-box input,
@@ -716,7 +726,7 @@ svg.lucide-mic-off * {
   stroke: currentColor !important;
 }
 
-/* All Search Boxes: text & icon in light mode, matching Find and search V-One */
+/* All Search Boxes: text & icon in light mode, matching Find and search Sparkle (Dev) */
 html.light-mode #topbar-search-box input,
 html.light-mode #channels-search-box input,
 html.light-mode #settings-search-box input,
@@ -1667,7 +1677,7 @@ html.light-mode #immersive-search-page .text-\[\#E0D8E2\] {
 }
 
 /* ==========================================================================
-   SPATIAL GLASS DESIGN SYSTEM (VNRT Online 26.9 - Developer Beta 6)
+   SPATIAL GLASS DESIGN SYSTEM (Sparkle (Dev) 26.9 - Developer Beta 6)
    ========================================================================== */
 
 /* Spatial Glass Capsule / Surface Style for Controls & Action Buttons */
@@ -3480,7 +3490,7 @@ html.light-mode select {
   color: #111827 !important;
 }
 
-/* TopBar search in V-One must NEVER have a white background */
+/* TopBar search in Sparkle (Dev) must NEVER have a white background */
 #topbar-search-box input,
 html.light-mode #topbar-search-box input,
 html:not(.light-mode) #topbar-search-box input {

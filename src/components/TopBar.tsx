@@ -222,7 +222,7 @@ export const TopBar: React.FC<TopBarProps> = ({
       { id: 'page-taskmanager', title: 'Task Manager', keywords: 'task manager quản lý tác vụ processes system performance', type: 'page', onSelect: () => navigate('/task-manager') },
       { id: 'page-widgets', title: 'Widgets', keywords: 'widgets tiện ích bảng tiện ích weather thời tiết lịch vnexpress tin tức', type: 'page', onSelect: () => navigate('/widgets') },
       { id: 'page-settings', title: 'Settings', keywords: 'cài đặt hệ thống settings preferences', type: 'page', onSelect: () => navigate('/settings') },
-      { id: 'page-about', title: 'About', keywords: 'giới thiệu about v-one v-one dev', type: 'page', onSelect: () => navigate('/about') },
+      { id: 'page-about', title: 'About', keywords: 'giới thiệu about sparkle sparkle dev', type: 'page', onSelect: () => navigate('/about') },
 
       // Settings Shortcuts
       { id: 'set-sideview', title: 'Side View', keywords: 'settings side view thanh bên', type: 'setting', onSelect: () => navigate('/settings') },
@@ -237,7 +237,7 @@ export const TopBar: React.FC<TopBarProps> = ({
       { id: 'tool-tts', title: 'Text-to-Speech Player', keywords: 'tools text-to-speech tts đọc bài viết', type: 'tool', onSelect: () => onOpenTextToSpeech(NEWS_DATA[0]) },
       { id: 'tool-findwords', title: 'Find Words', keywords: 'tools find words tìm từ trong trang', type: 'tool', onSelect: () => onOpenFindWords() },
       { id: 'tool-addstream', title: 'Add Custom Stream', keywords: 'tools add custom stream thêm luồng phát', type: 'tool', onSelect: () => onOpenAddStream() },
-      { id: 'tool-discord', title: 'Discord Community', keywords: 'community discord v-one', type: 'tool', onSelect: () => window.open('https://discord.gg/wcdjaDDayK', '_blank') }
+      { id: 'tool-discord', title: 'Discord Community', keywords: 'community discord sparkle dev', type: 'tool', onSelect: () => window.open('https://discord.gg/wcdjaDDayK', '_blank') }
     ];
 
     // Channels
@@ -453,8 +453,8 @@ export const TopBar: React.FC<TopBarProps> = ({
               data-flyout-open={isSearchFlyoutOpen ? "true" : "false"}
               className={`fluent-search-box group relative w-full h-8 sm:h-8.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3.5 gap-2 transition-all cursor-text select-none focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff] ${
                 isSearchFlyoutOpen
-                  ? 'rounded-t-[18px] rounded-b-none border-b-2 border-b-[#005fb8] dark:border-b-[#4cc2ff]'
-                  : 'rounded-full'
+                  ? 'rounded-t-[5px] rounded-b-none border-b-2 border-b-[#005fb8] dark:border-b-[#4cc2ff]'
+                  : 'rounded-[5px]'
               }`}
             >
               <input

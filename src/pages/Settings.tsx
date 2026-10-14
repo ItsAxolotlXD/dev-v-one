@@ -257,7 +257,7 @@ export const Settings: React.FC<SettingsProps> = ({
                 setIsFocused(true);
                 inputRef.current?.focus();
               }}
-              className="group relative w-full h-8 sm:h-8.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3.5 gap-2 rounded-full transition-all cursor-text select-none focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]"
+              className="group relative w-full h-8 sm:h-8.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3.5 gap-2 rounded-[5px] transition-all cursor-text select-none focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]"
             >
               <input
                 ref={inputRef}
@@ -503,14 +503,14 @@ export const Settings: React.FC<SettingsProps> = ({
             </div>
 
             <div className="space-y-2 pt-0.5">
-              {/* Test VNRT Online Option Card */}
+              {/* Test Sparkle (Dev) Option Card */}
               <div className="fluent-reveal-item setting-card p-3 sm:p-3.5 rounded-[18px] flex items-center justify-between gap-3 transition-colors hover:bg-black/5 dark:hover:bg-white/5">
                 <div>
                   <div className="font-bold text-[#111827] dark:text-white text-xs sm:text-sm">
-                    Test VNRT Online
+                    Test Sparkle (Dev)
                   </div>
                   <div className="text-[11px] sm:text-xs text-[#9CA3AF] mt-0.5 leading-normal">
-                    Try our test builds of VNRT Online with new, early unreleased features.
+                    Try our test builds of Sparkle (Dev) with new, early unreleased features.
                   </div>
                 </div>
 
@@ -532,7 +532,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     Changelogs
                   </div>
                   <div className="text-[11px] sm:text-xs text-[#9CA3AF] mt-0.5 leading-normal">
-                    Danh sách những sự thay đổi trong bản cập nhật mới nhất của VNRT Online.
+                    Danh sách những sự thay đổi trong bản cập nhật mới nhất của Sparkle (Dev).
                   </div>
                 </div>
 
@@ -1877,7 +1877,7 @@ export const Settings: React.FC<SettingsProps> = ({
         )}
       </AnimatePresence>
 
-      {/* Welcome to VNRT Online / Changelogs Modal Dialog */}
+      {/* Welcome to Sparkle (Dev) / Changelogs Modal Dialog */}
       <WelcomeModal
         isOpen={isWelcomeModalOpen}
         onClose={() => setIsWelcomeModalOpen(false)}

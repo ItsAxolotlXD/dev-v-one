@@ -87,11 +87,11 @@ const SAMPLE_MEDIA: PlaylistItem[] = [
   },
   {
     id: 'sample-5',
-    title: 'V-One Cyber Beats & Synthwave (Hi-Res Audio)',
+    title: 'Sparkle Cyber Beats & Synthwave (Hi-Res Audio)',
     url: 'https://cdn.freesound.org/previews/612/612610_5674468-lq.mp3',
     type: 'audio',
     duration: '02:45',
-    artist: 'V-One Audio Lab',
+    artist: 'Sparkle Audio Lab',
     source: 'sample'
   }
 ];
@@ -584,7 +584,7 @@ export const VlcPlayer: React.FC = () => {
         className="hidden"
       />
 
-      {/* Top Menu Bar (VLC Classic Menu styled in V-One design language) */}
+      {/* Top Menu Bar (VLC Classic Menu styled in Sparkle (Dev) design language) */}
       <div className="h-10 px-3 bg-white dark:bg-[#202020] border-b border-black/10 dark:border-white/10 flex items-center justify-between shrink-0 text-xs">
         {/* Left: VLC Cone Emblem & Menus */}
         <div className="flex items-center gap-1 sm:gap-2">
@@ -947,7 +947,7 @@ export const VlcPlayer: React.FC = () => {
                     {currentItem.title}
                   </h3>
                   <p className="text-xs text-neutral-400 mt-1">
-                    {currentItem.artist || 'Audio Track'} • V-One High Fidelity
+                    {currentItem.artist || 'Audio Track'} • Sparkle High Fidelity
                   </p>
                 </div>
               </div>
@@ -994,7 +994,7 @@ export const VlcPlayer: React.FC = () => {
             )}
           </div>
 
-          {/* Bottom Floating Control Bar (VLC Orange & V-One Fluent Style) */}
+          {/* Bottom Floating Control Bar (VLC Orange & Sparkle (Dev) Fluent Style) */}
           <div
             className="w-full bg-[#1a1a1a]/95 backdrop-blur-md border-t border-white/10 px-3 sm:px-5 py-2.5 z-20 shrink-0 text-white transition-opacity"
             onClick={(e) => e.stopPropagation()}
@@ -1258,7 +1258,7 @@ export const VlcPlayer: React.FC = () => {
           </div>
         </div>
 
-        {/* Right Dockable Playlist Drawer (Fluent V-One Style with "Let's chat Copilot" search layout) */}
+        {/* Right Dockable Playlist Drawer (Fluent Sparkle (Dev) Style with "Let's chat Copilot" search layout) */}
         {showPlaylist && (
           <div className="w-72 sm:w-80 bg-white dark:bg-[#202020] border-l border-black/10 dark:border-white/10 flex flex-col shrink-0 z-20">
             {/* Playlist Header */}
@@ -1292,7 +1292,7 @@ export const VlcPlayer: React.FC = () => {
 
             {/* Playlist Search Bar (Styled strictly matching the "Let's chat Copilot" layout) */}
             <div className="p-2.5 border-b border-black/10 dark:border-white/10">
-              <div className="relative w-full h-8 flex items-center px-2.5 rounded-[6px] bg-black/5 dark:bg-white/[0.06] border border-black/10 dark:border-white/10 focus-within:border-[#ea580c] focus-within:ring-1 focus-within:ring-[#ea580c] transition-all">
+              <div className="relative w-full h-8 flex items-center px-2.5 rounded-[5px] bg-black/5 dark:bg-white/[0.06] border border-black/10 dark:border-white/10 focus-within:border-[#ea580c] focus-within:ring-1 focus-within:ring-[#ea580c] transition-all">
                 <Search className="w-3.5 h-3.5 text-neutral-400 mr-2 shrink-0" />
                 <input
                   type="text"

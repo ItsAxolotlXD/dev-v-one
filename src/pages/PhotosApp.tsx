@@ -71,7 +71,7 @@ const DEFAULT_MEDIA: MediaItem[] = [
     aspectRatio: 1.5,
     date: '12/10/2026',
     section: 'Hôm nay • 12 tháng 10, 2026',
-    album: 'Studio V-One',
+    album: 'Studio Sparkle (Dev)',
     isFavorite: true,
     tags: ['VTV1', 'Studio', 'Chào buổi sáng']
   },
@@ -92,7 +92,7 @@ const DEFAULT_MEDIA: MediaItem[] = [
   },
   {
     id: 'm-4',
-    title: 'V-One Nebula Fluent Material Stage',
+    title: 'Sparkle (Dev) Nebula Fluent Material Stage',
     type: 'photo',
     url: '/banners/vplay_background.webp',
     thumbnailUrl: '/banners/vplay_background.webp',
@@ -124,7 +124,7 @@ const DEFAULT_MEDIA: MediaItem[] = [
   },
   {
     id: 'm-6',
-    title: 'Highlight Khoảnh khắc Thể thao V-One',
+    title: 'Highlight Khoảnh khắc Thể thao Sparkle (Dev)',
     type: 'video',
     url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
     thumbnailUrl: 'https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&w=1200&q=80',
@@ -623,7 +623,7 @@ export const PhotosApp: React.FC<PhotosAppProps> = ({ navigate }) => {
         {/* Right: Search, Select Mode, Grid Density & Upload */}
         <div className="flex items-center gap-2 shrink-0">
           {/* Quick Search */}
-          <div className="w-32 sm:w-52 h-8 px-2.5 rounded-[6px] bg-white/5 border border-white/10 flex items-center gap-2 focus-within:border-[#4cc2ff]/50 focus-within:bg-white/10 transition-colors">
+          <div className="w-32 sm:w-52 h-8 px-2.5 rounded-[5px] bg-white/5 border border-white/10 flex items-center gap-2 focus-within:border-[#4cc2ff]/50 focus-within:bg-white/10 transition-colors">
             <Search className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
             <input
               type="text"

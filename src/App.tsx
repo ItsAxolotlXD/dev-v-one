@@ -39,7 +39,6 @@ import { MSPaint } from './pages/MSPaint';
 import { PhotosApp } from './pages/PhotosApp';
 import { EdgeBrowser } from './pages/EdgeBrowser';
 import { CameraApp } from './pages/CameraApp';
-import { DirectCut } from './pages/DirectCut';
 import { SwiftBank } from './pages/SwiftBank';
 import { ClockApp } from './pages/ClockApp';
 import { VlcPlayer } from './pages/VlcPlayer';
@@ -653,11 +652,6 @@ export default function App() {
       case '/ms-paint':
         return <MSPaint navigate={navigate} />;
 
-      case '/direct-cut':
-      case '/video-editor':
-      case '/edit':
-        return <DirectCut navigate={navigate} />;
-
       case '/swift-bank':
       case '/bank':
       case '/swiftbank':
@@ -1013,7 +1007,7 @@ export default function App() {
       {/* Startup Splash Screen (nhanh, mượt mà: 700ms) */}
       <SplashScreen duration={700} onFinish={() => setIsSplashFinished(true)} />
 
-      {/* Update V-One Splash Screen */}
+      {/* Update Sparkle (Dev) Splash Screen */}
       {isUpdating && (
         <SplashScreen
           duration={2500}

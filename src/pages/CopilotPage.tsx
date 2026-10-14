@@ -184,10 +184,10 @@ export const CopilotPage: React.FC<CopilotPageProps> = ({ navigate }) => {
         fallbackText = `🔍 **Kết quả tìm kiếm Copilot cho:** "${searchKeyword}"\n\n` +
           `• 📺 **Kênh truyền hình & Live TV:** Khám phá chuyên mục Live TV với hơn 100+ kênh chuẩn HD.\n` +
           `• 📰 **Tin tức VnExpress:** Cập nhật tin thời sự mới nhất với tính năng AI Summarize.\n` +
-          `• ⚙️ **Ứng dụng V-One phù hợp:** Direct Cut (dựng phim), Swift Bank (ngân hàng số), Clock (báo thức & giờ thế giới), Notes, Widgets.\n` +
+          `• ⚙️ **Ứng dụng Sparkle (Dev) phù hợp:** Swift Bank (ngân hàng số), Clock (báo thức & giờ thế giới), Notes, Widgets.\n` +
           `• 💡 Bạn có thể bấm vào các thẻ gợi ý bên dưới hoặc chuyển sang tab Channels để xem nhanh!`;
       } else {
-        fallbackText = `Chào bạn! Tôi đã ghi nhận yêu cầu: "${message}". Bạn có thể sử dụng **/find <từ khóa>** hoặc **/search <từ khóa>** để tìm kiếm mọi dữ liệu trong V-One, xem tab Watch để xem kênh Live TV, mở Widgets để cập nhật tin tức VnExpress thời gian thực hoặc kiểm tra Task Manager!`;
+        fallbackText = `Chào bạn! Tôi đã ghi nhận yêu cầu: "${message}". Bạn có thể sử dụng **/find <từ khóa>** hoặc **/search <từ khóa>** để tìm kiếm mọi dữ liệu trong Sparkle (Dev), xem tab Watch để xem kênh Live TV, mở Widgets để cập nhật tin tức VnExpress thời gian thực hoặc kiểm tra Task Manager!`;
       }
 
       const fallbackMsg: ChatMessage = {
@@ -489,7 +489,7 @@ export const CopilotPage: React.FC<CopilotPageProps> = ({ navigate }) => {
             handleSendMessage();
           }}
           id="copilot-search-box"
-          className="fluent-search-box group relative w-full h-8 sm:h-8.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3.5 gap-2 rounded-full transition-all focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]"
+          className="fluent-search-box group relative w-full h-8 sm:h-8.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3.5 gap-2 rounded-[5px] transition-all focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]"
         >
           {/* Left Text Format Tools: Bold & Emoji */}
           <div className="flex items-center gap-0.5 shrink-0">

@@ -37,7 +37,6 @@ import {
   FluentPhotosIcon,
   FluentEdgeIcon,
   FluentCameraIcon,
-  FluentDirectCutIcon,
   FluentSwiftBankIcon,
   FluentClockIcon,
   FluentClockColorIcon,
@@ -438,13 +437,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
         icon: FluentPaintIcon,
       },
       {
-        id: 'direct-cut',
-        label: 'Direct Cut',
-        secondary: 'Video Editor',
-        route: '/direct-cut',
-        icon: FluentDirectCutIcon,
-      },
-      {
         id: 'swift-bank',
         label: 'Swift Bank',
         secondary: 'Ngân hàng số',
@@ -489,7 +481,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {
         id: 'friends',
         label: 'Friends',
-        secondary: '100 Bạn bè V-One',
+        secondary: '100 Bạn bè Sparkle (Dev)',
         route: '/friends',
         icon: FluentFriendsIcon,
       },
@@ -1068,7 +1060,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               id={isMobile ? 'mobile-nav-friends' : 'sidebar-nav-friends'}
               data-nav-active={(currentRoute === '/friends' || currentRoute.startsWith('/friends')) ? 'true' : undefined}
               onClick={() => handleNavClick('/friends')}
-              title="Friends - Danh sách 100 người dùng V-One"
+              title="Friends - Danh sách 100 người dùng Sparkle (Dev)"
               className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
                 (currentRoute === '/friends' || currentRoute.startsWith('/friends'))
                   ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
@@ -1351,32 +1343,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </div>
             </button>
           </div>
-
-          {/* 9. Direct Cut (Pro Video Editor) */}
-          <div className="w-full">
-            <button
-              type="button"
-              id={isMobile ? 'mobile-nav-direct-cut' : 'sidebar-nav-direct-cut'}
-              data-nav-active={(currentRoute === '/direct-cut' || currentRoute.startsWith('/direct-cut') || currentRoute === '/video-editor') ? 'true' : undefined}
-              onClick={() => handleNavClick('/direct-cut')}
-              title="Direct Cut - Dựng phim chuyên nghiệp"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
-                (currentRoute === '/direct-cut' || currentRoute.startsWith('/direct-cut') || currentRoute === '/video-editor')
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
-                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-              }`}
-            >
-              <div className="flex items-center gap-3.5 truncate">
-                <FluentDirectCutIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
-                <span className="truncate text-[13.5px]">Direct Cut</span>
-              </div>
-              <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-[#6366f1]/20 text-[#6366f1] dark:text-[#a5b4fc] shrink-0">
-                PRO
-              </span>
-            </button>
-          </div>
-
-          {/* Direct Cut */}
 
           {/* Divider & Category Heading: System */}
           <div className="my-2 mx-1 h-[1px] bg-black/10 dark:bg-white/10" />
@@ -1877,22 +1843,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 }`}
               >
                 <FluentPaintIcon className="w-5 h-5 text-black dark:text-white" />
-              </button>
-
-              {/* 9. Direct Cut Icon */}
-              <button
-                type="button"
-                id="sidebar-collapsed-direct-cut"
-                data-nav-active={(currentRoute === '/direct-cut' || currentRoute.startsWith('/direct-cut') || currentRoute === '/video-editor') ? 'true' : undefined}
-                onClick={() => handleNavClick('/direct-cut')}
-                title="Direct Cut - Video Editor"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  (currentRoute === '/direct-cut' || currentRoute.startsWith('/direct-cut') || currentRoute === '/video-editor')
-                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
-                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <FluentDirectCutIcon className="w-5 h-5 text-black dark:text-white" />
               </button>
 
               {/* Clock Icon */}

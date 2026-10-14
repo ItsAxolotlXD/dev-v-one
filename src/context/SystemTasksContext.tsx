@@ -186,20 +186,6 @@ const INITIAL_SYSTEM_TASKS: SystemTask[] = [
     isCritical: false
   },
   {
-    id: 'task-direct-cut',
-    name: 'Direct Cut Pro NLE Editor',
-    description: 'Bộ máy dựng phim phi tuyến tính, xử lý video đa luồng và biên mã',
-    category: 'Apps',
-    status: 'Running',
-    cpu: 6.8,
-    memory: 245.0,
-    disk: 4.8,
-    network: 1200,
-    gpu: 28.5,
-    pid: 9480,
-    isCritical: false
-  },
-  {
     id: 'task-swift-bank',
     name: 'Swift Bank Core Banking Engine',
     description: 'Bộ lõi thanh toán tài chính, bảo mật Smart OTP và kết nối Napas 247',

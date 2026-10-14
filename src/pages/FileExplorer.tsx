@@ -92,7 +92,7 @@ const INITIAL_FILES: FileItem[] = [
     size: 4210, 
     updatedAt: '12/10/2026 08:05', 
     parentId: 'folder-docs',
-    content: '1. Thêm ứng dụng File Explorer và MS Paint vào hệ sinh thái V-One.\n2. Cập nhật icon mic dạng outline không fill.\n3. Đảm bảo tab Widgets luôn hiển thị và hỗ trợ unlimited scrolling.'
+    content: '1. Thêm ứng dụng File Explorer và MS Paint vào hệ sinh thái Sparkle (Dev).\n2. Cập nhật icon mic dạng outline không fill.\n3. Đảm bảo tab Widgets luôn hiển thị và hỗ trợ unlimited scrolling.'
   },
 
   // Inside Media Recordings
@@ -338,7 +338,7 @@ export const FileExplorer: React.FC<FileExplorerProps> = ({ navigate }) => {
       size: 120,
       updatedAt: new Date().toLocaleString('vi-VN'),
       parentId: currentFolderId,
-      content: 'Nội dung tài liệu mới được tạo trong V-One File Explorer.'
+      content: 'Nội dung tài liệu mới được tạo trong Sparkle (Dev) File Explorer.'
     };
     setFiles(prev => [...prev, newFile]);
     setSelectedFileId(newFile.id);
@@ -630,7 +630,7 @@ export const FileExplorer: React.FC<FileExplorerProps> = ({ navigate }) => {
         </div>
 
         {/* Search within Current Folder */}
-        <div className="w-44 sm:w-64 h-7 px-2.5 rounded-[6px] bg-white dark:bg-[#1b1f24] border border-black/10 dark:border-white/10 flex items-center gap-2 shadow-2xs">
+        <div className="w-44 sm:w-64 h-7 px-2.5 rounded-[5px] bg-white dark:bg-[#1b1f24] border border-black/10 dark:border-white/10 flex items-center gap-2 shadow-2xs">
           <Search className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
           <input
             type="text"

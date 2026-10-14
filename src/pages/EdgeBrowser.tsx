@@ -289,7 +289,7 @@ export const EdgeBrowser: React.FC<EdgeBrowserProps> = ({ navigate }) => {
             e.preventDefault();
             goToUrl(addressInput);
           }}
-          className="flex-1 h-8 sm:h-8.5 px-3 rounded-[6px] bg-black/5 dark:bg-[#181c20] border border-black/10 dark:border-white/10 focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff] flex items-center gap-2 transition-all"
+          className="flex-1 h-8 sm:h-8.5 px-3 rounded-[5px] bg-black/5 dark:bg-[#181c20] border border-black/10 dark:border-white/10 focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff] flex items-center gap-2 transition-all"
         >
           <Lock className="w-3 h-3 text-emerald-400 shrink-0" />
           <input

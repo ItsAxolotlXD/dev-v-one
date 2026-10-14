@@ -241,8 +241,8 @@ export const ScheduleApp: React.FC<ScheduleAppProps> = ({
               <Tv className="w-4 h-4 text-neutral-400" />
             </div>
 
-            {/* Pill Search Input */}
-            <div className="relative w-full h-8 flex items-center px-3 rounded-full bg-black/5 dark:bg-white/[0.06] border border-black/10 dark:border-white/10 focus-within:border-[#0078d4] focus-within:ring-1 focus-within:ring-[#0078d4] transition-all">
+            {/* Search Input */}
+            <div className="relative w-full h-8 flex items-center px-3 rounded-[5px] bg-black/5 dark:bg-white/[0.06] border border-black/10 dark:border-white/10 focus-within:border-[#0078d4] focus-within:ring-1 focus-within:ring-[#0078d4] transition-all">
               <Search className="w-3.5 h-3.5 text-neutral-400 mr-2 shrink-0" />
               <input
                 type="text"
@@ -328,8 +328,8 @@ export const ScheduleApp: React.FC<ScheduleAppProps> = ({
               )}
             </div>
 
-            {/* Pill Search Input for Programs */}
-            <div className="relative w-full lg:w-72 h-9 flex items-center px-3.5 rounded-full bg-black/5 dark:bg-white/[0.06] border border-black/10 dark:border-white/10 focus-within:border-[#0078d4] focus-within:ring-1 focus-within:ring-[#0078d4] transition-all">
+            {/* Search Input for Programs */}
+            <div className="relative w-full lg:w-72 h-9 flex items-center px-3.5 rounded-[5px] bg-black/5 dark:bg-white/[0.06] border border-black/10 dark:border-white/10 focus-within:border-[#0078d4] focus-within:ring-1 focus-within:ring-[#0078d4] transition-all">
               <Search className="w-3.5 h-3.5 text-neutral-400 mr-2 shrink-0" />
               <input
                 type="text"

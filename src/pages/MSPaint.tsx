@@ -361,7 +361,7 @@ export const MSPaint: React.FC<MSPaintProps> = ({ navigate }) => {
 
   // Text tool implementation
   const handleTextStamp = (x: number, y: number) => {
-    const text = prompt('Nhập văn bản cần chèn vào hình ảnh:', 'V-One Paint');
+    const text = prompt('Nhập văn bản cần chèn vào hình ảnh:', 'Sparkle Paint');
     if (!text || !text.trim()) return;
 
     const canvas = canvasRef.current;

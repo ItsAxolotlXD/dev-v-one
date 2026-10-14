@@ -38,7 +38,7 @@ export interface VOneUser {
   channelWatching?: string;
 }
 
-// Generate exactly 100 realistic, high quality random V-One users
+// Generate exactly 100 realistic, high quality random Sparkle (Dev) users
 const NICKNAMES_POOL = [
   'hoangnam.dev', 'minhthu.vone', 'anhkiet_99', 'bichngoc.design', 'tuankhoi_vtv',
   'dragon_coder', 'linhdan.cute', 'vietanh.music', 'son_huy_pro', 'tra_my_star',
@@ -58,7 +58,7 @@ const NICKNAMES_POOL = [
   'mono_vibe', 'hieuthuhai_cool', 'wren_evans_groove', 'tlinh_sweet', 'mck_flame',
   'low_g_rap', 'karik_flow', 'justatee_chill', 'rhymastic_king', 'soobin_prince',
   'touliver_beat', 'binz_poet', 'space_speaker', 'slime_miner', 'pixel_art_vn',
-  'vone_superfan', 'edge_browser_pro', 'direct_cut_editor', 'swift_banker', 'clock_master',
+  'sparkle_superfan', 'edge_browser_pro', 'swift_coder', 'swift_banker', 'clock_master',
   'vlc_audiophile', 'photopea_artist', 'cookbook_chef', 'vietnam_traveler', 'saigon_wanderer'
 ];
 
@@ -91,12 +91,12 @@ const ACTIVITIES_POOL = [
   'Vừa nấu Phở bò Hà Nội trên Cookbook',
   'Đang chia sẻ bài viết mới trên Swift Social',
   'Đang xem HTV7 HD: 2 Ngày 1 Đêm',
-  'Đang dùng Direct Cut dựng video 4K',
+  'Đang đọc tin tức thời sự trên Sparkle News',
   'Đang chuyển khoản trên Swift Bank',
   'Đang chơi Craftmine Sandbox',
   'Đang thiết kế poster trên Photopea',
   'Đang đặt báo thức sớm trên Clock',
-  'Đang đọc tin tức thời sự trên V-One News',
+  'Đang lướt web trên Edge Browser',
   'Đang thảo luận trong kênh Discord #chung',
   'Đang xem VTV3: Hãy Chọn Giá Đúng',
   'Đang kiểm tra tiến trình trên Task Manager',
@@ -129,7 +129,7 @@ const GENERATED_USERS: VOneUser[] = Array.from({ length: 100 }, (_, index) => {
     bgGradient: GRADIENTS_POOL[index % GRADIENTS_POOL.length],
     status,
     activity: ACTIVITIES_POOL[index % ACTIVITIES_POOL.length],
-    bio: `Xin chào! Mình là ${name}. Rất vui được kết nối cùng cộng đồng V-One Việt Nam! ✨`,
+    bio: `Xin chào! Mình là ${name}. Rất vui được kết nối cùng cộng đồng Sparkle (Dev) Việt Nam! ✨`,
     badge: index % 7 === 0 ? 'Dev' : index % 5 === 0 ? 'VIP' : index % 4 === 0 ? 'Creator' : BADGES_POOL[index % BADGES_POOL.length],
     location: LOCATIONS_POOL[index % LOCATIONS_POOL.length],
     followers: Math.floor(Math.random() * 800) + 120,
@@ -211,20 +211,20 @@ export const FriendsApp: React.FC<FriendsAppProps> = ({ navigate }) => {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-neutral-900 dark:text-white">
-                  Cộng đồng V-One ({totalUsers} Người dùng)
+                  Cộng đồng Sparkle (Dev) ({totalUsers} Người dùng)
                 </h1>
                 <span className="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold uppercase tracking-wider">
                   100 Nicknames
                 </span>
               </div>
               <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
-                Khám phá và kết nối cùng 100 thành viên ngẫu nhiên trên hệ thống V-One Việt Nam
+                Khám phá và kết nối cùng 100 thành viên ngẫu nhiên trên hệ thống Sparkle (Dev) Việt Nam
               </p>
             </div>
           </div>
 
-          {/* Pill Search Input */}
-          <div className="relative w-full md:w-80 lg:w-96 h-10 flex items-center px-4 rounded-full bg-black/5 dark:bg-white/[0.06] border border-black/10 dark:border-white/10 focus-within:border-emerald-500 focus-within:ring-1 focus-within:ring-emerald-500 transition-all shadow-2xs">
+          {/* Search Input with 5px radius */}
+          <div className="relative w-full md:w-80 lg:w-96 h-10 flex items-center px-4 rounded-[5px] bg-black/5 dark:bg-white/[0.06] border border-black/10 dark:border-white/10 focus-within:border-emerald-500 focus-within:ring-1 focus-within:ring-emerald-500 transition-all shadow-2xs">
             <Search className="w-4 h-4 text-neutral-400 mr-2.5 shrink-0" />
             <input
               type="text"

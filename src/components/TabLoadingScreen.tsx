@@ -16,7 +16,6 @@ import {
   FluentPhotosIcon,
   FluentEdgeIcon,
   FluentCameraIcon,
-  FluentDirectCutIcon,
   FluentSwiftBankIcon,
   FluentClockIcon,
   FluentVlcIcon,
@@ -98,13 +97,6 @@ export const TabLoadingScreen: React.FC<TabLoadingScreenProps> = ({ route = '', 
       return {
         title: 'Paint',
         icon: <FluentPaintIcon className={iconClass} />
-      };
-    }
-
-    if (cleanRoute === '/direct-cut' || cleanRoute === '/video-editor' || cleanRoute === '/edit') {
-      return {
-        title: 'Direct Cut',
-        icon: <FluentDirectCutIcon className={iconClass} />
       };
     }
 

@@ -7,7 +7,7 @@ export const MinecraftWiki: React.FC = () => {
 
   return (
     <div className="w-full h-full min-h-[calc(100vh-64px)] relative bg-[#f4f4f4] dark:bg-[#181818] overflow-hidden">
-      {/* Loading Screen matching Fluent V-One gray styling */}
+      {/* Loading Screen matching Fluent Sparkle (Dev) gray styling */}
       {isLoading && (
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#f3f3f3] dark:bg-[#202020] text-[#111827] dark:text-white transition-opacity duration-300">
           <div className="flex flex-col items-center gap-4">

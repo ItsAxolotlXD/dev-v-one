@@ -95,18 +95,18 @@ const INITIAL_POSTS: Post[] = [
   {
     id: 'post-1',
     author: {
-      name: 'V-One Dev Studio',
-      handle: '@vone.official',
+      name: 'Sparkle Dev Studio',
+      handle: '@sparkle.official',
       avatar: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150&auto=format&fit=crop&q=80',
       verified: true,
       role: 'Official'
     },
-    content: 'Chào mừng bản cập nhật lớn của V-One! Nền tảng mạng xã hội Swift chính thức ra mắt, kết hợp trọn vẹn nhịp sống nhanh của Threads/Twitter, bảng tin phong phú của Facebook/Instagram và kênh trò chuyện cộng đồng Discord! 🚀🔥',
+    content: 'Chào mừng bản cập nhật lớn của Sparkle (Dev)! Nền tảng mạng xã hội Swift chính thức ra mắt, kết hợp trọn vẹn nhịp sống nhanh của Threads/Twitter, bảng tin phong phú của Facebook/Instagram và kênh trò chuyện cộng đồng Discord! 🚀🔥',
     image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80',
     timestamp: '10 phút trước',
     likes: 142,
     retweets: 38,
-    tags: ['#VOneDev', '#SwiftSocial', '#Update'],
+    tags: ['#SparkleDev', '#SwiftSocial', '#Update'],
     comments: [
       { id: 'c1', user: 'Hoàng Nam', text: 'Giao diện mượt quá ad ơi, thiết kế Mica nhìn rất đã!', time: '8m' },
       { id: 'c2', user: 'Minh Thư', text: 'Thích nhất là có cả kênh Discord tích hợp luôn 😍', time: '5m' }
@@ -121,7 +121,7 @@ const INITIAL_POSTS: Post[] = [
       verified: true,
       role: 'Creator'
     },
-    content: 'Vừa chỉnh xong bộ ảnh chiều hoàng hôn hồ Tây bằng tab Photopea ngay trên V-One. Công nhận mượt mà không kém gì Photoshop trên máy tính luôn! Mọi người thấy màu này ổn không?',
+    content: 'Vừa chỉnh xong bộ ảnh chiều hoàng hôn hồ Tây bằng tab Photopea ngay trên Sparkle (Dev). Công nhận mượt mà không kém gì Photoshop trên máy tính luôn! Mọi người thấy màu này ổn không?',
     image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop&q=80',
     timestamp: '35 phút trước',
     likes: 89,
@@ -174,7 +174,7 @@ export const SwiftSocial: React.FC = () => {
   const [channelMessages, setChannelMessages] = useState<Record<string, { user: string; text: string; time: string; avatar: string }[]>>({
     '#chung': [
       { user: 'Sơn Huy', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80', text: 'Chào cả nhà Swift Community!', time: '10:00' },
-      { user: 'Anh Kiệt', avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100&auto=format&fit=crop&q=80', text: 'V-One hôm nay update nhiều tab xịn quá', time: '10:02' }
+      { user: 'Anh Kiệt', avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100&auto=format&fit=crop&q=80', text: 'Sparkle (Dev) hôm nay update nhiều tab xịn quá', time: '10:02' }
     ],
     '#thao-luan-tv': [
       { user: 'Bích Ngọc', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80', text: 'Hôm nay VTV3 có phim mới hay lắm', time: '09:30' }
@@ -196,8 +196,8 @@ export const SwiftSocial: React.FC = () => {
     const newPost: Post = {
       id: `post-${Date.now()}`,
       author: {
-        name: 'Người dùng V-One',
-        handle: '@vone.user',
+        name: 'Người dùng Sparkle (Dev)',
+        handle: '@sparkle.user',
         avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
         role: 'Member'
       },
