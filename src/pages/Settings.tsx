@@ -246,7 +246,7 @@ export const Settings: React.FC<SettingsProps> = ({
             )}
           </div>
           <p className="text-xs sm:text-sm text-[#9CA3AF]">
-            Customize your V-One (Dev) streaming and display experience.
+            Customize your Sparkle (Dev) streaming and display experience.
           </p>
 
           {/* Search Header - Styled and laid out exactly like TopBar search bar */}
@@ -546,14 +546,14 @@ export const Settings: React.FC<SettingsProps> = ({
                 </button>
               </div>
 
-              {/* Update V-One (Dev) Option Card */}
+              {/* Update Sparkle (Dev) Option Card */}
               <div className="fluent-reveal-item setting-card p-3 sm:p-3.5 rounded-[18px] flex items-center justify-between gap-3 transition-colors hover:bg-black/5 dark:hover:bg-white/5">
                 <div>
                   <div className="font-bold text-[#111827] dark:text-white text-xs sm:text-sm">
-                    Update V-One (Dev)
+                    Update Sparkle (Dev)
                   </div>
                   <div className="text-[11px] sm:text-xs text-[#9CA3AF] mt-0.5 leading-normal">
-                    Kiểm tra và cập nhật phiên bản mới nhất của nền tảng V-One (Dev).
+                    Kiểm tra và cập nhật phiên bản mới nhất của nền tảng Sparkle (Dev).
                   </div>
                 </div>
 
@@ -1053,11 +1053,11 @@ export const Settings: React.FC<SettingsProps> = ({
 
                 <div className="divider-line h-[1px] bg-black/5 dark:bg-white/10 ml-4 mr-4" />
 
-                {/* 3. V-One (Dev) Notes */}
+                {/* 3. Sparkle (Dev) Notes */}
                 <div className="px-4 py-3 sm:py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors">
                   <div className="min-w-0 flex-1">
                     <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
-                      <span>V-One (Dev) Notes</span>
+                      <span>Sparkle (Dev) Notes</span>
                       <span className="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
                         Ghi chú
                       </span>
@@ -1072,7 +1072,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     onClick={() => onOpenOfficeTool?.('notes')}
                     className="px-4 py-1.5 rounded-md font-semibold text-xs text-white bg-[#0078d4] hover:bg-[#106ebe] dark:bg-[#4cc2ff] dark:text-black dark:hover:bg-[#6bd0ff] transition-all flex items-center gap-2 self-start sm:self-auto cursor-default shadow-xs"
                   >
-                    <span>Mở V-One (Dev) Notes</span>
+                    <span>Mở Sparkle (Dev) Notes</span>
                   </button>
                 </div>
               </section>

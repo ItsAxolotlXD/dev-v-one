@@ -66,7 +66,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
           {!logoError ? (
             <img
               src={LOGO_SRC}
-              alt="V-One (Dev)"
+              alt="Sparkle (Dev)"
               referrerPolicy="no-referrer"
               className="h-16 sm:h-20 md:h-24 w-auto max-w-[180px] sm:max-w-[220px] object-contain drop-shadow-md transition-all"
               onError={() => setLogoError(true)}

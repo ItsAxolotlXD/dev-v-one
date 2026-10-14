@@ -45,7 +45,7 @@ interface CopilotChatFlyoutProps {
 const STARTER_PROMPTS = [
   '📰 Tóm tắt tin nổi bật VnExpress hôm nay',
   '📺 Gợi ý kênh truyền hình thời sự & thể thao',
-  '📌 Bảng Widgets của V-One (Dev) có những tiện ích gì?',
+  '📌 Bảng Widgets của Sparkle (Dev) có những tiện ích gì?',
   '⚡ Task Manager giúp theo dõi tiến trình thế nào?'
 ];
 
@@ -64,7 +64,7 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
     {
       id: 'welcome',
       role: 'model',
-      text: 'Xin chào! Tôi là Copilot AI của **V-One (Dev)**. Bạn có thể hỏi tôi bất cứ điều gì về lịch phát sóng, tin tức thời sự, hướng dẫn tính năng (Live TV, Widgets, Task Manager, Notes) hoặc kiến thức đời sống!',
+      text: 'Xin chào! Tôi là Copilot AI của **Sparkle (Dev)**. Bạn có thể hỏi tôi bất cứ điều gì về lịch phát sóng, tin tức thời sự, hướng dẫn tính năng (Live TV, Widgets, Task Manager, Notes) hoặc kiến thức đời sống!',
       timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -518,7 +518,10 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
               </button>
             </div>
 
-            <div className="relative flex-1 group h-9 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3.5 rounded-full transition-all focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]">
+            <div 
+              id="copilot-flyout-search-box"
+              className="fluent-search-box relative flex-1 group h-8 sm:h-8.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3.5 rounded-full transition-all focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]"
+            >
               <input
                 ref={inputRef}
                 type="text"

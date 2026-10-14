@@ -16,7 +16,7 @@ export const Updates: React.FC<UpdatesProps> = ({ navigate, onOpenUpdate }) => {
             Updates & Release History
           </h1>
           <p className="text-xs sm:text-sm text-black dark:text-[#9CA3AF] mt-1">
-            Keep V-One (Dev) running smoothly with the latest features and security improvements.
+            Keep Sparkle (Dev) running smoothly with the latest features and security improvements.
           </p>
         </div>
 
@@ -46,7 +46,7 @@ export const Updates: React.FC<UpdatesProps> = ({ navigate, onOpenUpdate }) => {
               </span>
             </div>
             <p className="text-xs text-black dark:text-[#AAAAAA] mt-0.5">
-              V-One (Dev) version 26.11 (Build 261013) • Microsoft Fluent Design
+              Sparkle (Dev) version 26.11 (Build 261013) • Microsoft Fluent Design
             </p>
           </div>
         </div>
@@ -76,7 +76,7 @@ export const Updates: React.FC<UpdatesProps> = ({ navigate, onOpenUpdate }) => {
               Consistent Layout & Spring Animations
             </h4>
             <p className="text-xs sm:text-sm text-black dark:text-[#AAAAAA] leading-relaxed">
-              All modal dialogs across V-One (Dev) now share the exact same Fluent design tokens, border radii, backdrop blur, scale transition curve, and tactile bottom action bars.
+              All modal dialogs across Sparkle (Dev) now share the exact same Fluent design tokens, border radii, backdrop blur, scale transition curve, and tactile bottom action bars.
             </p>
           </div>
 

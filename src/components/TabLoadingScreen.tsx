@@ -242,7 +242,7 @@ export const TabLoadingScreen: React.FC<TabLoadingScreenProps> = ({ route = '', 
     }
 
     return {
-      title: 'V-One (Dev)',
+      title: 'Sparkle (Dev)',
       icon: <FluentHomeIcon className={iconClass} />
     };
   };

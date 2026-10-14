@@ -70,6 +70,7 @@ export const ChannelCard: React.FC<ChannelCardProps> = ({
                 src={channel.logo}
                 alt={channel.name}
                 referrerPolicy="no-referrer"
+                style={channel.id === 'vtv6' || channel.logo?.includes('Image_%2814%29') ? { imageRendering: 'pixelated' } : undefined}
                 className={`w-full h-full object-contain filter drop-shadow-xs transition-transform ${
                   channel.category === 'Kênh địa phương' || channel.category === 'Kênh phát thanh' || channel.category === 'Kênh HTV'
                     ? 'scale-110'

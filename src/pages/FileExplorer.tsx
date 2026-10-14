@@ -70,7 +70,7 @@ const INITIAL_FILES: FileItem[] = [
     size: 86420, 
     updatedAt: '12/10/2026 09:12', 
     parentId: 'folder-docs',
-    content: 'Tài liệu kế hoạch phát triển nền tảng truyền hình trực tuyến V-One (Dev) năm 2026.\n- Tích hợp chuẩn giao diện Microsoft Fluent Design.\n- Hỗ trợ xem trực tuyến chuẩn HLS độ trễ thấp.\n- Tích hợp AI Copilot và widgets đa năng.'
+    content: 'Tài liệu kế hoạch phát triển nền tảng truyền hình trực tuyến Sparkle (Dev) năm 2026.\n- Tích hợp chuẩn giao diện Microsoft Fluent Design.\n- Hỗ trợ xem trực tuyến chuẩn HLS độ trễ thấp.\n- Tích hợp AI Copilot và widgets đa năng.'
   },
   { 
     id: 'file-doc-2', 
@@ -971,7 +971,7 @@ export const FileExplorer: React.FC<FileExplorerProps> = ({ navigate }) => {
           {currentFiles.length} mục {selectedFileId && `• 1 mục đã chọn (${selectedFile?.name})`}
         </div>
         <div className="flex items-center gap-3">
-          <span>File Explorer • V-One (Dev)</span>
+          <span>File Explorer • Sparkle (Dev)</span>
         </div>
       </footer>
 

@@ -45,7 +45,7 @@ export const CopilotPage: React.FC<CopilotPageProps> = ({ navigate }) => {
     {
       id: 'welcome-1',
       role: 'model',
-      text: 'Xin chào! Tôi là **Copilot** - trợ lý AI đồng hành của bạn trên **V-One (Dev)**. Tôi có thể giúp bạn tìm kiếm kênh truyền hình, đọc và tóm tắt tin tức thời sự từ VnExpress, giải đáp thắc mắc hoặc hỗ trợ các công cụ văn phòng Notes & Sticky Notes. Bạn muốn tìm hiểu gì hôm nay? ✨',
+      text: 'Xin chào! Tôi là **Copilot** - trợ lý AI đồng hành của bạn trên **Sparkle (Dev)**. Tôi có thể giúp bạn tìm kiếm kênh truyền hình, đọc và tóm tắt tin tức thời sự từ VnExpress, giải đáp thắc mắc hoặc hỗ trợ các công cụ văn phòng Notes & Sticky Notes. Bạn muốn tìm hiểu gì hôm nay? ✨',
       timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -222,10 +222,10 @@ export const CopilotPage: React.FC<CopilotPageProps> = ({ navigate }) => {
   };
 
   const QUICK_PROMPTS = [
-    { label: 'Gợi ý các kênh truyền hình nổi bật', query: 'Gợi ý cho tôi các kênh truyền hình nổi bật hôm nay trên V-One (Dev)' },
+    { label: 'Gợi ý các kênh truyền hình nổi bật', query: 'Gợi ý cho tôi các kênh truyền hình nổi bật hôm nay trên Sparkle (Dev)' },
     { label: 'Tin tức nóng nhất từ VnExpress', query: 'Tóm tắt tin tức thời sự nóng nhất hôm nay từ VnExpress' },
     { label: 'Hướng dẫn sử dụng Widgets Dashboard', query: 'Hướng dẫn cách xem Bảng tiện ích Widgets Dashboard và tin tức thời gian thực' },
-    { label: 'Quản lý tiến trình trong Task Manager', query: 'Task Manager trong V-One (Dev) có những tiến trình gì và hoạt động ra sao?' },
+    { label: 'Quản lý tiến trình trong Task Manager', query: 'Task Manager trong Sparkle (Dev) có những tiến trình gì và hoạt động ra sao?' },
   ];
 
   // Helper to render bold markdown and formatting
@@ -316,7 +316,7 @@ export const CopilotPage: React.FC<CopilotPageProps> = ({ navigate }) => {
               </span>
             </div>
             <p className="text-xs text-[#6b7280] dark:text-[#9ca3af] mt-0.5">
-              Trợ lý AI thông minh tích hợp trên V-One (Dev) • Sẵn sàng tìm kiếm, tóm tắt và đồng hành cùng bạn.
+              Trợ lý AI thông minh tích hợp trên Sparkle (Dev) • Sẵn sàng tìm kiếm, tóm tắt và đồng hành cùng bạn.
             </p>
           </div>
         </div>
@@ -488,7 +488,8 @@ export const CopilotPage: React.FC<CopilotPageProps> = ({ navigate }) => {
             e.preventDefault();
             handleSendMessage();
           }}
-          className="group relative w-full h-10 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3.5 gap-2 rounded-full transition-all focus-within:ring-1 focus-within:ring-[#0078d4] dark:focus-within:ring-[#4cc2ff] focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]"
+          id="copilot-search-box"
+          className="fluent-search-box group relative w-full h-8 sm:h-8.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3.5 gap-2 rounded-full transition-all focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]"
         >
           {/* Left Text Format Tools: Bold & Emoji */}
           <div className="flex items-center gap-0.5 shrink-0">
@@ -536,7 +537,7 @@ export const CopilotPage: React.FC<CopilotPageProps> = ({ navigate }) => {
                 ? 'Đang nghe... Hãy nói yêu cầu của bạn'
                 : "Let's chat or use /search"
             }
-            className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#9ca3af] outline-none border-none py-1 pr-16"
+            className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#9ca3af] outline-none border-none py-1 pr-16 no-fluent-line"
           />
 
           {/* Right Action Icons matching Let's chat Copilot with outline mic */}

@@ -22,13 +22,13 @@ export const DiscontinuedBanner: React.FC<DiscontinuedBannerProps> = ({
             style={{ fontWeight: 600 }}
             className="text-sm sm:text-[15px] font-semibold text-[#111827] dark:text-white leading-tight"
           >
-            The next chapter is coming... (V-One (Dev))
+            The next chapter is coming... (Sparkle (Dev))
           </div>
           <p
             style={{ fontWeight: 400 }}
             className="text-xs sm:text-[13px] font-normal text-[#4b5563] dark:text-[#a1a1aa] leading-relaxed mt-1"
           >
-            Kế thừa sự thành công của Vplay, dự án mới V-One (Dev) chính thức được hình thành. Đón chờ những điều bất ngờ tiếp theo!
+            Kế thừa sự thành công của Vplay, dự án mới Sparkle (Dev) chính thức được hình thành. Đón chờ những điều bất ngờ tiếp theo!
           </p>
         </div>
       </div>

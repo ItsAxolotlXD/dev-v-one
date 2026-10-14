@@ -707,7 +707,7 @@ export default function App() {
         <div className="flex flex-col items-center text-center max-w-md space-y-6 animate-in fade-in duration-300">
           <img
             src="https://static.wikia.nocookie.net/ep-deo/images/d/d4/V-one-dev.png/"
-            alt="V-One (Dev)"
+            alt="Sparkle (Dev)"
             referrerPolicy="no-referrer"
             className="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-md"
           />
@@ -733,7 +733,7 @@ export default function App() {
           <div className="text-7xl sm:text-9xl font-light">:(</div>
           <div className="space-y-3 sm:space-y-4">
             <h1 className="text-2xl sm:text-4xl font-semibold leading-snug">
-              Your V-One (Dev) ran into a problem and needs to restart.
+              Your Sparkle (Dev) ran into a problem and needs to restart.
             </h1>
             <p className="text-sm sm:text-base opacity-90 leading-relaxed">
               Tiến trình hệ thống cốt lõi đã bị chấm dứt trong Task Manager khiến ứng dụng bị crash. Chúng tôi đã thu thập thông tin sự cố để bảo vệ tính toàn vẹn hệ thống.
@@ -743,14 +743,14 @@ export default function App() {
           <div className="flex items-start gap-5 pt-3">
             <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white p-2 rounded-md shrink-0 flex items-center justify-center">
               <div className="w-full h-full bg-black flex items-center justify-center text-[9px] text-white text-center font-mono font-bold leading-tight">
-                V-ONE<br />CRASH
+                SPARKLE<br />CRASH
               </div>
             </div>
             <div className="space-y-1.5 text-xs sm:text-sm">
-              <p className="opacity-90">Để biết thêm thông tin về sự cố này và cách khắc phục khả dụng, hãy truy cập trang hỗ trợ V-One (Dev).</p>
+              <p className="opacity-90">Để biết thêm thông tin về sự cố này và cách khắc phục khả dụng, hãy truy cập trang hỗ trợ Sparkle (Dev).</p>
               <div className="pt-2 font-mono text-xs sm:text-sm">
                 <div>Stop code: <strong className="text-amber-200">CRITICAL_PROCESS_DIED</strong></div>
-                <div>What failed: <strong className="text-amber-200">{crashReason || 'V-One Experience Host'}</strong></div>
+                <div>What failed: <strong className="text-amber-200">{crashReason || 'Sparkle Experience Host'}</strong></div>
               </div>
             </div>
           </div>
@@ -762,7 +762,7 @@ export default function App() {
             onClick={restartSystem}
             className="px-6 py-2.5 rounded-[6px] bg-white text-[#0078d7] hover:bg-neutral-100 font-bold text-xs sm:text-sm shadow-lg transition-transform active:scale-95 cursor-pointer"
           >
-            Khởi động lại V-One (Dev)
+            Khởi động lại Sparkle (Dev)
           </button>
         </div>
       </div>
@@ -1017,7 +1017,7 @@ export default function App() {
       {isUpdating && (
         <SplashScreen
           duration={2500}
-          subtitle="V-One (Dev) needs an update - Working on it"
+          subtitle="Sparkle (Dev) needs an update - Working on it"
           onFinish={() => setIsUpdating(false)}
         />
       )}

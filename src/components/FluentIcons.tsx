@@ -541,3 +541,61 @@ export const FluentMinecraftWikiIcon: React.FC<{ className?: string; style?: Rea
   </svg>
 );
 
+/* Games Category Icon (Fluent Gamepad) */
+export const FluentGamesIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <path d="M6.5 6H17.5C19.9853 6 22 8.01472 22 10.5C22 12.9853 19.9853 15 17.5 15H17.382C16.9248 15 16.5186 15.2893 16.3475 15.7171L15.3475 18.2171C14.9754 19.1473 13.9113 19.6469 12.9463 19.3409C12.3396 19.1485 11.6604 19.1485 11.0537 19.3409C10.0887 19.6469 9.02462 19.1473 8.65251 18.2171L7.65251 15.7171C7.48141 15.2893 7.07521 15 6.61799 15H6.5C4.01472 15 2 12.9853 2 10.5C2 8.01472 4.01472 6 6.5 6Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+    {/* D-Pad */}
+    <path d="M7.5 9V12M6 10.5H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    {/* Action Buttons */}
+    <circle cx="16" cy="9.5" r="0.9" fill="currentColor" />
+    <circle cx="18" cy="11.5" r="0.9" fill="currentColor" />
+  </svg>
+);
+
+/* Wheel of Fortune Icon (Rotating Lucky Wheel) */
+export const FluentWheelIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6" />
+    <circle cx="12" cy="12" r="2.5" stroke="currentColor" strokeWidth="1.5" />
+    <path d="M12 3V9.5M12 14.5V21M3 12H9.5M14.5 12H21" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+    <path d="M5.636 5.636L10.232 10.232M13.768 13.768L18.364 18.364M5.636 18.364L10.232 13.768M13.768 10.232L18.364 5.636" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.6" />
+    {/* Arrow Indicator Top */}
+    <path d="M12 1L14 3.5H10L12 1Z" fill="#4cc2ff" />
+  </svg>
+);
+
+/* Tic-Tac-Toe Grid Icon */
+export const FluentTicTacToeIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    {/* Grid Lines */}
+    <path d="M8.5 3V21M15.5 3V21M3 8.5H21M3 15.5H21" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    {/* X mark */}
+    <path d="M4.5 4.5L7 7M7 4.5L4.5 7" stroke="#4cc2ff" strokeWidth="1.4" strokeLinecap="round" />
+    {/* O mark */}
+    <circle cx="18.5" cy="18.5" r="1.6" stroke="#f43f5e" strokeWidth="1.4" />
+  </svg>
+);
+
+/* Rock Paper Scissors Icon */
+export const FluentRpsIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    {/* Scissors blades */}
+    <circle cx="6" cy="18" r="2.2" stroke="currentColor" strokeWidth="1.5" />
+    <circle cx="18" cy="18" r="2.2" stroke="currentColor" strokeWidth="1.5" />
+    <path d="M7.6 16.4L16.5 4M16.4 16.4L7.5 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <circle cx="12" cy="10" r="1.2" fill="currentColor" />
+  </svg>
+);
+
+/* Draw Logos From Memory Icon */
+export const FluentDrawLogosIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    {/* Palette frame */}
+    <path d="M12 3C7.03 3 3 7.03 3 12C3 16.97 7.03 21 12 21C13.24 21 14 20.24 14 19C14 18.42 13.78 17.89 13.43 17.5C13.09 17.12 12.87 16.62 12.87 16.06C12.87 14.93 13.8 14 14.93 14H16.5C18.98 14 21 11.98 21 9.5C21 5.91 16.97 3 12 3Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+    <circle cx="7.5" cy="9.5" r="1.3" fill="#4cc2ff" />
+    <circle cx="11.5" cy="7.5" r="1.3" fill="#f59e0b" />
+    <circle cx="16.5" cy="9.5" r="1.3" fill="#ec4899" />
+  </svg>
+);
+

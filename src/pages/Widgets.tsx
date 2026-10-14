@@ -212,7 +212,7 @@ export const Widgets: React.FC<WidgetsProps> = ({ navigate }) => {
           <button
             type="button"
             title="Thêm tiện ích (Add widget)"
-            onClick={() => alert('Bảng Widgets V-One (Dev) đang đồng bộ dữ liệu thời tiết, lịch và tin tức VnExpress!')}
+            onClick={() => alert('Bảng Widgets Sparkle (Dev) đang đồng bộ dữ liệu thời tiết, lịch và tin tức VnExpress!')}
             className="w-8 h-8 rounded-full bg-white/70 dark:bg-white/10 hover:bg-white dark:hover:bg-white/20 border border-black/10 dark:border-white/10 flex items-center justify-center text-black dark:text-white shadow-xs backdrop-blur-md cursor-pointer transition-colors"
           >
             <Plus className="w-4 h-4" />
@@ -388,7 +388,7 @@ export const Widgets: React.FC<WidgetsProps> = ({ navigate }) => {
             <div className="space-y-2 pt-1 text-xs">
               <div className="p-2 rounded-lg bg-emerald-500/10 border-l-3 border-emerald-500 text-[#111827] dark:text-white">
                 <div className="font-semibold text-[11px] text-emerald-600 dark:text-emerald-400">Cả ngày</div>
-                <div className="text-xs">🎂 Sinh nhật thành viên V-One (Dev)</div>
+                <div className="text-xs">🎂 Sinh nhật thành viên Sparkle (Dev)</div>
               </div>
 
               <div className="p-2 rounded-lg bg-sky-500/10 border-l-3 border-sky-500 text-[#111827] dark:text-white">
@@ -639,7 +639,7 @@ export const Widgets: React.FC<WidgetsProps> = ({ navigate }) => {
                   Xu hướng tài liệu
                 </div>
                 <div className="font-medium text-black dark:text-white truncate">
-                  Kế hoạch phát hành V-One (Dev) Build 261013
+                  Kế hoạch phát hành Sparkle (Dev) Build 261013
                 </div>
               </div>
             </div>
@@ -678,10 +678,10 @@ export const Widgets: React.FC<WidgetsProps> = ({ navigate }) => {
             </div>
           )}
 
-          {/* 3. Quick V-One Navigation Card */}
+          {/* 3. Quick Navigation Card */}
           <div className="rounded-[14px] bg-white/75 dark:bg-[#282c31]/80 backdrop-blur-xl border border-black/10 dark:border-white/10 p-4 shadow-sm space-y-2.5">
             <div className="flex items-center justify-between text-xs">
-              <span className="font-semibold text-black dark:text-white">Lối tắt V-One (Dev)</span>
+              <span className="font-semibold text-black dark:text-white">Lối tắt Sparkle (Dev)</span>
               <Sparkles className="w-4 h-4 text-[#0078d4] dark:text-[#4cc2ff]" />
             </div>
 

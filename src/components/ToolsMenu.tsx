@@ -261,8 +261,8 @@ export const ToolsMenu: React.FC<ToolsMenuProps> = ({
           className={`fluent-reveal-item w-9 h-9 rounded-md flex items-center justify-center transition-colors cursor-default relative text-neutral-800 dark:text-neutral-200 hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/5 ${
             isOpen ? 'bg-black/10 dark:bg-white/10' : ''
           }`}
-          title={isRelevant ? "Tools & Utilities (V-One (Dev) Tools)" : "No tools available"}
-          aria-label="V-One (Dev) Tools Menu"
+          title={isRelevant ? "Tools & Utilities (Sparkle (Dev) Tools)" : "No tools available"}
+          aria-label="Sparkle (Dev) Tools Menu"
           aria-expanded={isOpen}
           {...revealProps}
         >

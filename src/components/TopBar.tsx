@@ -451,21 +451,12 @@ export const TopBar: React.FC<TopBarProps> = ({
                 }
               }}
               data-flyout-open={isSearchFlyoutOpen ? "true" : "false"}
-              className={`group relative w-full h-8 sm:h-8.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3.5 gap-2 transition-all ${
+              className={`fluent-search-box group relative w-full h-8 sm:h-8.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3.5 gap-2 transition-all cursor-text select-none focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff] ${
                 isSearchFlyoutOpen
-                  ? 'rounded-t-[18px] rounded-b-none'
+                  ? 'rounded-t-[18px] rounded-b-none border-b-2 border-b-[#005fb8] dark:border-b-[#4cc2ff]'
                   : 'rounded-full'
               }`}
             >
-              {/* Thanh line ngang phẳng chạy hết chiều ngang thanh search, không cong lên hay chạy sang 2 bên */}
-              <div
-                className={`absolute bottom-0 left-0 right-0 h-[2px] pointer-events-none transition-colors duration-150 ${
-                  isSearchFlyoutOpen
-                    ? 'bg-[#005fb8] dark:bg-[#4cc2ff]'
-                    : 'bg-[#8e8e93] dark:bg-[#777777] group-focus-within:bg-[#005fb8] dark:group-focus-within:bg-[#4cc2ff]'
-                }`}
-              />
-
               <input
                 type="text"
                 value={searchQuery}

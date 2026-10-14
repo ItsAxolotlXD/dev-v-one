@@ -115,11 +115,11 @@ export const TaskManager: React.FC<TaskManagerProps> = ({ navigate }) => {
                 Task Manager
               </h1>
               <span className="text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff] border border-[#0078d4]/20 dark:border-[#4cc2ff]/30">
-                A-Z Tasks • V-One (Dev)
+                A-Z Tasks • Sparkle (Dev)
               </span>
             </div>
             <p className="text-xs text-[#6b7280] dark:text-[#9ca3af] mt-0.5">
-              Quản lý tiến trình, theo dõi hiệu năng hệ thống và các thành phần cốt lõi của V-One (Dev).
+              Quản lý tiến trình, theo dõi hiệu năng hệ thống và các thành phần cốt lõi của Sparkle (Dev).
             </p>
           </div>
         </div>
@@ -433,7 +433,7 @@ export const TaskManager: React.FC<TaskManagerProps> = ({ navigate }) => {
           </div>
 
           <div className="lg:col-span-2 p-5 rounded-[8px] bg-white/75 dark:bg-[#282c31]/80 backdrop-blur-md border border-black/10 dark:border-white/10 shadow-xs space-y-4">
-            <h3 className="text-sm font-bold text-black dark:text-white">Tổng quan tài nguyên V-One (Dev)</h3>
+            <h3 className="text-sm font-bold text-black dark:text-white">Tổng quan tài nguyên Sparkle (Dev)</h3>
             <div className="h-48 w-full bg-black/5 dark:bg-black/30 rounded-md border border-black/5 dark:border-white/5 flex items-end gap-2 p-4">
               {tasks.map((t) => (
                 <div key={t.id} className="flex-1 flex flex-col items-center justify-end h-full">
@@ -454,7 +454,7 @@ export const TaskManager: React.FC<TaskManagerProps> = ({ navigate }) => {
       {/* TAB CONTENT: SERVICES & HISTORY */}
       {(activeTab === 'services' || activeTab === 'apphistory') && (
         <div className="p-4 rounded-[8px] bg-white/75 dark:bg-[#282c31]/80 backdrop-blur-md border border-black/10 dark:border-white/10 shadow-xs text-xs space-y-2">
-          <div className="font-semibold text-sm text-black dark:text-white">Lịch sử và dịch vụ hệ thống V-One (Dev)</div>
+          <div className="font-semibold text-sm text-black dark:text-white">Lịch sử và dịch vụ hệ thống Sparkle (Dev)</div>
           <p className="text-[#6b7280] dark:text-[#9ca3af]">
             Tất cả 7 tiến trình cốt lõi được giám sát chặt chẽ từ A đến Z bởi trình điều khiển Task Manager.
           </p>

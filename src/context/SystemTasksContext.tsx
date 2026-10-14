@@ -4,7 +4,7 @@ export interface SystemTask {
   id: string;
   name: string;
   description: string;
-  category: 'Apps' | 'Background processes' | 'V-One (Dev) Services';
+  category: 'Apps' | 'Background processes' | 'Sparkle (Dev) Services';
   status: 'Running' | 'Terminated' | 'Efficiency mode';
   cpu: number;
   memory: number; // in MB
@@ -61,9 +61,9 @@ const INITIAL_SYSTEM_TASKS: SystemTask[] = [
   },
   {
     id: 'task-host',
-    name: 'V-One Experience Host',
-    description: 'Tiến trình lõi điều phối giao diện và hoạt động V-One (Dev)',
-    category: 'V-One (Dev) Services',
+    name: 'Sparkle Experience Host',
+    description: 'Tiến trình lõi điều phối giao diện và hoạt động Sparkle (Dev)',
+    category: 'Sparkle (Dev) Services',
     status: 'Running',
     cpu: 4.2,
     memory: 182.0,
@@ -75,9 +75,9 @@ const INITIAL_SYSTEM_TASKS: SystemTask[] = [
   },
   {
     id: 'task-update',
-    name: 'V-One Update Services',
+    name: 'Sparkle Update Services',
     description: 'Dịch vụ cập nhật nền tảng và kiểm tra tính toàn vẹn hệ thống',
-    category: 'V-One (Dev) Services',
+    category: 'Sparkle (Dev) Services',
     status: 'Running',
     cpu: 0.4,
     memory: 42.6,

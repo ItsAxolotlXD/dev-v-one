@@ -544,7 +544,7 @@ export const NotesApp: React.FC<NotesAppProps> = ({ navigate }) => {
           {/* App Branding Badge */}
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0078d4]/15 border border-[#4cc2ff]/30 text-white">
             <FluentNotesIcon className="w-4 h-4 text-[#4cc2ff]" />
-            <span className="font-semibold text-sm">V-One (Dev) Notes</span>
+            <span className="font-semibold text-sm">Sparkle (Dev) Notes</span>
             <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#4cc2ff]/20 text-[#4cc2ff] font-medium hidden sm:inline">
               Ghi chú
             </span>
@@ -1173,7 +1173,7 @@ export const NotesApp: React.FC<NotesAppProps> = ({ navigate }) => {
               Sticky Note Đang Mở
             </span>
           )}
-          <span>Tự động lưu vào V-One (Dev)</span>
+          <span>Tự động lưu vào Sparkle (Dev)</span>
         </div>
       </div>
     </div>
