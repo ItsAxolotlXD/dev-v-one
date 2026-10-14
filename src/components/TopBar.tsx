@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Menu, History, X, Mic, MicOff } from 'lucide-react';
+import { Menu, History, X, Mic, MicOff, Search } from 'lucide-react';
 import { 
   FluentHomeIcon, 
   FluentLiveTvIcon, 
@@ -32,6 +32,70 @@ const DEFAULT_HISTORY_ITEMS = [
   'watch live tv',
   'vtv1 hd thoi su 19h'
 ];
+
+export const getTabTitle = (route: string): string => {
+  const path = route.toLowerCase().split('?')[0].replace(/\/$/, '') || '/';
+  switch (path) {
+    case '/':
+    case '/home':
+      return 'Home';
+    case '/settings':
+      return 'settings';
+    case '/live-tv':
+      return 'Live TV';
+    case '/channels':
+      return 'channels';
+    case '/favorites':
+      return 'favorites';
+    case '/news':
+      return 'news';
+    case '/schedule':
+      return 'schedule';
+    case '/notes':
+      return 'notes';
+    case '/widgets':
+      return 'widgets';
+    case '/task-manager':
+      return 'Task Manager';
+    case '/friends':
+      return 'friends';
+    case '/clock':
+      return 'Clock';
+    case '/photos':
+      return 'photos';
+    case '/camera':
+      return 'camera';
+    case '/browser':
+      return 'browser';
+    case '/swift-bank':
+      return 'Swift Bank';
+    case '/swift-social':
+      return 'Swift Social';
+    case '/cookbook':
+      return 'Cookbook';
+    case '/vlc':
+      return 'VLC';
+    case '/photopea':
+      return 'Photopea';
+    case '/craftmine':
+      return 'Craftmine';
+    case '/copilot':
+      return 'Copilot';
+    case '/file-explorer':
+      return 'File Explorer';
+    case '/paint':
+      return 'Paint';
+    case '/updates':
+      return 'updates';
+    case '/about':
+      return 'about';
+    default: {
+      if (path.startsWith('/article')) return 'article';
+      const clean = path.replace(/^\//, '').replace(/-/g, ' ');
+      return clean || 'Home';
+    }
+  }
+};
 
 interface SearchAspectItem {
   id: string;
@@ -85,6 +149,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   onDismissUnsavedTooltip = () => {}
 }) => {
   const { settings, hasChanges, applyDraftSettings } = useSettings();
+  const searchExperience = settings.experimentalSearchExperience || 'right';
   const isMobile = useIsMobile();
   const [logoError, setLogoError] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -451,12 +516,25 @@ export const TopBar: React.FC<TopBarProps> = ({
                 }
               }}
               data-flyout-open={isSearchFlyoutOpen ? "true" : "false"}
-              className={`fluent-search-box group relative w-full h-8 sm:h-8.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3.5 gap-2 transition-all cursor-text select-none focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff] ${
-                isSearchFlyoutOpen
-                  ? 'rounded-t-[5px] rounded-b-none border-b-2 border-b-[#005fb8] dark:border-b-[#4cc2ff]'
-                  : 'rounded-[5px]'
+              className={`fluent-search-box group relative w-full h-8 sm:h-8.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3 gap-2 transition-all cursor-text select-none focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff] ${
+                settings.roundedSearchBox ? 'rounded-full' : 'rounded-[8px]'
+              } ${
+                isSearchFlyoutOpen && !settings.roundedSearchBox
+                  ? 'border-b-2 border-b-[#005fb8] dark:border-b-[#4cc2ff]'
+                  : ''
               }`}
             >
+              {/* Left Search Icon (if Move search to the left is active) */}
+              {searchExperience === 'left' && (
+                <button
+                  type="submit"
+                  title="Search"
+                  className="text-[#71717a] dark:text-neutral-200 hover:text-[#0078d4] dark:hover:text-[#4cc2ff] p-0.5 transition-colors cursor-pointer flex items-center justify-center shrink-0 -ml-0.5 mr-0.5"
+                >
+                  <Search className="w-3.5 h-3.5 shrink-0" />
+                </button>
+              )}
+
               <input
                 type="text"
                 value={searchQuery}
@@ -484,30 +562,12 @@ export const TopBar: React.FC<TopBarProps> = ({
                     setIsSearchFlyoutOpen(true);
                   }
                 }}
-                placeholder="Let's chat or use /search"
-                className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-white outline-none border-none py-1 pr-14 no-fluent-line"
+                placeholder={`Search ${getTabTitle(currentRoute)} or let's chat`}
+                className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-white outline-none border-none py-1 pr-9 no-fluent-line"
               />
 
-              {/* Right Action Icons: Microphone + Search / Clear */}
-              <div className="absolute right-1.5 flex items-center gap-1 z-10">
-                {/* Microphone Icon Button (Unfilled / Pure Outline) */}
-                <button
-                  type="button"
-                  onClick={toggleListening}
-                  title={isListening ? 'Dừng micro' : 'Nhận diện giọng nói với Copilot'}
-                  className={`p-1 rounded-full transition-colors cursor-pointer flex items-center justify-center ${
-                    isListening
-                      ? 'border border-rose-500 text-rose-500 bg-rose-500/10 animate-pulse'
-                      : 'text-[#71717a] dark:text-neutral-300 hover:text-[#0078d4] dark:hover:text-[#4cc2ff] hover:bg-black/5 dark:hover:bg-white/10'
-                  }`}
-                >
-                  {isListening ? (
-                    <FluentMicOffOutlineIcon className="w-3.5 h-3.5" />
-                  ) : (
-                    <FluentMicOutlineIcon className="w-3.5 h-3.5" />
-                  )}
-                </button>
-
+              {/* Right Action Icons: Search Icon and Clear button (Microphone removed per user request) */}
+              <div className="absolute right-2 flex items-center gap-1 z-10">
                 {searchQuery ? (
                   <button
                     type="button"
@@ -516,22 +576,19 @@ export const TopBar: React.FC<TopBarProps> = ({
                       setIsSearchFlyoutOpen(false);
                     }}
                     title="Clear search"
-                    className="text-[#71717a] dark:text-white hover:text-[#111827] dark:hover:text-white p-0.5 transition-colors cursor-pointer"
+                    className="text-[#71717a] dark:text-neutral-300 hover:text-[#111827] dark:hover:text-white p-1 transition-colors cursor-pointer rounded-full hover:bg-black/5 dark:hover:bg-white/10"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
-                ) : (
+                ) : null}
+
+                {searchExperience !== 'left' && searchExperience !== 'hidden' && (
                   <button
                     type="submit"
                     title="Search"
-                    className="text-[#71717a] dark:text-white hover:text-[#111827] dark:hover:text-white p-0.5 transition-colors cursor-pointer flex items-center justify-center"
+                    className="text-[#71717a] dark:text-neutral-200 hover:text-[#0078d4] dark:hover:text-[#4cc2ff] p-1 transition-colors cursor-pointer flex items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10"
                   >
-                    <img
-                      src={SEARCH_ICON_SRC}
-                      alt="Search"
-                      referrerPolicy="no-referrer"
-                      className="w-4 h-4 object-contain dark:brightness-0 dark:invert transition-all"
-                    />
+                    <Search className="w-3.5 h-3.5 shrink-0" />
                   </button>
                 )}
               </div>

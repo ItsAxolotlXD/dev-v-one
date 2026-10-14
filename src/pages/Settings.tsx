@@ -19,6 +19,8 @@ import {
   Box,
   ChevronRight,
   ChevronLeft,
+  ChevronDown,
+  Check,
   Sun,
   Moon
 } from 'lucide-react';
@@ -91,8 +93,26 @@ const SETTINGS_GROUP_2: SettingsCategoryItem[] = [
     subtitle: 'Preview features and diagnostic flags',
     icon: FlaskConical,
     badgeColor: 'bg-gradient-to-b from-[#8E8E93] to-[#636366]',
-    keywords: ['insider flags', 'insider', 'flags', 'experimental', 'lab', 'native keyboard', 'immersive search', 'triangle', 'loader'],
+    keywords: ['insider flags', 'insider', 'flags', 'experimental', 'lab', 'native keyboard', 'immersive search', 'triangle', 'loader', 'experimental search', 'search icon'],
   },
+];
+
+export const SEARCH_EXP_OPTIONS = [
+  {
+    value: 'right' as const,
+    label: 'Move search to the right (default)',
+    desc: 'Icon search bên phải trên thanh search top bar'
+  },
+  {
+    value: 'left' as const,
+    label: 'Move search to the left',
+    desc: 'chuyển icon search sang trái trên thanh search top bar'
+  },
+  {
+    value: 'hidden' as const,
+    label: 'Hide search icon',
+    desc: 'ẩn icon search trên thanh search top bar'
+  }
 ];
 
 const ALL_CATEGORIES = [...SETTINGS_GROUP_1, ...SETTINGS_GROUP_2];
@@ -137,6 +157,21 @@ export const Settings: React.FC<SettingsProps> = ({
   const [editingKeybindId, setEditingKeybindId] = useState<KeybindAction | null>(null);
   const [keybindError, setKeybindError] = useState<{ id: KeybindAction; message: string } | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Experimental search experience dropdown state
+  const [isSearchExpDropdownOpen, setIsSearchExpDropdownOpen] = useState(false);
+  const searchExpDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isSearchExpDropdownOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (searchExpDropdownRef.current && !searchExpDropdownRef.current.contains(e.target as Node)) {
+        setIsSearchExpDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isSearchExpDropdownOpen]);
 
   const shouldAnimateMotion = !draftSettings.reduceAllMotion && draftSettings.animatePageTransitions;
 
@@ -257,7 +292,7 @@ export const Settings: React.FC<SettingsProps> = ({
                 setIsFocused(true);
                 inputRef.current?.focus();
               }}
-              className="group relative w-full h-8 sm:h-8.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3.5 gap-2 rounded-[5px] transition-all cursor-text select-none focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]"
+              className="group relative w-full h-8 sm:h-8.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3.5 gap-2 rounded-[8px] transition-all cursor-text select-none focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]"
             >
               <input
                 ref={inputRef}
@@ -1768,7 +1803,7 @@ export const Settings: React.FC<SettingsProps> = ({
             {activeCategory === 'experimental' && (
               <section 
                 id="settings-section-experimental"
-                className="rounded-[8px] bg-white dark:bg-[#38383d] border border-[#e5e5e5] dark:border-[#383838] shadow-xs overflow-hidden select-none"
+                className="rounded-[8px] bg-white dark:bg-[#38383d] border border-[#e5e5e5] dark:border-[#383838] shadow-xs overflow-visible relative z-20 select-none"
               >
                 {/* Native keyboard */}
                 <div 
@@ -1867,6 +1902,131 @@ export const Settings: React.FC<SettingsProps> = ({
                       updateDraft('triangleExperiment', !draftSettings.triangleExperiment);
                     }}
                     className="toggle-switch-btn focus:outline-none"
+                  >
+                    <span className="toggle-switch-thumb" />
+                  </button>
+                </div>
+
+                <div className="divider-line h-[1px] bg-black/5 dark:bg-white/10 ml-4 mr-4" />
+
+                {/* Experimental search experience */}
+                <div 
+                  id="setting-experimental-search-experience"
+                  className={`px-4 py-3 sm:py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors relative ${
+                    isSearchExpDropdownOpen ? 'z-50' : 'z-20'
+                  }`}
+                >
+                  <div className="min-w-0 flex-1 pr-2">
+                    <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
+                      <span>Experimental search experience</span>
+                      <span className="text-[10px] px-1.5 py-0.2 rounded font-bold uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
+                        Dropdown
+                      </span>
+                    </div>
+                    <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
+                      Tùy chỉnh vị trí và hiển thị biểu tượng tìm kiếm trên thanh search top bar.
+                    </div>
+                  </div>
+
+                  {/* Dropdown Menu - always on-top */}
+                  <div className="relative shrink-0 z-[100]" ref={searchExpDropdownRef}>
+                    <button
+                      id="btn-dropdown-search-experience"
+                      type="button"
+                      onClick={() => setIsSearchExpDropdownOpen((prev) => !prev)}
+                      className="min-w-[240px] sm:min-w-[270px] h-9 px-3 rounded-[6px] bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 border border-black/10 dark:border-white/15 text-xs text-[#111827] dark:text-white flex items-center justify-between gap-2 transition-all cursor-pointer font-medium select-none shadow-2xs"
+                      aria-haspopup="listbox"
+                      aria-expanded={isSearchExpDropdownOpen}
+                    >
+                      <span className="truncate text-left">
+                        {SEARCH_EXP_OPTIONS.find((o) => o.value === (draftSettings.experimentalSearchExperience || 'right'))?.label || 'Move search to the right (default)'}
+                      </span>
+                      <ChevronDown
+                        className={`w-4 h-4 text-[#6B7280] dark:text-[#9CA3AF] transition-transform duration-200 shrink-0 ${
+                          isSearchExpDropdownOpen ? 'rotate-180 text-[#0078d4] dark:text-[#4cc2ff]' : ''
+                        }`}
+                      />
+                    </button>
+
+                    <AnimatePresence>
+                      {isSearchExpDropdownOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 4, scale: 0.98 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 4, scale: 0.98 }}
+                          transition={{ duration: 0.12 }}
+                          className="absolute right-0 top-full mt-1.5 z-[99999] w-72 sm:w-80 rounded-[8px] bg-white/98 dark:bg-[#25282e]/98 backdrop-blur-2xl border border-black/15 dark:border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.35)] p-1.5 space-y-1 select-none"
+                          style={{
+                            boxShadow: '0 20px 50px rgba(0,0,0,0.38), 0 4px 14px rgba(0,0,0,0.15)'
+                          }}
+                        >
+                          {SEARCH_EXP_OPTIONS.map((opt) => {
+                            const isSelected = (draftSettings.experimentalSearchExperience || 'right') === opt.value;
+                            return (
+                              <button
+                                key={opt.value}
+                                type="button"
+                                id={`search-exp-opt-${opt.value}`}
+                                onClick={() => {
+                                  updateDraft('experimentalSearchExperience', opt.value);
+                                  setIsSearchExpDropdownOpen(false);
+                                }}
+                                className={`w-full text-left p-2.5 rounded-[6px] flex items-start gap-2.5 transition-colors cursor-pointer ${
+                                  isSelected
+                                    ? 'bg-[#0078d4]/10 dark:bg-[#4cc2ff]/15 text-[#0078d4] dark:text-[#4cc2ff]'
+                                    : 'text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10'
+                                }`}
+                              >
+                                <div className="w-4 h-4 mt-0.5 shrink-0 flex items-center justify-center">
+                                  {isSelected && <Check className="w-4 h-4 text-[#0078d4] dark:text-[#4cc2ff]" />}
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                  <div className="font-semibold text-xs leading-snug">
+                                    {opt.label}
+                                  </div>
+                                  <div className="text-[11px] text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-snug">
+                                    {opt.desc}
+                                  </div>
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </div>
+
+                <div className="divider-line h-[1px] bg-black/5 dark:bg-white/10 ml-4 mr-4" />
+
+                {/* Rounded search box option: 100% round pill shape across entire app */}
+                <div 
+                  id="setting-experimental-rounded-search-box"
+                  onClick={() => updateDraft('roundedSearchBox', !draftSettings.roundedSearchBox)}
+                  className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                >
+                  <div className="min-w-0 flex-1 pr-2">
+                    <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
+                      <span>Rounded search box</span>
+                      <span className="text-[10px] px-1.5 py-0.2 rounded font-bold uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
+                        Mới
+                      </span>
+                    </div>
+                    <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
+                      Khi bật lên thì toàn bộ search box trong app đổi thành dạng pill radius corner 100% round.
+                    </div>
+                  </div>
+
+                  <button
+                    id="toggle-rounded-search-box"
+                    type="button"
+                    role="switch"
+                    aria-checked={draftSettings.roundedSearchBox}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      updateDraft('roundedSearchBox', !draftSettings.roundedSearchBox);
+                    }}
+                    className="toggle-switch-btn focus:outline-none shrink-0"
                   >
                     <span className="toggle-switch-thumb" />
                   </button>

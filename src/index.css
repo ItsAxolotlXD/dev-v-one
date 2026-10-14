@@ -124,7 +124,7 @@
 .copilot-style-input,
 [id*="search-box"],
 [id*="search-capsule"] {
-  border-radius: 5px;
+  border-radius: 8px;
   transition: all 0.15s ease-in-out;
 }
 
@@ -157,7 +157,7 @@ input[type="reset"],
 }
 
 /* ========================================================
-   TOÀN BỘ SEARCH BOX / INPUT BOX TRONG APP CÓ CORNER RADIUS 5PX
+   TOÀN BỘ SEARCH BOX / INPUT BOX TRONG APP CÓ CORNER RADIUS 8PX
    ======================================================== */
 input[type="text"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
 input[type="search"],
@@ -186,14 +186,44 @@ input[type="number"],
 #copilot-search-box,
 #copilot-flyout-search-box,
 #spotlight-search-container {
-  border-radius: 5px !important;
+  border-radius: 8px !important;
 }
 
 #topbar-search-box[data-flyout-open="true"] {
-  border-top-left-radius: 5px !important;
-  border-top-right-radius: 5px !important;
-  border-bottom-left-radius: 0px !important;
-  border-bottom-right-radius: 0px !important;
+  border-radius: 8px !important;
+}
+
+/* ========================================================
+   INSIDER FLAG: ROUNDED SEARCH BOX (100% ROUND / PILL)
+   ======================================================== */
+html.rounded-search-boxes input[type="text"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+html.rounded-search-boxes input[type="search"],
+html.rounded-search-boxes .copilot-style-input,
+html.rounded-search-boxes .fluent-search-box,
+html.rounded-search-boxes [id*="search-box"],
+html.rounded-search-boxes [id*="search-bar"],
+html.rounded-search-boxes [id*="search-container"],
+html.rounded-search-boxes [id*="search-capsule"],
+html.rounded-search-boxes [id*="search-input"],
+html.rounded-search-boxes [class*="search-box"],
+html.rounded-search-boxes [class*="search-bar"],
+html.rounded-search-boxes [class*="search-container"],
+html.rounded-search-boxes [class*="search-input"],
+html.rounded-search-boxes #topbar-search-box,
+html.rounded-search-boxes #topbar-search-box[data-flyout-open="true"],
+html.rounded-search-boxes #sidebar-search-box,
+html.rounded-search-boxes #channels-search-box,
+html.rounded-search-boxes #settings-search-box,
+html.rounded-search-boxes #immersive-search-capsule,
+html.rounded-search-boxes #floating-search-bar-pill,
+html.rounded-search-boxes #copilot-search-box,
+html.rounded-search-boxes #copilot-flyout-search-box,
+html.rounded-search-boxes #spotlight-search-container,
+html.rounded-search-boxes #find-words-bar,
+html.rounded-search-boxes #find-words-bar > div,
+body.rounded-search-boxes #topbar-search-box,
+body.rounded-search-boxes [id*="search-box"] {
+  border-radius: 9999px !important;
 }
 
 /* Light Mode Global Overrides: Main tab page is #f9f9f9, Sidebar & TopBar are #f3f3f3 */
@@ -576,56 +606,64 @@ html.light-mode #vplay-splash-screen {
 .signin-flyout-container,
 .topbar-search-results-dropdown,
 .spotlight-search-results-container,
-.immersive-search-results-container {
+.immersive-search-results-container,
+.copilot-flyout-container {
   animation: tabElementSlideUp 0.44s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .signin-flyout-container > *:not(style):not(script),
 .topbar-search-results-dropdown > *:not(style):not(script),
 .spotlight-search-results-container > *:not(style):not(script),
-.immersive-search-results-container > *:not(style):not(script) {
+.immersive-search-results-container > *:not(style):not(script),
+.copilot-flyout-container > *:not(style):not(script) > *:not(style):not(script) {
   animation: tabElementSlideUp 0.44s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .signin-flyout-container > *:nth-child(1),
 .topbar-search-results-dropdown > *:nth-child(1),
 .spotlight-search-results-container > *:nth-child(1),
-.immersive-search-results-container > *:nth-child(1) {
+.immersive-search-results-container > *:nth-child(1),
+.copilot-flyout-container > * > *:nth-child(1) {
   animation-delay: 0.04s;
 }
 
 .signin-flyout-container > *:nth-child(2),
 .topbar-search-results-dropdown > *:nth-child(2),
 .spotlight-search-results-container > *:nth-child(2),
-.immersive-search-results-container > *:nth-child(2) {
+.immersive-search-results-container > *:nth-child(2),
+.copilot-flyout-container > * > *:nth-child(2) {
   animation-delay: 0.08s;
 }
 
 .signin-flyout-container > *:nth-child(3),
 .topbar-search-results-dropdown > *:nth-child(3),
 .spotlight-search-results-container > *:nth-child(3),
-.immersive-search-results-container > *:nth-child(3) {
+.immersive-search-results-container > *:nth-child(3),
+.copilot-flyout-container > * > *:nth-child(3) {
   animation-delay: 0.12s;
 }
 
 .signin-flyout-container > *:nth-child(4),
 .topbar-search-results-dropdown > *:nth-child(4),
 .spotlight-search-results-container > *:nth-child(4),
-.immersive-search-results-container > *:nth-child(4) {
+.immersive-search-results-container > *:nth-child(4),
+.copilot-flyout-container > * > *:nth-child(4) {
   animation-delay: 0.16s;
 }
 
 .signin-flyout-container > *:nth-child(5),
 .topbar-search-results-dropdown > *:nth-child(5),
 .spotlight-search-results-container > *:nth-child(5),
-.immersive-search-results-container > *:nth-child(5) {
+.immersive-search-results-container > *:nth-child(5),
+.copilot-flyout-container > * > *:nth-child(5) {
   animation-delay: 0.20s;
 }
 
 .signin-flyout-container > *:nth-child(n+6),
 .topbar-search-results-dropdown > *:nth-child(n+6),
 .spotlight-search-results-container > *:nth-child(n+6),
-.immersive-search-results-container > *:nth-child(n+6) {
+.immersive-search-results-container > *:nth-child(n+6),
+.copilot-flyout-container > * > *:nth-child(n+6) {
   animation-delay: 0.24s;
 }
 

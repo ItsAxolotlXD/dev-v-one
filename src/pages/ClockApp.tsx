@@ -856,7 +856,7 @@ export const ClockApp: React.FC<ClockAppProps> = ({ navigate }) => {
               </button>
             </div>
 
-            <div className="group relative flex items-center gap-2 h-8.5 bg-black/5 dark:bg-[#1e2530] border border-black/10 dark:border-white/10 rounded-[5px] px-3 text-xs transition-all focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]">
+            <div className="group relative flex items-center gap-2 h-8.5 bg-black/5 dark:bg-[#1e2530] border border-black/10 dark:border-white/10 rounded-[8px] px-3 text-xs transition-all focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]">
               <Search className="w-3.5 h-3.5 text-neutral-400 shrink-0 pointer-events-none" />
               <input
                 type="text"

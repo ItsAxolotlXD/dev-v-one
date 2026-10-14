@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { 
   Bot, 
   Send, 
@@ -7,18 +7,19 @@ import {
   Copy, 
   Check, 
   X, 
-  ArrowRight, 
-  Tv, 
-  Layers, 
-  Compass, 
-  AlertCircle,
+  ArrowLeft,
+  ArrowRight,
+  Mic, 
+  MicOff,
+  Search,
   ExternalLink,
-  MessageSquare,
-  Smile,
-  Bold
+  ChevronRight,
+  FolderArchive,
+  Image as ImageIcon
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useSystemTasks } from '../context/SystemTasksContext';
+import { useSettings } from '../hooks/useSettings';
 
 interface ChatMessage {
   id: string;
@@ -42,12 +43,91 @@ interface CopilotChatFlyoutProps {
   navigate: (route: string) => void;
 }
 
-const STARTER_PROMPTS = [
-  '📰 Tóm tắt tin nổi bật VnExpress hôm nay',
-  '📺 Gợi ý kênh truyền hình thời sự & thể thao',
-  '📌 Bảng Widgets của Sparkle (Dev) có những tiện ích gì?',
-  '⚡ Task Manager giúp theo dõi tiến trình thế nào?'
-];
+// 1. Yellow Zip Folder Icon matching reference Windows Search
+const ZipFolderIcon: React.FC<{ className?: string }> = ({ className = "w-6 h-6" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none">
+    <path d="M3 5a2 2 0 0 1 2-2h4.586a1 1 0 0 1 .707.293L12 5h7a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5z" fill="#f59e0b" />
+    <path d="M3 7h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" fill="#fbbf24" />
+    <rect x="9.5" y="7" width="2" height="10" fill="#fef3c7" rx="0.5" />
+    <line x1="9.5" y1="8.5" x2="11.5" y2="8.5" stroke="#b45309" strokeWidth="1" />
+    <line x1="9.5" y1="10.5" x2="11.5" y2="10.5" stroke="#b45309" strokeWidth="1" />
+    <line x1="9.5" y1="12.5" x2="11.5" y2="12.5" stroke="#b45309" strokeWidth="1" />
+    <line x1="9.5" y1="14.5" x2="11.5" y2="14.5" stroke="#b45309" strokeWidth="1" />
+    <rect x="9" y="15.5" width="3" height="2.5" rx="0.5" fill="#d97706" />
+  </svg>
+);
+
+// 2. Speech Bubble with lines icon matching reference Ask Copilot row
+const AskCopilotBubbleIcon: React.FC<{ className?: string }> = ({ className = "w-5 h-5 text-[#0078d4] dark:text-[#4cc2ff]" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
+    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+    <line x1="8" y1="10.5" x2="14" y2="10.5" strokeLinecap="round" />
+    <line x1="8" y1="14" x2="12.5" y2="14" strokeLinecap="round" />
+  </svg>
+);
+
+// 3. Microsoft Copilot Ribbon Icon with vivid authentic gradient
+const CopilotRibbonIcon: React.FC<{ className?: string }> = ({ className = "w-5 h-5" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none">
+    <path 
+      d="M16.5 4.5a3.5 3.5 0 0 0-4.9 0l-5.6 5.6a3.5 3.5 0 0 0 0 4.9l1.4 1.4a2 2 0 0 0 2.8 0l5.6-5.6a2 2 0 0 0 0-2.8l-.7-.7 2.1-2.1a1 1 0 0 0 0-1.4l-.7-.7z" 
+      fill="url(#c-grad-1)" 
+    />
+    <path 
+      d="M7.5 19.5a3.5 3.5 0 0 0 4.9 0l5.6-5.6a3.5 3.5 0 0 0 0-4.9l-1.4-1.4a2 2 0 0 0-2.8 0l-5.6 5.6a2 2 0 0 0 0 2.8l.7.7-2.1 2.1a1 1 0 0 0 0 1.4l.7.7z" 
+      fill="url(#c-grad-2)" 
+    />
+    <defs>
+      <linearGradient id="c-grad-1" x1="6" y1="4" x2="18" y2="16" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#38bdf8" />
+        <stop offset="0.5" stopColor="#3b82f6" />
+        <stop offset="1" stopColor="#10b981" />
+      </linearGradient>
+      <linearGradient id="c-grad-2" x1="18" y1="20" x2="6" y2="8" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#fb923c" />
+        <stop offset="0.5" stopColor="#f43f5e" />
+        <stop offset="1" stopColor="#a855f7" />
+      </linearGradient>
+    </defs>
+  </svg>
+);
+
+// 4. Spectacles / Copilot Vision Glasses Icon
+const GlassesIcon: React.FC<{ className?: string }> = ({ className = "w-4.5 h-4.5" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
+    <circle cx="6.5" cy="13.5" r="3.5" />
+    <circle cx="17.5" cy="13.5" r="3.5" />
+    <path d="M10 13.5h4" strokeLinecap="round" />
+    <path d="M3.2 12.5 4.8 7.5" strokeLinecap="round" />
+    <path d="M20.8 12.5 19.2 7.5" strokeLinecap="round" />
+  </svg>
+);
+
+// 5. Artwork logo tile matching sparkle experience Artwork PNG
+const ArtworkPngIcon: React.FC<{ className?: string }> = ({ className = "w-6 h-6" }) => (
+  <div className={`${className} rounded-[4px] bg-white p-0.5 flex flex-col items-center justify-center shrink-0 shadow-xs border border-black/10 dark:border-white/20`}>
+    <div className="flex items-center gap-0.5">
+      <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+      <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+    </div>
+    <span className="text-[6.5px] font-black text-black leading-none mt-0.5 tracking-tighter">SE</span>
+  </div>
+);
+
+// 6. Photo thumbnail matching team shot JPG
+const TeamShotThumbnail: React.FC<{ className?: string }> = ({ className = "w-6 h-6" }) => (
+  <div className={`${className} rounded-[4px] overflow-hidden shrink-0 border border-black/10 dark:border-white/20 bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center`}>
+    <img
+      src="/banners/thoi_su_19h.webp"
+      alt="Preview"
+      onError={(e) => {
+        (e.target as HTMLElement).style.display = 'none';
+      }}
+      className="w-full h-full object-cover"
+    />
+    <ImageIcon className="w-3.5 h-3.5 text-neutral-400 absolute" style={{ zIndex: 0 }} />
+  </div>
+);
 
 export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
   isOpen,
@@ -57,120 +137,86 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
   appAspects,
   navigate
 }) => {
-  const { isTaskRunning, restartTask } = useSystemTasks();
-  const isCopilotRunning = isTaskRunning('task-copilot');
-
-  const [messages, setMessages] = useState<ChatMessage[]>(() => [
-    {
-      id: 'welcome',
-      role: 'model',
-      text: 'Xin chào! Tôi là Copilot AI của **Sparkle (Dev)**. Bạn có thể hỏi tôi bất cứ điều gì về lịch phát sóng, tin tức thời sự, hướng dẫn tính năng (Live TV, Widgets, Task Manager, Notes) hoặc kiến thức đời sống!',
-      timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
-    }
-  ]);
-  const [inputVal, setInputVal] = useState('');
+  const { isTaskRunning } = useSystemTasks();
+  const { settings } = useSettings();
+  const isPill = Boolean(settings.roundedSearchBox);
+  const [activeMode, setActiveMode] = useState<'search' | 'copilot'>('search');
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const chatScrollRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [isListening, setIsListening] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const speechRecognitionRef = useRef<any>(null);
 
-  const POPULAR_EMOJIS = ['😀', '😂', '😍', '🎉', '🚀', '✨', '💡', '🔥', '👍', '❤️', '👏', '🤖', '🌟', '📌', '💬', '🔍', '⚙️', '💻'];
-
-  const renderFormattedText = (text: string) => {
-    const parts = text.split(/(\*\*.*?\*\*)/g);
-    return parts.map((part, i) => {
-      if (part.startsWith('**') && part.endsWith('**')) {
-        return (
-          <strong key={i} className="font-bold underline decoration-[#0078d4]/40 decoration-1">
-            {part.slice(2, -2)}
-          </strong>
-        );
-      }
-      return part;
-    });
-  };
-
-  const handleToggleBold = () => {
-    const input = inputRef.current;
-    if (!input) {
-      setInputVal(prev => prev ? `${prev} **in đậm**` : '**in đậm**');
-      return;
-    }
-    const start = input.selectionStart ?? inputVal.length;
-    const end = input.selectionEnd ?? inputVal.length;
-    if (start !== end) {
-      const selected = inputVal.substring(start, end);
-      const newVal = inputVal.substring(0, start) + `**${selected}**` + inputVal.substring(end);
-      setInputVal(newVal);
-      setTimeout(() => {
-        input.setSelectionRange(start + 2, end + 2);
-        input.focus();
-      }, 20);
-    } else {
-      const newVal = inputVal.substring(0, start) + '**in đậm**' + inputVal.substring(end);
-      setInputVal(newVal);
-      setTimeout(() => {
-        input.setSelectionRange(start + 2, start + 8);
-        input.focus();
-      }, 20);
-    }
-  };
-
-  const handleInsertEmoji = (emoji: string) => {
-    const input = inputRef.current;
-    if (!input) {
-      setInputVal(prev => prev + emoji);
-    } else {
-      const start = input.selectionStart ?? inputVal.length;
-      const end = input.selectionEnd ?? inputVal.length;
-      const newVal = inputVal.substring(0, start) + emoji + inputVal.substring(end);
-      setInputVal(newVal);
-      setTimeout(() => {
-        input.setSelectionRange(start + emoji.length, start + emoji.length);
-        input.focus();
-      }, 20);
-    }
-    setShowEmojiPicker(false);
-  };
-
-
-  // Auto-scroll to bottom of chat when new message arrives
+  // Initialize Speech Recognition
   useEffect(() => {
-    if (chatScrollRef.current) {
-      chatScrollRef.current.scrollTop = chatScrollRef.current.scrollHeight;
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'vi-VN';
+
+      recognition.onstart = () => setIsListening(true);
+      recognition.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        if (transcript) {
+          onSearchQueryChange(transcript);
+        }
+      };
+      recognition.onerror = () => setIsListening(false);
+      recognition.onend = () => setIsListening(false);
+      speechRecognitionRef.current = recognition;
     }
-  }, [messages, isLoading]);
+  }, [onSearchQueryChange]);
 
-  // Quick matches from app aspects for the search query
-  const matchingAspects = React.useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-    if (!q) return [];
-    return appAspects.filter((a) => a.title.toLowerCase().includes(q)).slice(0, 4);
-  }, [searchQuery, appAspects]);
+  const toggleListening = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!speechRecognitionRef.current) return;
+    if (isListening) {
+      speechRecognitionRef.current.stop();
+      setIsListening(false);
+    } else {
+      try {
+        speechRecognitionRef.current.start();
+        setIsListening(true);
+      } catch (err) {
+        console.warn('Speech recognition error:', err);
+      }
+    }
+  };
 
-  const handleSendMessage = async (textToSend?: string) => {
-    if (!isCopilotRunning) return;
-    const message = (textToSend || inputVal || searchQuery).trim();
-    if (!message || isLoading) return;
+  // Keyboard shortcut ESC to close
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
+  // Handle Ask Copilot Action
+  const handleAskCopilot = async (question?: string) => {
+    const prompt = (question || searchQuery || 'windows central').trim();
+    if (!prompt || isLoading) return;
+
+    setActiveMode('copilot');
 
     const userMsg: ChatMessage = {
       id: `usr-${Date.now()}`,
       role: 'user',
-      text: message,
+      text: prompt,
       timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
     };
 
     setMessages((prev) => [...prev, userMsg]);
-    setInputVal('');
-    onSearchQueryChange('');
     setIsLoading(true);
 
-    const isSearchCmd = /^\/(find|search)\b/i.test(message);
-    const searchKeyword = isSearchCmd ? message.replace(/^\/(find|search)\s*/i, '').trim() : '';
-
     try {
-      const historyPayload = messages.slice(-6).map((m) => ({
+      const historyPayload = messages.slice(-4).map((m) => ({
         role: m.role,
         text: m.text
       }));
@@ -179,14 +225,12 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message,
+          message: prompt,
           history: historyPayload
         })
       });
 
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status}`);
-      }
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
       const data = await res.json();
       const modelMsg: ChatMessage = {
@@ -198,25 +242,10 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
       setMessages((prev) => [...prev, modelMsg]);
     } catch (err: any) {
       console.warn('Copilot request failed:', err);
-
-      // Intelligent local search fallback if command is /find or /search
-      let fallbackText = '';
-      if (isSearchCmd && searchKeyword) {
-        const matches = appAspects.filter((a) =>
-          a.title.toLowerCase().includes(searchKeyword.toLowerCase())
-        );
-        const matchTitles = matches.map((m) => `• [${m.type.toUpperCase()}] **${m.title}**`).join('\n');
-        fallbackText = `🔍 **Kết quả tìm kiếm Copilot cho:** "${searchKeyword}"\n\n` +
-          (matchTitles ? `Các mục tìm thấy trong hệ thống:\n${matchTitles}\n\n` : `Không tìm thấy mục khớp chính xác trong hệ sinh thái.\n\n`) +
-          `💡 Gợi ý: Bạn có thể tìm nhanh kênh truyền hình trong mục **Live TV**, xem **Tin tức VnExpress** hoặc tra cứu trong **Cài đặt**.`;
-      } else {
-        fallbackText = `Chào bạn! Tôi đã nhận được yêu cầu: "${message}". Bạn có thể gõ **/find <từ khóa>** hoặc **/search <từ khóa>** để tìm kiếm mọi nội dung, hoặc mở Live TV, Widgets, Task Manager từ thanh điều hướng nhé!`;
-      }
-
       const fallbackMsg: ChatMessage = {
         id: `ai-err-${Date.now()}`,
         role: 'model',
-        text: fallbackText,
+        text: `Chào bạn! Tôi là Copilot AI trong giao diện Windows Search. Bạn đang tìm hiểu về "${prompt}". Bạn có thể xem trực tiếp kênh truyền hình trong tab Watch (Live TV), mở Bảng Widgets để cập nhật tin tức thời gian thực, hoặc tra cứu các tùy chọn trong Settings.`,
         timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
       };
       setMessages((prev) => [...prev, fallbackMsg]);
@@ -233,322 +262,354 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
     }
   };
 
-  const handleResetChat = () => {
-    setMessages([
-      {
-        id: `welcome-${Date.now()}`,
-        role: 'model',
-        text: 'Cuộc trò chuyện mới đã bắt đầu! Bạn muốn Copilot giúp gì hôm nay?',
-        timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
+  // Helper to render bold markdown
+  const renderFormattedText = (text: string) => {
+    const parts = text.split(/(\*\*.*?\*\*)/g);
+    return parts.map((part, i) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return (
+          <strong key={i} className="font-bold underline decoration-[#0078d4]/40 decoration-1">
+            {part.slice(2, -2)}
+          </strong>
+        );
       }
-    ]);
+      return part;
+    });
   };
+
+  // Matched items or defaults that mirror Windows Search Copilot layout
+  const displayedItems = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    
+    // Default items matching the reference screenshot when empty or generic
+    if (!q || q === 'sparkle experience' || q === 'windows central' || q === 'windows') {
+      return [
+        {
+          id: 'item-1',
+          title: 'sparkle experience',
+          subtitle: 'Do action',
+          iconType: 'zip' as const,
+          action: () => navigate('/file-explorer')
+        },
+        {
+          id: 'item-2',
+          title: 'sparkle experience team shot 2',
+          subtitle: 'JPG File',
+          iconType: 'jpg' as const,
+          action: () => navigate('/photos')
+        },
+        {
+          id: 'item-3',
+          title: 'sparkle experience Artwork',
+          subtitle: 'PNG File',
+          iconType: 'png' as const,
+          action: () => navigate('/photos')
+        }
+      ];
+    }
+
+    // Dynamic search matches based on user input
+    const matches = appAspects.filter((a) =>
+      a.title.toLowerCase().includes(q)
+    ).slice(0, 3);
+
+    if (matches.length > 0) {
+      return matches.map((m, idx) => {
+        let subtitle = 'Tài liệu hệ thống';
+        let iconType: 'zip' | 'jpg' | 'png' | 'logo' = 'zip';
+        
+        if (m.type === 'channel') {
+          subtitle = 'Kênh truyền hình trực tiếp';
+          iconType = 'logo';
+        } else if (m.type === 'news') {
+          subtitle = 'Bài viết thời sự JPG';
+          iconType = 'jpg';
+        } else if (idx === 0) {
+          subtitle = 'Do action';
+          iconType = 'zip';
+        } else if (idx === 1) {
+          subtitle = 'JPG File';
+          iconType = 'jpg';
+        } else {
+          subtitle = 'PNG File';
+          iconType = 'png';
+        }
+
+        return {
+          id: m.id,
+          title: m.title,
+          subtitle,
+          iconType,
+          logo: m.logo,
+          action: m.onSelect
+        };
+      });
+    }
+
+    // Fallback search suggestions
+    return [
+      {
+        id: 'search-fallback-1',
+        title: `${searchQuery} (Thư mục tài liệu)`,
+        subtitle: 'Do action',
+        iconType: 'zip' as const,
+        action: () => navigate(`/channels?search=${encodeURIComponent(searchQuery)}`)
+      },
+      {
+        id: 'search-fallback-2',
+        title: `${searchQuery} ảnh chụp trực tuyến`,
+        subtitle: 'JPG File',
+        iconType: 'jpg' as const,
+        action: () => navigate('/photos')
+      },
+      {
+        id: 'search-fallback-3',
+        title: `${searchQuery} đồ họa & biểu trưng`,
+        subtitle: 'PNG File',
+        iconType: 'png' as const,
+        action: () => navigate('/photos')
+      }
+    ];
+  }, [searchQuery, appAspects, navigate]);
 
   if (!isOpen) return null;
 
   return (
     <motion.div
-      key="copilot-flyout-panel"
-      initial={{ opacity: 0, y: 14, scale: 0.98 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: 10, scale: 0.98 }}
-      transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-      className="absolute top-full mt-1.5 left-0 right-0 w-full z-50 bg-white/95 dark:bg-[#1f2328]/95 backdrop-blur-2xl rounded-[12px] border border-black/10 dark:border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.22)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.7)] flex flex-col max-h-[580px] h-[520px] overflow-hidden select-text"
+      key="windows-copilot-search-flyout"
+      initial={{ opacity: 0, y: 26 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 16 }}
+      transition={{ duration: 0.44, ease: [0.16, 1, 0.3, 1] }}
+      className="copilot-flyout-container absolute top-full mt-2 left-1/2 -translate-x-1/2 w-[95vw] max-w-[460px] z-[999] rounded-[16px] bg-[#fbfbfb]/85 dark:bg-[#1f1d27]/85 backdrop-blur-3xl border border-black/10 dark:border-white/10 shadow-[0_24px_50px_rgba(0,0,0,0.22)] dark:shadow-[0_24px_60px_rgba(0,0,0,0.65)] p-2 sm:p-2.5 flex flex-col gap-1.5 select-none text-[#18181b] dark:text-white font-sans overflow-hidden"
       style={{
-        backdropFilter: 'blur(30px) saturate(180%)',
-        WebkitBackdropFilter: 'blur(30px) saturate(180%)'
+        backdropFilter: 'blur(36px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(36px) saturate(180%)'
       }}
     >
-      {/* 1. Header Bar */}
-      <div className="px-3.5 py-2.5 border-b border-black/10 dark:border-white/10 flex items-center justify-between bg-[#fafafa]/80 dark:bg-[#1a1d21]/80 shrink-0 select-none">
-        <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-black/5 dark:bg-white/10 p-1 flex items-center justify-center shrink-0 border border-black/10 dark:border-white/10 shadow-xs">
-            <img
-              src="https://upload.wikimedia.org/wikipedia/vi/a/aa/Microsoft_Copilot_Icon.svg"
-              alt="Copilot"
-              referrerPolicy="no-referrer"
-              className="w-full h-full object-contain"
-            />
-          </div>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className="font-bold text-xs sm:text-[13px] text-black dark:text-white">
-                Copilot
-              </span>
-              <span className="text-[9px] px-1.5 py-0.2 rounded-full font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
-                Gemini
-              </span>
-            </div>
-            <p className="text-[10px] text-[#6b7280] dark:text-[#9ca3af]">
-              Trò chuyện & tìm kiếm thông minh
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-1">
-          {navigate && (
-            <button
-              type="button"
-              onClick={() => {
-                onClose();
-                navigate('/copilot');
-              }}
-              className="text-[11px] font-semibold text-[#0078d4] dark:text-[#4cc2ff] hover:underline px-1.5 py-1 rounded cursor-pointer"
-              title="Mở tab Copilot"
-            >
-              Mở rộng
-            </button>
-          )}
-          <button
-            type="button"
-            onClick={handleResetChat}
-            title="Làm mới cuộc trò chuyện (New topic)"
-            className="p-1.5 rounded-[5px] text-[#6b7280] dark:text-[#9ca3af] hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 text-xs flex items-center gap-1 cursor-pointer transition-colors"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline text-[11px]">Làm mới</span>
-          </button>
-          <button
-            type="button"
-            onClick={onClose}
-            className="p-1.5 rounded-[5px] text-[#6b7280] dark:text-[#9ca3af] hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 cursor-pointer"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
-
-      {/* 2. Instant Search Navigation Row (if user has active searchQuery) */}
-      {searchQuery.trim() && (
-        <div className="px-3 py-2 bg-[#f0f4f9] dark:bg-[#252a30] border-b border-black/10 dark:border-white/10 shrink-0">
-          <div className="text-[11px] font-semibold text-[#0078d4] dark:text-[#4cc2ff] mb-1.5 flex items-center justify-between">
-            <span>Kết quả tìm kiếm phù hợp với "{searchQuery}":</span>
-            <button
-              type="button"
-              onClick={() => handleSendMessage(searchQuery)}
-              className="text-[11px] font-bold text-[#0078d4] dark:text-[#4cc2ff] hover:underline flex items-center gap-1"
-            >
-              Hỏi Copilot ngay <ArrowRight className="w-3 h-3" />
-            </button>
-          </div>
-
-          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
-            {matchingAspects.map((aspect) => (
-              <button
-                key={aspect.id}
-                type="button"
-                onClick={() => {
-                  aspect.onSelect();
-                  onClose();
-                }}
-                className="px-2.5 py-1 rounded-[5px] bg-white dark:bg-[#1b1f24] hover:bg-[#0078d4] hover:text-white dark:hover:bg-[#4cc2ff] dark:hover:text-black border border-black/10 dark:border-white/10 text-xs font-medium flex items-center gap-1.5 shrink-0 transition-colors cursor-pointer shadow-xs"
-              >
-                {aspect.logo ? (
-                  <img src={aspect.logo} alt="" className="w-3.5 h-3.5 object-contain" />
-                ) : (
-                  <Compass className="w-3.5 h-3.5" />
-                )}
-                <span>{aspect.title}</span>
-              </button>
-            ))}
-
-            <button
-              type="button"
-              onClick={() => handleSendMessage(searchQuery)}
-              className="px-2.5 py-1 rounded-[5px] bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff] text-xs font-semibold flex items-center gap-1 shrink-0 hover:bg-[#0078d4]/20 cursor-pointer"
-            >
-              <Sparkles className="w-3 h-3" />
-              <span>Hỏi Copilot: "{searchQuery}"</span>
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* 3. Messages Stream */}
-      <div 
-        ref={chatScrollRef}
-        className="flex-1 overflow-y-auto p-4 space-y-3.5 bg-gradient-to-b from-transparent to-black/[0.02] dark:to-white/[0.01]"
-      >
-        {messages.map((msg) => {
-          const isUser = msg.role === 'user';
-          return (
-            <div
-              key={msg.id}
-              className={`flex items-start gap-2.5 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}
-            >
-              {!isUser && (
-                <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-[#0078d4] to-[#4cc2ff] flex items-center justify-center text-white shrink-0 shadow-xs mt-0.5">
-                  <Bot className="w-4 h-4" />
-                </div>
-              )}
-
-              <div className={`max-w-[85%] sm:max-w-[78%] space-y-1 ${isUser ? 'items-end' : 'items-start'}`}>
+      {/* ================= MODE 1: SEARCH & COPILOT SUGGESTIONS ================= */}
+      {activeMode === 'search' ? (
+        <>
+          {/* Upper Search Results List */}
+          <div className="flex flex-col gap-0.5">
+            {/* Dynamic Results (Items 1 - 3) */}
+            {displayedItems.map((item, index) => {
+              const isFirst = index === 0;
+              return (
                 <div
-                  className={`p-3 rounded-[10px] text-xs sm:text-[13px] leading-relaxed shadow-xs ${
-                    isUser
-                      ? 'bg-[#0078d4] dark:bg-[#4cc2ff] text-white dark:text-black font-normal rounded-tr-none'
-                      : 'bg-[#f3f4f6] dark:bg-[#282c31] text-[#111827] dark:text-[#f3f4f6] border border-black/5 dark:border-white/10 rounded-tl-none'
+                  key={item.id}
+                  onClick={() => {
+                    item.action();
+                    onClose();
+                  }}
+                  className={`w-full rounded-[8px] p-2 sm:p-2.5 px-3 flex items-center gap-3 transition-colors cursor-pointer ${
+                    isFirst
+                      ? 'bg-black/[0.04] dark:bg-white/[0.08] hover:bg-black/[0.08] dark:hover:bg-white/[0.12]'
+                      : 'hover:bg-black/[0.03] dark:hover:bg-white/[0.06]'
                   }`}
                 >
-                  <p className="whitespace-pre-wrap">{renderFormattedText(msg.text)}</p>
-                </div>
+                  {/* Left Icon */}
+                  <div className="w-6 h-6 flex items-center justify-center shrink-0">
+                    {item.iconType === 'zip' && <ZipFolderIcon className="w-6 h-6" />}
+                    {item.iconType === 'jpg' && <TeamShotThumbnail className="w-6 h-6" />}
+                    {item.iconType === 'png' && <ArtworkPngIcon className="w-6 h-6" />}
+                    {item.iconType === 'logo' && item.logo && (
+                      <img src={item.logo} alt="" className="w-6 h-6 object-contain rounded" />
+                    )}
+                  </div>
 
-                <div className={`flex items-center gap-2 px-1 text-[10px] text-[#6b7280] dark:text-[#9ca3af] ${isUser ? 'justify-end' : 'justify-start'}`}>
-                  <span>{msg.timestamp}</span>
-                  {!isUser && (
-                    <button
-                      type="button"
-                      onClick={() => handleCopyText(msg.id, msg.text)}
-                      title="Sao chép câu trả lời"
-                      className="hover:text-black dark:hover:text-white cursor-pointer ml-1"
-                    >
-                      {copiedId === msg.id ? (
-                        <Check className="w-3 h-3 text-emerald-500" />
-                      ) : (
-                        <Copy className="w-3 h-3" />
-                      )}
-                    </button>
-                  )}
+                  {/* Title & Subtitle */}
+                  <div className="flex-1 min-w-0 leading-tight">
+                    <div className="text-[13.5px] font-medium text-[#111827] dark:text-white truncate">
+                      {item.title}
+                    </div>
+                    <div className="text-[11.5px] text-[#6b7280] dark:text-neutral-400 mt-0.5 truncate">
+                      {item.subtitle}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* Item 4: Ask Copilot (with speech bubble icon matching leaked reference) */}
+            <div
+              onClick={() => handleAskCopilot(searchQuery || 'sparkle experience')}
+              className="w-full rounded-[8px] hover:bg-black/[0.03] dark:hover:bg-white/[0.06] p-2 sm:p-2.5 px-3 flex items-center gap-3 transition-colors cursor-pointer group"
+            >
+              <div className="w-6 h-6 flex items-center justify-center shrink-0">
+                <AskCopilotBubbleIcon className="w-5 h-5 text-[#0078d4] dark:text-white group-hover:scale-105 transition-transform" />
+              </div>
+              <div className="flex-1 min-w-0 leading-tight">
+                <div className="text-[13.5px] font-medium text-[#111827] dark:text-white truncate">
+                  {searchQuery.trim() || 'sparkle experience'}
+                </div>
+                <div className="text-[11.5px] text-[#0078d4] dark:text-[#4cc2ff] font-medium mt-0.5 flex items-center gap-1">
+                  <span>Ask Copilot</span>
+                  <Sparkles className="w-3 h-3 text-[#0078d4] dark:text-[#4cc2ff]" />
                 </div>
               </div>
             </div>
-          );
-        })}
 
-        {/* AI Typing / Loading Indicator */}
-        {isLoading && (
-          <div className="flex items-start gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-[#0078d4] to-[#4cc2ff] flex items-center justify-center text-white shrink-0 shadow-xs">
-              <Bot className="w-4 h-4" />
-            </div>
-            <div className="p-3 rounded-[10px] bg-[#f3f4f6] dark:bg-[#282c31] border border-black/5 dark:border-white/10 rounded-tl-none flex items-center gap-1.5 text-xs text-[#6b7280] dark:text-[#9ca3af]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#0078d4] dark:bg-[#4cc2ff] animate-ping" />
-              <span>Copilot đang suy nghĩ câu trả lời...</span>
+            {/* Item 5: See More Search Results Button */}
+            <div className="relative pt-1">
+              <button
+                type="button"
+                onMouseEnter={() => setShowTooltip(true)}
+                onMouseLeave={() => setShowTooltip(false)}
+                onClick={() => {
+                  onClose();
+                  navigate(`/search?q=${encodeURIComponent(searchQuery || 'sparkle experience')}`);
+                }}
+                className="w-full rounded-[8px] bg-black/[0.03] dark:bg-white/[0.04] hover:bg-black/[0.06] dark:hover:bg-white/[0.08] active:bg-black/[0.09] dark:active:bg-white/[0.1] text-neutral-600 dark:text-neutral-300 hover:text-black dark:hover:text-white text-xs sm:text-[13px] py-2 px-3.5 flex items-center justify-between transition-colors cursor-pointer font-medium border border-black/5 dark:border-white/5"
+              >
+                <span>See more search results</span>
+                <ChevronRight className="w-4 h-4 text-neutral-400" />
+              </button>
+
+              {/* Tooltip matching corner tooltip */}
+              {showTooltip && (
+                <div className="absolute right-0 bottom-full mb-1 px-2.5 py-1 rounded-[6px] bg-white dark:bg-[#1e1c24] text-[11px] text-neutral-700 dark:text-neutral-300 border border-black/10 dark:border-white/10 shadow-lg pointer-events-none whitespace-nowrap z-50 animate-in fade-in duration-150">
+                  See more search results
+                </div>
+              )}
             </div>
           </div>
-        )}
-      </div>
-
-      {/* 4. Quick Starter Suggestions Chips */}
-      {messages.length <= 2 && (
-        <div className="px-4 py-2 border-t border-black/5 dark:border-white/5 bg-[#fafafa]/50 dark:bg-[#1a1d21]/50 flex items-center gap-1.5 overflow-x-auto no-scrollbar shrink-0">
-          {STARTER_PROMPTS.map((prompt, idx) => (
+        </>
+      ) : (
+        /* ================= MODE 2: ACTIVE COPILOT AI CHAT VIEW ================= */
+        <div className="flex flex-col h-[480px]">
+          {/* Header */}
+          <div className="flex items-center justify-between pb-2.5 border-b border-black/10 dark:border-white/10 shrink-0">
             <button
-              key={idx}
               type="button"
-              onClick={() => handleSendMessage(prompt)}
-              className="px-2.5 py-1 rounded-full bg-white dark:bg-[#282c31] hover:bg-[#0078d4]/10 hover:text-[#0078d4] dark:hover:text-[#4cc2ff] border border-black/10 dark:border-white/10 text-[11px] text-[#4b5563] dark:text-[#d1d5db] shrink-0 transition-colors cursor-pointer shadow-2xs whitespace-nowrap"
+              onClick={() => setActiveMode('search')}
+              className="flex items-center gap-1.5 text-xs text-neutral-600 dark:text-neutral-300 hover:text-black dark:hover:text-white transition-colors cursor-pointer font-medium"
             >
-              {prompt}
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Quay lại tìm kiếm</span>
             </button>
-          ))}
+
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] bg-black/5 dark:bg-white/10 text-xs font-semibold text-neutral-800 dark:text-white">
+                <CopilotRibbonIcon className="w-4 h-4" />
+                <span>Copilot AI</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setMessages([])}
+                title="Làm mới cuộc trò chuyện"
+                className="p-1.5 rounded-[6px] text-neutral-500 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="p-1.5 rounded-[6px] text-neutral-500 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+
+          {/* Messages Stream */}
+          <div className="flex-1 overflow-y-auto py-3 space-y-3 pr-1">
+            {messages.map((msg) => {
+              const isUser = msg.role === 'user';
+              return (
+                <div
+                  key={msg.id}
+                  className={`flex flex-col ${isUser ? 'items-end' : 'items-start'}`}
+                >
+                  <div
+                    className={`p-3 rounded-[12px] text-xs sm:text-[13px] leading-relaxed max-w-[88%] ${
+                      isUser
+                        ? 'bg-[#0078d4] text-white rounded-tr-none shadow-xs'
+                        : 'bg-[#f4f4f7] dark:bg-[#282534] text-neutral-800 dark:text-neutral-200 border border-black/10 dark:border-white/10 rounded-tl-none shadow-xs'
+                    }`}
+                  >
+                    <p className="whitespace-pre-wrap">{renderFormattedText(msg.text)}</p>
+                  </div>
+
+                  <div className="flex items-center gap-2 mt-1 px-1 text-[10px] text-neutral-400">
+                    <span>{msg.timestamp}</span>
+                    {!isUser && (
+                      <button
+                        type="button"
+                        onClick={() => handleCopyText(msg.id, msg.text)}
+                        title="Sao chép"
+                        className="hover:text-black dark:hover:text-white cursor-pointer"
+                      >
+                        {copiedId === msg.id ? (
+                          <Check className="w-3 h-3 text-emerald-500" />
+                        ) : (
+                          <Copy className="w-3 h-3" />
+                        )}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+
+            {isLoading && (
+              <div className="flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400 p-2.5 rounded-[10px] bg-[#f4f4f7] dark:bg-[#282534] border border-black/10 dark:border-white/10 w-fit">
+                <span className="w-2 h-2 rounded-full bg-[#0078d4] dark:bg-[#4cc2ff] animate-ping" />
+                <span>Copilot đang tạo phản hồi...</span>
+              </div>
+            )}
+          </div>
+
+          {/* Quick Suggestions */}
+          <div className="py-1 flex items-center gap-1.5 overflow-x-auto no-scrollbar shrink-0">
+            {['Kênh thời sự VTV1', 'Xem truyền hình', 'Bảng tin hôm nay', 'Cài đặt hệ thống'].map((sug) => (
+              <button
+                key={sug}
+                type="button"
+                onClick={() => handleAskCopilot(sug)}
+                className="shrink-0 text-[11px] px-2.5 py-1 rounded-[6px] bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 text-neutral-600 dark:text-neutral-300 hover:text-black dark:hover:text-white transition-colors cursor-pointer"
+              >
+                {sug}
+              </button>
+            ))}
+          </div>
+
+          {/* Lower Input Box Card for Copilot Chat (8px radius corner or 100% round pill) */}
+          <div className={`${isPill ? 'rounded-full px-4' : 'rounded-[8px]'} bg-[#f4f4f7] dark:bg-[#282534] border border-black/10 dark:border-white/10 p-3 pt-2.5 flex flex-col justify-between shrink-0 shadow-2xs mt-1.5`}>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => onSearchQueryChange(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  handleAskCopilot(searchQuery);
+                }
+              }}
+              placeholder="Đặt câu hỏi tiếp theo cho Copilot..."
+              className="w-full bg-transparent text-[13.5px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-neutral-500 outline-none border-none py-0.5 no-fluent-line font-normal"
+            />
+
+            <div className="flex items-center justify-between mt-2.5 pt-1">
+              <div className="flex items-center gap-1.5">
+                <CopilotRibbonIcon className="w-4 h-4" />
+                <span className="text-[11px] text-neutral-500 dark:text-neutral-400 font-medium">Hỏi bất cứ điều gì</span>
+              </div>
+
+              <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-300">
+                <button
+                  type="button"
+                  disabled={!searchQuery.trim() || isLoading}
+                  onClick={() => handleAskCopilot(searchQuery)}
+                  className="p-1 rounded-[6px] bg-[#0078d4] text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#106ebe] transition-colors cursor-pointer active:scale-95 flex items-center justify-center"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
-
-      {/* 5. Bottom Input Area with Emoji & Bold */}
-      <div className="p-2.5 border-t border-black/10 dark:border-white/10 bg-[#fafafa] dark:bg-[#1a1d21] shrink-0 select-none relative">
-        {/* Emoji Picker Popover */}
-        {showEmojiPicker && (
-          <div className="absolute bottom-14 left-3 z-50 p-2.5 rounded-xl bg-white dark:bg-[#202428] border border-black/15 dark:border-white/15 shadow-2xl animate-in fade-in slide-in-from-bottom-2">
-            <div className="flex items-center justify-between pb-1.5 mb-1.5 border-b border-black/10 dark:border-white/10 text-[11px] font-semibold text-neutral-600 dark:text-neutral-300">
-              <span>Chọn biểu cảm</span>
-              <button
-                type="button"
-                onClick={() => setShowEmojiPicker(false)}
-                className="text-neutral-400 hover:text-black dark:hover:text-white cursor-pointer px-1"
-              >
-                ✕
-              </button>
-            </div>
-            <div className="grid grid-cols-6 gap-1 max-w-[240px]">
-              {POPULAR_EMOJIS.map((emoji) => (
-                <button
-                  key={emoji}
-                  type="button"
-                  onClick={() => handleInsertEmoji(emoji)}
-                  className="w-7 h-7 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 flex items-center justify-center text-base cursor-pointer transition-transform hover:scale-120"
-                >
-                  {emoji}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {!isCopilotRunning ? (
-          <div className="flex items-center justify-between p-2 rounded-[6px] bg-rose-500/10 border border-rose-500/20 text-xs text-rose-600 dark:text-rose-400">
-            <span>⚠️ Copilot Runtime Engine đã bị dừng trong Task Manager. Không thể gửi tin nhắn.</span>
-            <button
-              type="button"
-              onClick={() => restartTask('task-copilot')}
-              className="px-2.5 py-1 rounded bg-[#0078d4] dark:bg-[#4cc2ff] text-white dark:text-black font-semibold text-[11px] cursor-pointer shrink-0 ml-2"
-            >
-              Khởi động lại
-            </button>
-          </div>
-        ) : (
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSendMessage();
-            }}
-            className="flex items-center gap-1.5"
-          >
-            {/* Format Tools */}
-            <div className="flex items-center gap-0.5 shrink-0">
-              <button
-                type="button"
-                onClick={handleToggleBold}
-                className="p-1.5 rounded-[4px] hover:bg-black/10 dark:hover:bg-white/10 text-[#6b7280] dark:text-neutral-300 transition-colors cursor-pointer"
-                title="In đậm (Ctrl+B / **text**)"
-              >
-                <Bold className="w-3.5 h-3.5 stroke-[2.75]" />
-              </button>
-              <button
-                type="button"
-                onClick={() => setShowEmojiPicker(prev => !prev)}
-                className={`p-1.5 rounded-[4px] transition-colors cursor-pointer ${
-                  showEmojiPicker
-                    ? 'bg-[#0078d4]/10 text-[#0078d4] dark:text-[#4cc2ff]'
-                    : 'hover:bg-black/10 dark:hover:bg-white/10 text-[#6b7280] dark:text-neutral-300'
-                }`}
-                title="Chèn biểu cảm Emoji"
-              >
-                <Smile className="w-3.5 h-3.5" />
-              </button>
-            </div>
-
-            <div 
-              id="copilot-flyout-search-box"
-              className="fluent-search-box relative flex-1 group h-8 sm:h-8.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3.5 rounded-[5px] transition-all focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]"
-            >
-              <input
-                ref={inputRef}
-                type="text"
-                value={inputVal}
-                onChange={(e) => setInputVal(e.target.value)}
-                onKeyDown={(e) => {
-                  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
-                    e.preventDefault();
-                    handleToggleBold();
-                  }
-                }}
-                placeholder="Let's chat or use /search"
-                className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#9ca3af] outline-none border-none py-1 no-fluent-line"
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={!inputVal.trim() && !searchQuery.trim()}
-              className="w-9 h-9 rounded-[6px] bg-[#0078d4] dark:bg-[#4cc2ff] hover:bg-[#106ebe] dark:hover:bg-[#6bd0ff] text-white dark:text-black flex items-center justify-center shrink-0 shadow-xs disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
-              title="Gửi câu hỏi"
-            >
-              <Send className="w-4 h-4" />
-            </button>
-          </form>
-        )}
-      </div>
     </motion.div>
   );
 };

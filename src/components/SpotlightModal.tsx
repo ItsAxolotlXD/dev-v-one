@@ -427,7 +427,7 @@ export const SpotlightModal: React.FC<SpotlightModalProps> = ({
                     setIsFocused(true);
                     inputRef.current?.focus();
                   }}
-                  className="group relative w-full h-9 sm:h-9.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3.5 gap-2 rounded-[5px] focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff] transition-all cursor-text select-none"
+                  className="group relative w-full h-9 sm:h-9.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3.5 gap-2 rounded-[8px] focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff] transition-all cursor-text select-none"
                 >
                   <motion.div 
                     animate={{

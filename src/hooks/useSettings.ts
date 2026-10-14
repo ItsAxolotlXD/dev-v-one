@@ -42,6 +42,8 @@ export interface SystemSettings {
   developerMode: boolean;
   triangleExperiment: boolean;
   triangleExperimentVersion?: number;
+  experimentalSearchExperience?: 'right' | 'left' | 'hidden';
+  roundedSearchBox?: boolean;
   pageLoading: boolean;
   loadPagesSequentially: boolean;
   customKeybinds: CustomKeybinds;
@@ -75,8 +77,8 @@ export const DEFAULT_SETTINGS: SystemSettings = {
   animateModals: true,
   animatePageTransitions: true,
   immersiveSearch: true,
-  nativeKeyboard: true,
-  nativeKeyboardVersion: 2,
+  nativeKeyboard: false,
+  nativeKeyboardVersion: 3,
   keyboardNumberRow: false,
   keyboardClipboard: true,
   keyboardSoundEnabled: true,
@@ -90,6 +92,8 @@ export const DEFAULT_SETTINGS: SystemSettings = {
   developerMode: false,
   triangleExperiment: true,
   triangleExperimentVersion: 1,
+  experimentalSearchExperience: 'right',
+  roundedSearchBox: false,
   pageLoading: true,
   loadPagesSequentially: false,
   customKeybinds: DEFAULT_KEYBINDS,
@@ -151,10 +155,10 @@ export const getStoredSettings = (): SystemSettings => {
           ? (typeof parsed.floatingSearchBar === 'boolean' ? parsed.floatingSearchBar : true)
           : true,
         floatingSearchBarVersion: 1,
-        nativeKeyboard: parsed.nativeKeyboardVersion === 2
-          ? (typeof parsed.nativeKeyboard === 'boolean' ? parsed.nativeKeyboard : true)
-          : true,
-        nativeKeyboardVersion: 2,
+        nativeKeyboard: parsed.nativeKeyboardVersion === 3
+          ? (typeof parsed.nativeKeyboard === 'boolean' ? parsed.nativeKeyboard : false)
+          : false,
+        nativeKeyboardVersion: 3,
         keyboardNumberRow: typeof parsed.keyboardNumberRow === 'boolean' ? parsed.keyboardNumberRow : DEFAULT_SETTINGS.keyboardNumberRow,
         keyboardClipboard: typeof parsed.keyboardClipboard === 'boolean' ? parsed.keyboardClipboard : DEFAULT_SETTINGS.keyboardClipboard,
         keyboardSoundEnabled: typeof parsed.keyboardSoundEnabled === 'boolean' ? parsed.keyboardSoundEnabled : DEFAULT_SETTINGS.keyboardSoundEnabled,
@@ -178,6 +182,8 @@ export const getStoredSettings = (): SystemSettings => {
           ? (typeof parsed.triangleExperiment === 'boolean' ? parsed.triangleExperiment : true)
           : true,
         triangleExperimentVersion: 1,
+        experimentalSearchExperience: parsed.experimentalSearchExperience || 'right',
+        roundedSearchBox: typeof parsed.roundedSearchBox === 'boolean' ? parsed.roundedSearchBox : false,
         pageLoading: typeof parsed.pageLoading === 'boolean' ? parsed.pageLoading : true,
         loadPagesSequentially: typeof parsed.loadPagesSequentially === 'boolean' ? parsed.loadPagesSequentially : false,
         fontScale,
@@ -244,6 +250,15 @@ export const applySystemSettings = (settings: SystemSettings) => {
     document.documentElement.style.setProperty('--spatial-glass-opacity', String(opacityVal));
     document.documentElement.style.setProperty('--spatial-glass-bg', `rgba(255, 255, 255, ${opacityVal})`);
     document.documentElement.style.setProperty('--spatial-glass-blur', `${blurPx}px`);
+  }
+
+  // Rounded Search Box: 100% round pill shape across entire app
+  if (settings.roundedSearchBox) {
+    document.documentElement.classList.add('rounded-search-boxes');
+    document.body?.classList.add('rounded-search-boxes');
+  } else {
+    document.documentElement.classList.remove('rounded-search-boxes');
+    document.body?.classList.remove('rounded-search-boxes');
   }
 
   // Apply font scale
@@ -352,6 +367,11 @@ export const updateDraftSetting = <K extends keyof SystemSettings>(key: K, value
         document.documentElement.style.setProperty('--spatial-glass-blur', `${blurPx}px`);
       }
     }
+
+    if (key === 'roundedSearchBox') {
+      document.documentElement.classList.toggle('rounded-search-boxes', Boolean(value));
+      document.body?.classList.toggle('rounded-search-boxes', Boolean(value));
+    }
   }
   notifyDraftListeners();
 };
@@ -376,7 +396,7 @@ export const updateGlobalSetting = <K extends keyof SystemSettings>(key: K, valu
   if (key === 'theme' && value === 'light') {
     extraUpdates.spatialGlassOpacity = 43;
   }
-  settingsStore = { ...settingsStore, [key]: value, ...extraUpdates, fontScaleVersion: 2, spatialGlassVersion: 3, nativeKeyboardVersion: 2 };
+  settingsStore = { ...settingsStore, [key]: value, ...extraUpdates, fontScaleVersion: 2, spatialGlassVersion: 3, nativeKeyboardVersion: 3 };
   draftSettingsStore = { ...settingsStore };
   try {
     localStorage.setItem('waves_system_settings', JSON.stringify(settingsStore));
@@ -396,7 +416,7 @@ export const updateGlobalSetting = <K extends keyof SystemSettings>(key: K, valu
 };
 
 export const updateMultipleSettings = (newSettings: Partial<SystemSettings>) => {
-  settingsStore = { ...settingsStore, ...newSettings, fontScaleVersion: 2, spatialGlassVersion: 3, nativeKeyboardVersion: 2 };
+  settingsStore = { ...settingsStore, ...newSettings, fontScaleVersion: 2, spatialGlassVersion: 3, nativeKeyboardVersion: 3 };
   draftSettingsStore = { ...settingsStore };
   try {
     localStorage.setItem('waves_system_settings', JSON.stringify(settingsStore));

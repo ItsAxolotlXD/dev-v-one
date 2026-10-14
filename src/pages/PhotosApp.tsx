@@ -623,7 +623,7 @@ export const PhotosApp: React.FC<PhotosAppProps> = ({ navigate }) => {
         {/* Right: Search, Select Mode, Grid Density & Upload */}
         <div className="flex items-center gap-2 shrink-0">
           {/* Quick Search */}
-          <div className="w-32 sm:w-52 h-8 px-2.5 rounded-[5px] bg-white/5 border border-white/10 flex items-center gap-2 focus-within:border-[#4cc2ff]/50 focus-within:bg-white/10 transition-colors">
+          <div className="w-32 sm:w-52 h-8 px-2.5 rounded-[8px] bg-white/5 border border-white/10 flex items-center gap-2 focus-within:border-[#4cc2ff]/50 focus-within:bg-white/10 transition-colors">
             <Search className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
             <input
               type="text"

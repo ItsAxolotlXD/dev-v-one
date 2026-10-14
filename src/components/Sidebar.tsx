@@ -1013,19 +1013,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/swift-bank' || currentRoute.startsWith('/swift-bank') || currentRoute === '/bank') ? 'true' : undefined}
               onClick={() => handleNavClick('/swift-bank')}
               title="Swift Bank - Ngân hàng số bảo mật"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
                 (currentRoute === '/swift-bank' || currentRoute.startsWith('/swift-bank') || currentRoute === '/bank')
                   ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <div className="flex items-center gap-3.5 truncate">
-                <FluentSwiftBankIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
-                <span className="truncate text-[13.5px]">Swift Bank</span>
-              </div>
-              <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 shrink-0">
-                24/7
-              </span>
+              <FluentSwiftBankIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+              <span className="truncate text-[13.5px]">Swift Bank</span>
             </button>
           </div>
 
@@ -1037,19 +1032,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/swift' || currentRoute.startsWith('/swift') || currentRoute === '/swift-social') ? 'true' : undefined}
               onClick={() => handleNavClick('/swift')}
               title="Swift - Mạng xã hội đa năng"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
                 (currentRoute === '/swift' || currentRoute.startsWith('/swift') || currentRoute === '/swift-social')
                   ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <div className="flex items-center gap-3.5 truncate">
-                <FluentSwiftSocialIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
-                <span className="truncate text-[13.5px]">Swift Social</span>
-              </div>
-              <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-600 dark:text-purple-400 shrink-0">
-                MẠNG XÃ HỘI
-              </span>
+              <FluentSwiftSocialIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+              <span className="truncate text-[13.5px]">Swift Social</span>
             </button>
           </div>
 
@@ -1061,19 +1051,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/friends' || currentRoute.startsWith('/friends')) ? 'true' : undefined}
               onClick={() => handleNavClick('/friends')}
               title="Friends - Danh sách 100 người dùng Sparkle (Dev)"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
                 (currentRoute === '/friends' || currentRoute.startsWith('/friends'))
                   ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <div className="flex items-center gap-3.5 truncate">
-                <FluentFriendsIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
-                <span className="truncate text-[13.5px]">Friends</span>
-              </div>
-              <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 shrink-0">
-                100 USERS
-              </span>
+              <FluentFriendsIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+              <span className="truncate text-[13.5px]">Friends</span>
             </button>
           </div>
 
@@ -1085,17 +1070,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/logos-fandom' || currentRoute === '/logos-wiki' || currentRoute === '/fandom') ? 'true' : undefined}
               onClick={() => handleNavClick('/logos-fandom')}
               title="Logos Fandom - Bách khoa toàn thư nhận diện thương hiệu"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
                 (currentRoute === '/logos-fandom' || currentRoute === '/logos-wiki' || currentRoute === '/fandom')
                   ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <div className="flex items-center gap-3.5 truncate">
-                <FluentLogosFandomIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
-                <span className="truncate text-[13.5px]">Logos Fandom</span>
-              </div>
-              <span className="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-600 dark:text-amber-400 font-semibold uppercase">Wiki</span>
+              <FluentLogosFandomIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+              <span className="truncate text-[13.5px]">Logos Fandom</span>
             </button>
           </div>
 
@@ -1107,17 +1089,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/minecraft-wiki' || currentRoute === '/mc-wiki' || currentRoute === '/wiki') ? 'true' : undefined}
               onClick={() => handleNavClick('/minecraft-wiki')}
               title="Minecraft Wiki - Bách khoa toàn thư chính thức minecraft.wiki"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
                 (currentRoute === '/minecraft-wiki' || currentRoute === '/mc-wiki' || currentRoute === '/wiki')
                   ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <div className="flex items-center gap-3.5 truncate">
-                <FluentMinecraftWikiIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
-                <span className="truncate text-[13.5px]">Minecraft Wiki</span>
-              </div>
-              <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-semibold uppercase">Wiki</span>
+              <FluentMinecraftWikiIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+              <span className="truncate text-[13.5px]">Minecraft Wiki</span>
             </button>
           </div>
 
@@ -1389,17 +1368,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={currentRoute === '/craftmine' ? 'true' : undefined}
               onClick={() => handleNavClick('/craftmine')}
               title="Craftmine"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
                 currentRoute === '/craftmine'
                   ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <div className="flex items-center gap-3.5 truncate">
-                <FluentCraftmineIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
-                <span className="truncate text-[13.5px]">Craftmine</span>
-              </div>
-              <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-semibold uppercase">Web</span>
+              <FluentCraftmineIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+              <span className="truncate text-[13.5px]">Craftmine</span>
             </button>
           </div>
 
@@ -1411,17 +1387,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/photopea' || currentRoute === '/photoshop') ? 'true' : undefined}
               onClick={() => handleNavClick('/photopea')}
               title="Photopea - Trình chỉnh sửa ảnh PSD & Vector"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
                 (currentRoute === '/photopea' || currentRoute === '/photoshop')
                   ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <div className="flex items-center gap-3.5 truncate">
-                <FluentPhotopeaIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
-                <span className="truncate text-[13.5px]">Photopea</span>
-              </div>
-              <span className="text-[9px] px-1.5 py-0.5 rounded bg-teal-500/15 text-teal-600 dark:text-teal-400 font-semibold uppercase">Web</span>
+              <FluentPhotopeaIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+              <span className="truncate text-[13.5px]">Photopea</span>
             </button>
           </div>
 
