@@ -20,7 +20,7 @@ import {
   Clock,
   ChevronDown
 } from 'lucide-react';
-import { FluentFriendsColorIcon } from '../components/FluentIcons';
+import { FluentFriendsColorIcon, FluentSearchIcon } from '../components/FluentIcons';
 
 export interface VOneUser {
   id: number;
@@ -225,7 +225,7 @@ export const FriendsApp: React.FC<FriendsAppProps> = ({ navigate }) => {
 
           {/* Search Input with 8px radius */}
           <div className="relative w-full md:w-80 lg:w-96 h-10 flex items-center px-4 rounded-[8px] bg-black/5 dark:bg-white/[0.06] border border-black/10 dark:border-white/10 focus-within:border-emerald-500 focus-within:ring-1 focus-within:ring-emerald-500 transition-all shadow-2xs">
-            <Search className="w-4 h-4 text-neutral-400 mr-2.5 shrink-0" />
+            <FluentSearchIcon className="w-4 h-4 text-neutral-400 mr-2.5 shrink-0" />
             <input
               type="text"
               value={searchQuery}

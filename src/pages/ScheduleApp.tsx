@@ -22,7 +22,7 @@ import { Channel } from '../types';
 import { CHANNELS_DATA } from '../data/channels';
 import { fetchChannelEpgGuide, EpgProgram, EpgGuideResponse } from '../services/epgService';
 import { SpinningRing } from '../components/SpinningRing';
-import { FluentScheduleColorIcon } from '../components/FluentIcons';
+import { FluentScheduleColorIcon, FluentSearchIcon } from '../components/FluentIcons';
 
 interface ScheduleAppProps {
   navigate?: (route: string) => void;
@@ -243,7 +243,7 @@ export const ScheduleApp: React.FC<ScheduleAppProps> = ({
 
             {/* Search Input */}
             <div className="relative w-full h-8 flex items-center px-3 rounded-[8px] bg-black/5 dark:bg-white/[0.06] border border-black/10 dark:border-white/10 focus-within:border-[#0078d4] focus-within:ring-1 focus-within:ring-[#0078d4] transition-all">
-              <Search className="w-3.5 h-3.5 text-neutral-400 mr-2 shrink-0" />
+              <FluentSearchIcon className="w-3.5 h-3.5 text-neutral-400 mr-2 shrink-0" />
               <input
                 type="text"
                 value={channelSearch}
@@ -330,7 +330,7 @@ export const ScheduleApp: React.FC<ScheduleAppProps> = ({
 
             {/* Search Input for Programs */}
             <div className="relative w-full lg:w-72 h-9 flex items-center px-3.5 rounded-[8px] bg-black/5 dark:bg-white/[0.06] border border-black/10 dark:border-white/10 focus-within:border-[#0078d4] focus-within:ring-1 focus-within:ring-[#0078d4] transition-all">
-              <Search className="w-3.5 h-3.5 text-neutral-400 mr-2 shrink-0" />
+              <FluentSearchIcon className="w-3.5 h-3.5 text-neutral-400 mr-2 shrink-0" />
               <input
                 type="text"
                 value={searchQuery}

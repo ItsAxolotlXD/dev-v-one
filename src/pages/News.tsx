@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { NEWS_DATA } from '../data/news';
 import { NewsCard } from '../components/NewsCard';
 import { TrendingUp, Lock, Search, X } from 'lucide-react';
+import { FluentSearchIcon } from '../components/FluentIcons';
 import { DEFAULT_BANNER_PLACEHOLDER } from '../data/heroSlides';
 import { SequentialSection } from '../components/SequentialSection';
 import { useSettings } from '../hooks/useSettings';
@@ -163,7 +164,7 @@ export const News: React.FC<NewsProps> = ({ navigate, searchQuery, onSearchChang
             </button>
           ) : (
             <div className="absolute right-2 text-[#71717a] dark:text-white pointer-events-none flex items-center justify-center">
-              <Search className="w-3.5 h-3.5 text-[#71717a] dark:text-[#a1a1aa]" />
+              <FluentSearchIcon className="w-3.5 h-3.5 text-[#71717a] dark:text-[#a1a1aa]" />
             </div>
           )}
         </div>

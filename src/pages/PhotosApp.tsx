@@ -23,7 +23,7 @@ import {
   Rows,
   Maximize2
 } from 'lucide-react';
-import { FluentPhotosIcon, FluentPhotosColorIcon } from '../components/FluentIcons';
+import { FluentPhotosIcon, FluentPhotosColorIcon, FluentSearchIcon } from '../components/FluentIcons';
 
 export interface MediaItem {
   id: string;
@@ -624,7 +624,7 @@ export const PhotosApp: React.FC<PhotosAppProps> = ({ navigate }) => {
         <div className="flex items-center gap-2 shrink-0">
           {/* Quick Search */}
           <div className="w-32 sm:w-52 h-8 px-2.5 rounded-[8px] bg-white/5 border border-white/10 flex items-center gap-2 focus-within:border-[#4cc2ff]/50 focus-within:bg-white/10 transition-colors">
-            <Search className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
+            <FluentSearchIcon className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
             <input
               type="text"
               value={searchQuery}

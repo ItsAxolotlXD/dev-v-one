@@ -3,6 +3,8 @@ import { CustomKeybinds } from '../types';
 import { DEFAULT_KEYBINDS } from '../utils/keybinds';
 import { keyboardSound } from '../utils/keyboardSound';
 
+export type SearchIconTreatment = 'default' | 'flipped' | 'sparkle' | 'globe';
+
 export interface SystemSettings {
   theme: 'dark' | 'light';
   themeVersion?: number;
@@ -44,6 +46,8 @@ export interface SystemSettings {
   triangleExperimentVersion?: number;
   experimentalSearchExperience?: 'right' | 'left' | 'hidden';
   roundedSearchBox?: boolean;
+  searchIconTreatment: SearchIconTreatment;
+  windowsAppSdkPreview: boolean;
   pageLoading: boolean;
   loadPagesSequentially: boolean;
   customKeybinds: CustomKeybinds;
@@ -94,6 +98,8 @@ export const DEFAULT_SETTINGS: SystemSettings = {
   triangleExperimentVersion: 1,
   experimentalSearchExperience: 'right',
   roundedSearchBox: false,
+  searchIconTreatment: 'default',
+  windowsAppSdkPreview: false,
   pageLoading: true,
   loadPagesSequentially: false,
   customKeybinds: DEFAULT_KEYBINDS,
@@ -184,6 +190,8 @@ export const getStoredSettings = (): SystemSettings => {
         triangleExperimentVersion: 1,
         experimentalSearchExperience: parsed.experimentalSearchExperience || 'right',
         roundedSearchBox: typeof parsed.roundedSearchBox === 'boolean' ? parsed.roundedSearchBox : false,
+        searchIconTreatment: (['default', 'flipped', 'sparkle', 'globe'].includes(parsed.searchIconTreatment) ? parsed.searchIconTreatment : 'default') as SearchIconTreatment,
+        windowsAppSdkPreview: typeof parsed.windowsAppSdkPreview === 'boolean' ? parsed.windowsAppSdkPreview : false,
         pageLoading: typeof parsed.pageLoading === 'boolean' ? parsed.pageLoading : true,
         loadPagesSequentially: typeof parsed.loadPagesSequentially === 'boolean' ? parsed.loadPagesSequentially : false,
         fontScale,
@@ -259,6 +267,18 @@ export const applySystemSettings = (settings: SystemSettings) => {
   } else {
     document.documentElement.classList.remove('rounded-search-boxes');
     document.body?.classList.remove('rounded-search-boxes');
+  }
+
+  // Search icon treatment attribute on document
+  document.documentElement.dataset.searchIconTreatment = settings.searchIconTreatment || 'default';
+
+  // Windows App SDK Test Preview
+  if (settings.windowsAppSdkPreview) {
+    document.documentElement.classList.add('windows-app-sdk-preview');
+    document.body?.classList.add('windows-app-sdk-preview');
+  } else {
+    document.documentElement.classList.remove('windows-app-sdk-preview');
+    document.body?.classList.remove('windows-app-sdk-preview');
   }
 
   // Apply font scale
@@ -371,6 +391,15 @@ export const updateDraftSetting = <K extends keyof SystemSettings>(key: K, value
     if (key === 'roundedSearchBox') {
       document.documentElement.classList.toggle('rounded-search-boxes', Boolean(value));
       document.body?.classList.toggle('rounded-search-boxes', Boolean(value));
+    }
+
+    if (key === 'searchIconTreatment') {
+      document.documentElement.dataset.searchIconTreatment = String(value);
+    }
+
+    if (key === 'windowsAppSdkPreview') {
+      document.documentElement.classList.toggle('windows-app-sdk-preview', Boolean(value));
+      document.body?.classList.toggle('windows-app-sdk-preview', Boolean(value));
     }
   }
   notifyDraftListeners();

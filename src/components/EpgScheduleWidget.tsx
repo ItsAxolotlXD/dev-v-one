@@ -18,6 +18,7 @@ import {
 import { Channel } from '../types';
 import { fetchChannelEpgGuide, EpgProgram, EpgGuideResponse } from '../services/epgService';
 import { SpinningRing } from './SpinningRing';
+import { FluentSearchIcon } from './FluentIcons';
 
 interface EpgScheduleWidgetProps {
   currentChannel: Channel;
@@ -167,7 +168,7 @@ export const EpgScheduleWidget: React.FC<EpgScheduleWidgetProps> = ({
               placeholder="Search for programs"
               className="w-full h-9 pl-9 pr-8 rounded-[5px] text-xs sm:text-[13px] bg-white/10 dark:bg-white/10 border-0 outline-none text-white placeholder-[#9CA3AF] focus:ring-1 focus:ring-[#4cc2ff] transition-all"
             />
-            <Search className="w-4 h-4 text-[#9CA3AF] absolute left-3 top-2.5 pointer-events-none" />
+            <FluentSearchIcon className="w-4 h-4 text-[#9CA3AF] absolute left-3 top-2.5 pointer-events-none" />
             {filterQuery && (
               <button
                 type="button"

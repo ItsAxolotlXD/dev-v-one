@@ -14,6 +14,7 @@ import {
   ClipboardItem,
 } from '../utils/clipboardHistory';
 import { EmojiBoard } from './EmojiBoard';
+import { FluentSearchIcon } from './FluentIcons';
 
 const SF_SEARCH_ICON_URL = 'https://github.com/andrewtavis/sf-symbols-online/blob/master/glyphs/magnifyingglass.png?raw=true';
 const SF_MIC_ICON_URL = 'https://github.com/andrewtavis/sf-symbols-online/blob/master/glyphs/mic.png?raw=true';
@@ -419,8 +420,8 @@ export const NativeKeyboard: React.FC = () => {
                   <X className="w-3 h-3" />
                 </button>
               ) : (
-                <div className="absolute right-1.5 pointer-events-none text-black/50 dark:text-white/50">
-                  <Search className="w-3.5 h-3.5" />
+                <div className="absolute right-1.5 pointer-events-none text-black/50 dark:text-white/50 flex items-center justify-center">
+                  <FluentSearchIcon className="w-3.5 h-3.5" />
                 </div>
               )}
             </div>

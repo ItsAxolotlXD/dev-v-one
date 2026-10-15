@@ -12,6 +12,7 @@ import {
   ExternalLink
 } from 'lucide-react';
 import { useSettings } from '../hooks/useSettings';
+import { FluentSearchIcon } from './FluentIcons';
 
 interface ChatMessage {
   id: string;
@@ -351,7 +352,7 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
                   {aspect.logo ? (
                     <img src={aspect.logo} alt="" className="w-6 h-6 object-contain" />
                   ) : (
-                    <Search className="w-4 h-4 text-white stroke-[1.8]" />
+                    <FluentSearchIcon className="w-4 h-4 text-white" />
                   )}
                 </div>
 

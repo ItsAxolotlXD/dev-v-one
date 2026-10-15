@@ -871,11 +871,13 @@ export default function App() {
 
         {/* Dynamic Page Content with smooth slide-up transition - Bo cong 10px góc trên trái */}
         <main className={`main-tab-page flex-1 w-full mx-auto rounded-tl-[10px] rounded-tr-none rounded-br-none rounded-bl-none overflow-hidden ${
-          isTabLoading
-            ? 'bg-[#f3f4f6] dark:bg-[#202024] p-0 max-w-none pt-0 text-neutral-800 dark:text-neutral-100'
-            : (currentRoute === '/' || currentRoute === '/home' || isOfficeRoute || currentRoute === '/craftmine' || currentRoute === '/photopea' || currentRoute === '/logos-fandom' || currentRoute === '/logos-wiki' || currentRoute === '/minecraft-wiki' || currentRoute === '/mc-wiki' || currentRoute === '/vlc' || currentRoute.startsWith('/vlc') || currentRoute === '/media-player' || currentRoute === '/schedule' || currentRoute.startsWith('/schedule') || currentRoute === '/cookbook' || currentRoute === '/swift' || currentRoute === '/friends' || currentRoute === '/edge' || currentRoute === '/browser' || currentRoute === '/camera' || currentRoute === '/photos' || currentRoute === '/gallery' || currentRoute === '/paint' || currentRoute === '/ms-paint' || currentRoute === '/file-explorer' || currentRoute === '/files' || currentRoute === '/copilot' || currentRoute === '/direct-cut' || currentRoute === '/video-editor' || currentRoute === '/edit' || currentRoute === '/swift-bank' || currentRoute === '/bank' || currentRoute === '/swiftbank' || currentRoute === '/clock' || currentRoute === '/alarm' || currentRoute === '/timer' || currentRoute === '/stopwatch' || currentRoute === '/world-clock'
-              ? 'p-0 max-w-none pt-0 bg-[#f9f9f9] dark:bg-[#282c31]' 
-              : 'px-4 sm:px-6 md:px-8 py-5 max-w-7xl bg-[#f9f9f9] dark:bg-[#282c31]')
+          settings.windowsAppSdkPreview
+            ? '!bg-[#1e2024] text-white'
+            : (isTabLoading
+              ? 'bg-[#f3f4f6] dark:bg-[#202024] p-0 max-w-none pt-0 text-neutral-800 dark:text-neutral-100'
+              : (currentRoute === '/' || currentRoute === '/home' || isOfficeRoute || currentRoute === '/craftmine' || currentRoute === '/photopea' || currentRoute === '/logos-fandom' || currentRoute === '/logos-wiki' || currentRoute === '/minecraft-wiki' || currentRoute === '/mc-wiki' || currentRoute === '/vlc' || currentRoute.startsWith('/vlc') || currentRoute === '/media-player' || currentRoute === '/schedule' || currentRoute.startsWith('/schedule') || currentRoute === '/cookbook' || currentRoute === '/swift' || currentRoute === '/friends' || currentRoute === '/edge' || currentRoute === '/browser' || currentRoute === '/camera' || currentRoute === '/photos' || currentRoute === '/gallery' || currentRoute === '/paint' || currentRoute === '/ms-paint' || currentRoute === '/file-explorer' || currentRoute === '/files' || currentRoute === '/copilot' || currentRoute === '/direct-cut' || currentRoute === '/video-editor' || currentRoute === '/edit' || currentRoute === '/swift-bank' || currentRoute === '/bank' || currentRoute === '/swiftbank' || currentRoute === '/clock' || currentRoute === '/alarm' || currentRoute === '/timer' || currentRoute === '/stopwatch' || currentRoute === '/world-clock' || currentRoute === '/calculator' || currentRoute === '/snipping-tool' || currentRoute === '/feedback-hub'
+                ? 'p-0 max-w-none pt-0 bg-[#f9f9f9] dark:bg-[#282c31]' 
+                : 'px-4 sm:px-6 md:px-8 py-5 max-w-7xl bg-[#f9f9f9] dark:bg-[#282c31]'))
         } ${
           settings.navigationMode === 'floaty' && !isOfficeRoute
             ? 'pb-28 sm:pb-32'

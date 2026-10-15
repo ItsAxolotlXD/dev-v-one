@@ -1,4 +1,8 @@
 import React from 'react';
+import { useSettings, SearchIconTreatment } from '../hooks/useSettings';
+
+export const SPARKLE_SEARCH_ICON_URL = 'https://static.wikia.nocookie.net/ep-deo/images/6/6c/Search_sparkle.png/revision/latest/scale-to-width-down/1000?cb=20261015133722';
+export const GLOBE_SEARCH_ICON_URL = 'https://static.wikia.nocookie.net/ftv/images/5/5b/Ic_fluent_globe_search_24_regular.png/revision/latest?cb=20260508150432&path-prefix=vi';
 
 export const FLUENT_ICON_URLS = {
   home: 'https://raw.githubusercontent.com/microsoft/fluentui-system-icons/main/assets/Home/SVG/ic_fluent_home_48_regular.svg',
@@ -53,11 +57,56 @@ export const FluentPersonDeleteIcon: React.FC<{ className?: string; style?: Reac
   </svg>
 );
 
-export const FluentSearchIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
-  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
-    <path d="M31.3975 33.1615C28.601 35.5546 24.9693 37 21 37C12.1634 37 5 29.8366 5 21C5 12.1634 12.1634 5 21 5C29.8366 5 37 12.1634 37 21C37 24.9674 35.556 28.5975 33.1649 31.3934L42.6376 40.8661C43.1257 41.3542 43.1257 42.1457 42.6376 42.6338C42.1494 43.122 41.3579 43.122 40.8698 42.6338L31.3975 33.1615ZM34.5 21C34.5 13.5442 28.4558 7.5 21 7.5C13.5442 7.5 7.5 13.5442 7.5 21C7.5 28.4558 13.5442 34.5 21 34.5C28.4558 34.5 34.5 28.4558 34.5 21Z" fill="currentColor"/>
-  </svg>
-);
+export interface FluentSearchIconProps {
+  className?: string;
+  style?: React.CSSProperties;
+  treatment?: SearchIconTreatment;
+}
+
+export const FluentSearchIcon: React.FC<FluentSearchIconProps> = ({ 
+  className = 'w-5 h-5', 
+  style, 
+  treatment 
+}) => {
+  const { draftSettings, settings } = useSettings();
+  const activeTreatment = treatment || draftSettings.searchIconTreatment || settings.searchIconTreatment || 'default';
+
+  if (activeTreatment === 'sparkle') {
+    return (
+      <img
+        src={SPARKLE_SEARCH_ICON_URL}
+        alt="Search"
+        referrerPolicy="no-referrer"
+        className={`${className} object-contain shrink-0 select-none inline-block`}
+        style={style}
+      />
+    );
+  }
+
+  if (activeTreatment === 'globe') {
+    return (
+      <img
+        src={GLOBE_SEARCH_ICON_URL}
+        alt="Search"
+        referrerPolicy="no-referrer"
+        className={`${className} object-contain shrink-0 select-none inline-block brightness-0 dark:brightness-0 dark:invert`}
+        style={style}
+      />
+    );
+  }
+
+  return (
+    <svg 
+      viewBox="0 0 48 48" 
+      fill="none" 
+      xmlns="http://www.w3.org/2000/svg" 
+      className={`${className} ${activeTreatment === 'flipped' ? 'scale-x-[-1]' : ''}`} 
+      style={style}
+    >
+      <path d="M31.3975 33.1615C28.601 35.5546 24.9693 37 21 37C12.1634 37 5 29.8366 5 21C5 12.1634 12.1634 5 21 5C29.8366 5 37 12.1634 37 21C37 24.9674 35.556 28.5975 33.1649 31.3934L42.6376 40.8661C43.1257 41.3542 43.1257 42.1457 42.6376 42.6338C42.1494 43.122 41.3579 43.122 40.8698 42.6338L31.3975 33.1615ZM34.5 21C34.5 13.5442 28.4558 7.5 21 7.5C13.5442 7.5 7.5 13.5442 7.5 21C7.5 28.4558 13.5442 34.5 21 34.5C28.4558 34.5 34.5 28.4558 34.5 21Z" fill="currentColor"/>
+    </svg>
+  );
+};
 
 export const FluentSettingsIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
   <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
@@ -596,6 +645,100 @@ export const FluentDrawLogosIcon: React.FC<{ className?: string; style?: React.C
     <circle cx="7.5" cy="9.5" r="1.3" fill="#4cc2ff" />
     <circle cx="11.5" cy="7.5" r="1.3" fill="#f59e0b" />
     <circle cx="16.5" cy="9.5" r="1.3" fill="#ec4899" />
+  </svg>
+);
+
+/* Windows 11 Fluent Calculator Icon */
+export const FluentCalculatorIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <rect x="4" y="2.5" width="16" height="19" rx="3" stroke="currentColor" strokeWidth="1.6" />
+    {/* Display Screen */}
+    <rect x="6.5" y="5" width="11" height="3.5" rx="1" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="1.2" />
+    {/* Buttons Grid */}
+    <circle cx="8" cy="11.5" r="1" fill="currentColor" />
+    <circle cx="12" cy="11.5" r="1" fill="currentColor" />
+    <circle cx="16" cy="11.5" r="1" fill="currentColor" />
+    <circle cx="8" cy="15" r="1" fill="currentColor" />
+    <circle cx="12" cy="15" r="1" fill="currentColor" />
+    <circle cx="16" cy="15" r="1" fill="currentColor" />
+    <circle cx="8" cy="18.5" r="1" fill="currentColor" />
+    <rect x="11" y="17.75" width="6" height="1.5" rx="0.75" fill="#4cc2ff" />
+  </svg>
+);
+
+export const FluentCalculatorColorIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <defs>
+      <linearGradient id="calcGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#0078D4" />
+        <stop offset="1" stopColor="#005A9E" />
+      </linearGradient>
+    </defs>
+    <rect x="3.5" y="2" width="17" height="20" rx="3.5" fill="url(#calcGrad)" />
+    <rect x="6" y="4.5" width="12" height="4" rx="1.5" fill="#003D6B" />
+    <rect x="6.5" y="5" width="11" height="3" rx="1" fill="#E1DFDD" fillOpacity="0.95" />
+    <circle cx="8" cy="11.5" r="1.3" fill="white" />
+    <circle cx="12" cy="11.5" r="1.3" fill="white" />
+    <circle cx="16" cy="11.5" r="1.3" fill="#6bd0ff" />
+    <circle cx="8" cy="15" r="1.3" fill="white" />
+    <circle cx="12" cy="15" r="1.3" fill="white" />
+    <circle cx="16" cy="15" r="1.3" fill="#6bd0ff" />
+    <circle cx="8" cy="18.5" r="1.3" fill="white" />
+    <rect x="10.8" y="17.2" width="6.4" height="2.6" rx="1.3" fill="#FFB900" />
+  </svg>
+);
+
+/* Windows 11 Fluent Snipping Tool Icon */
+export const FluentSnippingToolIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    {/* Dashed crop frame */}
+    <rect x="3" y="3" width="18" height="18" rx="2.5" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3 2" />
+    {/* Scissors Blades */}
+    <path d="M7 16L17 7M7 8L17 17" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    <circle cx="6" cy="17" r="1.8" stroke="currentColor" strokeWidth="1.4" />
+    <circle cx="6" cy="7" r="1.8" stroke="currentColor" strokeWidth="1.4" />
+  </svg>
+);
+
+export const FluentSnippingToolColorIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <defs>
+      <linearGradient id="snipGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#68768A" />
+        <stop offset="1" stopColor="#323130" />
+      </linearGradient>
+    </defs>
+    <rect x="2.5" y="2.5" width="19" height="19" rx="4" fill="url(#snipGrad)" stroke="#68768A" strokeWidth="1.2" strokeDasharray="3.5 2" />
+    <circle cx="6.5" cy="7" r="2" fill="#4cc2ff" stroke="white" strokeWidth="1.2" />
+    <circle cx="6.5" cy="17" r="2" fill="#4cc2ff" stroke="white" strokeWidth="1.2" />
+    <path d="M8 8L17.5 16.5M8 16L17.5 7.5" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
+    <circle cx="12" cy="12" r="1.5" fill="#f59e0b" />
+  </svg>
+);
+
+/* Windows 11 Fluent Feedback Hub Icon */
+export const FluentFeedbackHubIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <path d="M4 4.5C4 3.67157 4.67157 3 5.5 3H18.5C19.3284 3 20 3.67157 20 4.5V15.5C20 16.3284 19.3284 17 18.5 17H8.5L4.5 20.5V4.5Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+    {/* Smiley Face */}
+    <circle cx="9" cy="8.5" r="1" fill="currentColor" />
+    <circle cx="15" cy="8.5" r="1" fill="currentColor" />
+    <path d="M9 12C10 13.5 14 13.5 15 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+  </svg>
+);
+
+export const FluentFeedbackHubColorIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <defs>
+      <linearGradient id="feedGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#0078D4" />
+        <stop offset="1" stopColor="#8764B8" />
+      </linearGradient>
+    </defs>
+    <path d="M3 4.5C3 3.12 4.12 2 5.5 2H18.5C19.88 2 21 3.12 21 4.5V15.5C21 16.88 19.88 18 18.5 18H8L3.5 21.8V4.5Z" fill="url(#feedGrad)" />
+    <circle cx="8.5" cy="8.5" r="1.3" fill="white" />
+    <circle cx="15.5" cy="8.5" r="1.3" fill="white" />
+    <path d="M8.5 12.5C9.8 14.5 14.2 14.5 15.5 12.5" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
   </svg>
 );
 

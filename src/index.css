@@ -226,6 +226,23 @@ body.rounded-search-boxes [id*="search-box"] {
   border-radius: 9999px !important;
 }
 
+/* ========================================================
+   INSIDER FLAG: WINDOWS APP SDK TEST PREVIEW
+   Main tab page đổi thành màu xám tối
+   ======================================================== */
+html.windows-app-sdk-preview main.main-tab-page,
+body.windows-app-sdk-preview main.main-tab-page,
+html.windows-app-sdk-preview .main-tab-page,
+body.windows-app-sdk-preview .main-tab-page,
+html.windows-app-sdk-preview .tab-element-slide-up-container,
+body.windows-app-sdk-preview .tab-element-slide-up-container {
+  background-color: #1e2024 !important;
+}
+
+html.windows-app-sdk-preview .main-tab-page > div {
+  background-color: transparent !important;
+}
+
 /* Light Mode Global Overrides: Main tab page is #f9f9f9, Sidebar & TopBar are #f3f3f3 */
 html.light-mode,
 html.light-mode body,

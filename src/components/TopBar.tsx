@@ -519,7 +519,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                   {searchQuery.trim() ? (
                     <SpinningRing size={14} strokeWidth={3.5} color="#4cc2ff" />
                   ) : (
-                    <Search className="w-3.5 h-3.5 shrink-0" />
+                    <FluentSearchIcon className="w-3.5 h-3.5 shrink-0" />
                   )}
                 </button>
               )}
@@ -566,7 +566,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                     {searchQuery.trim() ? (
                       <SpinningRing size={14} strokeWidth={3.5} color="#4cc2ff" />
                     ) : (
-                      <Search className="w-3.5 h-3.5 shrink-0" />
+                      <FluentSearchIcon className="w-3.5 h-3.5 shrink-0" />
                     )}
                   </button>
                 )}

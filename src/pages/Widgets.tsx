@@ -32,6 +32,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useSystemTasks } from '../context/SystemTasksContext';
+import { FluentSearchIcon } from '../components/FluentIcons';
 
 interface VnExpressArticle {
   id: string;
@@ -237,7 +238,7 @@ export const Widgets: React.FC<WidgetsProps> = ({ navigate }) => {
         {/* 2. Central Search Bar matching Let's chat Copilot */}
         <form onSubmit={handleWebSearch} className="w-full max-w-md sm:max-w-lg mt-0.5">
           <div className="w-full h-8 sm:h-8.5 px-3 rounded-[5px] bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 shadow-xs flex items-center gap-2 transition-all focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]">
-            <Search className="w-4 h-4 text-[#71717a] dark:text-[#a1a1aa] shrink-0" />
+            <FluentSearchIcon className="w-4 h-4 text-[#71717a] dark:text-[#a1a1aa] shrink-0" />
             <input
               type="text"
               value={webQuery}

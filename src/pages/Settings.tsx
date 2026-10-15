@@ -34,6 +34,7 @@ import { TriangleLoader } from '../components/TriangleLoader';
 import { SpinningRing } from '../components/SpinningRing';
 import { KEYBIND_DEFINITIONS, DEFAULT_KEYBINDS, eventToKeyString, validateKeybind } from '../utils/keybinds';
 import { KeybindAction } from '../types';
+import { FluentSearchIcon } from '../components/FluentIcons';
 
 export type SettingsCategoryId = 
   | 'spatial-glass' 
@@ -115,6 +116,29 @@ export const SEARCH_EXP_OPTIONS = [
   }
 ];
 
+export const SEARCH_ICON_TREATMENT_OPTIONS = [
+  {
+    value: 'default' as const,
+    label: 'Default',
+    desc: 'Icon tìm kiếm mặc định hệ thống'
+  },
+  {
+    value: 'flipped' as const,
+    label: 'Flipped',
+    desc: 'default icon but mirrored (lật đối xứng)'
+  },
+  {
+    value: 'sparkle' as const,
+    label: 'Sparkle',
+    desc: 'Icon tìm kiếm lấp lánh Sparkle'
+  },
+  {
+    value: 'globe' as const,
+    label: 'Globe',
+    desc: 'Icon tìm kiếm quả địa cầu Fluent Globe'
+  }
+];
+
 const ALL_CATEGORIES = [...SETTINGS_GROUP_1, ...SETTINGS_GROUP_2];
 
 interface SettingsProps {
@@ -162,16 +186,23 @@ export const Settings: React.FC<SettingsProps> = ({
   const [isSearchExpDropdownOpen, setIsSearchExpDropdownOpen] = useState(false);
   const searchExpDropdownRef = useRef<HTMLDivElement>(null);
 
+  // Search icon treatments dropdown state
+  const [isSearchIconTreatmentDropdownOpen, setIsSearchIconTreatmentDropdownOpen] = useState(false);
+  const searchIconTreatmentDropdownRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    if (!isSearchExpDropdownOpen) return;
+    if (!isSearchExpDropdownOpen && !isSearchIconTreatmentDropdownOpen) return;
     const handleClickOutside = (e: MouseEvent) => {
       if (searchExpDropdownRef.current && !searchExpDropdownRef.current.contains(e.target as Node)) {
         setIsSearchExpDropdownOpen(false);
       }
+      if (searchIconTreatmentDropdownRef.current && !searchIconTreatmentDropdownRef.current.contains(e.target as Node)) {
+        setIsSearchIconTreatmentDropdownOpen(false);
+      }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isSearchExpDropdownOpen]);
+  }, [isSearchExpDropdownOpen, isSearchIconTreatmentDropdownOpen]);
 
   const shouldAnimateMotion = !draftSettings.reduceAllMotion && draftSettings.animatePageTransitions;
 
@@ -342,10 +373,10 @@ export const Settings: React.FC<SettingsProps> = ({
                     e.stopPropagation();
                     inputRef.current?.focus();
                   }}
-                  className="text-[#71717a] dark:text-[#8e8e8e] hover:text-[#111827] dark:hover:text-white p-0.5 transition-colors cursor-pointer"
+                  className="text-[#71717a] dark:text-[#8e8e8e] hover:text-[#111827] dark:hover:text-white p-0.5 transition-colors cursor-pointer flex items-center justify-center"
                   title="Search"
                 >
-                  <Search className="w-3.5 h-3.5 stroke-[1.75]" />
+                  <FluentSearchIcon className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
@@ -1999,6 +2030,107 @@ export const Settings: React.FC<SettingsProps> = ({
 
                 <div className="divider-line h-[1px] bg-black/5 dark:bg-white/10 ml-4 mr-4" />
 
+                {/* Search icon treatments */}
+                <div 
+                  id="setting-experimental-search-icon-treatments"
+                  className={`px-4 py-3 sm:py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors relative ${
+                    isSearchIconTreatmentDropdownOpen ? 'z-50' : 'z-20'
+                  }`}
+                >
+                  <div className="min-w-0 flex-1 pr-2">
+                    <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
+                      <span>Search icon treatments</span>
+                      <span className="text-[10px] px-1.5 py-0.2 rounded font-bold uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
+                        Dropdown
+                      </span>
+                    </div>
+                    <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
+                      Tùy chỉnh biểu tượng tìm kiếm hiển thị trên tất cả các thanh tìm kiếm (Default, Flipped, Sparkle, Globe).
+                    </div>
+                  </div>
+
+                  {/* Dropdown Menu - always on-top */}
+                  <div className="relative shrink-0 z-[100]" ref={searchIconTreatmentDropdownRef}>
+                    <button
+                      id="btn-dropdown-search-icon-treatments"
+                      type="button"
+                      onClick={() => setIsSearchIconTreatmentDropdownOpen((prev) => !prev)}
+                      className="min-w-[240px] sm:min-w-[270px] h-9 px-3 rounded-[6px] bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 border border-black/10 dark:border-white/15 text-xs text-[#111827] dark:text-white flex items-center justify-between gap-2 transition-all cursor-pointer font-medium select-none shadow-2xs"
+                      aria-haspopup="listbox"
+                      aria-expanded={isSearchIconTreatmentDropdownOpen}
+                    >
+                      <div className="flex items-center gap-2.5 truncate">
+                        <div className="w-4 h-4 flex items-center justify-center shrink-0">
+                          <FluentSearchIcon 
+                            className="w-4 h-4 shrink-0 text-[#111827] dark:text-white" 
+                            treatment={draftSettings.searchIconTreatment || 'default'} 
+                          />
+                        </div>
+                        <span className="truncate text-left font-medium">
+                          {SEARCH_ICON_TREATMENT_OPTIONS.find((o) => o.value === (draftSettings.searchIconTreatment || 'default'))?.label || 'Default'}
+                        </span>
+                      </div>
+                      <ChevronDown
+                        className={`w-4 h-4 text-[#6B7280] dark:text-[#9CA3AF] transition-transform duration-200 shrink-0 ${
+                          isSearchIconTreatmentDropdownOpen ? 'rotate-180 text-[#0078d4] dark:text-[#4cc2ff]' : ''
+                        }`}
+                      />
+                    </button>
+
+                    <AnimatePresence>
+                      {isSearchIconTreatmentDropdownOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 4, scale: 0.98 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 4, scale: 0.98 }}
+                          transition={{ duration: 0.12 }}
+                          className="absolute right-0 top-full mt-1.5 z-[99999] w-72 sm:w-80 rounded-[8px] bg-white/98 dark:bg-[#25282e]/98 backdrop-blur-2xl border border-black/15 dark:border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.35)] p-1.5 space-y-1 select-none"
+                          style={{
+                            boxShadow: '0 20px 50px rgba(0,0,0,0.38), 0 4px 14px rgba(0,0,0,0.15)'
+                          }}
+                        >
+                          {SEARCH_ICON_TREATMENT_OPTIONS.map((opt) => {
+                            const isSelected = (draftSettings.searchIconTreatment || 'default') === opt.value;
+                            return (
+                              <button
+                                key={opt.value}
+                                type="button"
+                                id={`search-icon-treatment-opt-${opt.value}`}
+                                onClick={() => {
+                                  updateDraft('searchIconTreatment', opt.value);
+                                  setIsSearchIconTreatmentDropdownOpen(false);
+                                }}
+                                className={`w-full text-left p-2.5 rounded-[6px] flex items-start gap-2.5 transition-colors cursor-pointer ${
+                                  isSelected
+                                    ? 'bg-[#0078d4]/10 dark:bg-[#4cc2ff]/15 text-[#0078d4] dark:text-[#4cc2ff]'
+                                    : 'text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10'
+                                }`}
+                              >
+                                <div className="w-4 h-4 mt-0.5 shrink-0 flex items-center justify-center">
+                                  {isSelected && <Check className="w-4 h-4 text-[#0078d4] dark:text-[#4cc2ff]" />}
+                                </div>
+                                <div className="w-5 h-5 mt-0.5 shrink-0 flex items-center justify-center">
+                                  <FluentSearchIcon className="w-4 h-4 shrink-0 text-[#111827] dark:text-white" treatment={opt.value} />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                  <div className="font-semibold text-xs leading-snug">
+                                    {opt.label}
+                                  </div>
+                                  <div className="text-[11px] text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-snug">
+                                    {opt.desc}
+                                  </div>
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </div>
+
+                <div className="divider-line h-[1px] bg-black/5 dark:bg-white/10 ml-4 mr-4" />
+
                 {/* Rounded search box option: 100% round pill shape across entire app */}
                 <div 
                   id="setting-experimental-rounded-search-box"
@@ -2025,6 +2157,41 @@ export const Settings: React.FC<SettingsProps> = ({
                     onClick={(e) => {
                       e.stopPropagation();
                       updateDraft('roundedSearchBox', !draftSettings.roundedSearchBox);
+                    }}
+                    className="toggle-switch-btn focus:outline-none shrink-0"
+                  >
+                    <span className="toggle-switch-thumb" />
+                  </button>
+                </div>
+
+                <div className="divider-line h-[1px] bg-black/5 dark:bg-white/10 ml-4 mr-4" />
+
+                {/* Windows App SDK Test Preview */}
+                <div 
+                  id="setting-experimental-windows-app-sdk"
+                  onClick={() => updateDraft('windowsAppSdkPreview', !draftSettings.windowsAppSdkPreview)}
+                  className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                >
+                  <div className="min-w-0 flex-1 pr-2">
+                    <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
+                      <span>Windows App SDK Test Preview</span>
+                      <span className="text-[10px] px-1.5 py-0.2 rounded font-bold uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
+                        Preview
+                      </span>
+                    </div>
+                    <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
+                      Khi bật lên thì nền của trang tab chính (main tab page) đổi thành màu xám tối chuẩn WinUI 3 desktop.
+                    </div>
+                  </div>
+
+                  <button
+                    id="toggle-windows-app-sdk"
+                    type="button"
+                    role="switch"
+                    aria-checked={draftSettings.windowsAppSdkPreview}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      updateDraft('windowsAppSdkPreview', !draftSettings.windowsAppSdkPreview);
                     }}
                     className="toggle-switch-btn focus:outline-none shrink-0"
                   >

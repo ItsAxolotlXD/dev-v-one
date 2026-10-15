@@ -42,6 +42,9 @@
               } else {
                 document.documentElement.classList.remove('spatial-glass-dark-content');
               }
+              if (s.searchIconTreatment) {
+                document.documentElement.dataset.searchIconTreatment = s.searchIconTreatment;
+              }
             } catch(e) {}
           }
 
