@@ -228,20 +228,44 @@ body.rounded-search-boxes [id*="search-box"] {
 
 /* ========================================================
    INSIDER FLAG: WINDOWS APP SDK TEST PREVIEW
-   Main tab page đổi thành màu xám tối
+   Main tab page đổi thành màu xám tối thuần túy (#141414, R=G=B, không pha xanh)
    ======================================================== */
 html.windows-app-sdk-preview main.main-tab-page,
 body.windows-app-sdk-preview main.main-tab-page,
 html.windows-app-sdk-preview .main-tab-page,
 body.windows-app-sdk-preview .main-tab-page,
+html.windows-app-sdk-preview .main-tab-content-container,
+body.windows-app-sdk-preview .main-tab-content-container,
 html.windows-app-sdk-preview .tab-element-slide-up-container,
-body.windows-app-sdk-preview .tab-element-slide-up-container {
-  background-color: #1e2024 !important;
+body.windows-app-sdk-preview .tab-element-slide-up-container,
+html.windows-app-sdk-preview .main-tab-page > div,
+html.windows-app-sdk-preview .main-tab-page [class*="bg-[#f9f9f9]"],
+html.windows-app-sdk-preview .main-tab-page [class*="bg-[#f3f4f6]"],
+html.windows-app-sdk-preview .main-tab-page [class*="bg-[#f3f3f3]"],
+html.windows-app-sdk-preview .main-tab-page [class*="dark:bg-[#1a1c20]"],
+html.windows-app-sdk-preview .main-tab-page [class*="dark:bg-[#1b1f24]"],
+html.windows-app-sdk-preview .main-tab-page [class*="dark:bg-[#282c31]"],
+html.windows-app-sdk-preview .main-tab-page [class*="dark:bg-[#202024]"] {
+  background-color: #141414 !important;
 }
 
-html.windows-app-sdk-preview .main-tab-page > div {
-  background-color: transparent !important;
+html.windows-app-sdk-preview .main-tab-page {
+  color: #f3f4f6 !important;
 }
+
+/* Neutral dark gray cho cards & headers bên trong trang tab chính (R=G=B xám thuần không pha xanh) */
+html.windows-app-sdk-preview .main-tab-page .bg-white.dark\:bg-\[\#22252a\],
+html.windows-app-sdk-preview .main-tab-page [class*="dark:bg-[#22252a]"],
+html.windows-app-sdk-preview .main-tab-page .bg-white.dark\:bg-\[\#23272d\],
+html.windows-app-sdk-preview .main-tab-page [class*="dark:bg-[#23272d]"] {
+  background-color: #1f1f1f !important;
+}
+
+html.windows-app-sdk-preview .main-tab-page [class*="dark:border-[#2f333a]"],
+html.windows-app-sdk-preview .main-tab-page [class*="dark:border-white/10"] {
+  border-color: #2b2b2b !important;
+}
+
 
 /* Light Mode Global Overrides: Main tab page is #f9f9f9, Sidebar & TopBar are #f3f3f3 */
 html.light-mode,
@@ -510,99 +534,34 @@ html.light-mode .fluent-edge-icon {
   will-change: transform, opacity;
 }
 
-/* Tab Elements Slide-Up Animation: Sau loading state tab khi load các content sẽ có hiệu ứng slide up từng element (không slide cả trang) */
+/* Tab Elements Slide-Up Animation: Đã bỏ animation slide up khi chuyển trang */
 @keyframes tabElementSlideUp {
   0% {
-    opacity: 0;
-    transform: translateY(26px);
+    opacity: 1;
+    transform: none;
   }
   100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
   }
 }
 
-.tab-element-slide-up-container {
-  animation: none !important;
-  transform: none !important;
-}
-
-.tab-element-slide-up-container > *:not(style):not(script) {
-  animation: none !important;
-  transform: none !important;
-}
-
-.tab-element-slide-up-container > * > *:not(style):not(script):not(.fixed),
-.tab-element-slide-up-container > * > div > *:not(style):not(script):not(.fixed),
+.tab-element-slide-up-container,
+.tab-element-slide-up-container *,
+.tab-element-slide-up-container > *,
+.tab-element-slide-up-container > * > *,
+.tab-element-slide-up-container > * > div > *,
 .tab-element-slide-up-container > * > section,
 .tab-element-slide-up-container > * > header,
 .tab-element-slide-up-container > * > article,
-.tab-element-slide-up-container > * > main {
-  animation: tabElementSlideUp 0.44s cubic-bezier(0.16, 1, 0.3, 1) both;
+.tab-element-slide-up-container > * > main,
+.tab-loading-slide-up,
+.slide-up-refresh {
+  animation: none !important;
+  transform: none !important;
+  opacity: 1 !important;
 }
 
-.tab-element-slide-up-container > * > *:nth-child(1),
-.tab-element-slide-up-container > * > div > *:nth-child(1),
-.tab-element-slide-up-container > * > section:nth-child(1) {
-  animation-delay: 0.04s;
-}
-
-.tab-element-slide-up-container > * > *:nth-child(2),
-.tab-element-slide-up-container > * > div > *:nth-child(2),
-.tab-element-slide-up-container > * > section:nth-child(2) {
-  animation-delay: 0.08s;
-}
-
-.tab-element-slide-up-container > * > *:nth-child(3),
-.tab-element-slide-up-container > * > div > *:nth-child(3),
-.tab-element-slide-up-container > * > section:nth-child(3) {
-  animation-delay: 0.12s;
-}
-
-.tab-element-slide-up-container > * > *:nth-child(4),
-.tab-element-slide-up-container > * > div > *:nth-child(4),
-.tab-element-slide-up-container > * > section:nth-child(4) {
-  animation-delay: 0.16s;
-}
-
-.tab-element-slide-up-container > * > *:nth-child(5),
-.tab-element-slide-up-container > * > div > *:nth-child(5),
-.tab-element-slide-up-container > * > section:nth-child(5) {
-  animation-delay: 0.20s;
-}
-
-.tab-element-slide-up-container > * > *:nth-child(6),
-.tab-element-slide-up-container > * > div > *:nth-child(6),
-.tab-element-slide-up-container > * > section:nth-child(6) {
-  animation-delay: 0.24s;
-}
-
-.tab-element-slide-up-container > * > *:nth-child(7),
-.tab-element-slide-up-container > * > div > *:nth-child(7),
-.tab-element-slide-up-container > * > section:nth-child(7) {
-  animation-delay: 0.28s;
-}
-
-.tab-element-slide-up-container > * > *:nth-child(8),
-.tab-element-slide-up-container > * > div > *:nth-child(8),
-.tab-element-slide-up-container > * > section:nth-child(8) {
-  animation-delay: 0.32s;
-}
-
-.tab-element-slide-up-container > * > *:nth-child(n+9),
-.tab-element-slide-up-container > * > div > *:nth-child(n+9),
-.tab-element-slide-up-container > * > section:nth-child(n+9) {
-  animation-delay: 0.36s;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .tab-element-slide-up-container > * > *,
-  .tab-element-slide-up-container > * > div > * {
-    animation: none !important;
-    transform: none !important;
-    opacity: 1 !important;
-  }
-}
 
 /* Splash Screen background matches Sidebar (#1b1f24 in Dark, #f3f3f3 in Light) */
 #vplay-splash-screen,
@@ -734,13 +693,12 @@ html.light-mode #vplay-splash-screen {
 .sidebar-items-slide-up > *:nth-child(8) { animation-delay: 0.16s; }
 .sidebar-items-slide-up > *:nth-child(n+9) { animation-delay: 0.18s; }
 
-/* Slide up animations for tab loading and refreshed elements */
-.tab-loading-slide-up {
-  animation: tabElementSlideUp 0.44s cubic-bezier(0.16, 1, 0.3, 1) both !important;
-}
-
+/* Đã bỏ animation slide up khi chuyển trang */
+.tab-loading-slide-up,
 .slide-up-refresh {
-  animation: tabElementSlideUp 0.44s cubic-bezier(0.16, 1, 0.3, 1) both !important;
+  animation: none !important;
+  transform: none !important;
+  opacity: 1 !important;
 }
 
 /* All Search Boxes: text & icon white in dark mode, matching Find and search Sparkle (Dev) */

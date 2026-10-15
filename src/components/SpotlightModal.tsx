@@ -20,7 +20,10 @@ import {
   FluentNewsIcon, 
   FluentSearchIcon,
   FluentMicOutlineIcon,
-  FluentMicOffOutlineIcon
+  FluentMicOffOutlineIcon,
+  FluentCalculatorIcon,
+  FluentSnippingToolIcon,
+  FluentFeedbackHubIcon
 } from './FluentIcons';
 import { CHANNELS_DATA } from '../data/channels';
 import { NEWS_DATA } from '../data/news';
@@ -40,6 +43,9 @@ const CATEGORY_ITEMS = [
   { id: 'cat-home', title: 'Home', route: '/', icon: FluentHomeIcon, color: '#4cc2ff' },
   { id: 'cat-livetv', title: 'Watch', route: '/live-tv', icon: FluentLiveTvIcon, color: '#4cc2ff' },
   { id: 'cat-news', title: 'Articles', route: '/news', icon: FluentNewsIcon, color: '#4cc2ff' },
+  { id: 'cat-calc', title: 'Calculator', route: '/calculator', icon: FluentCalculatorIcon, color: '#0078d4' },
+  { id: 'cat-snip', title: 'Snipping Tool', route: '/snipping-tool', icon: FluentSnippingToolIcon, color: '#0078d4' },
+  { id: 'cat-feedback', title: 'Feedback Hub', route: '/feedback-hub', icon: FluentFeedbackHubIcon, color: '#0078d4' },
   { id: 'cat-settings', title: 'Settings', route: '/settings', icon: SettingsIcon, color: '#4cc2ff' },
 ];
 

@@ -25,7 +25,10 @@ import {
   FluentSwiftSocialIcon,
   FluentFriendsIcon,
   FluentLogosFandomIcon,
-  FluentMinecraftWikiIcon
+  FluentMinecraftWikiIcon,
+  FluentCalculatorIcon,
+  FluentSnippingToolIcon,
+  FluentFeedbackHubIcon
 } from './FluentIcons';
 
 interface TabLoadingScreenProps {
@@ -125,6 +128,27 @@ export const TabLoadingScreen: React.FC<TabLoadingScreenProps> = ({ route = '', 
       return {
         title: 'Logos Fandom',
         icon: <FluentLogosFandomIcon className={iconClass} />
+      };
+    }
+
+    if (cleanRoute === '/calculator' || cleanRoute === '/calc') {
+      return {
+        title: 'Calculator',
+        icon: <FluentCalculatorIcon className={iconClass} />
+      };
+    }
+
+    if (cleanRoute === '/snipping-tool' || cleanRoute === '/snip' || cleanRoute === '/snipping') {
+      return {
+        title: 'Snipping Tool',
+        icon: <FluentSnippingToolIcon className={iconClass} />
+      };
+    }
+
+    if (cleanRoute === '/feedback-hub' || cleanRoute === '/feedback') {
+      return {
+        title: 'Feedback Hub',
+        icon: <FluentFeedbackHubIcon className={iconClass} />
       };
     }
 

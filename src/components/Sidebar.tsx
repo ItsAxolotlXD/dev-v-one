@@ -53,7 +53,10 @@ import {
   FluentFriendsIcon,
   FluentFriendsColorIcon,
   FluentLogosFandomIcon,
-  FluentMinecraftWikiIcon
+  FluentMinecraftWikiIcon,
+  FluentCalculatorIcon,
+  FluentSnippingToolIcon,
+  FluentFeedbackHubIcon
 } from './FluentIcons';
 import { useFavorites } from '../hooks/useFavorites';
 import { useSettings } from '../hooks/useSettings';
@@ -1323,6 +1326,48 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
           </div>
 
+          {/* 9. Calculator */}
+          <div className="w-full">
+            <button
+              type="button"
+              id={isMobile ? 'mobile-nav-calculator' : 'sidebar-nav-calculator'}
+              data-nav-active={(currentRoute === '/calculator' || currentRoute === '/calc') ? 'true' : undefined}
+              onClick={() => handleNavClick('/calculator')}
+              title="Calculator - Máy tính Fluent"
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                (currentRoute === '/calculator' || currentRoute === '/calc')
+                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-3.5 truncate">
+                <FluentCalculatorIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <span className="truncate text-[13.5px]">Calculator</span>
+              </div>
+            </button>
+          </div>
+
+          {/* 10. Snipping Tool */}
+          <div className="w-full">
+            <button
+              type="button"
+              id={isMobile ? 'mobile-nav-snipping-tool' : 'sidebar-nav-snipping-tool'}
+              data-nav-active={(currentRoute === '/snipping-tool' || currentRoute === '/snip' || currentRoute === '/snipping') ? 'true' : undefined}
+              onClick={() => handleNavClick('/snipping-tool')}
+              title="Snipping Tool - Chụp ảnh màn hình"
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                (currentRoute === '/snipping-tool' || currentRoute === '/snip' || currentRoute === '/snipping')
+                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-3.5 truncate">
+                <FluentSnippingToolIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <span className="truncate text-[13.5px]">Snipping Tool</span>
+              </div>
+            </button>
+          </div>
+
           {/* Divider & Category Heading: System */}
           <div className="my-2 mx-1 h-[1px] bg-black/10 dark:bg-white/10" />
           <div className="px-1.5 pt-0.5 pb-1 shrink-0">
@@ -1348,6 +1393,27 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <div className="flex items-center gap-3.5 truncate">
                 <FluentTaskManagerIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Task Manager</span>
+              </div>
+            </button>
+          </div>
+
+          {/* Feedback Hub */}
+          <div className="w-full">
+            <button
+              type="button"
+              id={isMobile ? 'mobile-nav-feedback-hub' : 'sidebar-nav-feedback-hub'}
+              data-nav-active={(currentRoute === '/feedback-hub' || currentRoute === '/feedback') ? 'true' : undefined}
+              onClick={() => handleNavClick('/feedback-hub')}
+              title="Feedback Hub - Trung tâm phản hồi"
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                (currentRoute === '/feedback-hub' || currentRoute === '/feedback')
+                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-3.5 truncate">
+                <FluentFeedbackHubIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <span className="truncate text-[13.5px]">Feedback Hub</span>
               </div>
             </button>
           </div>

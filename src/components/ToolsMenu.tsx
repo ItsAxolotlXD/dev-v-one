@@ -18,7 +18,7 @@ import {
   Wrench,
   FileText
 } from 'lucide-react';
-import { FluentNotesIcon, FluentSearchIcon, FluentFileExplorerIcon, FluentPaintIcon, FluentPhotosIcon, FluentEdgeIcon, FluentCameraIcon, FluentSwiftBankIcon } from './FluentIcons';
+import { FluentNotesIcon, FluentSearchIcon, FluentFileExplorerIcon, FluentPaintIcon, FluentPhotosIcon, FluentEdgeIcon, FluentCameraIcon, FluentSwiftBankIcon, FluentCalculatorIcon, FluentSnippingToolIcon, FluentFeedbackHubIcon } from './FluentIcons';
 import { Channel, NewsArticle } from '../types';
 import { useFavorites } from '../hooks/useFavorites';
 import { useSettings } from '../hooks/useSettings';
@@ -790,6 +790,60 @@ export const ToolsMenu: React.FC<ToolsMenuProps> = ({
                   <span className="truncate font-medium text-emerald-600 dark:text-emerald-400">Swift Bank</span>
                 </div>
                 <span className="text-[10px] px-1.5 py-0.5 rounded-[2px] bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold">Ngân hàng</span>
+              </button>
+
+              {/* Calculator */}
+              <button
+                id="tool-calculator"
+                type="button"
+                onClick={() => {
+                  setIsOpen(false);
+                  onNavigate('/calculator');
+                }}
+                className="fluent-reveal-item w-full h-[34px] px-2.5 rounded-[4px] flex items-center justify-between text-[13px] font-normal transition-colors text-left cursor-default text-[#1b1b1b] dark:text-[#f3f3f3] hover:bg-black/5 dark:hover:bg-white/[0.08] active:bg-black/10 dark:active:bg-white/[0.05]"
+                {...revealProps}
+              >
+                <div className="flex items-center gap-2.5 truncate">
+                  <FluentCalculatorIcon className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
+                  <span className="truncate">Calculator</span>
+                </div>
+                <span className="text-[10px] px-1.5 py-0.5 rounded-[2px] bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-medium">Máy tính</span>
+              </button>
+
+              {/* Snipping Tool */}
+              <button
+                id="tool-snipping-tool"
+                type="button"
+                onClick={() => {
+                  setIsOpen(false);
+                  onNavigate('/snipping-tool');
+                }}
+                className="fluent-reveal-item w-full h-[34px] px-2.5 rounded-[4px] flex items-center justify-between text-[13px] font-normal transition-colors text-left cursor-default text-[#1b1b1b] dark:text-[#f3f3f3] hover:bg-black/5 dark:hover:bg-white/[0.08] active:bg-black/10 dark:active:bg-white/[0.05]"
+                {...revealProps}
+              >
+                <div className="flex items-center gap-2.5 truncate">
+                  <FluentSnippingToolIcon className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
+                  <span className="truncate">Snipping Tool</span>
+                </div>
+                <span className="text-[10px] px-1.5 py-0.5 rounded-[2px] bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-medium">Cắt ảnh</span>
+              </button>
+
+              {/* Feedback Hub */}
+              <button
+                id="tool-feedback-hub"
+                type="button"
+                onClick={() => {
+                  setIsOpen(false);
+                  onNavigate('/feedback-hub');
+                }}
+                className="fluent-reveal-item w-full h-[34px] px-2.5 rounded-[4px] flex items-center justify-between text-[13px] font-normal transition-colors text-left cursor-default text-[#1b1b1b] dark:text-[#f3f3f3] hover:bg-black/5 dark:hover:bg-white/[0.08] active:bg-black/10 dark:active:bg-white/[0.05]"
+                {...revealProps}
+              >
+                <div className="flex items-center gap-2.5 truncate">
+                  <FluentFeedbackHubIcon className="w-4 h-4 text-[#0078d4] dark:text-[#4cc2ff] shrink-0" />
+                  <span className="truncate">Feedback Hub</span>
+                </div>
+                <span className="text-[10px] px-1.5 py-0.5 rounded-[2px] bg-[#0078d4]/15 text-[#0078d4] dark:text-[#4cc2ff] font-medium">Phản hồi</span>
               </button>
             </div>
 

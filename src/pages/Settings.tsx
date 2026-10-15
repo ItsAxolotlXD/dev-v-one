@@ -94,7 +94,7 @@ const SETTINGS_GROUP_2: SettingsCategoryItem[] = [
     subtitle: 'Preview features and diagnostic flags',
     icon: FlaskConical,
     badgeColor: 'bg-gradient-to-b from-[#8E8E93] to-[#636366]',
-    keywords: ['insider flags', 'insider', 'flags', 'experimental', 'lab', 'native keyboard', 'immersive search', 'triangle', 'loader', 'experimental search', 'search icon'],
+    keywords: ['insider flags', 'insider', 'flags', 'experimental', 'lab', 'windows app sdk', 'windows app sdk test preview', 'xám tối', 'native keyboard', 'immersive search', 'triangle', 'loader', 'experimental search', 'search icon'],
   },
 ];
 

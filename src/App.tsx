@@ -49,6 +49,9 @@ import { SwiftSocial } from './pages/SwiftSocial';
 import { FriendsApp } from './pages/FriendsApp';
 import { LogosFandom } from './pages/LogosFandom';
 import { MinecraftWiki } from './pages/MinecraftWiki';
+import { Calculator } from './pages/Calculator';
+import { SnippingTool } from './pages/SnippingTool';
+import { FeedbackHub } from './pages/FeedbackHub';
 import { SpinningRing } from './components/SpinningRing';
 import { CHANNELS_DATA } from './data/channels';
 import { NEWS_DATA } from './data/news';
@@ -296,8 +299,8 @@ export default function App() {
       setCurrentRoute(path);
     }
 
-    // Scroll to top on navigation
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Instant scroll to top on navigation (bỏ slide up)
+    window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
 
     // 1-second splash screen on entering a new tab
     if (isDifferentTab) {
@@ -678,6 +681,19 @@ export default function App() {
       case '/copilot':
         return <CopilotPage navigate={navigate} />;
 
+      case '/calculator':
+      case '/calc':
+        return <Calculator navigate={navigate} />;
+
+      case '/snipping-tool':
+      case '/snip':
+      case '/snipping':
+        return <SnippingTool navigate={navigate} />;
+
+      case '/feedback-hub':
+      case '/feedback':
+        return <FeedbackHub navigate={navigate} />;
+
       case '/updates':
         return <Updates navigate={navigate} onOpenUpdate={() => setIsUpdating(true)} />;
 
@@ -872,10 +888,10 @@ export default function App() {
         {/* Dynamic Page Content with smooth slide-up transition - Bo cong 10px góc trên trái */}
         <main className={`main-tab-page flex-1 w-full mx-auto rounded-tl-[10px] rounded-tr-none rounded-br-none rounded-bl-none overflow-hidden ${
           settings.windowsAppSdkPreview
-            ? '!bg-[#1e2024] text-white'
+            ? '!bg-[#141414] text-white'
             : (isTabLoading
               ? 'bg-[#f3f4f6] dark:bg-[#202024] p-0 max-w-none pt-0 text-neutral-800 dark:text-neutral-100'
-              : (currentRoute === '/' || currentRoute === '/home' || isOfficeRoute || currentRoute === '/craftmine' || currentRoute === '/photopea' || currentRoute === '/logos-fandom' || currentRoute === '/logos-wiki' || currentRoute === '/minecraft-wiki' || currentRoute === '/mc-wiki' || currentRoute === '/vlc' || currentRoute.startsWith('/vlc') || currentRoute === '/media-player' || currentRoute === '/schedule' || currentRoute.startsWith('/schedule') || currentRoute === '/cookbook' || currentRoute === '/swift' || currentRoute === '/friends' || currentRoute === '/edge' || currentRoute === '/browser' || currentRoute === '/camera' || currentRoute === '/photos' || currentRoute === '/gallery' || currentRoute === '/paint' || currentRoute === '/ms-paint' || currentRoute === '/file-explorer' || currentRoute === '/files' || currentRoute === '/copilot' || currentRoute === '/direct-cut' || currentRoute === '/video-editor' || currentRoute === '/edit' || currentRoute === '/swift-bank' || currentRoute === '/bank' || currentRoute === '/swiftbank' || currentRoute === '/clock' || currentRoute === '/alarm' || currentRoute === '/timer' || currentRoute === '/stopwatch' || currentRoute === '/world-clock' || currentRoute === '/calculator' || currentRoute === '/snipping-tool' || currentRoute === '/feedback-hub'
+              : (currentRoute === '/' || currentRoute === '/home' || isOfficeRoute || currentRoute === '/craftmine' || currentRoute === '/photopea' || currentRoute === '/logos-fandom' || currentRoute === '/logos-wiki' || currentRoute === '/minecraft-wiki' || currentRoute === '/mc-wiki' || currentRoute === '/vlc' || currentRoute.startsWith('/vlc') || currentRoute === '/media-player' || currentRoute === '/schedule' || currentRoute.startsWith('/schedule') || currentRoute === '/cookbook' || currentRoute === '/swift' || currentRoute === '/friends' || currentRoute === '/edge' || currentRoute === '/browser' || currentRoute === '/camera' || currentRoute === '/photos' || currentRoute === '/gallery' || currentRoute === '/paint' || currentRoute === '/ms-paint' || currentRoute === '/file-explorer' || currentRoute === '/files' || currentRoute === '/copilot' || currentRoute === '/direct-cut' || currentRoute === '/video-editor' || currentRoute === '/edit' || currentRoute === '/swift-bank' || currentRoute === '/bank' || currentRoute === '/swiftbank' || currentRoute === '/clock' || currentRoute === '/alarm' || currentRoute === '/timer' || currentRoute === '/stopwatch' || currentRoute === '/world-clock' || currentRoute === '/calculator' || currentRoute === '/calc' || currentRoute === '/snipping-tool' || currentRoute === '/snip' || currentRoute === '/snipping' || currentRoute === '/feedback-hub' || currentRoute === '/feedback'
                 ? 'p-0 max-w-none pt-0 bg-[#f9f9f9] dark:bg-[#282c31]' 
                 : 'px-4 sm:px-6 md:px-8 py-5 max-w-7xl bg-[#f9f9f9] dark:bg-[#282c31]'))
         } ${
@@ -883,15 +899,17 @@ export default function App() {
             ? 'pb-28 sm:pb-32'
             : ''
         }`}>
-          {/* Dynamic Page Content: Slide up individual elements of the loaded tab, not the entire page as a block */}
+          {/* Dynamic Page Content: No slide-up animation when switching pages */}
           {isTabLoading ? (
-            <div key={`tab-loading-${currentRoute}`} className="tab-loading-slide-up w-full h-full flex-1 flex flex-col items-center justify-center min-h-[calc(100vh-3.5rem)] bg-[#f3f4f6] dark:bg-[#202024]">
+            <div key={`tab-loading-${currentRoute}`} className={`w-full h-full flex-1 flex flex-col items-center justify-center min-h-[calc(100vh-3.5rem)] ${
+              settings.windowsAppSdkPreview ? 'bg-[#141414]' : 'bg-[#f3f4f6] dark:bg-[#202024]'
+            }`}>
               <TabLoadingScreen route={currentRoute} />
             </div>
           ) : (
             <div
               key={`tab-loaded-${currentRoute}-${tabLoadCount}`}
-              className="tab-element-slide-up-container w-full h-full rounded-tl-[10px] rounded-tr-none rounded-br-none rounded-bl-none overflow-hidden"
+              className="w-full h-full rounded-tl-[10px] rounded-tr-none rounded-br-none rounded-bl-none overflow-hidden"
             >
               {renderContent()}
             </div>
