@@ -15,6 +15,7 @@ import { useIsMobile } from '../hooks/useIsMobile';
 import { Channel, NewsArticle } from '../types';
 import { NEWS_DATA } from '../data/news';
 import { CopilotChatFlyout } from './CopilotChatFlyout';
+import { SpinningRing } from './SpinningRing';
 
 const LOGO_SRC = 'https://static.wikia.nocookie.net/ep-deo/images/d/d4/V-one-dev.png/revision/latest?cb=20261012151735';
 const SEARCH_ICON_SRC = 'https://static.wikia.nocookie.net/ep-deo/images/3/3c/Tools_menu.png/revision/latest?cb=20260905055712';
@@ -173,11 +174,7 @@ export const TopBar: React.FC<TopBarProps> = ({
         const transcript = event.results[0][0].transcript;
         if (transcript) {
           setSearchQuery(transcript);
-          if (window.innerWidth < 768) {
-            navigate('/copilot');
-          } else {
-            setIsSearchFlyoutOpen(true);
-          }
+          setIsSearchFlyoutOpen(true);
         }
       };
       recognition.onerror = () => setIsListening(false);
@@ -190,11 +187,7 @@ export const TopBar: React.FC<TopBarProps> = ({
     e.preventDefault();
     e.stopPropagation();
     if (!recognitionRef.current) {
-      if (window.innerWidth < 768) {
-        navigate('/copilot');
-      } else {
-        setIsSearchFlyoutOpen(true);
-      }
+      setIsSearchFlyoutOpen(true);
       return;
     }
     if (isListening) {
@@ -402,11 +395,7 @@ export const TopBar: React.FC<TopBarProps> = ({
       saveToHistory(query);
       if (query.startsWith('/find') || query.startsWith('/search')) {
         // Action command /find hoặc /search: tìm kiếm với copilot
-        if (window.innerWidth < 768) {
-          navigate(`/copilot?query=${encodeURIComponent(query)}`);
-        } else {
-          setIsSearchFlyoutOpen(true);
-        }
+        setIsSearchFlyoutOpen(true);
       } else {
         setIsSearchFlyoutOpen(false);
         navigate(`/search?q=${encodeURIComponent(query)}`);
@@ -508,12 +497,8 @@ export const TopBar: React.FC<TopBarProps> = ({
           <form onSubmit={handleSearchSubmit} className="w-full">
             <div
               id="topbar-search-box"
-              onClick={(e) => {
-                if (window.innerWidth < 768) {
-                  e.preventDefault();
-                  setIsSearchFlyoutOpen(false);
-                  navigate('/copilot');
-                }
+              onClick={() => {
+                setIsSearchFlyoutOpen(true);
               }}
               data-flyout-open={isSearchFlyoutOpen ? "true" : "false"}
               className={`fluent-search-box group relative w-full h-8 sm:h-8.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3 gap-2 transition-all cursor-text select-none focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff] ${
@@ -531,7 +516,11 @@ export const TopBar: React.FC<TopBarProps> = ({
                   title="Search"
                   className="text-[#71717a] dark:text-neutral-200 hover:text-[#0078d4] dark:hover:text-[#4cc2ff] p-0.5 transition-colors cursor-pointer flex items-center justify-center shrink-0 -ml-0.5 mr-0.5"
                 >
-                  <Search className="w-3.5 h-3.5 shrink-0" />
+                  {searchQuery.trim() ? (
+                    <SpinningRing size={14} strokeWidth={3.5} color="#4cc2ff" />
+                  ) : (
+                    <Search className="w-3.5 h-3.5 shrink-0" />
+                  )}
                 </button>
               )}
 
@@ -540,29 +529,15 @@ export const TopBar: React.FC<TopBarProps> = ({
                 value={searchQuery}
                 onChange={(e) => {
                   setSearchQuery(e.target.value);
-                  if (window.innerWidth >= 768) {
-                    setIsSearchFlyoutOpen(true);
-                  }
+                  setIsSearchFlyoutOpen(true);
                 }}
-                onClick={(e) => {
-                  if (window.innerWidth < 768) {
-                    e.preventDefault();
-                    e.currentTarget.blur();
-                    setIsSearchFlyoutOpen(false);
-                    navigate('/copilot');
-                  }
+                onClick={() => {
+                  setIsSearchFlyoutOpen(true);
                 }}
-                onFocus={(e) => {
-                  if (window.innerWidth < 768) {
-                    e.preventDefault();
-                    e.currentTarget.blur();
-                    setIsSearchFlyoutOpen(false);
-                    navigate('/copilot');
-                  } else {
-                    setIsSearchFlyoutOpen(true);
-                  }
+                onFocus={() => {
+                  setIsSearchFlyoutOpen(true);
                 }}
-                placeholder={`Search ${getTabTitle(currentRoute)} or let's chat`}
+                placeholder={`Search ${getTabTitle(currentRoute)}`}
                 className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-white outline-none border-none py-1 pr-9 no-fluent-line"
               />
 
@@ -588,7 +563,11 @@ export const TopBar: React.FC<TopBarProps> = ({
                     title="Search"
                     className="text-[#71717a] dark:text-neutral-200 hover:text-[#0078d4] dark:hover:text-[#4cc2ff] p-1 transition-colors cursor-pointer flex items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10"
                   >
-                    <Search className="w-3.5 h-3.5 shrink-0" />
+                    {searchQuery.trim() ? (
+                      <SpinningRing size={14} strokeWidth={3.5} color="#4cc2ff" />
+                    ) : (
+                      <Search className="w-3.5 h-3.5 shrink-0" />
+                    )}
                   </button>
                 )}
               </div>
@@ -596,18 +575,16 @@ export const TopBar: React.FC<TopBarProps> = ({
           </form>
 
           {/* Integrated AI Copilot Chat & Search Flyout */}
-          <AnimatePresence>
-            {isSearchFlyoutOpen && (
-              <CopilotChatFlyout
-                isOpen={isSearchFlyoutOpen}
-                onClose={() => setIsSearchFlyoutOpen(false)}
-                searchQuery={searchQuery}
-                onSearchQueryChange={setSearchQuery}
-                appAspects={appAspects}
-                navigate={navigate}
-              />
-            )}
-          </AnimatePresence>
+          {isSearchFlyoutOpen && (
+            <CopilotChatFlyout
+              isOpen={isSearchFlyoutOpen}
+              onClose={() => setIsSearchFlyoutOpen(false)}
+              searchQuery={searchQuery}
+              onSearchQueryChange={setSearchQuery}
+              appAspects={appAspects}
+              navigate={navigate}
+            />
+          )}
         </div>
       </div>
 

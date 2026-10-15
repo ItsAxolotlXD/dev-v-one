@@ -1,24 +1,16 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { 
-  Bot, 
-  Send, 
-  Sparkles, 
+  History,
+  X, 
+  ArrowLeft,
   RotateCcw, 
   Copy, 
   Check, 
-  X, 
-  ArrowLeft,
-  ArrowRight,
-  Mic, 
-  MicOff,
+  Send, 
+  Sparkles,
   Search,
-  ExternalLink,
-  ChevronRight,
-  FolderArchive,
-  Image as ImageIcon
+  ExternalLink
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
-import { useSystemTasks } from '../context/SystemTasksContext';
 import { useSettings } from '../hooks/useSettings';
 
 interface ChatMessage {
@@ -43,90 +35,66 @@ interface CopilotChatFlyoutProps {
   navigate: (route: string) => void;
 }
 
-// 1. Yellow Zip Folder Icon matching reference Windows Search
-const ZipFolderIcon: React.FC<{ className?: string }> = ({ className = "w-6 h-6" }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none">
-    <path d="M3 5a2 2 0 0 1 2-2h4.586a1 1 0 0 1 .707.293L12 5h7a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5z" fill="#f59e0b" />
-    <path d="M3 7h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" fill="#fbbf24" />
-    <rect x="9.5" y="7" width="2" height="10" fill="#fef3c7" rx="0.5" />
-    <line x1="9.5" y1="8.5" x2="11.5" y2="8.5" stroke="#b45309" strokeWidth="1" />
-    <line x1="9.5" y1="10.5" x2="11.5" y2="10.5" stroke="#b45309" strokeWidth="1" />
-    <line x1="9.5" y1="12.5" x2="11.5" y2="12.5" stroke="#b45309" strokeWidth="1" />
-    <line x1="9.5" y1="14.5" x2="11.5" y2="14.5" stroke="#b45309" strokeWidth="1" />
-    <rect x="9" y="15.5" width="3" height="2.5" rx="0.5" fill="#d97706" />
-  </svg>
-);
+// Default 5 Windows Search History items matching the reference image exactly
+const DEFAULT_HISTORY_ITEMS: Array<{ id: string; query: string; route?: string }> = [
+  { id: 'h-1', query: 'minecraft preview for windows', route: '/craftmine' },
+  { id: 'h-2', query: 'mail and calendar', route: '/schedule' },
+  { id: 'h-3', query: 'calculator', route: '/clock' },
+  { id: 'h-4', query: 'microsoft maps', route: '/widgets' },
+  { id: 'h-5', query: 'notepad', route: '/notes' },
+];
 
-// 2. Speech Bubble with lines icon matching reference Ask Copilot row
-const AskCopilotBubbleIcon: React.FC<{ className?: string }> = ({ className = "w-5 h-5 text-[#0078d4] dark:text-[#4cc2ff]" }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
-    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
-    <line x1="8" y1="10.5" x2="14" y2="10.5" strokeLinecap="round" />
-    <line x1="8" y1="14" x2="12.5" y2="14" strokeLinecap="round" />
-  </svg>
-);
+const ROUTE_SHORTCUTS: Record<string, string> = {
+  'minecraft preview for windows': '/craftmine',
+  'mail and calendar': '/schedule',
+  'calculator': '/clock',
+  'microsoft maps': '/widgets',
+  'notepad': '/notes',
+  'craftmine': '/craftmine',
+  'schedule': '/schedule',
+  'notes': '/notes',
+  'clock': '/clock',
+  'widgets': '/widgets',
+  'live tv': '/live-tv',
+  'watch': '/live-tv',
+  'channels': '/channels',
+  'news': '/news',
+  'articles': '/news',
+  'photos': '/photos',
+  'camera': '/camera',
+  'vlc': '/vlc',
+  'photopea': '/photopea',
+  'cookbook': '/cookbook',
+  'swift bank': '/swift-bank',
+  'swift social': '/swift-social',
+  'task manager': '/task-manager',
+  'settings': '/settings',
+};
 
-// 3. Microsoft Copilot Ribbon Icon with vivid authentic gradient
-const CopilotRibbonIcon: React.FC<{ className?: string }> = ({ className = "w-5 h-5" }) => (
+// Microsoft Copilot Ribbon Icon
+const CopilotRibbonIcon: React.FC<{ className?: string }> = ({ className = "w-4 h-4" }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none">
     <path 
       d="M16.5 4.5a3.5 3.5 0 0 0-4.9 0l-5.6 5.6a3.5 3.5 0 0 0 0 4.9l1.4 1.4a2 2 0 0 0 2.8 0l5.6-5.6a2 2 0 0 0 0-2.8l-.7-.7 2.1-2.1a1 1 0 0 0 0-1.4l-.7-.7z" 
-      fill="url(#c-grad-1)" 
+      fill="url(#c-flyout-grad-1)" 
     />
     <path 
       d="M7.5 19.5a3.5 3.5 0 0 0 4.9 0l5.6-5.6a3.5 3.5 0 0 0 0-4.9l-1.4-1.4a2 2 0 0 0-2.8 0l-5.6 5.6a2 2 0 0 0 0 2.8l.7.7-2.1 2.1a1 1 0 0 0 0 1.4l.7.7z" 
-      fill="url(#c-grad-2)" 
+      fill="url(#c-flyout-grad-2)" 
     />
     <defs>
-      <linearGradient id="c-grad-1" x1="6" y1="4" x2="18" y2="16" gradientUnits="userSpaceOnUse">
+      <linearGradient id="c-flyout-grad-1" x1="6" y1="4" x2="18" y2="16" gradientUnits="userSpaceOnUse">
         <stop stopColor="#38bdf8" />
         <stop offset="0.5" stopColor="#3b82f6" />
         <stop offset="1" stopColor="#10b981" />
       </linearGradient>
-      <linearGradient id="c-grad-2" x1="18" y1="20" x2="6" y2="8" gradientUnits="userSpaceOnUse">
+      <linearGradient id="c-flyout-grad-2" x1="18" y1="20" x2="6" y2="8" gradientUnits="userSpaceOnUse">
         <stop stopColor="#fb923c" />
         <stop offset="0.5" stopColor="#f43f5e" />
         <stop offset="1" stopColor="#a855f7" />
       </linearGradient>
     </defs>
   </svg>
-);
-
-// 4. Spectacles / Copilot Vision Glasses Icon
-const GlassesIcon: React.FC<{ className?: string }> = ({ className = "w-4.5 h-4.5" }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
-    <circle cx="6.5" cy="13.5" r="3.5" />
-    <circle cx="17.5" cy="13.5" r="3.5" />
-    <path d="M10 13.5h4" strokeLinecap="round" />
-    <path d="M3.2 12.5 4.8 7.5" strokeLinecap="round" />
-    <path d="M20.8 12.5 19.2 7.5" strokeLinecap="round" />
-  </svg>
-);
-
-// 5. Artwork logo tile matching sparkle experience Artwork PNG
-const ArtworkPngIcon: React.FC<{ className?: string }> = ({ className = "w-6 h-6" }) => (
-  <div className={`${className} rounded-[4px] bg-white p-0.5 flex flex-col items-center justify-center shrink-0 shadow-xs border border-black/10 dark:border-white/20`}>
-    <div className="flex items-center gap-0.5">
-      <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
-      <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-    </div>
-    <span className="text-[6.5px] font-black text-black leading-none mt-0.5 tracking-tighter">SE</span>
-  </div>
-);
-
-// 6. Photo thumbnail matching team shot JPG
-const TeamShotThumbnail: React.FC<{ className?: string }> = ({ className = "w-6 h-6" }) => (
-  <div className={`${className} rounded-[4px] overflow-hidden shrink-0 border border-black/10 dark:border-white/20 bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center`}>
-    <img
-      src="/banners/thoi_su_19h.webp"
-      alt="Preview"
-      onError={(e) => {
-        (e.target as HTMLElement).style.display = 'none';
-      }}
-      className="w-full h-full object-cover"
-    />
-    <ImageIcon className="w-3.5 h-3.5 text-neutral-400 absolute" style={{ zIndex: 0 }} />
-  </div>
 );
 
 export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
@@ -137,57 +105,28 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
   appAspects,
   navigate
 }) => {
-  const { isTaskRunning } = useSystemTasks();
   const { settings } = useSettings();
   const isPill = Boolean(settings.roundedSearchBox);
   const [activeMode, setActiveMode] = useState<'search' | 'copilot'>('search');
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [isListening, setIsListening] = useState(false);
-  const [showTooltip, setShowTooltip] = useState(false);
-  const speechRecognitionRef = useRef<any>(null);
 
-  // Initialize Speech Recognition
-  useEffect(() => {
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (SpeechRecognition) {
-      const recognition = new SpeechRecognition();
-      recognition.continuous = false;
-      recognition.interimResults = false;
-      recognition.lang = 'vi-VN';
-
-      recognition.onstart = () => setIsListening(true);
-      recognition.onresult = (event: any) => {
-        const transcript = event.results[0][0].transcript;
-        if (transcript) {
-          onSearchQueryChange(transcript);
+  // Search History from localStorage (seeded with default 5 items)
+  const [historyItems, setHistoryItems] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('vone_search_history');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
         }
-      };
-      recognition.onerror = () => setIsListening(false);
-      recognition.onend = () => setIsListening(false);
-      speechRecognitionRef.current = recognition;
-    }
-  }, [onSearchQueryChange]);
-
-  const toggleListening = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!speechRecognitionRef.current) return;
-    if (isListening) {
-      speechRecognitionRef.current.stop();
-      setIsListening(false);
-    } else {
-      try {
-        speechRecognitionRef.current.start();
-        setIsListening(true);
-      } catch (err) {
-        console.warn('Speech recognition error:', err);
       }
-    }
-  };
+    } catch {}
+    return DEFAULT_HISTORY_ITEMS.map((item) => item.query);
+  });
 
-  // Keyboard shortcut ESC to close
+  // ESC to close flyout
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -198,9 +137,56 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
 
+  // Remove single history item
+  const handleRemoveHistoryItem = (e: React.MouseEvent, itemToRemove: string) => {
+    e.stopPropagation();
+    setHistoryItems((prev) => {
+      const next = prev.filter((item) => item !== itemToRemove);
+      try {
+        localStorage.setItem('vone_search_history', JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+  };
+
+  // Click on an item in the flyout
+  const handleItemClick = (query: string) => {
+    const trimmed = query.trim();
+    if (!trimmed) return;
+
+    // Save to history top
+    setHistoryItems((prev) => {
+      const filtered = prev.filter((item) => item.toLowerCase() !== trimmed.toLowerCase());
+      const next = [trimmed, ...filtered].slice(0, 15);
+      try {
+        localStorage.setItem('vone_search_history', JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+
+    onClose();
+
+    // Route matching
+    const lower = trimmed.toLowerCase();
+    if (ROUTE_SHORTCUTS[lower]) {
+      navigate(ROUTE_SHORTCUTS[lower]);
+      return;
+    }
+
+    const matchedAspect = appAspects.find(
+      (a) => a.title.toLowerCase() === lower || a.title.toLowerCase().includes(lower)
+    );
+    if (matchedAspect) {
+      matchedAspect.onSelect();
+      return;
+    }
+
+    navigate(`/channels?search=${encodeURIComponent(trimmed)}`);
+  };
+
   // Handle Ask Copilot Action
-  const handleAskCopilot = async (question?: string) => {
-    const prompt = (question || searchQuery || 'windows central').trim();
+  const handleAskCopilot = async (promptQuery?: string) => {
+    const prompt = (promptQuery || searchQuery || 'windows').trim();
     if (!prompt || isLoading) return;
 
     setActiveMode('copilot');
@@ -245,7 +231,7 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
       const fallbackMsg: ChatMessage = {
         id: `ai-err-${Date.now()}`,
         role: 'model',
-        text: `Chào bạn! Tôi là Copilot AI trong giao diện Windows Search. Bạn đang tìm hiểu về "${prompt}". Bạn có thể xem trực tiếp kênh truyền hình trong tab Watch (Live TV), mở Bảng Widgets để cập nhật tin tức thời gian thực, hoặc tra cứu các tùy chọn trong Settings.`,
+        text: `Chào bạn! Tôi là Copilot AI. Bạn đang tìm hiểu về "${prompt}". Bạn có thể xem trực tiếp kênh truyền hình trong tab Watch (Live TV), mở Bảng Widgets để cập nhật tin tức thời gian thực, hoặc tra cứu các tùy chọn trong Settings.`,
         timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
       };
       setMessages((prev) => [...prev, fallbackMsg]);
@@ -262,7 +248,6 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
     }
   };
 
-  // Helper to render bold markdown
   const renderFormattedText = (text: string) => {
     const parts = text.split(/(\*\*.*?\*\*)/g);
     return parts.map((part, i) => {
@@ -277,235 +262,165 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
     });
   };
 
-  // Matched items or defaults that mirror Windows Search Copilot layout
-  const displayedItems = useMemo(() => {
+  // Filter items based on active search query
+  const displayedHistory = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
-    
-    // Default items matching the reference screenshot when empty or generic
-    if (!q || q === 'sparkle experience' || q === 'windows central' || q === 'windows') {
-      return [
-        {
-          id: 'item-1',
-          title: 'sparkle experience',
-          subtitle: 'Do action',
-          iconType: 'zip' as const,
-          action: () => navigate('/file-explorer')
-        },
-        {
-          id: 'item-2',
-          title: 'sparkle experience team shot 2',
-          subtitle: 'JPG File',
-          iconType: 'jpg' as const,
-          action: () => navigate('/photos')
-        },
-        {
-          id: 'item-3',
-          title: 'sparkle experience Artwork',
-          subtitle: 'PNG File',
-          iconType: 'png' as const,
-          action: () => navigate('/photos')
-        }
-      ];
+    if (!q) {
+      // Empty input: render exactly the 5 recent items like the user reference screenshot
+      return historyItems.slice(0, 5);
     }
-
-    // Dynamic search matches based on user input
-    const matches = appAspects.filter((a) =>
-      a.title.toLowerCase().includes(q)
-    ).slice(0, 3);
-
-    if (matches.length > 0) {
-      return matches.map((m, idx) => {
-        let subtitle = 'Tài liệu hệ thống';
-        let iconType: 'zip' | 'jpg' | 'png' | 'logo' = 'zip';
-        
-        if (m.type === 'channel') {
-          subtitle = 'Kênh truyền hình trực tiếp';
-          iconType = 'logo';
-        } else if (m.type === 'news') {
-          subtitle = 'Bài viết thời sự JPG';
-          iconType = 'jpg';
-        } else if (idx === 0) {
-          subtitle = 'Do action';
-          iconType = 'zip';
-        } else if (idx === 1) {
-          subtitle = 'JPG File';
-          iconType = 'jpg';
-        } else {
-          subtitle = 'PNG File';
-          iconType = 'png';
-        }
-
-        return {
-          id: m.id,
-          title: m.title,
-          subtitle,
-          iconType,
-          logo: m.logo,
-          action: m.onSelect
-        };
-      });
+    // Filter matching history
+    const matched = historyItems.filter((item) => item.toLowerCase().includes(q));
+    if (matched.length > 0) {
+      return matched.slice(0, 5);
     }
+    return [];
+  }, [searchQuery, historyItems]);
 
-    // Fallback search suggestions
-    return [
-      {
-        id: 'search-fallback-1',
-        title: `${searchQuery} (Thư mục tài liệu)`,
-        subtitle: 'Do action',
-        iconType: 'zip' as const,
-        action: () => navigate(`/channels?search=${encodeURIComponent(searchQuery)}`)
-      },
-      {
-        id: 'search-fallback-2',
-        title: `${searchQuery} ảnh chụp trực tuyến`,
-        subtitle: 'JPG File',
-        iconType: 'jpg' as const,
-        action: () => navigate('/photos')
-      },
-      {
-        id: 'search-fallback-3',
-        title: `${searchQuery} đồ họa & biểu trưng`,
-        subtitle: 'PNG File',
-        iconType: 'png' as const,
-        action: () => navigate('/photos')
-      }
-    ];
-  }, [searchQuery, appAspects, navigate]);
+  // Additional matching app aspects when searching
+  const matchingAspects = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return [];
+    return appAspects.filter((a) => a.title.toLowerCase().includes(q)).slice(0, 3);
+  }, [searchQuery, appAspects]);
 
   if (!isOpen) return null;
 
   return (
-    <motion.div
-      key="windows-copilot-search-flyout"
-      initial={{ opacity: 0, y: 26 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 16 }}
-      transition={{ duration: 0.44, ease: [0.16, 1, 0.3, 1] }}
-      className="copilot-flyout-container absolute top-full mt-2 left-1/2 -translate-x-1/2 w-[95vw] max-w-[460px] z-[999] rounded-[16px] bg-[#fbfbfb]/85 dark:bg-[#1f1d27]/85 backdrop-blur-3xl border border-black/10 dark:border-white/10 shadow-[0_24px_50px_rgba(0,0,0,0.22)] dark:shadow-[0_24px_60px_rgba(0,0,0,0.65)] p-2 sm:p-2.5 flex flex-col gap-1.5 select-none text-[#18181b] dark:text-white font-sans overflow-hidden"
+    <div
+      key="windows-search-copilot-flyout"
+      className={`copilot-flyout-container absolute top-full left-0 right-0 w-full z-[999] select-none text-white font-sans overflow-hidden ${
+        isPill
+          ? 'rounded-[16px] mt-2 shadow-[0_20px_50px_rgba(0,0,0,0.65)] border border-black/15 dark:border-white/10'
+          : 'rounded-b-[8px] rounded-t-none -mt-px shadow-[0_20px_50px_rgba(0,0,0,0.65)] border border-black/15 dark:border-white/10 border-t-0'
+      } bg-[#1f2025]/95 dark:bg-[#1b1c21]/95 backdrop-blur-2xl p-2.5 pb-3 flex flex-col`}
       style={{
-        backdropFilter: 'blur(36px) saturate(180%)',
-        WebkitBackdropFilter: 'blur(36px) saturate(180%)'
+        backdropFilter: 'blur(32px) saturate(160%)',
+        WebkitBackdropFilter: 'blur(32px) saturate(160%)',
+        animation: 'none',
+        transform: 'none',
       }}
     >
-      {/* ================= MODE 1: SEARCH & COPILOT SUGGESTIONS ================= */}
+      {/* ================= MODE 1: WINDOWS SEARCH FLYOUT (MATCHING USER SCREENSHOT) ================= */}
       {activeMode === 'search' ? (
-        <>
-          {/* Upper Search Results List */}
-          <div className="flex flex-col gap-0.5">
-            {/* Dynamic Results (Items 1 - 3) */}
-            {displayedItems.map((item, index) => {
-              const isFirst = index === 0;
-              return (
-                <div
-                  key={item.id}
-                  onClick={() => {
-                    item.action();
-                    onClose();
-                  }}
-                  className={`w-full rounded-[8px] p-2 sm:p-2.5 px-3 flex items-center gap-3 transition-colors cursor-pointer ${
-                    isFirst
-                      ? 'bg-black/[0.04] dark:bg-white/[0.08] hover:bg-black/[0.08] dark:hover:bg-white/[0.12]'
-                      : 'hover:bg-black/[0.03] dark:hover:bg-white/[0.06]'
-                  }`}
-                >
-                  {/* Left Icon */}
-                  <div className="w-6 h-6 flex items-center justify-center shrink-0">
-                    {item.iconType === 'zip' && <ZipFolderIcon className="w-6 h-6" />}
-                    {item.iconType === 'jpg' && <TeamShotThumbnail className="w-6 h-6" />}
-                    {item.iconType === 'png' && <ArtworkPngIcon className="w-6 h-6" />}
-                    {item.iconType === 'logo' && item.logo && (
-                      <img src={item.logo} alt="" className="w-6 h-6 object-contain rounded" />
-                    )}
-                  </div>
-
-                  {/* Title & Subtitle */}
-                  <div className="flex-1 min-w-0 leading-tight">
-                    <div className="text-[13.5px] font-medium text-[#111827] dark:text-white truncate">
-                      {item.title}
-                    </div>
-                    <div className="text-[11.5px] text-[#6b7280] dark:text-neutral-400 mt-0.5 truncate">
-                      {item.subtitle}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-
-            {/* Item 4: Ask Copilot (with speech bubble icon matching leaked reference) */}
+        <div className="flex flex-col space-y-1" style={{ animation: 'none', transform: 'none' }}>
+          {/* Recent Search History Rows (No animation, instant hover response) */}
+          {displayedHistory.map((item) => (
             <div
-              onClick={() => handleAskCopilot(searchQuery || 'sparkle experience')}
-              className="w-full rounded-[8px] hover:bg-black/[0.03] dark:hover:bg-white/[0.06] p-2 sm:p-2.5 px-3 flex items-center gap-3 transition-colors cursor-pointer group"
+              key={item}
+              onClick={() => handleItemClick(item)}
+              style={{ animation: 'none', transform: 'none' }}
+              className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-[6px] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] active:bg-black/[0.08] dark:active:bg-white/[0.1] cursor-pointer group text-left"
             >
-              <div className="w-6 h-6 flex items-center justify-center shrink-0">
-                <AskCopilotBubbleIcon className="w-5 h-5 text-[#0078d4] dark:text-white group-hover:scale-105 transition-transform" />
-              </div>
-              <div className="flex-1 min-w-0 leading-tight">
-                <div className="text-[13.5px] font-medium text-[#111827] dark:text-white truncate">
-                  {searchQuery.trim() || 'sparkle experience'}
+              <div className="flex items-center gap-3.5 min-w-0 flex-1">
+                {/* Black Square Icon with White History Clock Glyphs */}
+                <div className="w-9 h-9 rounded-[6px] bg-black dark:bg-[#0c0d0e] flex items-center justify-center shrink-0 border border-white/[0.08] shadow-xs">
+                  <History className="w-4 h-4 text-white stroke-[1.8]" />
                 </div>
-                <div className="text-[11.5px] text-[#0078d4] dark:text-[#4cc2ff] font-medium mt-0.5 flex items-center gap-1">
-                  <span>Ask Copilot</span>
-                  <Sparkles className="w-3 h-3 text-[#0078d4] dark:text-[#4cc2ff]" />
-                </div>
-              </div>
-            </div>
 
-            {/* Item 5: See More Search Results Button */}
-            <div className="relative pt-1">
+                {/* Clean label matching lowercase reference */}
+                <span className="text-[13px] sm:text-[13.5px] font-normal text-neutral-800 dark:text-neutral-100 group-hover:text-black dark:group-hover:text-white truncate">
+                  {item}
+                </span>
+              </div>
+
+              {/* Discreet Remove from History Button on Hover */}
               <button
                 type="button"
-                onMouseEnter={() => setShowTooltip(true)}
-                onMouseLeave={() => setShowTooltip(false)}
-                onClick={() => {
-                  onClose();
-                  navigate(`/search?q=${encodeURIComponent(searchQuery || 'sparkle experience')}`);
-                }}
-                className="w-full rounded-[8px] bg-black/[0.03] dark:bg-white/[0.04] hover:bg-black/[0.06] dark:hover:bg-white/[0.08] active:bg-black/[0.09] dark:active:bg-white/[0.1] text-neutral-600 dark:text-neutral-300 hover:text-black dark:hover:text-white text-xs sm:text-[13px] py-2 px-3.5 flex items-center justify-between transition-colors cursor-pointer font-medium border border-black/5 dark:border-white/5"
+                onClick={(e) => handleRemoveHistoryItem(e, item)}
+                title="Xóa khỏi lịch sử"
+                className="opacity-0 group-hover:opacity-100 p-1 text-neutral-400 hover:text-white rounded cursor-pointer shrink-0 ml-2"
               >
-                <span>See more search results</span>
-                <ChevronRight className="w-4 h-4 text-neutral-400" />
+                <X className="w-3.5 h-3.5" />
               </button>
-
-              {/* Tooltip matching corner tooltip */}
-              {showTooltip && (
-                <div className="absolute right-0 bottom-full mb-1 px-2.5 py-1 rounded-[6px] bg-white dark:bg-[#1e1c24] text-[11px] text-neutral-700 dark:text-neutral-300 border border-black/10 dark:border-white/10 shadow-lg pointer-events-none whitespace-nowrap z-50 animate-in fade-in duration-150">
-                  See more search results
-                </div>
-              )}
             </div>
-          </div>
-        </>
+          ))}
+
+          {/* App Aspect Results (when typing query) */}
+          {searchQuery.trim() && matchingAspects.map((aspect) => (
+            <div
+              key={aspect.id}
+              onClick={() => {
+                aspect.onSelect();
+                onClose();
+              }}
+              className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-[6px] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] active:bg-black/[0.08] dark:active:bg-white/[0.1] cursor-pointer group text-left"
+            >
+              <div className="flex items-center gap-3.5 min-w-0 flex-1">
+                <div className="w-9 h-9 rounded-[6px] bg-black dark:bg-[#0c0d0e] flex items-center justify-center shrink-0 border border-white/[0.08] shadow-xs overflow-hidden">
+                  {aspect.logo ? (
+                    <img src={aspect.logo} alt="" className="w-6 h-6 object-contain" />
+                  ) : (
+                    <Search className="w-4 h-4 text-white stroke-[1.8]" />
+                  )}
+                </div>
+
+                <div className="flex flex-col min-w-0">
+                  <span className="text-[13px] sm:text-[13.5px] font-normal text-neutral-800 dark:text-neutral-100 group-hover:text-black dark:group-hover:text-white truncate">
+                    {aspect.title}
+                  </span>
+                  <span className="text-[11px] text-neutral-400 capitalize">
+                    {aspect.type}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+
+          {/* Ask Copilot Row (Optional AI Query row when typing or available) */}
+          {searchQuery.trim() && (
+            <div
+              onClick={() => handleAskCopilot(searchQuery)}
+              className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-[6px] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] active:bg-black/[0.08] dark:active:bg-white/[0.1] cursor-pointer group text-left mt-0.5 pt-1 border-t border-black/5 dark:border-white/5"
+            >
+              <div className="flex items-center gap-3.5 min-w-0 flex-1">
+                <div className="w-9 h-9 rounded-[6px] bg-black dark:bg-[#0c0d0e] flex items-center justify-center shrink-0 border border-white/[0.08] shadow-xs">
+                  <CopilotRibbonIcon className="w-4 h-4" />
+                </div>
+                <div className="flex flex-col min-w-0">
+                  <span className="text-[13px] sm:text-[13.5px] font-normal text-neutral-800 dark:text-neutral-100 group-hover:text-black dark:group-hover:text-white truncate">
+                    Hỏi Copilot: "{searchQuery}"
+                  </span>
+                  <span className="text-[11px] text-[#0078d4] dark:text-[#4cc2ff] font-medium flex items-center gap-1">
+                    <span>Trò chuyện với AI</span>
+                    <Sparkles className="w-3 h-3" />
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       ) : (
         /* ================= MODE 2: ACTIVE COPILOT AI CHAT VIEW ================= */
-        <div className="flex flex-col h-[480px]">
+        <div className="flex flex-col h-[440px]">
           {/* Header */}
           <div className="flex items-center justify-between pb-2.5 border-b border-black/10 dark:border-white/10 shrink-0">
             <button
               type="button"
               onClick={() => setActiveMode('search')}
-              className="flex items-center gap-1.5 text-xs text-neutral-600 dark:text-neutral-300 hover:text-black dark:hover:text-white transition-colors cursor-pointer font-medium"
+              className="flex items-center gap-1.5 text-xs text-neutral-600 dark:text-neutral-300 hover:text-black dark:hover:text-white cursor-pointer font-medium"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Quay lại tìm kiếm</span>
             </button>
 
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] bg-black/5 dark:bg-white/10 text-xs font-semibold text-neutral-800 dark:text-white">
-                <CopilotRibbonIcon className="w-4 h-4" />
+              <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-[6px] bg-black/5 dark:bg-white/10 text-xs font-semibold text-neutral-800 dark:text-white">
+                <CopilotRibbonIcon className="w-3.5 h-3.5" />
                 <span>Copilot AI</span>
               </div>
               <button
                 type="button"
                 onClick={() => setMessages([])}
                 title="Làm mới cuộc trò chuyện"
-                className="p-1.5 rounded-[6px] text-neutral-500 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer"
+                className="p-1 rounded-[6px] text-neutral-500 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 cursor-pointer"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
               </button>
               <button
                 type="button"
                 onClick={onClose}
-                className="p-1.5 rounded-[6px] text-neutral-500 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer"
+                className="p-1 rounded-[6px] text-neutral-500 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 cursor-pointer"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -522,7 +437,7 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
                   className={`flex flex-col ${isUser ? 'items-end' : 'items-start'}`}
                 >
                   <div
-                    className={`p-3 rounded-[12px] text-xs sm:text-[13px] leading-relaxed max-w-[88%] ${
+                    className={`p-3 rounded-[10px] text-xs sm:text-[13px] leading-relaxed max-w-[90%] ${
                       isUser
                         ? 'bg-[#0078d4] text-white rounded-tr-none shadow-xs'
                         : 'bg-[#f4f4f7] dark:bg-[#282534] text-neutral-800 dark:text-neutral-200 border border-black/10 dark:border-white/10 rounded-tl-none shadow-xs'
@@ -553,29 +468,15 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
             })}
 
             {isLoading && (
-              <div className="flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400 p-2.5 rounded-[10px] bg-[#f4f4f7] dark:bg-[#282534] border border-black/10 dark:border-white/10 w-fit">
+              <div className="flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400 p-2.5 rounded-[8px] bg-[#f4f4f7] dark:bg-[#282534] border border-black/10 dark:border-white/10 w-fit">
                 <span className="w-2 h-2 rounded-full bg-[#0078d4] dark:bg-[#4cc2ff] animate-ping" />
                 <span>Copilot đang tạo phản hồi...</span>
               </div>
             )}
           </div>
 
-          {/* Quick Suggestions */}
-          <div className="py-1 flex items-center gap-1.5 overflow-x-auto no-scrollbar shrink-0">
-            {['Kênh thời sự VTV1', 'Xem truyền hình', 'Bảng tin hôm nay', 'Cài đặt hệ thống'].map((sug) => (
-              <button
-                key={sug}
-                type="button"
-                onClick={() => handleAskCopilot(sug)}
-                className="shrink-0 text-[11px] px-2.5 py-1 rounded-[6px] bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 text-neutral-600 dark:text-neutral-300 hover:text-black dark:hover:text-white transition-colors cursor-pointer"
-              >
-                {sug}
-              </button>
-            ))}
-          </div>
-
-          {/* Lower Input Box Card for Copilot Chat (8px radius corner or 100% round pill) */}
-          <div className={`${isPill ? 'rounded-full px-4' : 'rounded-[8px]'} bg-[#f4f4f7] dark:bg-[#282534] border border-black/10 dark:border-white/10 p-3 pt-2.5 flex flex-col justify-between shrink-0 shadow-2xs mt-1.5`}>
+          {/* Bottom Chat Input */}
+          <div className="rounded-[8px] bg-black/5 dark:bg-[#282534] border border-black/10 dark:border-white/10 p-2.5 flex items-center justify-between shrink-0 mt-1">
             <input
               type="text"
               value={searchQuery}
@@ -586,30 +487,20 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
                   handleAskCopilot(searchQuery);
                 }
               }}
-              placeholder="Đặt câu hỏi tiếp theo cho Copilot..."
-              className="w-full bg-transparent text-[13.5px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-neutral-500 outline-none border-none py-0.5 no-fluent-line font-normal"
+              placeholder="Hỏi tiếp Copilot..."
+              className="w-full bg-transparent text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-neutral-500 outline-none border-none py-0.5 no-fluent-line"
             />
-
-            <div className="flex items-center justify-between mt-2.5 pt-1">
-              <div className="flex items-center gap-1.5">
-                <CopilotRibbonIcon className="w-4 h-4" />
-                <span className="text-[11px] text-neutral-500 dark:text-neutral-400 font-medium">Hỏi bất cứ điều gì</span>
-              </div>
-
-              <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-300">
-                <button
-                  type="button"
-                  disabled={!searchQuery.trim() || isLoading}
-                  onClick={() => handleAskCopilot(searchQuery)}
-                  className="p-1 rounded-[6px] bg-[#0078d4] text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#106ebe] transition-colors cursor-pointer active:scale-95 flex items-center justify-center"
-                >
-                  <Send className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
+            <button
+              type="button"
+              disabled={!searchQuery.trim() || isLoading}
+              onClick={() => handleAskCopilot(searchQuery)}
+              className="p-1 rounded-[6px] bg-[#0078d4] text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#106ebe] cursor-pointer shrink-0 ml-1.5"
+            >
+              <Send className="w-3.5 h-3.5" />
+            </button>
           </div>
         </div>
       )}
-    </motion.div>
+    </div>
   );
 };
