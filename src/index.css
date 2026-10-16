@@ -402,6 +402,80 @@ html.webview-sdk-preview .sidebar-nav-item [class*="h-5"] {
   max-height: 15px !important;
 }
 
+/* WebView SDK sidebar matches the compact native navigation rail. */
+html.windows-app-sdk-preview #waves-desktop-sidebar,
+html.webview-sdk-preview #waves-desktop-sidebar,
+html.windows-app-sdk-preview #waves-mobile-sidebar,
+html.webview-sdk-preview #waves-mobile-sidebar {
+  width: 207px !important;
+  min-width: 207px !important;
+  max-width: 207px !important;
+  background: #141414 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html.windows-app-sdk-preview #waves-desktop-sidebar > div,
+html.webview-sdk-preview #waves-desktop-sidebar > div,
+html.windows-app-sdk-preview #waves-mobile-sidebar > div,
+html.webview-sdk-preview #waves-mobile-sidebar > div {
+  background: #141414 !important;
+}
+
+html.windows-app-sdk-preview #waves-desktop-sidebar .sidebar-items-slide-up,
+html.webview-sdk-preview #waves-desktop-sidebar .sidebar-items-slide-up,
+html.windows-app-sdk-preview #waves-mobile-sidebar .sidebar-items-slide-up,
+html.webview-sdk-preview #waves-mobile-sidebar .sidebar-items-slide-up {
+  padding: 8px 4px 12px !important;
+  gap: 0 !important;
+}
+
+html.windows-app-sdk-preview #waves-desktop-sidebar .sidebar-nav-item,
+html.webview-sdk-preview #waves-desktop-sidebar .sidebar-nav-item,
+html.windows-app-sdk-preview #waves-mobile-sidebar .sidebar-nav-item,
+html.webview-sdk-preview #waves-mobile-sidebar .sidebar-nav-item {
+  height: 31px !important;
+  min-height: 31px !important;
+  padding: 0 10px !important;
+  gap: 10px !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: #d6d6d6 !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+}
+
+html.windows-app-sdk-preview #waves-desktop-sidebar .sidebar-nav-item:hover,
+html.webview-sdk-preview #waves-desktop-sidebar .sidebar-nav-item:hover,
+html.windows-app-sdk-preview #waves-mobile-sidebar .sidebar-nav-item:hover,
+html.webview-sdk-preview #waves-mobile-sidebar .sidebar-nav-item:hover {
+  background: #202020 !important;
+}
+
+html.windows-app-sdk-preview #waves-desktop-sidebar .sidebar-nav-item[data-nav-active="true"],
+html.webview-sdk-preview #waves-desktop-sidebar .sidebar-nav-item[data-nav-active="true"],
+html.windows-app-sdk-preview #waves-mobile-sidebar .sidebar-nav-item[data-nav-active="true"],
+html.webview-sdk-preview #waves-mobile-sidebar .sidebar-nav-item[data-nav-active="true"] {
+  color: #f5f5f5 !important;
+  font-weight: 600 !important;
+}
+
+html.windows-app-sdk-preview .topbar-header,
+html.webview-sdk-preview .topbar-header,
+html.windows-app-sdk-preview #topbar-search-box,
+html.webview-sdk-preview #topbar-search-box,
+html.windows-app-sdk-preview #topbar-search-box input,
+html.webview-sdk-preview #topbar-search-box input {
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+}
+
+html.windows-app-sdk-preview #topbar-search-box:focus-within,
+html.webview-sdk-preview #topbar-search-box:focus-within {
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+}
+
 html.windows-app-sdk-preview #waves-desktop-sidebar.w-\[48px\] .sidebar-nav-item,
 html.webview-sdk-preview #waves-desktop-sidebar.w-\[48px\] .sidebar-nav-item,
 html.windows-app-sdk-preview .sidebar-items-slide-up.items-center .sidebar-nav-item,
