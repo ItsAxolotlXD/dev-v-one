@@ -308,7 +308,38 @@ html.webview-sdk-preview .main-tab-page [class*="dark:border-white/10"] {
   border-color: #2b2b2b !important;
 }
 
-/* Sidebar: Giảm space đi một chút giữa các tab (2px) */
+  /* WebView SDK search: compact dark pill with no underline or focus border. */
+  html.windows-app-sdk-preview #topbar-search-box,
+  html.webview-sdk-preview #topbar-search-box {
+    height: 32px !important;
+    min-height: 32px !important;
+    border: 0 !important;
+    border-bottom: 0 !important;
+    border-radius: 9999px !important;
+    background: #1f1f1f !important;
+    box-shadow: none !important;
+  }
+
+  html.windows-app-sdk-preview #topbar-search-box:focus-within,
+  html.webview-sdk-preview #topbar-search-box:focus-within {
+    border: 0 !important;
+    border-bottom: 0 !important;
+    box-shadow: none !important;
+    outline: 0 !important;
+  }
+
+  html.windows-app-sdk-preview #topbar-search-box input,
+  html.webview-sdk-preview #topbar-search-box input {
+    color: #d6d6d6 !important;
+    font-size: 12px !important;
+  }
+
+  html.windows-app-sdk-preview #topbar-search-box input::placeholder,
+  html.webview-sdk-preview #topbar-search-box input::placeholder {
+    color: #989898 !important;
+  }
+
+  /* Sidebar: Giảm space đi một chút giữa các tab (2px) */
 html.windows-app-sdk-preview #waves-desktop-sidebar .sidebar-items-slide-up > :not([hidden]) ~ :not([hidden]),
 html.webview-sdk-preview #waves-desktop-sidebar .sidebar-items-slide-up > :not([hidden]) ~ :not([hidden]),
 html.windows-app-sdk-preview #waves-mobile-sidebar .sidebar-items-slide-up > :not([hidden]) ~ :not([hidden]),
@@ -340,7 +371,35 @@ body.webview-sdk-preview .sidebar-nav-item[data-nav-active="true"]::before {
 
 html.windows-app-sdk-preview .sidebar-static-indicator,
 html.webview-sdk-preview .sidebar-static-indicator {
-  display: none !important;
+  display: block !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+html.windows-app-sdk-preview #waves-desktop-sidebar .sidebar-nav-item[data-nav-active="true"],
+html.webview-sdk-preview #waves-desktop-sidebar .sidebar-nav-item[data-nav-active="true"],
+html.windows-app-sdk-preview #waves-mobile-sidebar .sidebar-nav-item[data-nav-active="true"],
+html.webview-sdk-preview #waves-mobile-sidebar .sidebar-nav-item[data-nav-active="true"] {
+  position: relative !important;
+  overflow: visible !important;
+}
+
+html.windows-app-sdk-preview #waves-desktop-sidebar .sidebar-nav-item[data-nav-active="true"]::before,
+html.webview-sdk-preview #waves-desktop-sidebar .sidebar-nav-item[data-nav-active="true"]::before,
+html.windows-app-sdk-preview #waves-mobile-sidebar .sidebar-nav-item[data-nav-active="true"]::before,
+html.webview-sdk-preview #waves-mobile-sidebar .sidebar-nav-item[data-nav-active="true"]::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 50% !important;
+  width: 3px !important;
+  height: 16px !important;
+  transform: translateY(-50%) !important;
+  border-radius: 0 9999px 9999px 0 !important;
+  background: #4cc2ff !important;
+  opacity: 1 !important;
+  z-index: 50 !important;
 }
 
 /* Sidebar: Thu nhỏ icon trên sidebar 1 chút, giảm height các tabs trên sidebar 1 chút */
@@ -369,6 +428,80 @@ html.webview-sdk-preview .sidebar-nav-item [class*="h-5"] {
   min-height: 15px !important;
   max-width: 15px !important;
   max-height: 15px !important;
+}
+
+/* WebView SDK sidebar matches the compact native navigation rail. */
+html.windows-app-sdk-preview #waves-desktop-sidebar,
+html.webview-sdk-preview #waves-desktop-sidebar,
+html.windows-app-sdk-preview #waves-mobile-sidebar,
+html.webview-sdk-preview #waves-mobile-sidebar {
+  width: 207px !important;
+  min-width: 207px !important;
+  max-width: 207px !important;
+  background: #141414 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html.windows-app-sdk-preview #waves-desktop-sidebar > div,
+html.webview-sdk-preview #waves-desktop-sidebar > div,
+html.windows-app-sdk-preview #waves-mobile-sidebar > div,
+html.webview-sdk-preview #waves-mobile-sidebar > div {
+  background: #141414 !important;
+}
+
+html.windows-app-sdk-preview #waves-desktop-sidebar .sidebar-items-slide-up,
+html.webview-sdk-preview #waves-desktop-sidebar .sidebar-items-slide-up,
+html.windows-app-sdk-preview #waves-mobile-sidebar .sidebar-items-slide-up,
+html.webview-sdk-preview #waves-mobile-sidebar .sidebar-items-slide-up {
+  padding: 8px 4px 12px !important;
+  gap: 0 !important;
+}
+
+html.windows-app-sdk-preview #waves-desktop-sidebar .sidebar-nav-item,
+html.webview-sdk-preview #waves-desktop-sidebar .sidebar-nav-item,
+html.windows-app-sdk-preview #waves-mobile-sidebar .sidebar-nav-item,
+html.webview-sdk-preview #waves-mobile-sidebar .sidebar-nav-item {
+  height: 31px !important;
+  min-height: 31px !important;
+  padding: 0 10px !important;
+  gap: 10px !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: #d6d6d6 !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+}
+
+html.windows-app-sdk-preview #waves-desktop-sidebar .sidebar-nav-item:hover,
+html.webview-sdk-preview #waves-desktop-sidebar .sidebar-nav-item:hover,
+html.windows-app-sdk-preview #waves-mobile-sidebar .sidebar-nav-item:hover,
+html.webview-sdk-preview #waves-mobile-sidebar .sidebar-nav-item:hover {
+  background: #202020 !important;
+}
+
+html.windows-app-sdk-preview #waves-desktop-sidebar .sidebar-nav-item[data-nav-active="true"],
+html.webview-sdk-preview #waves-desktop-sidebar .sidebar-nav-item[data-nav-active="true"],
+html.windows-app-sdk-preview #waves-mobile-sidebar .sidebar-nav-item[data-nav-active="true"],
+html.webview-sdk-preview #waves-mobile-sidebar .sidebar-nav-item[data-nav-active="true"] {
+  color: #f5f5f5 !important;
+  font-weight: 600 !important;
+}
+
+html.windows-app-sdk-preview .topbar-header,
+html.webview-sdk-preview .topbar-header,
+html.windows-app-sdk-preview #topbar-search-box,
+html.webview-sdk-preview #topbar-search-box,
+html.windows-app-sdk-preview #topbar-search-box input,
+html.webview-sdk-preview #topbar-search-box input {
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+}
+
+html.windows-app-sdk-preview #topbar-search-box:focus-within,
+html.webview-sdk-preview #topbar-search-box:focus-within {
+  border-bottom: 0 !important;
+  box-shadow: none !important;
 }
 
 html.windows-app-sdk-preview #waves-desktop-sidebar.w-\[48px\] .sidebar-nav-item,
@@ -425,6 +558,10 @@ html.windows-app-sdk-preview #spotlight-search-container,
 html.webview-sdk-preview #spotlight-search-container,
 html.windows-app-sdk-preview #find-words-bar,
 html.webview-sdk-preview #find-words-bar,
+html.windows-app-sdk-preview #topbar-search-box::before,
+html.webview-sdk-preview #topbar-search-box::before,
+html.windows-app-sdk-preview #topbar-search-box::after,
+html.webview-sdk-preview #topbar-search-box::after,
 html.windows-app-sdk-preview input[type="search"],
 html.webview-sdk-preview input[type="search"] {
   border-radius: 100px !important;
@@ -493,6 +630,33 @@ html.light-mode.webview-sdk-preview .fluent-search-box:focus-within {
   background-color: #d2d5dc !important;
   border: none !important;
   border-bottom: none !important;
+}
+
+/* WebView SDK: keep all search corners identical and remove residual bottom lines. */
+html.windows-app-sdk-preview #topbar-search-box,
+html.webview-sdk-preview #topbar-search-box {
+  border-radius: 9999px !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+}
+
+/* WebView SDK: active navigation uses the blue pill and blue icon without sliding transitions. */
+html.windows-app-sdk-preview .sidebar-nav-item,
+html.webview-sdk-preview .sidebar-nav-item,
+html.windows-app-sdk-preview .sidebar-items-slide-up > *,
+html.webview-sdk-preview .sidebar-items-slide-up > * {
+  transition: none !important;
+  animation: none !important;
+  transform: none !important;
+}
+
+html.windows-app-sdk-preview .sidebar-nav-item[data-nav-active="true"] svg,
+html.webview-sdk-preview .sidebar-nav-item[data-nav-active="true"] svg {
+  color: #4cc2ff !important;
+  stroke: #4cc2ff !important;
+  fill: none !important;
 }
 
 /* Xóa bỏ mọi border-bottom / line / ring ở các input search */
@@ -1112,8 +1276,8 @@ html.light-mode #find-words-bar svg {
 [role="dialog"] .fluent-modal-footer button,
 [role="dialog"] button.fluent-btn-primary,
 [role="dialog"] button.fluent-btn-secondary {
-  height: 32px !important;
-  min-height: 32px !important;
+  height: 38px !important;
+  min-height: 38px !important;
   padding-left: 14px !important;
   padding-right: 14px !important;
   font-size: 12.5px !important;
@@ -2511,7 +2675,7 @@ html.light-mode #floating-search-build-info .build-info-line-2 {
 }
 
 /* ==========================================================================
-   Spatial Glass Border: Viền trắng ở 2 cạnh trên - dưới, giảm opacity dần sang 2 bên trái - phải
+   Spatial Glass Border: Viền trắng ở 2 cạnh trên - dư���i, giảm opacity dần sang 2 bên trái - phải
    Áp dụng đồng nhất cho các nút, ô kênh, banner trong toàn bộ ứng dụng
    ========================================================================== */
 
