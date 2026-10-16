@@ -138,8 +138,17 @@ export const News: React.FC<NewsProps> = ({ navigate, searchQuery, onSearchChang
         {/* Search matching Let's chat Copilot */}
         <div
           id="news-search-box"
-          className="group relative w-full md:w-72 h-8 sm:h-8.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3 gap-2 transition-all rounded-[5px] shrink-0 focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]"
+          className={`group relative w-full md:w-72 h-8 sm:h-8.5 ${
+            settings.windowsAppSdkPreview
+              ? '!rounded-[100px] !bg-[#363636] !border-0 !border-none !shadow-none'
+              : 'rounded-[5px] bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10'
+          } flex items-center px-3 gap-2 transition-all shrink-0 ${
+            settings.windowsAppSdkPreview
+              ? '!border-0 !border-none !ring-0 !outline-none'
+              : 'focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]'
+          }`}
         >
+          <FluentSearchIcon className="w-3.5 h-3.5 text-[#71717a] dark:text-[#a1a1aa] shrink-0 pointer-events-none" />
           <input
             type="text"
             value={localSearch}
@@ -148,7 +157,7 @@ export const News: React.FC<NewsProps> = ({ navigate, searchQuery, onSearchChang
               if (onSearchChange) onSearchChange(e.target.value);
             }}
             placeholder="Search news or use /search..."
-            className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#9ca3af] outline-none border-none py-1 pr-7 no-fluent-line"
+            className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#9ca3af] outline-none border-none py-1 pr-6 no-fluent-line"
           />
           {localSearch ? (
             <button
@@ -158,15 +167,11 @@ export const News: React.FC<NewsProps> = ({ navigate, searchQuery, onSearchChang
                 if (onSearchChange) onSearchChange('');
               }}
               title="Clear search"
-              className="absolute right-1.5 text-[#71717a] dark:text-white hover:text-[#111827] dark:hover:text-white p-0.5 transition-colors cursor-pointer"
+              className="absolute right-2 text-[#71717a] dark:text-white hover:text-[#111827] dark:hover:text-white p-0.5 transition-colors cursor-pointer"
             >
               <X className="w-3.5 h-3.5" />
             </button>
-          ) : (
-            <div className="absolute right-2 text-[#71717a] dark:text-white pointer-events-none flex items-center justify-center">
-              <FluentSearchIcon className="w-3.5 h-3.5 text-[#71717a] dark:text-[#a1a1aa]" />
-            </div>
-          )}
+          ) : null}
         </div>
       </div>
 

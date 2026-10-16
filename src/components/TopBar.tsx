@@ -407,7 +407,9 @@ export const TopBar: React.FC<TopBarProps> = ({
   };
 
   return (
-    <header className="w-full h-14 relative bg-[#f3f3f3] dark:bg-[#1b1f24] px-3 sm:px-6 md:px-8 flex items-center justify-between gap-3 sticky top-0 z-30 select-none">
+    <header className={`topbar-header w-full h-14 relative ${
+      settings.windowsAppSdkPreview ? '!bg-[#141414] border-b border-[#202020]' : 'bg-[#f3f3f3] dark:bg-[#1b1f24]'
+    } px-3 sm:px-6 md:px-8 flex items-center justify-between gap-3 sticky top-0 z-30 select-none`}>
       {/* 1. Left Section */}
       <div className="flex items-center gap-2 sm:gap-3 shrink-0 z-10">
         {settings.navigationMode !== 'floaty' && (
@@ -501,20 +503,28 @@ export const TopBar: React.FC<TopBarProps> = ({
                 setIsSearchFlyoutOpen(true);
               }}
               data-flyout-open={isSearchFlyoutOpen ? "true" : "false"}
-              className={`fluent-search-box group relative w-full h-8 sm:h-8.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3 gap-2 transition-all cursor-text select-none focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff] ${
-                settings.roundedSearchBox ? 'rounded-full' : 'rounded-[8px]'
-              } ${
-                isSearchFlyoutOpen && !settings.roundedSearchBox
-                  ? 'border-b-2 border-b-[#005fb8] dark:border-b-[#4cc2ff]'
-                  : ''
+              className={`fluent-search-box group relative w-full h-8 sm:h-8.5 ${
+                settings.windowsAppSdkPreview
+                  ? '!rounded-[100px] !bg-[#363636] !border-0 !border-none !shadow-none'
+                  : settings.roundedSearchBox
+                    ? 'rounded-full bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10'
+                    : 'rounded-[8px] bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10'
+              } flex items-center px-3 gap-2 transition-all cursor-text select-none ${
+                settings.windowsAppSdkPreview
+                  ? '!border-0 !border-none !ring-0 !outline-none'
+                  : `focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff] ${
+                      isSearchFlyoutOpen && !settings.roundedSearchBox
+                        ? 'border-b-2 border-b-[#005fb8] dark:border-b-[#4cc2ff]'
+                        : ''
+                    }`
               }`}
             >
-              {/* Left Search Icon (if Move search to the left is active) */}
-              {searchExperience === 'left' && (
+              {/* Left Search Icon (if Move search to the left is active OR WebView SDK is enabled) */}
+              {(searchExperience === 'left' || settings.windowsAppSdkPreview) && (
                 <button
                   type="submit"
                   title="Search"
-                  className="text-[#71717a] dark:text-neutral-200 hover:text-[#0078d4] dark:hover:text-[#4cc2ff] p-0.5 transition-colors cursor-pointer flex items-center justify-center shrink-0 -ml-0.5 mr-0.5"
+                  className="text-neutral-300 dark:text-neutral-200 hover:text-[#0078d4] dark:hover:text-[#4cc2ff] p-0.5 transition-colors cursor-pointer flex items-center justify-center shrink-0 -ml-0.5 mr-0.5"
                 >
                   {searchQuery.trim() ? (
                     <SpinningRing size={14} strokeWidth={3.5} color="#4cc2ff" />
@@ -538,10 +548,10 @@ export const TopBar: React.FC<TopBarProps> = ({
                   setIsSearchFlyoutOpen(true);
                 }}
                 placeholder={`Search ${getTabTitle(currentRoute)}`}
-                className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-white outline-none border-none py-1 pr-9 no-fluent-line"
+                className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#a0a6b2] outline-none border-none py-1 pr-9 no-fluent-line"
               />
 
-              {/* Right Action Icons: Search Icon and Clear button (Microphone removed per user request) */}
+              {/* Right Action Icons: Clear button and Right Search Icon */}
               <div className="absolute right-2 flex items-center gap-1 z-10">
                 {searchQuery ? (
                   <button
@@ -557,7 +567,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                   </button>
                 ) : null}
 
-                {searchExperience !== 'left' && searchExperience !== 'hidden' && (
+                {searchExperience !== 'left' && !settings.windowsAppSdkPreview && searchExperience !== 'hidden' && (
                   <button
                     type="submit"
                     title="Search"

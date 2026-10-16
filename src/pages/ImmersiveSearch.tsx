@@ -296,6 +296,7 @@ export const ImmersiveSearch: React.FC<ImmersiveSearchProps> = ({
             }}
             className="group relative w-full max-w-md sm:max-w-lg h-9 sm:h-9.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-4 gap-2.5 rounded-[8px] transition-all cursor-text select-none focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]"
           >
+            <FluentSearchIcon className="w-4 h-4 text-[#71717a] dark:text-[#a1a1aa] shrink-0 pointer-events-none" />
             <input
               ref={inputRef}
               id="immersive-search-input"
@@ -303,9 +304,9 @@ export const ImmersiveSearch: React.FC<ImmersiveSearchProps> = ({
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Let's chat or use /search"
-              className="w-full bg-transparent text-xs sm:text-[13.5px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#9ca3af] outline-none border-none py-1 pr-14 no-fluent-line"
+              className="w-full bg-transparent text-xs sm:text-[13.5px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#9ca3af] outline-none border-none py-1 pr-10 no-fluent-line"
             />
-            {query ? (
+            {query && (
               <button
                 type="button"
                 onClick={(e) => {
@@ -318,10 +319,6 @@ export const ImmersiveSearch: React.FC<ImmersiveSearchProps> = ({
               >
                 <X className="w-3.5 h-3.5" />
               </button>
-            ) : (
-              <div className="absolute right-2.5 text-[#71717a] dark:text-white pointer-events-none">
-                <FluentSearchIcon className="w-4 h-4 text-[#71717a] dark:text-white" />
-              </div>
             )}
           </div>
         </div>

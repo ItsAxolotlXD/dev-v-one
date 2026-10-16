@@ -283,15 +283,19 @@ export const ToolsMenu: React.FC<ToolsMenuProps> = ({
         {isOpen && isRelevant && (
           <motion.div
             id="vplay-tools-dropdown-card"
-            initial={{ opacity: 0, y: placement === 'bottom' ? 6 : -6, scale: 0.98 }}
+            initial={settings.windowsAppSdkPreview ? false : { opacity: 0, y: placement === 'bottom' ? 6 : -6, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: placement === 'bottom' ? 4 : -4, scale: 0.98 }}
-            transition={{ duration: 0.12, ease: 'easeOut' }}
-            className={`${
+            exit={settings.windowsAppSdkPreview ? undefined : { opacity: 0, y: placement === 'bottom' ? 4 : -4, scale: 0.98 }}
+            transition={settings.windowsAppSdkPreview ? { duration: 0 } : { duration: 0.12, ease: 'easeOut' }}
+            className={`context-menu ${
               showTrigger
                 ? (placement === 'bottom' ? 'absolute right-0 bottom-full mb-2 origin-bottom-right' : 'absolute right-0 mt-1.5 origin-top-right')
                 : 'relative origin-bottom-right'
-            } w-[276px] max-w-[calc(100vw-24px)] rounded-[8px] p-1.5 z-50 select-none cursor-default overflow-hidden bg-[#ffffff] dark:bg-[#2c2c2c] text-[#1b1b1b] dark:text-[#f3f3f3] border border-[#e5e5e5] dark:border-[#383838] shadow-[0_8px_18px_rgba(0,0,0,0.14),0_0_2px_rgba(0,0,0,0.10)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.40),0_0_2px_rgba(0,0,0,0.26)] ${className || ''}`}
+            } w-[276px] max-w-[calc(100vw-24px)] rounded-[8px] p-1.5 z-50 select-none cursor-default overflow-hidden ${
+              settings.windowsAppSdkPreview
+                ? '!bg-[#2b2b2b] text-[#f3f3f3] !border-0 !border-none !backdrop-blur-none shadow-[0_8px_24px_rgba(0,0,0,0.5)]'
+                : 'bg-[#ffffff] dark:bg-[#2c2c2c] text-[#1b1b1b] dark:text-[#f3f3f3] border border-[#e5e5e5] dark:border-[#383838] shadow-[0_8px_18px_rgba(0,0,0,0.14),0_0_2px_rgba(0,0,0,0.10)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.40),0_0_2px_rgba(0,0,0,0.26)]'
+            } ${className || ''}`}
           >
             {/* Context Menu Header */}
             <div className="px-2.5 py-1.5 flex items-center justify-between border-b border-black/[0.08] dark:border-white/[0.08] mb-1">

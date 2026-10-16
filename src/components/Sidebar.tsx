@@ -72,12 +72,14 @@ interface MorphingIndicatorProps {
   containerRef: React.RefObject<HTMLDivElement | null>;
   currentRoute: string;
   dependencyKey?: string;
+  isWebViewSdk?: boolean;
 }
 
 const MorphingVerticalIndicator: React.FC<MorphingIndicatorProps> = ({
   containerRef,
   currentRoute,
   dependencyKey,
+  isWebViewSdk,
 }) => {
   const [bounds, setBounds] = useState<{
     top: number;
@@ -154,6 +156,22 @@ const MorphingVerticalIndicator: React.FC<MorphingIndicatorProps> = ({
 
   const INDICATOR_HEIGHT = 16;
   const centeredTop = bounds.top + Math.round((bounds.height - INDICATOR_HEIGHT) / 2);
+
+  // WebView SDK: Selected sidebar tab retains the vertical blue pill, but with NO motion animation across tabs
+  if (isWebViewSdk) {
+    return (
+      <div
+        className="sidebar-static-indicator absolute w-[3px] h-[16px] bg-[#4cc2ff] z-30 pointer-events-none rounded-full shadow-none"
+        style={{
+          top: centeredTop,
+          left: bounds.left,
+          opacity: bounds.visible ? 1 : 0,
+          transition: 'none',
+          animation: 'none',
+        }}
+      />
+    );
+  }
 
   return (
     <motion.div
@@ -548,14 +566,24 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const renderToolsFlyout = (isCollapsedMode = false) => {
     return (
       <motion.div
-        initial={{ opacity: 0, scale: 0.96, y: isCollapsedMode ? 0 : 4 }}
+        initial={settings.windowsAppSdkPreview ? false : { opacity: 0, scale: 0.96, y: isCollapsedMode ? 0 : 4 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.96, y: isCollapsedMode ? 0 : 4 }}
-        transition={{ duration: 0.14, ease: 'easeOut' }}
-        className={`tools-flyout-container absolute z-50 w-[230px] bg-white dark:bg-[#1b1f24] border border-black/10 dark:border-[#3e3e3e] rounded-[6px] shadow-2xl p-1.5 space-y-0.5 text-[#111827] dark:text-white select-none ${
+        exit={settings.windowsAppSdkPreview ? undefined : { opacity: 0, scale: 0.96, y: isCollapsedMode ? 0 : 4 }}
+        transition={settings.windowsAppSdkPreview ? { duration: 0 } : { duration: 0.14, ease: 'easeOut' }}
+        className={`context-menu tools-flyout-container absolute z-50 w-[230px] ${
+          settings.windowsAppSdkPreview
+            ? '!bg-[#2b2b2b] text-[#f3f3f3] !border-0 !border-none !backdrop-blur-none shadow-[0_8px_24px_rgba(0,0,0,0.5)]'
+            : 'bg-white dark:bg-[#1b1f24] border border-black/10 dark:border-[#3e3e3e] shadow-2xl'
+        } rounded-[6px] p-1.5 space-y-0.5 text-[#111827] dark:text-white select-none ${
           isCollapsedMode ? 'left-[52px] bottom-14' : 'left-3 right-3 sm:left-[265px] sm:right-auto bottom-12'
         }`}
-        style={{
+        style={settings.windowsAppSdkPreview ? {
+          backgroundColor: '#2b2b2b',
+          border: 'none',
+          backdropFilter: 'none',
+          WebkitBackdropFilter: 'none',
+          boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
+        } : {
           boxShadow: '0 16px 40px rgba(0,0,0,0.25), 0 2px 8px rgba(0,0,0,0.1)',
         }}
         onClick={(e) => e.stopPropagation()}
@@ -736,18 +764,28 @@ export const Sidebar: React.FC<SidebarProps> = ({
     return (
       <motion.div
         key="signin-flyout-panel"
-        initial={{ opacity: 0, y: 26 }}
+        initial={settings.windowsAppSdkPreview ? false : { opacity: 0, y: 26 }}
         animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 18 }}
-        transition={{ duration: 0.44, ease: [0.16, 1, 0.3, 1] }}
-        className={`signin-flyout-panel signin-flyout-container absolute z-50 w-[264px] bg-white/70 dark:bg-[#1c1c1c]/70 backdrop-blur-3xl backdrop-saturate-150 border border-black/10 dark:border-white/10 rounded-[10px] shadow-[0_16px_48px_rgba(0,0,0,0.22),0_2px_8px_rgba(0,0,0,0.08)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.7),0_2px_8px_rgba(255,255,255,0.04)] p-1.5 space-y-0.5 text-[#111827] dark:text-white select-none ${
+        exit={settings.windowsAppSdkPreview ? undefined : { opacity: 0, y: 18 }}
+        transition={settings.windowsAppSdkPreview ? { duration: 0 } : { duration: 0.44, ease: [0.16, 1, 0.3, 1] }}
+        className={`context-menu signin-flyout-panel signin-flyout-container absolute z-50 w-[264px] ${
+          settings.windowsAppSdkPreview
+            ? '!bg-[#2b2b2b] text-[#f3f3f3] !border-0 !border-none !backdrop-blur-none shadow-[0_8px_24px_rgba(0,0,0,0.5)]'
+            : 'bg-white/70 dark:bg-[#1c1c1c]/70 backdrop-blur-3xl backdrop-saturate-150 border border-black/10 dark:border-white/10 shadow-[0_16px_48px_rgba(0,0,0,0.22),0_2px_8px_rgba(0,0,0,0.08)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.7),0_2px_8px_rgba(255,255,255,0.04)]'
+        } rounded-[10px] p-1.5 space-y-0.5 text-[#111827] dark:text-white select-none ${
           isCollapsedMode
             ? settings.sidebarPosition === 'right'
               ? 'right-[54px] bottom-0'
               : 'left-[54px] bottom-0'
             : 'bottom-full mb-2 left-0 right-0 sm:left-0 sm:right-auto sm:w-[264px]'
         }`}
-        style={{
+        style={settings.windowsAppSdkPreview ? {
+          backgroundColor: '#2b2b2b',
+          border: 'none',
+          backdropFilter: 'none',
+          WebkitBackdropFilter: 'none',
+          boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
+        } : {
           backdropFilter: 'blur(32px) saturate(180%)',
           WebkitBackdropFilter: 'blur(32px) saturate(180%)',
           boxShadow: '0 16px 40px rgba(0,0,0,0.25), 0 2px 8px rgba(0,0,0,0.1)',
@@ -915,13 +953,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div 
           ref={containerRef}
           key="sidebar-nav-expanded"
-          className="sidebar-items-slide-up flex-1 overflow-y-auto pb-4 no-scrollbar space-y-1 px-2.5 font-normal relative"
+          className={`sidebar-items-slide-up flex-1 overflow-y-auto pb-4 no-scrollbar ${
+            settings.windowsAppSdkPreview ? 'space-y-[2px]' : 'space-y-1'
+          } px-2.5 font-normal relative`}
         >
           {/* Morphing Vertical Blue Accent Bar */}
           <MorphingVerticalIndicator
             containerRef={containerRef}
             currentRoute={currentRoute}
             dependencyKey={`${navItems.length}-${isLiveTvExpanded}-${currentRoute}`}
+            isWebViewSdk={settings.windowsAppSdkPreview}
           />
 
           {/* 1. Home */}
@@ -1530,7 +1571,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
             {isCurrentActive('/settings') && (
               <span
                 aria-hidden="true"
-                className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[16px] bg-[#4cc2ff] rounded-full z-30 pointer-events-none"
+                className="sidebar-static-indicator absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[14px] bg-[#4cc2ff] rounded-full z-30 pointer-events-none"
+                style={{ transition: 'none', animation: 'none' }}
               />
             )}
             <FluentSettingsIcon className="w-5 h-5 shrink-0 settings-spin-icon text-black dark:text-white" />
@@ -1549,7 +1591,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
           id="waves-desktop-sidebar"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          className={`hidden md:flex flex-col h-screen bg-[#f3f3f3] dark:bg-[#1b1f24] text-[#111827] dark:text-white select-none shrink-0 fixed top-0 z-40 overflow-visible shadow-none border-r border-[#e5e5e5] dark:border-[#2e2e2e] ${
+          className={`hidden md:flex flex-col h-screen ${
+            settings.windowsAppSdkPreview
+              ? '!bg-[#141414] border-r border-[#202020]'
+              : 'bg-[#f3f3f3] dark:bg-[#1b1f24] border-r border-[#e5e5e5] dark:border-[#2e2e2e]'
+          } text-[#111827] dark:text-white select-none shrink-0 fixed top-0 z-40 overflow-visible shadow-none ${
             settings.sidebarPosition === 'right' ? 'right-0' : 'left-0'
           } ${
             shouldAnimateSidebar ? 'transition-[width] duration-300 ease-in-out' : 'transition-none'
@@ -1557,7 +1603,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             effectiveCollapsed ? 'w-[48px]' : 'w-[260px]'
           }`}
           style={{
-            backgroundColor: settings.theme === 'light' ? '#f3f3f3' : '#1b1f24',
+            backgroundColor: settings.windowsAppSdkPreview ? '#141414' : (settings.theme === 'light' ? '#f3f3f3' : '#1b1f24'),
             backdropFilter: 'none',
             WebkitBackdropFilter: 'none',
             boxShadow: 'none',
@@ -1570,12 +1616,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div 
               ref={collapsedNavRef}
               key="sidebar-nav-collapsed"
-              className="sidebar-items-slide-up flex flex-col h-full select-none items-center py-2.5 space-y-1 relative"
+              className={`sidebar-items-slide-up flex flex-col h-full select-none items-center py-2.5 ${
+                settings.windowsAppSdkPreview ? 'space-y-[2px]' : 'space-y-1'
+              } relative`}
             >
               <MorphingVerticalIndicator
                 containerRef={collapsedNavRef}
                 currentRoute={currentRoute}
                 dependencyKey={`${navItems.length}-${currentRoute}`}
+                isWebViewSdk={settings.windowsAppSdkPreview}
               />
 
               {/* Back Button with Left Arrow */}
@@ -2058,7 +2107,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   {isCurrentActive('/settings') && (
                     <span
                       aria-hidden="true"
-                      className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[16px] bg-[#4cc2ff] rounded-full z-30 pointer-events-none"
+                      className="sidebar-static-indicator absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[14px] bg-[#4cc2ff] rounded-full z-30 pointer-events-none"
+                      style={{ transition: 'none', animation: 'none' }}
                     />
                   )}
                   <FluentSettingsIcon className="w-5 h-5 settings-spin-icon text-[#111827] dark:text-white" />
@@ -2102,10 +2152,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }}
               onTouchStart={handleDrawerTouchStart}
               onTouchEnd={handleDrawerTouchEnd}
-              className="relative w-[285px] max-w-[85vw] h-full bg-[#f3f3f3]/90 dark:bg-[#1b1f24]/90 text-[#111827] dark:text-white shadow-none flex flex-col z-10 border-r border-[#e5e5e5] dark:border-[#333333] backdrop-blur-2xl"
+              className={`relative w-[285px] max-w-[85vw] h-full ${
+                settings.windowsAppSdkPreview
+                  ? '!bg-[#141414] border-r border-[#202020]'
+                  : 'bg-[#f3f3f3]/90 dark:bg-[#1b1f24]/90 border-r border-[#e5e5e5] dark:border-[#333333]'
+              } text-[#111827] dark:text-white shadow-none flex flex-col z-10 backdrop-blur-2xl`}
               style={{
-                backdropFilter: 'blur(24px)',
-                WebkitBackdropFilter: 'blur(24px)',
+                backgroundColor: settings.windowsAppSdkPreview ? '#141414' : undefined,
+                backdropFilter: settings.windowsAppSdkPreview ? 'none' : 'blur(24px)',
+                WebkitBackdropFilter: settings.windowsAppSdkPreview ? 'none' : 'blur(24px)',
                 boxShadow: 'none',
               }}
             >

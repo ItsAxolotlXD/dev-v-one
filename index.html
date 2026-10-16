@@ -45,8 +45,8 @@
               if (s.searchIconTreatment) {
                 document.documentElement.dataset.searchIconTreatment = s.searchIconTreatment;
               }
-              if (s.windowsAppSdkPreview) {
-                document.documentElement.classList.add('windows-app-sdk-preview');
+              if (s.windowsAppSdkPreview || s.webviewSdkPreview) {
+                document.documentElement.classList.add('windows-app-sdk-preview', 'webview-sdk-preview');
               }
             } catch(e) {}
           }

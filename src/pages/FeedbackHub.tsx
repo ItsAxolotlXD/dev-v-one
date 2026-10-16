@@ -44,8 +44,8 @@ const DEFAULT_FEEDBACKS: FeedbackItem[] = [
   {
     id: 'fb-1',
     type: 'suggestion',
-    title: 'Hỗ trợ thêm tùy chọn Insider Flags "Windows App SDK Test Preview" để đổi nền màu xám tối',
-    description: 'Mong muốn có thêm flag thử nghiệm Windows App SDK để giao diện main tab page hiển thị tông màu xám tối chuẩn WinUI 3 desktop hiện đại.',
+    title: 'Hỗ trợ thêm tùy chọn Insider Flags "WebView SDK Test Preview" để đổi nền màu xám tối',
+    description: 'Mong muốn có thêm flag thử nghiệm WebView SDK để giao diện main tab page, thanh bên và thanh trên cùng hiển thị tông màu xám tối chuẩn WebView desktop hiện đại.',
     category: 'Fluent Design & Mica',
     upvotes: 142,
     hasUpvoted: true,
@@ -363,7 +363,7 @@ export const FeedbackHub: React.FC<FeedbackHubProps> = ({ navigate }) => {
                 <div className="text-2xl font-bold mt-2">
                   {feedbacks.filter((f) => f.status === 'resolved').length}
                 </div>
-                <span className="text-[11px] text-neutral-500 font-medium">Bao gồm Windows App SDK, Calculator, Snipping Tool</span>
+                <span className="text-[11px] text-neutral-500 font-medium">Bao gồm WebView SDK, Calculator, Snipping Tool</span>
               </div>
               <div className="p-4 rounded-xl bg-white dark:bg-[#23272d] border border-black/10 dark:border-white/10 shadow-xs">
                 <div className="flex items-center justify-between">

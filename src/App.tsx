@@ -19,6 +19,7 @@ import { NativeKeyboardProvider } from './context/NativeKeyboardContext';
 import { NotesProvider } from './context/NotesContext';
 import { StickyNoteWidget } from './components/StickyNoteWidget';
 import { TabLoadingScreen } from './components/TabLoadingScreen';
+import { GlobalContextMenu } from './components/GlobalContextMenu';
 import { Home } from './pages/Home';
 import { LiveTV } from './pages/LiveTV';
 import { TestChannels } from './pages/TestChannels';
@@ -839,7 +840,9 @@ export default function App() {
       )}
 
       {/* Main App Container */}
-      <div className={`flex-1 flex flex-col min-w-0 min-h-screen transition-[padding] duration-300 ease-in-out bg-[#f3f3f3] dark:bg-[#1b1f24] ${
+      <div className={`main-app-container flex-1 flex flex-col min-w-0 min-h-screen transition-[padding] duration-300 ease-in-out ${
+        settings.windowsAppSdkPreview ? 'bg-[#141414]' : 'bg-[#f3f3f3] dark:bg-[#1b1f24]'
+      } ${
         settings.navigationMode === 'topbar'
           ? 'md:pl-0 md:pr-0 pb-10'
           : !settings.dockToSidebar || settings.navigationMode !== 'sidebar'
@@ -1035,6 +1038,19 @@ export default function App() {
           onFinish={() => setIsUpdating(false)}
         />
       )}
+
+      {/* Global WebView SDK Context Menu */}
+      <GlobalContextMenu
+        navigate={navigate}
+        onOpenSearch={handleOpenSearch}
+        onOpenTools={() => {
+          if (currentRoute === '/live-tv') {
+            setIsCustomStreamModalOpen(true);
+          } else {
+            setIsHelpModalOpen(true);
+          }
+        }}
+      />
     </div>
       </NotesProvider>
     </NativeKeyboardProvider>

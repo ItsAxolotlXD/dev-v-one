@@ -290,14 +290,17 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
   return (
     <div
       key="windows-search-copilot-flyout"
-      className={`copilot-flyout-container absolute top-full left-0 right-0 w-full z-[999] select-none text-white font-sans overflow-hidden ${
-        isPill
-          ? 'rounded-[16px] mt-2 shadow-[0_20px_50px_rgba(0,0,0,0.65)] border border-black/15 dark:border-white/10'
-          : 'rounded-b-[8px] rounded-t-none -mt-px shadow-[0_20px_50px_rgba(0,0,0,0.65)] border border-black/15 dark:border-white/10 border-t-0'
-      } bg-[#1f2025]/95 dark:bg-[#1b1c21]/95 backdrop-blur-2xl p-2.5 pb-3 flex flex-col`}
+      className={`context-menu copilot-flyout-container absolute top-full left-0 right-0 w-full z-[999] select-none text-white font-sans overflow-hidden ${
+        settings.windowsAppSdkPreview
+          ? 'rounded-b-[8px] rounded-t-none -mt-px !bg-[#2b2b2b] !border-0 !border-none !backdrop-blur-none shadow-[0_20px_50px_rgba(0,0,0,0.65)]'
+          : isPill
+            ? 'rounded-[16px] mt-2 shadow-[0_20px_50px_rgba(0,0,0,0.65)] border border-black/15 dark:border-white/10 bg-[#1f2025]/95 dark:bg-[#1b1c21]/95 backdrop-blur-2xl'
+            : 'rounded-b-[8px] rounded-t-none -mt-px shadow-[0_20px_50px_rgba(0,0,0,0.65)] border border-black/15 dark:border-white/10 border-t-0 bg-[#1f2025]/95 dark:bg-[#1b1c21]/95 backdrop-blur-2xl'
+      } p-2.5 pb-3 flex flex-col`}
       style={{
-        backdropFilter: 'blur(32px) saturate(160%)',
-        WebkitBackdropFilter: 'blur(32px) saturate(160%)',
+        backdropFilter: settings.windowsAppSdkPreview ? 'none' : 'blur(32px) saturate(160%)',
+        WebkitBackdropFilter: settings.windowsAppSdkPreview ? 'none' : 'blur(32px) saturate(160%)',
+        backgroundColor: settings.windowsAppSdkPreview ? '#2b2b2b' : undefined,
         animation: 'none',
         transform: 'none',
       }}

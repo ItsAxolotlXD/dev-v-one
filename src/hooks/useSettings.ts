@@ -191,7 +191,9 @@ export const getStoredSettings = (): SystemSettings => {
         experimentalSearchExperience: parsed.experimentalSearchExperience || 'right',
         roundedSearchBox: typeof parsed.roundedSearchBox === 'boolean' ? parsed.roundedSearchBox : false,
         searchIconTreatment: (['default', 'flipped', 'sparkle', 'globe'].includes(parsed.searchIconTreatment) ? parsed.searchIconTreatment : 'default') as SearchIconTreatment,
-        windowsAppSdkPreview: typeof parsed.windowsAppSdkPreview === 'boolean' ? parsed.windowsAppSdkPreview : false,
+        windowsAppSdkPreview: typeof parsed.windowsAppSdkPreview === 'boolean' 
+          ? parsed.windowsAppSdkPreview 
+          : (typeof parsed.webviewSdkPreview === 'boolean' ? parsed.webviewSdkPreview : false),
         pageLoading: typeof parsed.pageLoading === 'boolean' ? parsed.pageLoading : true,
         loadPagesSequentially: typeof parsed.loadPagesSequentially === 'boolean' ? parsed.loadPagesSequentially : false,
         fontScale,
@@ -272,13 +274,13 @@ export const applySystemSettings = (settings: SystemSettings) => {
   // Search icon treatment attribute on document
   document.documentElement.dataset.searchIconTreatment = settings.searchIconTreatment || 'default';
 
-  // Windows App SDK Test Preview
+  // WebView SDK / Windows App SDK Test Preview
   if (settings.windowsAppSdkPreview) {
-    document.documentElement.classList.add('windows-app-sdk-preview');
-    document.body?.classList.add('windows-app-sdk-preview');
+    document.documentElement.classList.add('windows-app-sdk-preview', 'webview-sdk-preview');
+    document.body?.classList.add('windows-app-sdk-preview', 'webview-sdk-preview');
   } else {
-    document.documentElement.classList.remove('windows-app-sdk-preview');
-    document.body?.classList.remove('windows-app-sdk-preview');
+    document.documentElement.classList.remove('windows-app-sdk-preview', 'webview-sdk-preview');
+    document.body?.classList.remove('windows-app-sdk-preview', 'webview-sdk-preview');
   }
 
   // Apply font scale
@@ -399,7 +401,9 @@ export const updateDraftSetting = <K extends keyof SystemSettings>(key: K, value
 
     if (key === 'windowsAppSdkPreview') {
       document.documentElement.classList.toggle('windows-app-sdk-preview', Boolean(value));
+      document.documentElement.classList.toggle('webview-sdk-preview', Boolean(value));
       document.body?.classList.toggle('windows-app-sdk-preview', Boolean(value));
+      document.body?.classList.toggle('webview-sdk-preview', Boolean(value));
     }
   }
   notifyDraftListeners();
