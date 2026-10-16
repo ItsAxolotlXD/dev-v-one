@@ -308,7 +308,38 @@ html.webview-sdk-preview .main-tab-page [class*="dark:border-white/10"] {
   border-color: #2b2b2b !important;
 }
 
-/* Sidebar: Giảm space đi một chút giữa các tab (2px) */
+  /* WebView SDK search: compact dark pill with no underline or focus border. */
+  html.windows-app-sdk-preview #topbar-search-box,
+  html.webview-sdk-preview #topbar-search-box {
+    height: 32px !important;
+    min-height: 32px !important;
+    border: 0 !important;
+    border-bottom: 0 !important;
+    border-radius: 9999px !important;
+    background: #1f1f1f !important;
+    box-shadow: none !important;
+  }
+
+  html.windows-app-sdk-preview #topbar-search-box:focus-within,
+  html.webview-sdk-preview #topbar-search-box:focus-within {
+    border: 0 !important;
+    border-bottom: 0 !important;
+    box-shadow: none !important;
+    outline: 0 !important;
+  }
+
+  html.windows-app-sdk-preview #topbar-search-box input,
+  html.webview-sdk-preview #topbar-search-box input {
+    color: #d6d6d6 !important;
+    font-size: 12px !important;
+  }
+
+  html.windows-app-sdk-preview #topbar-search-box input::placeholder,
+  html.webview-sdk-preview #topbar-search-box input::placeholder {
+    color: #989898 !important;
+  }
+
+  /* Sidebar: Giảm space đi một chút giữa các tab (2px) */
 html.windows-app-sdk-preview #waves-desktop-sidebar .sidebar-items-slide-up > :not([hidden]) ~ :not([hidden]),
 html.webview-sdk-preview #waves-desktop-sidebar .sidebar-items-slide-up > :not([hidden]) ~ :not([hidden]),
 html.windows-app-sdk-preview #waves-mobile-sidebar .sidebar-items-slide-up > :not([hidden]) ~ :not([hidden]),
@@ -2515,7 +2546,7 @@ html.light-mode #floating-search-build-info .build-info-line-2 {
 }
 
 /* ==========================================================================
-   Spatial Glass Border: Viền trắng ở 2 cạnh trên - dưới, giảm opacity dần sang 2 bên trái - phải
+   Spatial Glass Border: Viền trắng ở 2 cạnh trên - dư���i, giảm opacity dần sang 2 bên trái - phải
    Áp dụng đồng nhất cho các nút, ô kênh, banner trong toàn bộ ứng dụng
    ========================================================================== */
 
