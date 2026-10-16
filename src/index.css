@@ -371,7 +371,35 @@ body.webview-sdk-preview .sidebar-nav-item[data-nav-active="true"]::before {
 
 html.windows-app-sdk-preview .sidebar-static-indicator,
 html.webview-sdk-preview .sidebar-static-indicator {
-  display: none !important;
+  display: block !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+html.windows-app-sdk-preview #waves-desktop-sidebar .sidebar-nav-item[data-nav-active="true"],
+html.webview-sdk-preview #waves-desktop-sidebar .sidebar-nav-item[data-nav-active="true"],
+html.windows-app-sdk-preview #waves-mobile-sidebar .sidebar-nav-item[data-nav-active="true"],
+html.webview-sdk-preview #waves-mobile-sidebar .sidebar-nav-item[data-nav-active="true"] {
+  position: relative !important;
+  overflow: visible !important;
+}
+
+html.windows-app-sdk-preview #waves-desktop-sidebar .sidebar-nav-item[data-nav-active="true"]::before,
+html.webview-sdk-preview #waves-desktop-sidebar .sidebar-nav-item[data-nav-active="true"]::before,
+html.windows-app-sdk-preview #waves-mobile-sidebar .sidebar-nav-item[data-nav-active="true"]::before,
+html.webview-sdk-preview #waves-mobile-sidebar .sidebar-nav-item[data-nav-active="true"]::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 50% !important;
+  width: 3px !important;
+  height: 16px !important;
+  transform: translateY(-50%) !important;
+  border-radius: 0 9999px 9999px 0 !important;
+  background: #4cc2ff !important;
+  opacity: 1 !important;
+  z-index: 50 !important;
 }
 
 /* Sidebar: Thu nhỏ icon trên sidebar 1 chút, giảm height các tabs trên sidebar 1 chút */
@@ -1248,8 +1276,8 @@ html.light-mode #find-words-bar svg {
 [role="dialog"] .fluent-modal-footer button,
 [role="dialog"] button.fluent-btn-primary,
 [role="dialog"] button.fluent-btn-secondary {
-  height: 34px !important;
-  min-height: 34px !important;
+  height: 38px !important;
+  min-height: 38px !important;
   padding-left: 14px !important;
   padding-right: 14px !important;
   font-size: 12.5px !important;
