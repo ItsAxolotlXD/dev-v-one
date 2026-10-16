@@ -505,13 +505,13 @@ export const TopBar: React.FC<TopBarProps> = ({
                 setIsSearchFlyoutOpen(true);
               }}
               data-flyout-open={isSearchFlyoutOpen ? "true" : "false"}
-              className={`fluent-search-box group relative w-full h-8 sm:h-8.5 ${
+              className={`fluent-search-box group relative w-full h-8.5 sm:h-9 ${
                 settings.windowsAppSdkPreview
-                  ? '!rounded-[9999px] !bg-[#1f1f1f] !border-0 !border-none !border-b-0 !shadow-none'
+                  ? '!h-[34px] !min-h-[34px] !rounded-[9999px] !bg-[#1f1f1f] !border-0 !border-none !border-b-0 !shadow-none'
                   : settings.roundedSearchBox
                     ? 'rounded-full bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10'
                     : 'rounded-[8px] bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10'
-              } flex items-center px-3 gap-2 transition-all cursor-text select-none ${
+              } flex items-center px-2 gap-1 transition-all cursor-text select-none ${
                 settings.windowsAppSdkPreview
                   ? '!border-0 !border-none !ring-0 !outline-none'
                   : `focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff] ${
@@ -526,7 +526,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                 <button
                   type="submit"
                   title="Search"
-                  className="text-[#a7a7a7] hover:text-white p-1 transition-colors cursor-pointer flex items-center justify-center shrink-0 -ml-0.5 mr-0.5"
+                  className="text-[#a7a7a7] hover:text-white p-1 transition-colors cursor-pointer flex items-center justify-center shrink-0 -ml-0.5 mr-0"
                 >
                   {searchQuery.trim() ? (
                     <SpinningRing size={14} strokeWidth={3.5} color="#4cc2ff" />

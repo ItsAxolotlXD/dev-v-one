@@ -1221,8 +1221,8 @@ html.light-mode #find-words-bar svg {
 [role="dialog"] .fluent-modal-footer button,
 [role="dialog"] button.fluent-btn-primary,
 [role="dialog"] button.fluent-btn-secondary {
-  height: 32px !important;
-  min-height: 32px !important;
+  height: 34px !important;
+  min-height: 34px !important;
   padding-left: 14px !important;
   padding-right: 14px !important;
   font-size: 12.5px !important;
