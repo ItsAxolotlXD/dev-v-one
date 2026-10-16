@@ -348,6 +348,11 @@ function getDraftSnapshot(): SystemSettings {
 export const updateDraftSetting = <K extends keyof SystemSettings>(key: K, value: SystemSettings[K]) => {
   draftSettingsStore = { ...draftSettingsStore, [key]: value };
 
+  // WebView SDK uses the native left-aligned search layout by default.
+  if (key === 'windowsAppSdkPreview' && value === true) {
+    draftSettingsStore.experimentalSearchExperience = 'left';
+  }
+
   // Khi bật light mode, opacity của spatial glass tự động nhảy lên 43%
   if (key === 'theme') {
     if (value === 'light') {

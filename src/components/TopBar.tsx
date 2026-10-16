@@ -150,7 +150,10 @@ export const TopBar: React.FC<TopBarProps> = ({
   onDismissUnsavedTooltip = () => {}
 }) => {
   const { settings, hasChanges, applyDraftSettings } = useSettings();
-  const searchExperience = settings.experimentalSearchExperience || 'right';
+  // WebView SDK follows the native layout: search stays on the left by default.
+  const searchExperience = settings.windowsAppSdkPreview
+    ? 'left'
+    : (settings.experimentalSearchExperience || 'right');
   const isMobile = useIsMobile();
   const [logoError, setLogoError] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -524,7 +527,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                 <button
                   type="submit"
                   title="Search"
-                  className="text-neutral-300 dark:text-neutral-200 hover:text-[#0078d4] dark:hover:text-[#4cc2ff] p-0.5 transition-colors cursor-pointer flex items-center justify-center shrink-0 -ml-0.5 mr-0.5"
+                  className="text-neutral-300 dark:text-neutral-200 hover:text-[#0078d4] dark:hover:text-[#4cc2ff] p-1 transition-colors cursor-pointer flex items-center justify-center shrink-0 -ml-0.5 mr-0.5"
                 >
                   {searchQuery.trim() ? (
                     <SpinningRing size={14} strokeWidth={3.5} color="#4cc2ff" />
@@ -574,9 +577,9 @@ export const TopBar: React.FC<TopBarProps> = ({
                     className="text-[#71717a] dark:text-neutral-200 hover:text-[#0078d4] dark:hover:text-[#4cc2ff] p-1 transition-colors cursor-pointer flex items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10"
                   >
                     {searchQuery.trim() ? (
-                      <SpinningRing size={14} strokeWidth={3.5} color="#4cc2ff" />
+<SpinningRing size={17} strokeWidth={3.5} color="#4cc2ff" />
                     ) : (
-                      <FluentSearchIcon className="w-3.5 h-3.5 shrink-0" />
+<FluentSearchIcon className="w-4.5 h-4.5 shrink-0" />
                     )}
                   </button>
                 )}
