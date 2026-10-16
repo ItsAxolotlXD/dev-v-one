@@ -604,6 +604,33 @@ html.light-mode.webview-sdk-preview .fluent-search-box:focus-within {
   border-bottom: none !important;
 }
 
+/* WebView SDK: keep all search corners identical and remove residual bottom lines. */
+html.windows-app-sdk-preview #topbar-search-box,
+html.webview-sdk-preview #topbar-search-box {
+  border-radius: 9999px !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+}
+
+/* WebView SDK: active navigation uses the blue pill and blue icon without sliding transitions. */
+html.windows-app-sdk-preview .sidebar-nav-item,
+html.webview-sdk-preview .sidebar-nav-item,
+html.windows-app-sdk-preview .sidebar-items-slide-up > *,
+html.webview-sdk-preview .sidebar-items-slide-up > * {
+  transition: none !important;
+  animation: none !important;
+  transform: none !important;
+}
+
+html.windows-app-sdk-preview .sidebar-nav-item[data-nav-active="true"] svg,
+html.webview-sdk-preview .sidebar-nav-item[data-nav-active="true"] svg {
+  color: #4cc2ff !important;
+  stroke: #4cc2ff !important;
+  fill: none !important;
+}
+
 /* Xóa bỏ mọi border-bottom / line / ring ở các input search */
 html.windows-app-sdk-preview input[type="text"]:not(.no-fluent-line):focus,
 html.webview-sdk-preview input[type="text"]:not(.no-fluent-line):focus,
