@@ -4,7 +4,6 @@ import {
   FluentHomeIcon, 
   FluentLiveTvIcon, 
   FluentNewsIcon, 
-  FluentSearchIcon, 
   FluentMicOutlineIcon,
   FluentMicOffOutlineIcon,
   FLUENT_ICON_URLS 
@@ -411,7 +410,7 @@ export const TopBar: React.FC<TopBarProps> = ({
 
   return (
     <header className={`topbar-header w-full h-14 relative ${
-      settings.windowsAppSdkPreview ? '!bg-[#141414] border-b border-[#202020]' : 'bg-[#f3f3f3] dark:bg-[#1b1f24]'
+      settings.windowsAppSdkPreview ? '!bg-[#141414] !border-0 !border-b-0' : 'bg-[#f3f3f3] dark:bg-[#1b1f24]'
     } px-3 sm:px-6 md:px-8 flex items-center justify-between gap-3 sticky top-0 z-30 select-none`}>
       {/* 1. Left Section */}
       <div className="flex items-center gap-2 sm:gap-3 shrink-0 z-10">
@@ -508,7 +507,7 @@ export const TopBar: React.FC<TopBarProps> = ({
               data-flyout-open={isSearchFlyoutOpen ? "true" : "false"}
               className={`fluent-search-box group relative w-full h-8 sm:h-8.5 ${
                 settings.windowsAppSdkPreview
-                  ? '!rounded-[100px] !bg-[#363636] !border-0 !border-none !shadow-none'
+                  ? '!rounded-[100px] !bg-[#363636] !border-0 !border-none !border-b-0 !shadow-none'
                   : settings.roundedSearchBox
                     ? 'rounded-full bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10'
                     : 'rounded-[8px] bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10'
@@ -532,7 +531,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                   {searchQuery.trim() ? (
                     <SpinningRing size={14} strokeWidth={3.5} color="#4cc2ff" />
                   ) : (
-                    <FluentSearchIcon className="w-3.5 h-3.5 shrink-0" />
+                    <Search className="size-[18px] shrink-0" strokeWidth={2.2} />
                   )}
                 </button>
               )}
@@ -579,7 +578,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                     {searchQuery.trim() ? (
 <SpinningRing size={17} strokeWidth={3.5} color="#4cc2ff" />
                     ) : (
-<FluentSearchIcon className="w-4.5 h-4.5 shrink-0" />
+<Search className="size-[18px] shrink-0" strokeWidth={2.2} />
                     )}
                   </button>
                 )}

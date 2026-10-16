@@ -425,6 +425,10 @@ html.windows-app-sdk-preview #spotlight-search-container,
 html.webview-sdk-preview #spotlight-search-container,
 html.windows-app-sdk-preview #find-words-bar,
 html.webview-sdk-preview #find-words-bar,
+html.windows-app-sdk-preview #topbar-search-box::before,
+html.webview-sdk-preview #topbar-search-box::before,
+html.windows-app-sdk-preview #topbar-search-box::after,
+html.webview-sdk-preview #topbar-search-box::after,
 html.windows-app-sdk-preview input[type="search"],
 html.webview-sdk-preview input[type="search"] {
   border-radius: 100px !important;
