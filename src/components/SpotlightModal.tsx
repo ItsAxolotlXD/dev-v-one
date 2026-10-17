@@ -12,7 +12,8 @@ import {
   Radio,
   Film,
   Mic,
-  MicOff
+  MicOff,
+  MessageCircle
 } from 'lucide-react';
 import { 
   FluentHomeIcon, 
@@ -50,11 +51,18 @@ const CATEGORY_ITEMS = [
 ];
 
 const SETTINGS_SHORTCUTS = [
-  { id: 'set-font', title: 'Text Scaling & Typography', keyword: 'font scale zoom size text' },
-  { id: 'set-autohide', title: 'Auto-hide Side View', keyword: 'auto-hide sidebar collapse' },
+  { id: 'set-font', title: 'Text Scaling & Typography', keyword: 'font scale zoom size text typography' },
+  { id: 'set-autohide', title: 'Auto-hide Side View', keyword: 'auto-hide sidebar collapse side view' },
   { id: 'set-motion', title: 'Motion & Movements', keyword: 'motion movements animation reduce' },
-  { id: 'set-search', title: 'Customize Search Categories', keyword: 'search spotlight categories' },
-  { id: 'set-keybinds', title: 'Custom Keybinds & Shortcuts', keyword: 'keybinds shortcuts keyboard alt' },
+  { id: 'set-search', title: 'Customize Search Categories', keyword: 'search spotlight categories tv news settings' },
+  { id: 'set-keybinds', title: 'Custom Keybinds & Shortcuts', keyword: 'keybinds shortcuts keyboard alt command ctrl' },
+  { id: 'set-theme', title: 'App Theme & Appearance', keyword: 'theme appearance dark light oled acrylic glass blur' },
+  { id: 'set-navigation', title: 'Navigation Bar', keyword: 'navigation bar sidebar side view position' },
+  { id: 'set-transparency', title: 'Spatial Glass & Blur', keyword: 'transparency opacity blur acrylic glass' },
+  { id: 'set-updates', title: 'Software Updates', keyword: 'software update version build' },
+  { id: 'set-accessibility', title: 'Accessibility', keyword: 'accessibility contrast motion keyboard screen reader' },
+  { id: 'set-experimental', title: 'Experimental Features', keyword: 'experimental dev preview beta' },
+  { id: 'set-reset', title: 'Reset Settings', keyword: 'reset restore defaults clear settings' },
 ];
 
 export const SpotlightModal: React.FC<SpotlightModalProps> = ({
@@ -173,10 +181,13 @@ export const SpotlightModal: React.FC<SpotlightModalProps> = ({
     normalizedQuery && (s.title.toLowerCase().includes(normalizedQuery) || s.keyword.toLowerCase().includes(normalizedQuery))
   ) : [];
 
+  const showCopilot = normalizedQuery.length > 1 && /copilot|ask|question|help|explain|hỏi|giúp/i.test(normalizedQuery);
+
   const hasAnyResults = matchedChannels.length > 0 || 
     matchedCategories.length > 0 || 
     matchedNews.length > 0 || 
-    matchedSettings.length > 0;
+    matchedSettings.length > 0 ||
+    showCopilot;
 
   const shouldAnimateModal = !settings.reduceAllMotion && settings.animateModals;
 
@@ -218,7 +229,7 @@ export const SpotlightModal: React.FC<SpotlightModalProps> = ({
                 ease: [0.16, 1, 0.3, 1]
               }
             }}
-            className="fluent-modal-dialog relative w-full max-w-[440px] sm:max-w-[480px] bg-white dark:bg-[#38383d] border border-black/[0.08] dark:border-white/[0.08] rounded-[10px] p-4 sm:p-5 shadow-[0_24px_48px_rgba(0,0,0,0.22),0_2px_6px_rgba(0,0,0,0.08)] dark:shadow-[0_24px_48px_rgba(0,0,0,0.7),0_2px_6px_rgba(255,255,255,0.04)] overflow-hidden z-10 my-auto max-h-[calc(100vh-32px)] flex flex-col text-[#111827] dark:text-[#FFFFFF]"
+            className="fluent-modal-dialog relative w-full max-w-[520px] bg-[#2b2725]/95 dark:bg-[#2b2725]/95 border border-white/[0.12] rounded-[20px] p-3 sm:p-3.5 shadow-[0_28px_70px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-2xl overflow-hidden z-10 my-auto max-h-[calc(100vh-32px)] flex flex-col text-white"
           >
             {viewMode === 'settings' ? (
               /* View 2: Search Settings Menu (Without navigating to Settings tab) */
@@ -265,7 +276,7 @@ export const SpotlightModal: React.FC<SpotlightModalProps> = ({
                   <div 
                     id="setting-spotlight-categories"
                     onClick={() => updateSetting('searchCategories', !settings.searchCategories)}
-                    className="group p-3 rounded-xl bg-[#F9F9F9] dark:bg-[#2B2B2B] border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-between gap-3.5 cursor-default hover:bg-[#F2F2F2] dark:hover:bg-[#323232] transition-colors"
+                    className="group p-3 rounded-[12px] bg-[#332e2b]/80 border border-white/[0.06] flex items-center justify-between gap-3.5 cursor-default hover:bg-[#443d39] hover:border-white/[0.12] transition-all"
                   >
                     <div className="min-w-0 flex-1">
                       <div className="font-semibold text-[#111827] dark:text-white text-[13.5px]">
@@ -295,7 +306,7 @@ export const SpotlightModal: React.FC<SpotlightModalProps> = ({
                   <div 
                     id="setting-spotlight-news"
                     onClick={() => updateSetting('searchNews', !settings.searchNews)}
-                    className="group p-3 rounded-xl bg-[#F9F9F9] dark:bg-[#2B2B2B] border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-between gap-3.5 cursor-default hover:bg-[#F2F2F2] dark:hover:bg-[#323232] transition-colors"
+                    className="group p-3 rounded-[12px] bg-[#332e2b]/80 border border-white/[0.06] flex items-center justify-between gap-3.5 cursor-default hover:bg-[#443d39] hover:border-white/[0.12] transition-all"
                   >
                     <div className="min-w-0 flex-1">
                       <div className="font-semibold text-[#111827] dark:text-white text-[13.5px]">
@@ -396,7 +407,7 @@ export const SpotlightModal: React.FC<SpotlightModalProps> = ({
                   <div 
                     id="setting-spotlight-settings"
                     onClick={() => updateSetting('searchSettings', !settings.searchSettings)}
-                    className="group p-3 rounded-xl bg-[#F9F9F9] dark:bg-[#2B2B2B] border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-between gap-3.5 cursor-default hover:bg-[#F2F2F2] dark:hover:bg-[#323232] transition-colors"
+                    className="group p-3 rounded-[12px] bg-[#332e2b]/80 border border-white/[0.06] flex items-center justify-between gap-3.5 cursor-default hover:bg-[#443d39] hover:border-white/[0.12] transition-all"
                   >
                     <div className="min-w-0 flex-1">
                       <div className="font-semibold text-[#111827] dark:text-white text-[13.5px]">
@@ -433,7 +444,7 @@ export const SpotlightModal: React.FC<SpotlightModalProps> = ({
                     setIsFocused(true);
                     inputRef.current?.focus();
                   }}
-                  className="group relative w-full h-9 sm:h-9.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-3.5 gap-2 rounded-[8px] focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff] transition-all cursor-text select-none"
+                  className="group relative w-full h-10 bg-[#1d1b1a]/85 border border-[#4cc2ff]/80 flex items-center px-3.5 gap-2 rounded-[12px] shadow-[0_0_0_1px_rgba(76,194,255,0.12),0_6px_18px_rgba(0,0,0,0.18)] focus-within:border-[#5dcaff] focus-within:ring-2 focus-within:ring-[#4cc2ff]/20 transition-all cursor-text select-none"
                 >
                   <motion.div 
                     animate={{
@@ -537,7 +548,7 @@ export const SpotlightModal: React.FC<SpotlightModalProps> = ({
 
                 {/* Dynamic Content Area */}
                 {!query ? (
-                  <div className="py-7 sm:py-9 px-3 text-center">
+                  <div className="py-9 sm:py-11 px-3 text-center rounded-[14px] bg-[#332e2b]/45 border border-white/[0.05]">
                     <p className="text-[13px] sm:text-sm text-[#666666] dark:text-[#AAAAAA] leading-relaxed font-normal select-none max-w-[290px] mx-auto">
                       Type keywords or channel numbers to search Sparkle (Dev)
                     </p>
@@ -553,7 +564,7 @@ export const SpotlightModal: React.FC<SpotlightModalProps> = ({
                     {/* 1. Channels */}
                     {matchedChannels.length > 0 && (
                       <div className="space-y-1">
-                        <div className="px-2 py-1 text-[11px] font-semibold uppercase tracking-wider text-[#4cc2ff] flex items-center gap-1.5">
+                        <div className="px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#8fcae8] flex items-center gap-1.5">
                           <CategoryIcon className="w-4 h-4 shrink-0" />
                           <span>Channels ({matchedChannels.length})</span>
                         </div>
@@ -565,10 +576,10 @@ export const SpotlightModal: React.FC<SpotlightModalProps> = ({
                               navigate(`/live-tv?channel=${ch.slug}`);
                               onClose();
                             }}
-                            className="flex items-center justify-between p-2.5 rounded-xl bg-[#F9F9F9] dark:bg-[#2B2B2B] hover:bg-[#F2F2F2] dark:hover:bg-[#343434] border border-black/[0.06] dark:border-white/[0.08] cursor-default transition-colors group"
+                            className="flex items-center justify-between p-2.5 rounded-[12px] bg-[#332e2b]/80 hover:bg-[#443d39] border border-white/[0.06] hover:border-white/[0.12] cursor-default transition-all group"
                           >
                             <div className="flex items-center gap-2.5 min-w-0">
-                              <div className="w-8 h-8 rounded-lg bg-white dark:bg-[#1C1C1C] border border-black/[0.08] dark:border-white/[0.1] flex items-center justify-center text-xs font-bold text-[#111827] dark:text-white shrink-0 p-1 overflow-hidden">
+                              <div className="w-8 h-8 flex items-center justify-center text-xs font-bold text-white shrink-0 p-1 overflow-hidden">
                                 <img
                                    src={ch.logo}
                                   alt={ch.name}
@@ -598,7 +609,7 @@ export const SpotlightModal: React.FC<SpotlightModalProps> = ({
                     {/* 2. Categories / Navigation */}
                     {matchedCategories.length > 0 && (
                       <div className="space-y-1">
-                        <div className="px-2 py-1 text-[11px] font-semibold uppercase tracking-wider text-[#4cc2ff] flex items-center gap-1.5">
+                        <div className="px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#8fcae8] flex items-center gap-1.5">
                           <CategoryIcon className="w-4 h-4 shrink-0" />
                           <span>Categories ({matchedCategories.length})</span>
                         </div>
@@ -611,9 +622,9 @@ export const SpotlightModal: React.FC<SpotlightModalProps> = ({
                                 navigate(item.route);
                                 onClose();
                               }}
-                              className="flex items-center gap-2.5 p-2 rounded-xl bg-[#F9F9F9] dark:bg-[#2B2B2B] hover:bg-[#F2F2F2] dark:hover:bg-[#343434] border border-black/[0.06] dark:border-white/[0.08] cursor-default transition-colors"
+                              className="flex items-center gap-2.5 p-2.5 rounded-[12px] bg-[#332e2b]/80 hover:bg-[#443d39] border border-white/[0.06] hover:border-white/[0.12] cursor-default transition-all"
                             >
-                              <div className="w-7 h-7 rounded-lg bg-black/5 dark:bg-white/10 flex items-center justify-center shrink-0">
+                              <div className="w-7 h-7 flex items-center justify-center shrink-0">
                                 <IconComponent className="w-4 h-4 text-[#4cc2ff]" />
                               </div>
                               <span className="text-xs font-medium text-[#111827] dark:text-white truncate">{item.title}</span>
@@ -626,7 +637,7 @@ export const SpotlightModal: React.FC<SpotlightModalProps> = ({
                     {/* 3. News */}
                     {matchedNews.length > 0 && (
                       <div className="space-y-1">
-                        <div className="px-2 py-1 text-[11px] font-semibold uppercase tracking-wider text-[#4cc2ff] flex items-center gap-1.5">
+                        <div className="px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#8fcae8] flex items-center gap-1.5">
                           <CategoryIcon className="w-4 h-4 shrink-0" />
                           <span>Articles ({matchedNews.length})</span>
                         </div>
@@ -637,7 +648,7 @@ export const SpotlightModal: React.FC<SpotlightModalProps> = ({
                               navigate(`/news/${n.slug}`);
                               onClose();
                             }}
-                            className="flex items-center gap-2.5 p-2 rounded-xl bg-[#F9F9F9] dark:bg-[#2B2B2B] hover:bg-[#F2F2F2] dark:hover:bg-[#343434] border border-black/[0.06] dark:border-white/[0.08] cursor-default transition-colors"
+                            className="flex items-center gap-2.5 p-2.5 rounded-[12px] bg-[#332e2b]/80 hover:bg-[#443d39] border border-white/[0.06] hover:border-white/[0.12] cursor-default transition-all"
                           >
                             <div className="w-10 h-7 rounded bg-black/10 dark:bg-black/40 overflow-hidden shrink-0">
                               <img src={n.coverImage} alt={n.title} className="w-full h-full object-cover" />
@@ -648,10 +659,34 @@ export const SpotlightModal: React.FC<SpotlightModalProps> = ({
                       </div>
                     )}
 
-                    {/* 4. Settings Shortcuts */}
+                    {/* 4. Ask Copilot */}
+                    {showCopilot && (
+                      <div className="space-y-1">
+                        <div className="px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#8fcae8] flex items-center gap-1.5">
+                          <MessageCircle className="w-4 h-4 shrink-0" />
+                          <span>Assistant</span>
+                        </div>
+                        <div
+                          id="spotlight-ask-copilot"
+                          onClick={() => {
+                            navigate('/copilot', { initialPrompt: query });
+                            onClose();
+                          }}
+                          className="flex items-center gap-2.5 p-2.5 rounded-[12px] bg-[#332e2b]/80 hover:bg-[#443d39] border border-white/[0.06] hover:border-white/[0.12] cursor-default transition-all"
+                        >
+                          <MessageCircle className="w-5 h-5 text-[#4cc2ff] shrink-0" />
+                          <div className="min-w-0">
+                            <div className="text-xs font-medium text-white truncate">Ask Copilot</div>
+                            <div className="text-[10px] text-[#AAAAAA] truncate">Ask about “{query}”</div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* 5. Settings Shortcuts */}
                     {matchedSettings.length > 0 && (
                       <div className="space-y-1">
-                        <div className="px-2 py-1 text-[11px] font-semibold uppercase tracking-wider text-[#4cc2ff] flex items-center gap-1.5">
+                        <div className="px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#8fcae8] flex items-center gap-1.5">
                           <CategoryIcon className="w-4 h-4 shrink-0" />
                           <span>Settings ({matchedSettings.length})</span>
                         </div>
@@ -662,9 +697,9 @@ export const SpotlightModal: React.FC<SpotlightModalProps> = ({
                               navigate('/settings');
                               onClose();
                             }}
-                            className="flex items-center gap-2.5 p-2 rounded-xl bg-[#F9F9F9] dark:bg-[#2B2B2B] hover:bg-[#F2F2F2] dark:hover:bg-[#343434] border border-black/[0.06] dark:border-white/[0.08] cursor-default transition-colors"
+                            className="flex items-center gap-2.5 p-2.5 rounded-[12px] bg-[#332e2b]/80 hover:bg-[#443d39] border border-white/[0.06] hover:border-white/[0.12] cursor-default transition-all"
                           >
-                            <div className="w-7 h-7 rounded-lg bg-black/5 dark:bg-white/10 flex items-center justify-center shrink-0">
+                            <div className="w-7 h-7 flex items-center justify-center shrink-0">
                               <SettingsIcon className="w-4 h-4 text-[#4cc2ff]" />
                             </div>
                             <span className="text-xs font-medium text-[#111827] dark:text-white truncate">{st.title}</span>
