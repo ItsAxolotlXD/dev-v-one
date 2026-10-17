@@ -54,6 +54,7 @@ import { MinecraftWiki } from './pages/MinecraftWiki';
 import { Calculator } from './pages/Calculator';
 import { SnippingTool } from './pages/SnippingTool';
 import { FeedbackHub } from './pages/FeedbackHub';
+import { ProductivityTab } from './pages/ProductivityTabs';
 import { SpinningRing } from './components/SpinningRing';
 import { CHANNELS_DATA } from './data/channels';
 import { NEWS_DATA } from './data/news';
@@ -529,6 +530,12 @@ export default function App() {
             onSearchChange={handleTabSearchChange}
           />
         );
+
+      case '/mail':
+        return <ProductivityTab kind="mail" />;
+
+      case '/calendar':
+        return <ProductivityTab kind="calendar" />;
 
       case '/news':
         return (
