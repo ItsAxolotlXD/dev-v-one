@@ -110,7 +110,7 @@ export const Channels: React.FC<ChannelsProps> = ({
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search channels or use /search..."
+            placeholder="Search Channels Or Use /search..."
             className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#a0a6b2] outline-none border-none py-1 pr-7 no-fluent-line"
           />
           <div className="absolute right-2 flex items-center gap-1">

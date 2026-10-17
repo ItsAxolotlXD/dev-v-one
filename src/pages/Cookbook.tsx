@@ -355,7 +355,7 @@ export const Cookbook: React.FC = () => {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Tìm món ăn, nguyên liệu, thịt bò, canh chua..."
+              placeholder="Tìm Món Ăn, Nguyên Liệu, Thịt Bò, Canh Chua..."
               className="w-full bg-transparent text-xs sm:text-sm text-neutral-900 dark:text-white placeholder-neutral-400 outline-none border-none"
             />
             {searchQuery && (

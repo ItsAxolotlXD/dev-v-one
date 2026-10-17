@@ -143,7 +143,7 @@ export const FindWordsBar: React.FC<FindWordsBarProps> = ({ isOpen, onClose }) =
               value={searchTerm}
               onChange={handleSearchChange}
               onKeyDown={handleKeyDown}
-              placeholder="Find in article..."
+              placeholder="Find In Article..."
               className="w-36 sm:w-52 bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-white outline-none border-none py-1 no-fluent-line"
             />
             {searchTerm && (

@@ -629,7 +629,7 @@ export const PhotosApp: React.FC<PhotosAppProps> = ({ navigate }) => {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Tìm ảnh, video..."
+              placeholder="Tìm Ảnh, Video..."
               className="w-full bg-transparent text-xs text-white placeholder-neutral-500 outline-none"
             />
             {searchQuery && (

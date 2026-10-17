@@ -1298,7 +1298,7 @@ export const VlcPlayer: React.FC = () => {
                   type="text"
                   value={playlistSearch}
                   onChange={(e) => setPlaylistSearch(e.target.value)}
-                  placeholder="Tìm kiếm danh sách phát..."
+                  placeholder="Tìm Kiếm Danh Sách Phát..."
                   className="w-full bg-transparent text-xs text-neutral-900 dark:text-white placeholder-neutral-400 outline-none border-none"
                 />
                 {playlistSearch && (

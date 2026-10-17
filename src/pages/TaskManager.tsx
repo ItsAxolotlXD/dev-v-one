@@ -225,7 +225,7 @@ export const TaskManager: React.FC<TaskManagerProps> = ({ navigate }) => {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Tìm kiếm tác vụ (A-Z, PID) hoặc dùng /search..."
+                placeholder="Tìm Kiếm Tác Vụ (A-Z, PID) Hoặc Dùng /search..."
                 className="w-full bg-transparent text-xs text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#9ca3af] outline-none border-none py-1 pr-6 no-fluent-line"
               />
               {searchQuery && (

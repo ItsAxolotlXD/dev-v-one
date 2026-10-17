@@ -165,7 +165,7 @@ export const EpgScheduleWidget: React.FC<EpgScheduleWidgetProps> = ({
               type="text"
               value={filterQuery}
               onChange={(e) => setFilterQuery(e.target.value)}
-              placeholder="Search for programs"
+              placeholder="Search For Programs"
               className="w-full h-9 pl-9 pr-8 rounded-[5px] text-xs sm:text-[13px] bg-white/10 dark:bg-white/10 border-0 outline-none text-white placeholder-[#9CA3AF] focus:ring-1 focus:ring-[#4cc2ff] transition-all"
             />
             <FluentSearchIcon className="w-4 h-4 text-[#9CA3AF] absolute left-3 top-2.5 pointer-events-none" />

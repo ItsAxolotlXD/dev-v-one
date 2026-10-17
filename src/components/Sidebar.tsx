@@ -462,11 +462,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
   icon: FluentPaintIcon,
   },
   {
-  id: 'ink-space',
-  label: 'Ink Space',
-  secondary: 'Infinite canvas',
-  route: '/ink-space',
-  icon: Pencil,
+    id: 'ink-canvas',
+    label: 'Ink Canvas',
+    secondary: 'Infinite canvas',
+    route: '/ink-space',
+    icon: Pencil,
   },
       {
         id: 'swift-bank',
@@ -1401,21 +1401,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
   </button>
   </div>
 
-  {/* 9. Ink Space */}
+  {/* 9. Ink Canvas */}
   <div className="w-full">
     <button
       type="button"
-      id={isMobile ? 'mobile-nav-ink-space' : 'sidebar-nav-ink-space'}
-      data-nav-active={(currentRoute === '/ink-space' || currentRoute === '/inkspace') ? 'true' : undefined}
+      id={isMobile ? 'mobile-nav-ink-canvas' : 'sidebar-nav-ink-canvas'}
+      data-nav-active={(currentRoute === '/ink-space' || currentRoute === '/inkspace' || currentRoute === '/ink-canvas' || currentRoute === '/inkcanvas') ? 'true' : undefined}
       onClick={() => handleNavClick('/ink-space')}
-      title="Ink Space - Infinite canvas"
+      title="Ink Canvas - Infinite canvas"
       className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
-        (currentRoute === '/ink-space' || currentRoute === '/inkspace')
+        (currentRoute === '/ink-space' || currentRoute === '/inkspace' || currentRoute === '/ink-canvas' || currentRoute === '/inkcanvas')
           ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
           : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
       }`}
     >
-      <div className="flex items-center gap-3.5 truncate"><Pencil className="w-5 h-5 shrink-0 text-black dark:text-white" /><span className="truncate text-[13.5px]">Ink Space</span></div>
+      <div className="flex items-center gap-3.5 truncate"><Pencil className="w-5 h-5 shrink-0 text-black dark:text-white" /><span className="truncate text-[13.5px]">Ink Canvas</span></div>
     </button>
   </div>
   

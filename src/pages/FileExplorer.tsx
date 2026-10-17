@@ -636,7 +636,7 @@ export const FileExplorer: React.FC<FileExplorerProps> = ({ navigate }) => {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder={`Tìm trong ${breadcrumbItems[breadcrumbItems.length - 1]?.name}...`}
+            placeholder={`Tìm Trong ${breadcrumbItems[breadcrumbItems.length - 1]?.name}...`}
             className="w-full bg-transparent text-xs text-[#111827] dark:text-white placeholder-neutral-400 outline-none"
           />
         </div>

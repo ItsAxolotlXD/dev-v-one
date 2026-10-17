@@ -860,7 +860,7 @@ export const ClockApp: React.FC<ClockAppProps> = ({ navigate }) => {
               <FluentSearchIcon className="w-3.5 h-3.5 text-neutral-400 shrink-0 pointer-events-none" />
               <input
                 type="text"
-                placeholder="Tìm thành phố hoặc dùng /search..."
+                placeholder="Tìm Thành Phố Hoặc Dùng /search..."
                 value={citySearchQuery}
                 onChange={(e) => setCitySearchQuery(e.target.value)}
                 className="bg-transparent border-none outline-none w-full text-white placeholder-neutral-400 no-fluent-line"

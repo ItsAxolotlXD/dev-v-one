@@ -230,7 +230,7 @@ export const FriendsApp: React.FC<FriendsAppProps> = ({ navigate }) => {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Tìm theo nickname (@hoangnam.dev), họ tên, thành phố..."
+              placeholder="Tìm Theo Nickname (@hoangnam.dev), Họ Tên, Thành Phố..."
               className="w-full bg-transparent text-xs sm:text-sm text-neutral-900 dark:text-white placeholder-neutral-400 outline-none border-none"
             />
             {searchQuery && (

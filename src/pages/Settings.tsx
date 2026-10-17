@@ -342,7 +342,7 @@ export const Settings: React.FC<SettingsProps> = ({
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
-                placeholder="Search in Settings"
+                placeholder="Search In Settings"
                 className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#a0a6b2] outline-none border-none py-1 pr-14 no-fluent-line"
               />
 

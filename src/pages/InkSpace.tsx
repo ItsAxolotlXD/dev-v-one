@@ -77,7 +77,7 @@ export const InkSpace: React.FC<InkSpaceProps> = () => {
       <header className="flex h-14 shrink-0 items-center justify-between border-b border-white/10 px-5">
         <div className="flex items-center gap-3">
           <div className="flex size-9 items-center justify-center rounded-xl bg-[#1e293b] text-[#4cc2ff]"><Pencil className="size-4" /></div>
-          <div><h1 className="text-sm font-semibold">Ink Space</h1><p className="text-[11px] text-white/45">Infinite canvas</p></div>
+          <div><h1 className="text-sm font-semibold">Ink Canvas</h1><p className="text-[11px] text-white/45">Infinite canvas</p></div>
         </div>
         <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-white/[0.04] p-1">
           <button type="button" aria-label="Pen" onClick={() => setTool('pen')} className={`rounded-lg p-2 ${tool === 'pen' ? 'bg-[#4cc2ff]/20 text-[#4cc2ff]' : 'text-white/60 hover:bg-white/10'}`}><Pencil className="size-4" /></button>

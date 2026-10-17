@@ -40,40 +40,45 @@ export const getTabTitle = (route: string): string => {
     case '/home':
       return 'Home';
     case '/settings':
-      return 'settings';
+      return 'Settings';
     case '/live-tv':
       return 'Live TV';
     case '/channels':
-      return 'channels';
+      return 'Channels';
     case '/favorites':
-      return 'favorites';
+      return 'Favorites';
     case '/news':
-      return 'news';
+      return 'News';
     case '/schedule':
-      return 'schedule';
+      return 'Schedule';
     case '/notes':
-      return 'notes';
+      return 'Notes';
     case '/widgets':
-      return 'widgets';
+      return 'Widgets';
     case '/task-manager':
       return 'Task Manager';
     case '/friends':
-      return 'friends';
+      return 'Friends';
     case '/clock':
       return 'Clock';
     case '/photos':
-      return 'photos';
+      return 'Photos';
     case '/camera':
-      return 'camera';
+      return 'Camera';
     case '/browser':
-      return 'browser';
+    case '/edge':
+      return 'Browser';
     case '/swift-bank':
+    case '/bank':
+    case '/swiftbank':
       return 'Swift Bank';
     case '/swift-social':
+    case '/swift':
       return 'Swift Social';
     case '/cookbook':
       return 'Cookbook';
     case '/vlc':
+    case '/media-player':
       return 'VLC';
     case '/photopea':
       return 'Photopea';
@@ -82,17 +87,40 @@ export const getTabTitle = (route: string): string => {
     case '/copilot':
       return 'Copilot';
     case '/file-explorer':
+    case '/files':
       return 'File Explorer';
     case '/paint':
+    case '/ms-paint':
       return 'Paint';
+    case '/ink-space':
+    case '/inkspace':
+    case '/ink-canvas':
+    case '/inkcanvas':
+      return 'Ink Canvas';
+    case '/mail':
+      return 'Mail';
+    case '/calendar':
+      return 'Calendar';
+    case '/calculator':
+    case '/calc':
+      return 'Calculator';
+    case '/snipping-tool':
+    case '/snip':
+    case '/snipping':
+      return 'Snipping Tool';
+    case '/feedback-hub':
+    case '/feedback':
+      return 'Feedback Hub';
     case '/updates':
-      return 'updates';
+      return 'Updates';
     case '/about':
-      return 'about';
+      return 'About';
+    case '/search':
+      return 'Search';
     default: {
-      if (path.startsWith('/article')) return 'article';
-      const clean = path.replace(/^\//, '').replace(/-/g, ' ');
-      return clean || 'Home';
+      if (path.startsWith('/article')) return 'Article';
+      const clean = path.replace(/^\//, '').replace(/[-_/]/g, ' ');
+      return clean.replace(/\b\w/g, (char) => char.toUpperCase()) || 'Home';
     }
   }
 };
@@ -281,6 +309,9 @@ export const TopBar: React.FC<TopBarProps> = ({
       { id: 'page-notes', title: 'Notes', keywords: 'ghi chú soạn thảo notes office', type: 'page', onSelect: () => navigate('/notes') },
       { id: 'page-taskmanager', title: 'Task Manager', keywords: 'task manager quản lý tác vụ processes system performance', type: 'page', onSelect: () => navigate('/task-manager') },
       { id: 'page-widgets', title: 'Widgets', keywords: 'widgets tiện ích bảng tiện ích weather thời tiết lịch vnexpress tin tức', type: 'page', onSelect: () => navigate('/widgets') },
+      { id: 'page-mail', title: 'Mail', keywords: 'mail email hộp thư điện tử outlook fluent mail', type: 'page', onSelect: () => navigate('/mail') },
+      { id: 'page-calendar', title: 'Calendar', keywords: 'calendar lịch lịch vạn niên sự kiện fluent calendar', type: 'page', onSelect: () => navigate('/calendar') },
+      { id: 'page-ink-canvas', title: 'Ink Canvas', keywords: 'ink canvas vẽ infinite canvas bảng vẽ bút vẽ ink space', type: 'page', onSelect: () => navigate('/ink-space') },
       { id: 'page-settings', title: 'Settings', keywords: 'cài đặt hệ thống settings preferences', type: 'page', onSelect: () => navigate('/settings') },
       { id: 'page-about', title: 'About', keywords: 'giới thiệu about sparkle sparkle dev', type: 'page', onSelect: () => navigate('/about') },
 
@@ -557,7 +588,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                 onFocus={() => {
                   setIsSearchFlyoutOpen(true);
                 }}
-                placeholder={`Search ${getTabTitle(currentRoute)}`}
+                placeholder={`Search ${getTabTitle(currentRoute)}`.replace(/\b\w/g, (c) => c.toUpperCase())}
                 className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#a0a6b2] outline-none border-none py-1 pr-9 no-fluent-line"
               />
 

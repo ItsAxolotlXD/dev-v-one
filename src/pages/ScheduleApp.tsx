@@ -248,7 +248,7 @@ export const ScheduleApp: React.FC<ScheduleAppProps> = ({
                 type="text"
                 value={channelSearch}
                 onChange={(e) => setChannelSearch(e.target.value)}
-                placeholder="Tìm kênh (VTV1, HTV7...)"
+                placeholder="Tìm Kênh (VTV1, HTV7...)"
                 className="w-full bg-transparent text-xs text-neutral-900 dark:text-white placeholder-neutral-400 outline-none border-none"
               />
             </div>
@@ -335,7 +335,7 @@ export const ScheduleApp: React.FC<ScheduleAppProps> = ({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Tìm chương trình, thời sự, phim..."
+                placeholder="Tìm Chương Trình, Thời Sự, Phim..."
                 className="w-full bg-transparent text-xs text-neutral-900 dark:text-white placeholder-neutral-400 outline-none border-none"
               />
             </div>

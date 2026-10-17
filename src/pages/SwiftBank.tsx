@@ -1395,7 +1395,7 @@ export const SwiftBank: React.FC<SwiftBankProps> = ({ navigate }) => {
                   <Search className="w-3.5 h-3.5 text-neutral-400" />
                   <input
                     type="text"
-                    placeholder="Tìm theo tên, nội dung, mã..."
+                    placeholder="Tìm Theo Tên, Nội Dung, Mã..."
                     value={historySearch}
                     onChange={(e) => setHistorySearch(e.target.value)}
                     className="bg-transparent border-none outline-none w-36 sm:w-48 text-xs"
