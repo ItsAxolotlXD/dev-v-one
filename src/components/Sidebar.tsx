@@ -59,6 +59,9 @@ import {
   FluentSnippingToolIcon,
   FluentFeedbackHubIcon
 } from './FluentIcons';
+
+const MAIL_TAB_ICON = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-w08Tu7AUdI6LLJeWquYKJiNuuzCnVN.png';
+const CALENDAR_TAB_ICON = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-EOTmadFpTcD8ViTHEiYhPMCbFvwgFn.png';
 import { useFavorites } from '../hooks/useFavorites';
 import { useSettings } from '../hooks/useSettings';
 import { CHANNELS_DATA } from '../data/channels';
@@ -1049,6 +1052,29 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
           </div>
 
+          {/* Productivity tabs */}
+          <div className="shrink-0 flex flex-col gap-0.5">
+            {[
+              { route: '/mail', label: 'Mail', icon: MAIL_TAB_ICON },
+              { route: '/calendar', label: 'Calendar', icon: CALENDAR_TAB_ICON },
+            ].map((item) => {
+              const active = currentRoute === item.route;
+              return (
+                <button
+                  key={item.route}
+                  type="button"
+                  data-nav-active={active ? 'true' : undefined}
+                  onClick={() => handleNavClick(item.route)}
+                  title={item.label}
+                  className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${active ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs' : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'}`}
+                >
+                  <img src={item.icon} alt="" className="size-5 shrink-0 object-contain" />
+                  <span className="truncate text-[13.5px]">{item.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
           {/* Divider & Category Heading: Social (Bên trên category Apps) */}
           <div className="my-2 mx-1 h-[1px] bg-black/10 dark:bg-white/10" />
           <div className="px-1.5 pt-0.5 pb-1 shrink-0">
@@ -1692,7 +1718,24 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <FluentHomeIcon className="w-5 h-5 text-black dark:text-white" />
               </button>
 
-              {/* 2. Articles Icon */}
+              {/* Productivity icons */}
+  {[
+    { route: '/mail', label: 'Mail', icon: MAIL_TAB_ICON },
+    { route: '/calendar', label: 'Calendar', icon: CALENDAR_TAB_ICON },
+  ].map((item) => (
+    <button
+      key={item.route}
+      type="button"
+      data-nav-active={currentRoute === item.route ? 'true' : undefined}
+      onClick={() => handleNavClick(item.route)}
+      title={item.label}
+      className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${currentRoute === item.route ? 'bg-black/5 dark:bg-white/[0.08] shadow-xs' : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'}`}
+    >
+      <img src={item.icon} alt="" className="size-5 object-contain" />
+    </button>
+  ))}
+
+  {/* 2. Articles Icon */}
               <button
                 type="button"
                 id="sidebar-collapsed-articles"
