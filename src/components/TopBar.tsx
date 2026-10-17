@@ -58,7 +58,7 @@ export const getTabTitle = (route: string): string => {
     case '/task-manager':
       return 'Task Manager';
     case '/friends':
-      return 'Friends';
+      return 'People';
     case '/clock':
       return 'Clock';
     case '/photos':
@@ -123,6 +123,29 @@ export const getTabTitle = (route: string): string => {
       return clean.replace(/\b\w/g, (char) => char.toUpperCase()) || 'Home';
     }
   }
+};
+
+const getSearchPlaceholder = (path: string) => {
+  if (path === '/' || path === '/home') return 'Search Home';
+  if (path === '/news' || path.startsWith('/article') || path.startsWith('/news/')) return 'Search news articles';
+  if (path === '/updates' || path.startsWith('/updates/')) return 'Find new updates';
+  if (path === '/widgets' || path.startsWith('/widgets/')) return 'Type here to search';
+  if (path === '/mail') return 'Search your inbox';
+  if (path === '/calendar') return 'Search date and events';
+  if (path === '/friends' || path === '/ban-be') return 'Search for people';
+  if (path === '/copilot' || path.startsWith('/copilot/')) return 'Ask me anything';
+  if (path === '/edge' || path === '/browser') return 'Type here to search';
+  if (['/craftmine', '/bank', '/swift-bank', '/swiftbank', '/snipping-tool', '/snip', '/snipping', '/camera', '/swift-social', '/swift', '/logos-fandom', '/logos-wiki', '/fandom', '/minecraft-wiki', '/mc-wiki', '/wiki', '/file-explorer', '/files'].includes(path)) return 'Search';
+  if (path === '/live-tv' || path.startsWith('/live-tv/') || path === '/channels') return 'Search for channels';
+  if (path === '/notes' || ['/write', '/present', '/table'].includes(path)) return 'Search for notes or stickies';
+  if (path === '/photos' || path.startsWith('/photos/')) return 'Search for photos';
+  if (['/ink-space', '/inkspace', '/ink-canvas', '/inkcanvas'].includes(path)) return 'Search canvases';
+  if (path === '/calculator' || path === '/calc') return 'Search calculations';
+  if (path === '/task-manager' || path.startsWith('/task-manager/')) return 'Find tasks, services or PID';
+  if (path === '/feedback-hub' || path === '/feedback') return 'Find suggestions or reports';
+  if (path === '/photopea' || path.startsWith('/photopea/')) return 'Find actions and tools';
+  if (path === '/settings' || path.startsWith('/settings/')) return 'Search for options';
+  return `Search ${getTabTitle(path)}`;
 };
 
 interface SearchAspectItem {
@@ -316,7 +339,7 @@ export const TopBar: React.FC<TopBarProps> = ({
       { id: 'page-schedule', title: 'Lịch phát sóng', keywords: 'lịch phát sóng schedule epg tv guide truyền hình vtv htv', type: 'page', onSelect: () => navigate('/schedule') },
       { id: 'page-cookbook', title: 'Cookbook', keywords: 'cookbook công thức nấu ăn ẩm thực món ngon recipes', type: 'page', onSelect: () => navigate('/cookbook') },
       { id: 'page-swift', title: 'Swift Social', keywords: 'swift mạng xã hội social threads twitter facebook instagram discord feed chat', type: 'page', onSelect: () => navigate('/swift') },
-      { id: 'page-friends', title: 'Friends (Bạn bè)', keywords: 'friends bạn bè 100 người dùng cộng đồng nicknames', type: 'page', onSelect: () => navigate('/friends') },
+      { id: 'page-friends', title: 'People (Bạn bè)', keywords: 'friends people bạn bè 100 người dùng cộng đồng nicknames', type: 'page', onSelect: () => navigate('/friends') },
       { id: 'page-notes', title: 'Notes', keywords: 'ghi chú soạn thảo notes office', type: 'page', onSelect: () => navigate('/notes') },
       { id: 'page-taskmanager', title: 'Task Manager', keywords: 'task manager quản lý tác vụ processes system performance', type: 'page', onSelect: () => navigate('/task-manager') },
       { id: 'page-widgets', title: 'Widgets', keywords: 'widgets tiện ích bảng tiện ích weather thời tiết lịch vnexpress tin tức', type: 'page', onSelect: () => navigate('/widgets') },
@@ -599,7 +622,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                 onFocus={() => {
                   setIsSearchFlyoutOpen(true);
                 }}
-                placeholder={`Search ${getTabTitle(currentRoute)}`.replace(/\b\w/g, (c) => c.toUpperCase())}
+                placeholder={getSearchPlaceholder(currentRoute)}
                 className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#a0a6b2] outline-none border-none py-1 pr-9 no-fluent-line"
               />
 
