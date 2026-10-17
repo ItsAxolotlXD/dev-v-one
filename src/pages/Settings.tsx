@@ -285,7 +285,7 @@ export const Settings: React.FC<SettingsProps> = ({
   return (
     <div className="w-full max-w-7xl mx-auto space-y-6 pb-28 pt-2 select-none">
       {/* 1. Top Header on Main Category View OR Minimal Back Bar on Subpage */}
-      {activeCategory === null ? (
+      {true ? (
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-bold text-[#111827] dark:text-white tracking-tight">
@@ -433,7 +433,7 @@ export const Settings: React.FC<SettingsProps> = ({
 
       {/* 2. Main Page: Grouped Categories vs Subpages with horizontal slide animation */}
       <AnimatePresence mode="wait" initial={false}>
-        {activeCategory === null ? (
+        {false ? (
           <motion.div
             key="settings-main-categories"
             initial={{ opacity: 0, x: -60 }}
@@ -443,7 +443,7 @@ export const Settings: React.FC<SettingsProps> = ({
               duration: shouldAnimateMotion ? 0.28 : 0,
               ease: [0.16, 1, 0.3, 1]
             }}
-            className="space-y-3.5"
+            className="hidden space-y-3.5"
           >
           {/* Quick Search Jump Results if user typed a search query */}
           {searchQuery.trim() && (
@@ -647,7 +647,7 @@ export const Settings: React.FC<SettingsProps> = ({
           className="space-y-6"
         >
             {/* SUBPAGE 1: SPATIAL GLASS */}
-            {activeCategory === 'spatial-glass' && (
+            {true && (
               <section 
                 id="settings-section-spatial-glass"
                 className="rounded-[8px] bg-white dark:bg-[#38383d] border border-[#e5e5e5] dark:border-[#383838] shadow-xs overflow-hidden select-none"
@@ -807,7 +807,7 @@ export const Settings: React.FC<SettingsProps> = ({
             )}
 
             {/* SUBPAGE 2: GIAO DIỆN */}
-            {activeCategory === 'interface' && (
+            {true && (
               <section 
                 id="settings-section-interface"
                 className="rounded-[8px] bg-white dark:bg-[#38383d] border border-[#e5e5e5] dark:border-[#383838] shadow-xs overflow-hidden select-none"
@@ -1047,7 +1047,7 @@ export const Settings: React.FC<SettingsProps> = ({
             )}
 
             {/* SUBPAGE 3: CÔNG CỤ */}
-            {activeCategory === 'tools' && (
+            {true && (
               <section 
                 id="settings-section-tools"
                 className="rounded-[8px] bg-white dark:bg-[#38383d] border border-[#e5e5e5] dark:border-[#383838] shadow-xs overflow-hidden select-none"
@@ -1143,7 +1143,7 @@ export const Settings: React.FC<SettingsProps> = ({
             )}
 
             {/* SUBPAGE 4: TRỢ NĂNG */}
-            {activeCategory === 'accessibility' && (
+            {true && (
               <div className="space-y-4 select-none">
                 {/* Section 1: Tải trang & Hiệu năng */}
                 <div className="space-y-1.5">
@@ -1829,7 +1829,7 @@ export const Settings: React.FC<SettingsProps> = ({
             )}
 
             {/* SUBPAGE 5: INSIDER FLAGS */}
-            {activeCategory === 'experimental' && (
+            {true && (
               <section 
                 id="settings-section-experimental"
                 className="rounded-[8px] bg-white dark:bg-[#38383d] border border-[#e5e5e5] dark:border-[#383838] shadow-xs overflow-visible relative z-20 select-none"

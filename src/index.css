@@ -316,7 +316,7 @@ html.webview-sdk-preview .main-tab-page [class*="dark:border-white/10"] {
     border: 0 !important;
     border-bottom: 0 !important;
     border-radius: 9999px !important;
-    background: #1f1f1f !important;
+    background: #292929 !important;
     box-shadow: none !important;
   }
 
@@ -494,6 +494,7 @@ html.windows-app-sdk-preview #topbar-search-box,
 html.webview-sdk-preview #topbar-search-box,
 html.windows-app-sdk-preview #topbar-search-box input,
 html.webview-sdk-preview #topbar-search-box input {
+    margin-left: -2px !important;
   border-bottom: 0 !important;
   box-shadow: none !important;
 }

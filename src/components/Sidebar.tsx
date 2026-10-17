@@ -15,7 +15,8 @@ import {
   PlusCircle,
   UploadCloud,
   DownloadCloud,
-  RefreshCw
+  RefreshCw,
+  Pencil
 } from 'lucide-react';
 import { 
   FluentHomeIcon, 
@@ -450,13 +451,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
         route: '/camera',
         icon: FluentCameraIcon,
       },
-      {
-        id: 'ms-paint',
-        label: 'Paint',
-        secondary: 'Paint',
-        route: '/ms-paint',
-        icon: FluentPaintIcon,
-      },
+  {
+  id: 'ms-paint',
+  label: 'Paint',
+  secondary: 'Paint',
+  route: '/ms-paint',
+  icon: FluentPaintIcon,
+  },
+  {
+  id: 'ink-space',
+  label: 'Ink Space',
+  secondary: 'Infinite canvas',
+  route: '/ink-space',
+  icon: Pencil,
+  },
       {
         id: 'swift-bank',
         label: 'Swift Bank',
@@ -1364,10 +1372,28 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <FluentPaintIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Paint</span>
               </div>
-            </button>
-          </div>
+  </button>
+  </div>
 
-          {/* 9. Calculator */}
+  {/* 9. Ink Space */}
+  <div className="w-full">
+    <button
+      type="button"
+      id={isMobile ? 'mobile-nav-ink-space' : 'sidebar-nav-ink-space'}
+      data-nav-active={(currentRoute === '/ink-space' || currentRoute === '/inkspace') ? 'true' : undefined}
+      onClick={() => handleNavClick('/ink-space')}
+      title="Ink Space - Infinite canvas"
+      className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+        (currentRoute === '/ink-space' || currentRoute === '/inkspace')
+          ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+          : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+      }`}
+    >
+      <div className="flex items-center gap-3.5 truncate"><Pencil className="w-5 h-5 shrink-0 text-black dark:text-white" /><span className="truncate text-[13.5px]">Ink Space</span></div>
+    </button>
+  </div>
+  
+  {/* 10. Calculator */}
           <div className="w-full">
             <button
               type="button"

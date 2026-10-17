@@ -37,6 +37,7 @@ import { Widgets } from './pages/Widgets';
 import { CopilotPage } from './pages/CopilotPage';
 import { FileExplorer } from './pages/FileExplorer';
 import { MSPaint } from './pages/MSPaint';
+import { InkSpace } from './pages/InkSpace';
 import { PhotosApp } from './pages/PhotosApp';
 import { EdgeBrowser } from './pages/EdgeBrowser';
 import { CameraApp } from './pages/CameraApp';
@@ -655,6 +656,10 @@ export default function App() {
       case '/paint':
       case '/ms-paint':
         return <MSPaint navigate={navigate} />;
+
+      case '/ink-space':
+      case '/inkspace':
+        return <InkSpace navigate={navigate} />;
 
       case '/swift-bank':
       case '/bank':
