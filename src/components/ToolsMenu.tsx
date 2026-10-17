@@ -18,7 +18,7 @@ import {
   Wrench,
   FileText
 } from 'lucide-react';
-import { FluentNotesIcon, FluentSearchIcon, FluentFileExplorerIcon, FluentPaintIcon, FluentPhotosIcon, FluentEdgeIcon, FluentCameraIcon, FluentSwiftBankIcon, FluentCalculatorIcon, FluentSnippingToolIcon, FluentFeedbackHubIcon } from './FluentIcons';
+import { AppTabIcon, FluentNotesIcon, FluentSearchIcon, FluentFileExplorerIcon, FluentPaintIcon, FluentPhotosIcon, FluentEdgeIcon, FluentCameraIcon, FluentSwiftBankIcon, FluentCalculatorIcon, FluentSnippingToolIcon, FluentFeedbackHubIcon } from './FluentIcons';
 import { Channel, NewsArticle } from '../types';
 import { useFavorites } from '../hooks/useFavorites';
 import { useSettings } from '../hooks/useSettings';
@@ -682,7 +682,7 @@ export const ToolsMenu: React.FC<ToolsMenuProps> = ({
                 {...revealProps}
               >
                 <div className="flex items-center gap-2.5 truncate">
-                  <FluentNotesIcon className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
+                  <AppTabIcon name="notes" className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
                   <span className="truncate">Notes</span>
                 </div>
                 <span className="text-[10px] px-1.5 py-0.5 rounded-[2px] bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-medium">Ghi chú</span>
@@ -700,7 +700,7 @@ export const ToolsMenu: React.FC<ToolsMenuProps> = ({
                 {...revealProps}
               >
                 <div className="flex items-center gap-2.5 truncate">
-                  <FluentEdgeIcon className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
+                  <AppTabIcon name="edge" className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
                   <span className="truncate">Microsoft Edge</span>
                 </div>
                 <span className="text-[10px] px-1.5 py-0.5 rounded-[2px] bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-medium">Trình duyệt</span>
@@ -718,7 +718,7 @@ export const ToolsMenu: React.FC<ToolsMenuProps> = ({
                 {...revealProps}
               >
                 <div className="flex items-center gap-2.5 truncate">
-                  <FluentFileExplorerIcon className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
+                  <AppTabIcon name="fileExplorer" className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
                   <span className="truncate">File Explorer</span>
                 </div>
                 <span className="text-[10px] px-1.5 py-0.5 rounded-[2px] bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-medium">Tệp tin</span>
@@ -736,7 +736,7 @@ export const ToolsMenu: React.FC<ToolsMenuProps> = ({
                 {...revealProps}
               >
                 <div className="flex items-center gap-2.5 truncate">
-                  <FluentPhotosIcon className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
+                  <AppTabIcon name="gallery" className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
                   <span className="truncate">Gallery</span>
                 </div>
                 <span className="text-[10px] px-1.5 py-0.5 rounded-[2px] bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-medium">Ảnh & Video</span>
@@ -754,7 +754,7 @@ export const ToolsMenu: React.FC<ToolsMenuProps> = ({
                 {...revealProps}
               >
                 <div className="flex items-center gap-2.5 truncate">
-                  <FluentCameraIcon className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
+                  <AppTabIcon name="camera" className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
                   <span className="truncate">Camera</span>
                 </div>
                 <span className="text-[10px] px-1.5 py-0.5 rounded-[2px] bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-medium">Chụp ảnh</span>
@@ -772,7 +772,7 @@ export const ToolsMenu: React.FC<ToolsMenuProps> = ({
                 {...revealProps}
               >
                 <div className="flex items-center gap-2.5 truncate">
-                  <FluentPaintIcon className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
+                  <AppTabIcon name="paint" className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
                   <span className="truncate">MS Paint</span>
                 </div>
                 <span className="text-[10px] px-1.5 py-0.5 rounded-[2px] bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-medium">Vẽ tranh</span>
@@ -808,7 +808,7 @@ export const ToolsMenu: React.FC<ToolsMenuProps> = ({
                 {...revealProps}
               >
                 <div className="flex items-center gap-2.5 truncate">
-                  <FluentCalculatorIcon className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
+                  <AppTabIcon name="calculator" className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
                   <span className="truncate">Calculator</span>
                 </div>
                 <span className="text-[10px] px-1.5 py-0.5 rounded-[2px] bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-medium">Máy tính</span>
@@ -826,7 +826,7 @@ export const ToolsMenu: React.FC<ToolsMenuProps> = ({
                 {...revealProps}
               >
                 <div className="flex items-center gap-2.5 truncate">
-                  <FluentSnippingToolIcon className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
+                  <AppTabIcon name="snippingTool" className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
                   <span className="truncate">Snipping Tool</span>
                 </div>
                 <span className="text-[10px] px-1.5 py-0.5 rounded-[2px] bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-medium">Cắt ảnh</span>
@@ -844,7 +844,7 @@ export const ToolsMenu: React.FC<ToolsMenuProps> = ({
                 {...revealProps}
               >
                 <div className="flex items-center gap-2.5 truncate">
-                  <FluentFeedbackHubIcon className="w-4 h-4 text-[#0078d4] dark:text-[#4cc2ff] shrink-0" />
+                  <AppTabIcon name="feedback" className="w-4 h-4 text-[#0078d4] dark:text-[#4cc2ff] shrink-0" />
                   <span className="truncate">Feedback Hub</span>
                 </div>
                 <span className="text-[10px] px-1.5 py-0.5 rounded-[2px] bg-[#0078d4]/15 text-[#0078d4] dark:text-[#4cc2ff] font-medium">Phản hồi</span>

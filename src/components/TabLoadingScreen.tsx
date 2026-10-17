@@ -1,5 +1,6 @@
 import React from 'react';
 import { 
+  AppTabIcon,
   FluentHomeIcon, 
   FluentWatchIcon,
   FluentLiveTvIcon, 
@@ -44,7 +45,7 @@ export const TabLoadingScreen: React.FC<TabLoadingScreenProps> = ({ route = '', 
     if (cleanRoute === '/edge' || cleanRoute === '/browser') {
       return {
         title: 'Microsoft Edge',
-        icon: <FluentEdgeIcon className={iconClass} />
+        icon: <AppTabIcon name="edge" className={iconClass} />
       };
     }
 
@@ -64,42 +65,49 @@ export const TabLoadingScreen: React.FC<TabLoadingScreenProps> = ({ route = '', 
     if (cleanRoute === '/file-explorer' || cleanRoute === '/files') {
       return {
         title: 'File Explorer',
-        icon: <FluentFileExplorerIcon className={iconClass} />
+        icon: <AppTabIcon name="fileExplorer" className={iconClass} />
       };
     }
 
     if (cleanRoute === '/live-tv' || cleanRoute === '/watch') {
       return {
         title: 'Watch & Live TV',
-        icon: <FluentWatchIcon className={iconClass} />
+        icon: <AppTabIcon name="watch" className={iconClass} />
       };
     }
 
     if (cleanRoute === '/notes' || cleanRoute === '/write' || cleanRoute === '/present' || cleanRoute === '/table') {
       return {
         title: 'Notes',
-        icon: <FluentNotesIcon className={iconClass} />
+        icon: <AppTabIcon name="notes" className={iconClass} />
       };
     }
 
     if (cleanRoute === '/gallery' || cleanRoute === '/photos') {
       return {
         title: 'Gallery',
-        icon: <FluentPhotosIcon className={iconClass} />
+        icon: <AppTabIcon name="gallery" className={iconClass} />
       };
     }
 
     if (cleanRoute === '/camera') {
       return {
         title: 'Camera',
-        icon: <FluentCameraIcon className={iconClass} />
+        icon: <AppTabIcon name="camera" className={iconClass} />
       };
     }
 
     if (cleanRoute === '/paint' || cleanRoute === '/ms-paint') {
       return {
         title: 'Paint',
-        icon: <FluentPaintIcon className={iconClass} />
+        icon: <AppTabIcon name="paint" className={iconClass} />
+      };
+    }
+
+    if (cleanRoute === '/ink-space' || cleanRoute === '/inkspace' || cleanRoute === '/ink-canvas' || cleanRoute === '/inkcanvas') {
+      return {
+        title: 'Ink Canvas',
+        icon: <AppTabIcon name="inkCanvas" className={iconClass} />
       };
     }
 
@@ -134,21 +142,21 @@ export const TabLoadingScreen: React.FC<TabLoadingScreenProps> = ({ route = '', 
     if (cleanRoute === '/calculator' || cleanRoute === '/calc') {
       return {
         title: 'Calculator',
-        icon: <FluentCalculatorIcon className={iconClass} />
+        icon: <AppTabIcon name="calculator" className={iconClass} />
       };
     }
 
     if (cleanRoute === '/snipping-tool' || cleanRoute === '/snip' || cleanRoute === '/snipping') {
       return {
         title: 'Snipping Tool',
-        icon: <FluentSnippingToolIcon className={iconClass} />
+        icon: <AppTabIcon name="snippingTool" className={iconClass} />
       };
     }
 
     if (cleanRoute === '/feedback-hub' || cleanRoute === '/feedback') {
       return {
         title: 'Feedback Hub',
-        icon: <FluentFeedbackHubIcon className={iconClass} />
+        icon: <AppTabIcon name="feedback" className={iconClass} />
       };
     }
 
@@ -183,7 +191,7 @@ export const TabLoadingScreen: React.FC<TabLoadingScreenProps> = ({ route = '', 
     if (cleanRoute === '/friends' || cleanRoute === '/ban-be') {
       return {
         title: 'Bạn bè & Cộng đồng',
-        icon: <FluentFriendsIcon className={iconClass} />
+        icon: <AppTabIcon name="people" className={iconClass} />
       };
     }
 
@@ -197,14 +205,14 @@ export const TabLoadingScreen: React.FC<TabLoadingScreenProps> = ({ route = '', 
     if (cleanRoute === '/task-manager') {
       return {
         title: 'Task Manager',
-        icon: <FluentTaskManagerIcon className={iconClass} />
+        icon: <AppTabIcon name="taskManager" className={iconClass} />
       };
     }
 
     if (cleanRoute === '/widgets') {
       return {
         title: 'Widgets',
-        icon: <FluentWidgetsIcon className={iconClass} />
+        icon: <AppTabIcon name="widgets" className={iconClass} />
       };
     }
 
@@ -225,14 +233,14 @@ export const TabLoadingScreen: React.FC<TabLoadingScreenProps> = ({ route = '', 
     if (cleanRoute === '/favorites') {
       return {
         title: 'Kênh yêu thích',
-        icon: <FluentWatchIcon className={iconClass} />
+        icon: <AppTabIcon name="watch" className={iconClass} />
       };
     }
 
     if (cleanRoute === '/settings') {
       return {
         title: 'Cài đặt',
-        icon: <FluentSettingsIcon className={iconClass} />
+        icon: <AppTabIcon name="settings" className={iconClass} />
       };
     }
 
@@ -259,7 +267,7 @@ export const TabLoadingScreen: React.FC<TabLoadingScreenProps> = ({ route = '', 
 
     return {
       title: 'Sparkle (Dev)',
-      icon: <FluentHomeIcon className={iconClass} />
+      icon: <AppTabIcon name="home" className={iconClass} />
     };
   };
 

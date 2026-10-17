@@ -19,6 +19,7 @@ import {
   Pencil
 } from 'lucide-react';
 import { 
+  AppTabIcon,
   FluentHomeIcon, 
   FluentWatchIcon,
   FluentLiveTvIcon, 
@@ -709,7 +710,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-pointer text-left"
         >
           <div className="flex items-center gap-2.5">
-            <FluentNotesIcon className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
+            <AppTabIcon name="notes" className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
             <span>Notes</span>
           </div>
           <span className="text-[10px] px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-medium">Ghi chú</span>
@@ -726,7 +727,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-pointer text-left"
         >
           <div className="flex items-center gap-2.5">
-            <FluentFileExplorerIcon className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
+            <AppTabIcon name="fileExplorer" className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
             <span>File Explorer</span>
           </div>
           <span className="text-[10px] px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-medium">Tệp tin</span>
@@ -743,7 +744,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-pointer text-left"
         >
           <div className="flex items-center gap-2.5">
-            <FluentPaintIcon className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
+            <AppTabIcon name="paint" className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
             <span>MS Paint</span>
           </div>
           <span className="text-[10px] px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-medium">Vẽ tranh</span>
@@ -990,7 +991,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <FluentHomeIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+              <AppTabIcon name="home" className="w-5 h-5 shrink-0 text-black dark:text-white" />
               <span className="truncate text-[13.5px]">Home</span>
             </button>
           </div>
@@ -1047,7 +1048,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <FluentWidgetsIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+              <AppTabIcon name="widgets" className="w-5 h-5 shrink-0 text-black dark:text-white" />
               <span className="truncate text-[13.5px]">Widgets</span>
             </button>
           </div>
@@ -1135,7 +1136,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <FluentFriendsIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+              <AppTabIcon name="people" className="w-5 h-5 shrink-0 text-black dark:text-white" />
               <span className="truncate text-[13.5px]">Friends</span>
             </button>
           </div>
@@ -1225,7 +1226,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <div className="flex items-center gap-3.5 truncate">
-                <FluentEdgeIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <AppTabIcon name="edge" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Microsoft Edge</span>
               </div>
             </button>
@@ -1246,7 +1247,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <div className="flex items-center gap-3.5 truncate">
-                <FluentFileExplorerIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <AppTabIcon name="fileExplorer" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">File Explorer</span>
               </div>
             </button>
@@ -1267,7 +1268,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <div className="flex items-center gap-3.5 truncate">
-                <FluentWatchIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <AppTabIcon name="watch" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Watch</span>
               </div>
 
@@ -1332,7 +1333,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <div className="flex items-center gap-3.5 truncate">
-                <FluentNotesIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <AppTabIcon name="notes" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Notes</span>
               </div>
             </button>
@@ -1353,7 +1354,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <div className="flex items-center gap-3.5 truncate">
-                <FluentPhotosIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <AppTabIcon name="gallery" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Gallery</span>
               </div>
             </button>
@@ -1374,7 +1375,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <div className="flex items-center gap-3.5 truncate">
-                <FluentCameraIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <AppTabIcon name="camera" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Camera</span>
               </div>
             </button>
@@ -1395,7 +1396,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <div className="flex items-center gap-3.5 truncate">
-                <FluentPaintIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <AppTabIcon name="paint" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Paint</span>
               </div>
   </button>
@@ -1415,7 +1416,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
       }`}
     >
-      <div className="flex items-center gap-3.5 truncate"><Pencil className="w-5 h-5 shrink-0 text-black dark:text-white" /><span className="truncate text-[13.5px]">Ink Canvas</span></div>
+      <div className="flex items-center gap-3.5 truncate"><AppTabIcon name="inkCanvas" className="w-5 h-5" /><span className="truncate text-[13.5px]">Ink Canvas</span></div>
     </button>
   </div>
   
@@ -1434,7 +1435,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <div className="flex items-center gap-3.5 truncate">
-                <FluentCalculatorIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <AppTabIcon name="calculator" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Calculator</span>
               </div>
             </button>
@@ -1455,7 +1456,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <div className="flex items-center gap-3.5 truncate">
-                <FluentSnippingToolIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <AppTabIcon name="snippingTool" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Snipping Tool</span>
               </div>
             </button>
@@ -1484,7 +1485,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <div className="flex items-center gap-3.5 truncate">
-                <FluentTaskManagerIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <AppTabIcon name="taskManager" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Task Manager</span>
               </div>
             </button>
@@ -1505,7 +1506,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <div className="flex items-center gap-3.5 truncate">
-                <FluentFeedbackHubIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <AppTabIcon name="feedback" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Feedback Hub</span>
               </div>
             </button>
@@ -1627,7 +1628,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 style={{ transition: 'none', animation: 'none' }}
               />
             )}
-            <FluentSettingsIcon className="w-5 h-5 shrink-0 settings-spin-icon text-black dark:text-white" />
+            <AppTabIcon name="settings" className="w-5 h-5 shrink-0 settings-spin-icon text-black dark:text-white" />
             <span className="truncate text-[13.5px]">Settings</span>
           </button>
         </div>
@@ -1715,7 +1716,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                 }`}
               >
-                <FluentHomeIcon className="w-5 h-5 text-black dark:text-white" />
+                <AppTabIcon name="home" className="w-5 h-5 text-black dark:text-white" />
               </button>
 
               {/* Productivity icons */}
@@ -1780,7 +1781,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                 }`}
               >
-                <FluentWidgetsIcon className="w-5 h-5 text-black dark:text-white" />
+                <AppTabIcon name="widgets" className="w-5 h-5 text-black dark:text-white" />
               </button>
 
               {/* Divider: Social */}
@@ -1831,7 +1832,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                 }`}
               >
-                <FluentFriendsIcon className="w-5 h-5 text-black dark:text-white" />
+                <AppTabIcon name="people" className="w-5 h-5 text-black dark:text-white" />
               </button>
 
               {/* Logos Fandom Icon */}
@@ -1903,7 +1904,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                 }`}
               >
-                <FluentEdgeIcon className="w-5 h-5 text-black dark:text-white" />
+                <AppTabIcon name="edge" className="w-5 h-5 text-black dark:text-white" />
               </button>
 
               {/* 3. File Explorer Icon */}
@@ -1919,7 +1920,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                 }`}
               >
-                <FluentFileExplorerIcon className="w-5 h-5 text-black dark:text-white" />
+                <AppTabIcon name="fileExplorer" className="w-5 h-5 text-black dark:text-white" />
               </button>
 
               {/* 4. Watch Icon */}
@@ -1935,7 +1936,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                 }`}
               >
-                <FluentWatchIcon className="w-5 h-5 text-black dark:text-white" />
+                <AppTabIcon name="watch" className="w-5 h-5 text-black dark:text-white" />
               </button>
 
               {/* 5. Notes Icon */}
@@ -1951,7 +1952,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                 }`}
               >
-                <FluentNotesIcon className="w-5 h-5 text-black dark:text-white" />
+                <AppTabIcon name="notes" className="w-5 h-5 text-black dark:text-white" />
               </button>
 
               {/* 6. Gallery Icon */}
@@ -1967,7 +1968,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                 }`}
               >
-                <FluentPhotosIcon className="w-5 h-5 text-black dark:text-white" />
+                <AppTabIcon name="gallery" className="w-5 h-5 text-black dark:text-white" />
               </button>
 
               {/* 7. Camera Icon */}
@@ -1983,7 +1984,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                 }`}
               >
-                <FluentCameraIcon className="w-5 h-5 text-black dark:text-white" />
+                <AppTabIcon name="camera" className="w-5 h-5 text-black dark:text-white" />
               </button>
 
               {/* 8. Paint Icon */}
@@ -1999,7 +2000,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                 }`}
               >
-                <FluentPaintIcon className="w-5 h-5 text-black dark:text-white" />
+                <AppTabIcon name="paint" className="w-5 h-5 text-black dark:text-white" />
               </button>
 
               {/* Clock Icon */}
@@ -2086,7 +2087,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                 }`}
               >
-                <FluentTaskManagerIcon className="w-5 h-5 text-black dark:text-white" />
+                <AppTabIcon name="taskManager" className="w-5 h-5 text-black dark:text-white" />
               </button>
 
               {/* Divider: LAC's project */}
@@ -2180,7 +2181,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       style={{ transition: 'none', animation: 'none' }}
                     />
                   )}
-                  <FluentSettingsIcon className="w-5 h-5 settings-spin-icon text-[#111827] dark:text-white" />
+                  <AppTabIcon name="settings" className="w-5 h-5 settings-spin-icon text-[#111827] dark:text-white" />
                 </button>
               </div>
             </div>
