@@ -1,16 +1,22 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { 
+import {
   History,
-  X, 
+  X,
   ArrowLeft,
-  RotateCcw, 
-  Copy, 
-  Check, 
-  Send, 
+  RotateCcw,
+  Copy,
+  Check,
+  Send,
   Sparkles,
   Search,
   ExternalLink,
-  MessageCircle
+  MessageCircle,
+  AppWindow,
+  ChevronRight,
+  Newspaper,
+  Settings2,
+  Tv,
+  Wrench,
 } from 'lucide-react';
 import { useSettings } from '../hooks/useSettings';
 import { FluentSearchIcon } from './FluentIcons';
@@ -31,6 +37,7 @@ interface CopilotChatFlyoutProps {
     id: string;
     title: string;
     type: string;
+    keywords?: string;
     logo?: string;
     onSelect: () => void;
   }>;
@@ -113,6 +120,7 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [selectedAspectId, setSelectedAspectId] = useState<string | null>(null);
 
   // Search History from localStorage (seeded with default 5 items)
   const [historyItems, setHistoryItems] = useState<string[]>(() => {
@@ -279,122 +287,209 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
     return [];
   }, [searchQuery, historyItems]);
 
-  // Additional matching app aspects when searching
+  const normalizedQuery = searchQuery.trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase();
+
   const matchingAspects = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-    if (!q) return [];
-    return appAspects.filter((a) => a.title.toLowerCase().includes(q)).slice(0, 3);
-  }, [searchQuery, appAspects]);
+    if (!normalizedQuery) return [];
+    return appAspects
+      .filter((aspect) => {
+        const searchableText = `${aspect.title} ${aspect.keywords || ''}`
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toLocaleLowerCase();
+        return searchableText.includes(normalizedQuery);
+      })
+      .sort((a, b) => {
+        const rank = (title: string) => {
+          const normalizedTitle = title.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase();
+          return normalizedTitle === normalizedQuery ? 0 : normalizedTitle.startsWith(normalizedQuery) ? 1 : 2;
+        };
+        return rank(a.title) - rank(b.title);
+      });
+  }, [normalizedQuery, appAspects]);
+
+  const matchingHistory = useMemo(
+    () => normalizedQuery ? historyItems.filter((item) => item.toLocaleLowerCase().includes(normalizedQuery)).slice(0, 3) : [],
+    [normalizedQuery, historyItems]
+  );
+  const selectedAspect = matchingAspects.find((aspect) => aspect.id === selectedAspectId) || matchingAspects[0];
+
+  useEffect(() => {
+    setSelectedAspectId(matchingAspects[0]?.id || null);
+  }, [normalizedQuery, matchingAspects]);
+
+  const handleCopyResult = async () => {
+    if (!selectedAspect || !navigator.clipboard) return;
+    await navigator.clipboard.writeText(selectedAspect.title);
+    setCopiedId(selectedAspect.id);
+    window.setTimeout(() => setCopiedId(null), 1600);
+  };
 
   if (!isOpen) return null;
 
   return (
     <div
       key="windows-search-copilot-flyout"
-      className={`context-menu copilot-flyout-container absolute top-full left-0 right-0 w-full z-[999] select-none text-white font-sans overflow-hidden ${
+      className={`context-menu copilot-flyout-container absolute top-full left-1/2 right-auto w-[min(680px,calc(100vw-24px))] max-w-[calc(100vw-24px)] -translate-x-1/2 z-[999] select-none font-sans overflow-hidden max-h-[min(70vh,540px)] ${
         settings.windowsAppSdkPreview
-          ? 'rounded-[18px] mt-2 !bg-[#2f2926]/95 !border !border-white/[0.1] !backdrop-blur-none shadow-[0_22px_55px_rgba(0,0,0,0.65)]'
-          : isPill
-            ? 'rounded-[18px] mt-2 shadow-[0_22px_55px_rgba(0,0,0,0.65)] border border-white/[0.1] bg-[#2f2926]/95 backdrop-blur-2xl'
-            : 'rounded-[18px] mt-2 shadow-[0_22px_55px_rgba(0,0,0,0.65)] border border-white/[0.1] bg-[#2f2926]/95 backdrop-blur-2xl'
-      } p-2.5 pb-3 flex flex-col`}
+          ? 'rounded-[12px] mt-2 !bg-[#2b2b2b] !border !border-white/[0.12] shadow-[0_18px_45px_rgba(0,0,0,0.38)] text-white'
+          : 'rounded-[12px] mt-2 border border-black/10 dark:border-white/10 bg-white dark:bg-[#202124] shadow-[0_18px_45px_rgba(0,0,0,0.28)] text-[#1f2937] dark:text-neutral-100'
+      } flex flex-col`}
       style={{
-        backdropFilter: settings.windowsAppSdkPreview ? 'none' : 'blur(32px) saturate(160%)',
-        WebkitBackdropFilter: settings.windowsAppSdkPreview ? 'none' : 'blur(32px) saturate(160%)',
+        backdropFilter: 'none',
+        WebkitBackdropFilter: 'none',
         backgroundColor: settings.windowsAppSdkPreview ? '#2b2b2b' : undefined,
         animation: 'none',
-        transform: 'none',
+        transform: 'translateX(-50%)',
       }}
     >
       {/* ================= MODE 1: WINDOWS SEARCH FLYOUT (MATCHING USER SCREENSHOT) ================= */}
       {activeMode === 'search' ? (
-        <div className="flex flex-col space-y-1" style={{ animation: 'none', transform: 'none' }}>
-          {/* Recent Search History Rows (No animation, instant hover response) */}
-          {displayedHistory.map((item) => (
-            <div
-              key={item}
-              onClick={() => handleItemClick(item)}
-              style={{ animation: 'none', transform: 'none' }}
-              className="w-full flex items-center justify-between px-2.5 py-2 rounded-[12px] hover:bg-white/[0.08] active:bg-white/[0.12] cursor-pointer group text-left transition-colors"
-            >
-              <div className="flex items-center gap-3.5 min-w-0 flex-1">
-                {/* Black Square Icon with White History Clock Glyphs */}
-                <div className="w-9 h-9 rounded-[10px] bg-[#161414] flex items-center justify-center shrink-0 border border-white/[0.08] shadow-[0_2px_5px_rgba(0,0,0,0.25)]">
-                  <History className="w-4 h-4 text-white stroke-[1.8]" />
-                </div>
+        normalizedQuery ? (
+          <div className="grid min-h-0 flex-1 grid-cols-1 sm:grid-cols-[minmax(0,0.94fr)_minmax(270px,1.06fr)]" style={{ animation: 'none', transform: 'none' }}>
+            <div className="min-h-0 overflow-y-auto border-b border-black/10 bg-[#f3f3f3] p-3.5 dark:border-white/10 dark:bg-[#252525] sm:border-b-0 sm:border-r sm:p-4">
+              <h2 className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Best match</h2>
+              {matchingAspects[0] ? (
+                <button
+                  type="button"
+                  aria-pressed={selectedAspect?.id === matchingAspects[0].id}
+                  onClick={() => setSelectedAspectId(matchingAspects[0].id)}
+                  className={`group flex w-full items-center gap-3 rounded-[3px] border px-2.5 py-2.5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4] ${
+                    selectedAspect?.id === matchingAspects[0].id
+                      ? 'border-[#a7cce8] bg-[#cce8fa] text-[#1f2937] dark:border-[#3579a8] dark:bg-[#174a70] dark:text-white'
+                      : 'border-transparent hover:bg-black/5 dark:hover:bg-white/[0.07]'
+                  }`}
+                >
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-[3px] bg-[#0078d4] text-white">
+                    {matchingAspects[0].logo ? (
+                      <img src={matchingAspects[0].logo} alt="" className="h-6 w-6 object-contain" />
+                    ) : (
+                      <FluentSearchIcon className="h-4 w-4" />
+                    )}
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-[13px] font-semibold">{matchingAspects[0].title}</span>
+                    <span className="mt-0.5 block text-[11px] text-neutral-600 dark:text-neutral-300">{matchingAspects[0].type === 'setting' ? 'Setting' : matchingAspects[0].type === 'news' ? 'Article' : matchingAspects[0].type === 'channel' ? 'Channel' : 'App'}</span>
+                  </span>
+                </button>
+              ) : (
+                <p className="rounded-sm px-2.5 py-3 text-[13px] text-neutral-600 dark:text-neutral-300">No matching apps or settings</p>
+              )}
 
-                {/* Clean label matching lowercase reference */}
-                <span className="text-[13px] sm:text-[13.5px] font-normal text-neutral-800 dark:text-neutral-100 group-hover:text-black dark:group-hover:text-white truncate">
-                  {item}
-                </span>
-              </div>
+              {matchingAspects.length > 1 && (
+                <section className="mt-4" aria-label="More matching apps">
+                  <h3 className="mb-1 px-1 text-[11px] font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Apps &amp; settings</h3>
+                  <div className="space-y-0.5">
+                    {matchingAspects.slice(1, 10).map((aspect) => (
+                      <button
+                        key={aspect.id}
+                        type="button"
+                        aria-pressed={selectedAspect?.id === aspect.id}
+                        onClick={() => setSelectedAspectId(aspect.id)}
+                        className={`group flex w-full items-center gap-2.5 rounded-[3px] px-2 py-1.5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4] ${
+                          selectedAspect?.id === aspect.id
+                            ? 'bg-[#cce8fa] text-[#1f2937] dark:bg-[#174a70] dark:text-white'
+                            : 'hover:bg-black/5 dark:hover:bg-white/[0.07]'
+                        }`}
+                      >
+                        <span className="flex h-6 w-6 shrink-0 items-center justify-center overflow-hidden text-[#0078d4] dark:text-[#75c7ff]">
+                          {aspect.logo ? <img src={aspect.logo} alt="" className="h-5 w-5 object-contain" /> : aspect.type === 'news' ? <Newspaper className="h-4 w-4" /> : aspect.type === 'channel' ? <Tv className="h-4 w-4" /> : aspect.type === 'setting' ? <Settings2 className="h-4 w-4" /> : aspect.type === 'tool' ? <Wrench className="h-4 w-4" /> : <AppWindow className="h-4 w-4" />}
+                        </span>
+                        <span className="min-w-0 flex-1 truncate text-[12px]">{aspect.title}</span>
+                        <ChevronRight className="h-3.5 w-3.5 shrink-0 text-neutral-400 opacity-0 group-hover:opacity-100" />
+                      </button>
+                    ))}
+                  </div>
+                </section>
+              )}
 
-              {/* Discreet Remove from History Button on Hover */}
-              <button
-                type="button"
-                onClick={(e) => handleRemoveHistoryItem(e, item)}
-                title="Xóa khỏi lịch sử"
-                className="opacity-0 group-hover:opacity-100 p-1 text-neutral-400 hover:text-white rounded cursor-pointer shrink-0 ml-2"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
+              {matchingHistory.length > 0 && (
+                <section className="mt-4" aria-label="Matching search history">
+                  <h3 className="mb-1 px-1 text-[11px] font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Search history</h3>
+                  {matchingHistory.map((item) => (
+                    <button key={item} type="button" onClick={() => handleItemClick(item)} className="flex w-full items-center gap-2.5 rounded-[3px] px-2 py-1.5 text-left text-[12px] hover:bg-black/5 dark:hover:bg-white/[0.07]">
+                      <History className="h-4 w-4 shrink-0 text-neutral-500" />
+                      <span className="truncate">{item}</span>
+                    </button>
+                  ))}
+                </section>
+              )}
+
+              <section className="mt-4 border-t border-black/10 pt-3 dark:border-white/10" aria-label="Search the web">
+                <h3 className="mb-1 px-1 text-[11px] font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Search the web</h3>
+                <button type="button" onClick={() => handleAskCopilot(searchQuery)} className="group flex w-full items-center gap-2.5 rounded-[3px] px-2 py-2 text-left transition-colors hover:bg-black/5 dark:hover:bg-white/[0.07]">
+                  <MessageCircle className="h-4 w-4 shrink-0 text-[#0078d4] dark:text-[#75c7ff]" />
+                  <span className="min-w-0 flex-1 truncate text-[12px]">Ask Copilot: “{searchQuery}”</span>
+                  <Sparkles className="h-3.5 w-3.5 shrink-0 text-[#0078d4] dark:text-[#75c7ff]" />
+                </button>
+              </section>
             </div>
-          ))}
 
-          {/* App Aspect Results (when typing query) */}
-          {searchQuery.trim() && matchingAspects.map((aspect) => (
-            <div
-              key={aspect.id}
-              onClick={() => {
-                aspect.onSelect();
-                onClose();
-              }}
-              className="w-full flex items-center justify-between px-2.5 py-2 rounded-[12px] hover:bg-white/[0.08] active:bg-white/[0.12] cursor-pointer group text-left transition-colors"
-            >
-              <div className="flex items-center gap-3.5 min-w-0 flex-1">
-                <div className="w-9 h-9 rounded-[10px] bg-[#063b70] flex items-center justify-center shrink-0 overflow-hidden border border-white/[0.08] shadow-[0_2px_5px_rgba(0,0,0,0.25)]">
-                  {aspect.logo ? (
-                    <img src={aspect.logo} alt="" className="w-6 h-6 object-contain" />
-                  ) : (
-                    <FluentSearchIcon className="w-4 h-4 text-white" />
-                  )}
-                </div>
+            <div className="flex min-h-[230px] min-w-0 flex-col bg-white dark:bg-[#202124] sm:min-h-[390px]">
+              {selectedAspect ? (
+                <>
+                  <div className="flex flex-1 flex-col items-center justify-center border-b border-black/[0.08] px-5 py-7 text-center dark:border-white/[0.08]">
+                    <span className="mb-3 flex h-[54px] w-[54px] items-center justify-center overflow-hidden rounded-[5px] bg-[#0078d4] text-white shadow-sm">
+                      {selectedAspect.logo ? (
+                        <img src={selectedAspect.logo} alt="" className="h-9 w-9 object-contain" />
+                      ) : (
+                        selectedAspect.type === 'news' ? <Newspaper className="h-7 w-7" /> : selectedAspect.type === 'channel' ? <Tv className="h-7 w-7" /> : selectedAspect.type === 'setting' ? <Settings2 className="h-7 w-7" /> : selectedAspect.type === 'tool' ? <Wrench className="h-7 w-7" /> : <AppWindow className="h-7 w-7" />
+                      )}
+                    </span>
+                    <h2 className="max-w-full truncate text-[16px] font-medium text-[#222] dark:text-white">{selectedAspect.title}</h2>
+                    <p className="mt-0.5 text-[12px] text-neutral-500 dark:text-neutral-400">{selectedAspect.type === 'setting' ? 'Setting' : selectedAspect.type === 'news' ? 'Article' : selectedAspect.type === 'channel' ? 'Channel' : selectedAspect.type === 'tool' ? 'Tool' : 'App'}</p>
+                  </div>
 
-                <div className="flex flex-col min-w-0">
-                  <span className="text-[13px] sm:text-[13.5px] font-normal text-neutral-800 dark:text-neutral-100 group-hover:text-black dark:group-hover:text-white truncate">
-                    {aspect.title}
-                  </span>
-                  <span className="text-[11px] text-neutral-400 capitalize">
-                    {aspect.type}
-                  </span>
+                  <div className="space-y-0.5 p-3 sm:p-4" aria-label="Selected result actions">
+                    <button type="button" onClick={() => { selectedAspect.onSelect(); onClose(); }} className="flex w-full items-center gap-3 rounded-[3px] px-2.5 py-2 text-left text-[12px] text-[#2b2b2b] transition-colors hover:bg-[#f2f2f2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4] dark:text-neutral-100 dark:hover:bg-white/[0.08]">
+                      <ExternalLink className="h-4 w-4 text-[#0078d4] dark:text-[#75c7ff]" />
+                      <span>Open</span>
+                    </button>
+                    {selectedAspect.type === 'setting' && (
+                      <button type="button" onClick={() => { navigate('/settings'); onClose(); }} className="flex w-full items-center gap-3 rounded-[3px] px-2.5 py-2 text-left text-[12px] text-[#2b2b2b] transition-colors hover:bg-[#f2f2f2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4] dark:text-neutral-100 dark:hover:bg-white/[0.08]">
+                        <Settings2 className="h-4 w-4 text-[#0078d4] dark:text-[#75c7ff]" />
+                        <span>App settings</span>
+                      </button>
+                    )}
+                    <button type="button" onClick={() => { navigate(`/search?q=${encodeURIComponent(selectedAspect.title)}`); onClose(); }} className="flex w-full items-center gap-3 rounded-[3px] px-2.5 py-2 text-left text-[12px] text-[#2b2b2b] transition-colors hover:bg-[#f2f2f2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4] dark:text-neutral-100 dark:hover:bg-white/[0.08]">
+                      <Search className="h-4 w-4 text-[#0078d4] dark:text-[#75c7ff]" />
+                      <span>Search the web</span>
+                    </button>
+                    <button type="button" onClick={handleCopyResult} className="flex w-full items-center gap-3 rounded-[3px] px-2.5 py-2 text-left text-[12px] text-[#2b2b2b] transition-colors hover:bg-[#f2f2f2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4] dark:text-neutral-100 dark:hover:bg-white/[0.08]">
+                      {copiedId === selectedAspect.id ? <Check className="h-4 w-4 text-emerald-600" /> : <Copy className="h-4 w-4 text-[#0078d4] dark:text-[#75c7ff]" />}
+                      <span>{copiedId === selectedAspect.id ? 'Copied' : 'Copy name'}</span>
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
+                  <Search className="mb-3 h-7 w-7 text-neutral-400" />
+                  <p className="text-[13px] font-medium">No results found</p>
+                  <p className="mt-1 text-[12px] text-neutral-500 dark:text-neutral-400">Try another search or ask Copilot.</p>
                 </div>
-              </div>
+              )}
             </div>
-          ))}
-
-          {/* Ask Copilot Row (Optional AI Query row when typing or available) */}
-          {searchQuery.trim() && (
-            <div
-              onClick={() => handleAskCopilot(searchQuery)}
-              className="w-full flex items-center justify-between px-2.5 py-2 rounded-[12px] hover:bg-white/[0.08] active:bg-white/[0.12] cursor-pointer group text-left mt-0.5 pt-2 border-t border-white/5 transition-colors"
-            >
-              <div className="flex items-center gap-3.5 min-w-0 flex-1">
-                <div className="w-9 h-9 flex items-center justify-center shrink-0">
-                  <MessageCircle className="w-5 h-5 text-[#4cc2ff]" strokeWidth={1.8} />
-                </div>
-                <div className="flex flex-col min-w-0">
-                  <span className="text-[13px] sm:text-[13.5px] font-normal text-neutral-800 dark:text-neutral-100 group-hover:text-black dark:group-hover:text-white truncate">
-                    Hỏi Copilot: "{searchQuery}"
-                  </span>
-                  <span className="text-[11px] text-[#0078d4] dark:text-[#4cc2ff] font-medium flex items-center gap-1">
-                    <span>Trò chuyện với AI</span>
-                    <Sparkles className="w-3 h-3" />
-                  </span>
-                </div>
+          </div>
+        ) : (
+          <div className="flex max-h-[min(70vh,520px)] flex-col overflow-y-auto bg-[#f3f3f3] p-2 dark:bg-[#252525]" style={{ animation: 'none', transform: 'none' }}>
+            {displayedHistory.map((item) => (
+              <div key={item} className="group flex w-full items-center gap-1 rounded-[3px] transition-colors hover:bg-black/5 dark:hover:bg-white/[0.08]">
+                <button
+                  type="button"
+                  onClick={() => handleItemClick(item)}
+                  className="flex min-w-0 flex-1 items-center gap-3 px-2.5 py-2 text-left"
+                >
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[3px] bg-[#e5e7eb] text-neutral-600 dark:bg-[#3a3a3a] dark:text-neutral-200"><History className="h-4 w-4" /></span>
+                  <span className="min-w-0 flex-1 truncate text-[13px]">{item}</span>
+                </button>
+                <button type="button" onClick={(event) => handleRemoveHistoryItem(event, item)} title="Remove from history" aria-label={`Remove ${item} from search history`} className="mr-2 rounded p-1 text-neutral-500 opacity-0 transition-opacity hover:bg-black/10 group-hover:opacity-100 focus-visible:opacity-100 dark:hover:bg-white/10">
+                  <X className="h-3.5 w-3.5" />
+                </button>
               </div>
-            </div>
-          )}
-        </div>
+            ))}
+            {displayedHistory.length === 0 && <p className="px-3 py-4 text-[13px] text-neutral-500">No recent searches</p>}
+          </div>
+        )
       ) : (
         /* ================= MODE 2: ACTIVE COPILOT AI CHAT VIEW ================= */
         <div className="flex flex-col h-[440px]">
