@@ -292,10 +292,10 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
       key="windows-search-copilot-flyout"
       className={`context-menu copilot-flyout-container absolute top-full left-0 right-0 w-full z-[999] select-none text-white font-sans overflow-hidden ${
         settings.windowsAppSdkPreview
-          ? 'rounded-b-[8px] rounded-t-none -mt-px !bg-[#2b2b2b] !border-0 !border-none !backdrop-blur-none shadow-[0_20px_50px_rgba(0,0,0,0.65)]'
+          ? 'rounded-[18px] mt-2 !bg-[#2f2926]/95 !border !border-white/[0.1] !backdrop-blur-none shadow-[0_22px_55px_rgba(0,0,0,0.65)]'
           : isPill
-            ? 'rounded-[16px] mt-2 shadow-[0_20px_50px_rgba(0,0,0,0.65)] border border-black/15 dark:border-white/10 bg-[#1f2025]/95 dark:bg-[#1b1c21]/95 backdrop-blur-2xl'
-            : 'rounded-b-[8px] rounded-t-none -mt-px shadow-[0_20px_50px_rgba(0,0,0,0.65)] border border-black/15 dark:border-white/10 border-t-0 bg-[#1f2025]/95 dark:bg-[#1b1c21]/95 backdrop-blur-2xl'
+            ? 'rounded-[18px] mt-2 shadow-[0_22px_55px_rgba(0,0,0,0.65)] border border-white/[0.1] bg-[#2f2926]/95 backdrop-blur-2xl'
+            : 'rounded-[18px] mt-2 shadow-[0_22px_55px_rgba(0,0,0,0.65)] border border-white/[0.1] bg-[#2f2926]/95 backdrop-blur-2xl'
       } p-2.5 pb-3 flex flex-col`}
       style={{
         backdropFilter: settings.windowsAppSdkPreview ? 'none' : 'blur(32px) saturate(160%)',
@@ -314,11 +314,11 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
               key={item}
               onClick={() => handleItemClick(item)}
               style={{ animation: 'none', transform: 'none' }}
-              className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-[6px] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] active:bg-black/[0.08] dark:active:bg-white/[0.1] cursor-pointer group text-left"
+              className="w-full flex items-center justify-between px-2.5 py-2 rounded-[12px] hover:bg-white/[0.08] active:bg-white/[0.12] cursor-pointer group text-left transition-colors"
             >
               <div className="flex items-center gap-3.5 min-w-0 flex-1">
                 {/* Black Square Icon with White History Clock Glyphs */}
-                <div className="w-9 h-9 rounded-[6px] bg-black dark:bg-[#0c0d0e] flex items-center justify-center shrink-0 border border-white/[0.08] shadow-xs">
+                <div className="w-9 h-9 rounded-[10px] bg-[#161414] flex items-center justify-center shrink-0 border border-white/[0.08] shadow-[0_2px_5px_rgba(0,0,0,0.25)]">
                   <History className="w-4 h-4 text-white stroke-[1.8]" />
                 </div>
 
@@ -348,7 +348,7 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
                 aspect.onSelect();
                 onClose();
               }}
-              className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-[6px] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] active:bg-black/[0.08] dark:active:bg-white/[0.1] cursor-pointer group text-left"
+              className="w-full flex items-center justify-between px-2.5 py-2 rounded-[12px] hover:bg-white/[0.08] active:bg-white/[0.12] cursor-pointer group text-left transition-colors"
             >
               <div className="flex items-center gap-3.5 min-w-0 flex-1">
                 <div className="w-9 h-9 rounded-[6px] bg-black dark:bg-[#0c0d0e] flex items-center justify-center shrink-0 border border-white/[0.08] shadow-xs overflow-hidden">
@@ -378,7 +378,7 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
               className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-[6px] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] active:bg-black/[0.08] dark:active:bg-white/[0.1] cursor-pointer group text-left mt-0.5 pt-1 border-t border-black/5 dark:border-white/5"
             >
               <div className="flex items-center gap-3.5 min-w-0 flex-1">
-                <div className="w-9 h-9 rounded-[6px] bg-black dark:bg-[#0c0d0e] flex items-center justify-center shrink-0 border border-white/[0.08] shadow-xs">
+                <div className="w-9 h-9 rounded-[10px] bg-[#161414] flex items-center justify-center shrink-0 border border-white/[0.08] shadow-[0_2px_5px_rgba(0,0,0,0.25)]">
                   <CopilotRibbonIcon className="w-4 h-4" />
                 </div>
                 <div className="flex flex-col min-w-0">
