@@ -138,6 +138,8 @@ interface TopBarProps {
   currentRoute: string;
   navigate: (route: string) => void;
   onOpenSearch: () => void;
+  settingsSearchQuery?: string;
+  onSettingsSearchChange?: (query: string) => void;
   onOpenMobileMenu?: () => void;
   currentChannel?: Channel;
   channels?: Channel[];
@@ -160,6 +162,8 @@ export const TopBar: React.FC<TopBarProps> = ({
   currentRoute,
   navigate,
   onOpenSearch,
+  settingsSearchQuery,
+  onSettingsSearchChange,
   onOpenMobileMenu,
   currentChannel,
   channels = [],
@@ -183,7 +187,14 @@ export const TopBar: React.FC<TopBarProps> = ({
     : (settings.experimentalSearchExperience || 'right');
   const isMobile = useIsMobile();
   const [logoError, setLogoError] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [localSearchQuery, setLocalSearchQuery] = useState('');
+  const searchQuery = currentRoute === '/settings' && settingsSearchQuery !== undefined
+    ? settingsSearchQuery
+    : localSearchQuery;
+  const setSearchQuery = (query: string) => {
+    setLocalSearchQuery(query);
+    if (currentRoute === '/settings') onSettingsSearchChange?.(query);
+  };
   const [isSearchFlyoutOpen, setIsSearchFlyoutOpen] = useState(false);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
