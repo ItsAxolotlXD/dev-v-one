@@ -114,7 +114,7 @@ export const TabLoadingScreen: React.FC<TabLoadingScreenProps> = ({ route = '', 
     if (cleanRoute === '/swift-bank' || cleanRoute === '/bank' || cleanRoute === '/swiftbank') {
       return {
         title: 'Swift Bank',
-        icon: <FluentSwiftBankIcon className={iconClass} />
+        icon: <AppTabIcon name="bank" className={iconClass} />
       };
     }
 
@@ -184,7 +184,7 @@ export const TabLoadingScreen: React.FC<TabLoadingScreenProps> = ({ route = '', 
     if (cleanRoute === '/swift' || cleanRoute === '/swift-social' || cleanRoute === '/social') {
       return {
         title: 'Swift Social',
-        icon: <FluentSwiftSocialIcon className={iconClass} />
+        icon: <AppTabIcon name="social" className={iconClass} />
       };
     }
 
@@ -219,7 +219,7 @@ export const TabLoadingScreen: React.FC<TabLoadingScreenProps> = ({ route = '', 
     if (cleanRoute === '/news' || cleanRoute.startsWith('/news/')) {
       return {
         title: 'Tin tức',
-        icon: <FluentNewsIcon className={iconClass} />
+        icon: <AppTabIcon name="articles" className={iconClass} />
       };
     }
 
@@ -247,7 +247,7 @@ export const TabLoadingScreen: React.FC<TabLoadingScreenProps> = ({ route = '', 
     if (cleanRoute === '/updates') {
       return {
         title: 'Cập nhật',
-        icon: <FluentUpdatesIcon className={iconClass} />
+        icon: <AppTabIcon name="updates" className={iconClass} />
       };
     }
 

@@ -1010,7 +1010,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <FluentArticlesIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+              <AppTabIcon name="articles" className="w-5 h-5 shrink-0" />
               <span className="truncate text-[13.5px]">Articles</span>
             </button>
           </div>
@@ -1029,7 +1029,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <FluentUpdatesIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+              <AppTabIcon name="updates" className="w-5 h-5 shrink-0" />
               <span className="truncate text-[13.5px]">Updates</span>
             </button>
           </div>
@@ -1098,7 +1098,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <FluentSwiftBankIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+              <AppTabIcon name="bank" className="w-5 h-5 shrink-0" />
               <span className="truncate text-[13.5px]">Swift Bank</span>
             </button>
           </div>
@@ -1117,7 +1117,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <FluentSwiftSocialIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+              <AppTabIcon name="social" className="w-5 h-5 shrink-0" />
               <span className="truncate text-[13.5px]">Swift Social</span>
             </button>
           </div>
@@ -1749,7 +1749,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                 }`}
               >
-                <FluentArticlesIcon className="w-5 h-5 text-black dark:text-white" />
+                <AppTabIcon name="articles" className="w-5 h-5" />
               </button>
 
               {/* 3. Updates Icon */}
@@ -1765,7 +1765,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                 }`}
               >
-                <FluentUpdatesIcon className="w-5 h-5 text-black dark:text-white" />
+                <AppTabIcon name="updates" className="w-5 h-5" />
               </button>
 
               {/* 4. Widgets Icon */}
@@ -1800,7 +1800,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                 }`}
               >
-                <FluentSwiftBankIcon className="w-5 h-5 text-black dark:text-white" />
+                <AppTabIcon name="bank" className="w-5 h-5" />
               </button>
 
               {/* Swift Social Icon */}
@@ -1816,7 +1816,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                 }`}
               >
-                <FluentSwiftSocialIcon className="w-5 h-5 text-black dark:text-white" />
+                <AppTabIcon name="social" className="w-5 h-5" />
               </button>
 
               {/* Friends Icon */}
