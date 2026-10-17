@@ -9,7 +9,8 @@ import {
   Send, 
   Sparkles,
   Search,
-  ExternalLink
+  ExternalLink,
+  MessageCircle
 } from 'lucide-react';
 import { useSettings } from '../hooks/useSettings';
 import { FluentSearchIcon } from './FluentIcons';
@@ -351,7 +352,7 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
               className="w-full flex items-center justify-between px-2.5 py-2 rounded-[12px] hover:bg-white/[0.08] active:bg-white/[0.12] cursor-pointer group text-left transition-colors"
             >
               <div className="flex items-center gap-3.5 min-w-0 flex-1">
-                <div className="w-9 h-9 rounded-[6px] bg-black dark:bg-[#0c0d0e] flex items-center justify-center shrink-0 border border-white/[0.08] shadow-xs overflow-hidden">
+                <div className="w-9 h-9 flex items-center justify-center shrink-0 overflow-hidden">
                   {aspect.logo ? (
                     <img src={aspect.logo} alt="" className="w-6 h-6 object-contain" />
                   ) : (
@@ -375,11 +376,11 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
           {searchQuery.trim() && (
             <div
               onClick={() => handleAskCopilot(searchQuery)}
-              className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-[6px] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] active:bg-black/[0.08] dark:active:bg-white/[0.1] cursor-pointer group text-left mt-0.5 pt-1 border-t border-black/5 dark:border-white/5"
+              className="w-full flex items-center justify-between px-2.5 py-2 rounded-[12px] hover:bg-white/[0.08] active:bg-white/[0.12] cursor-pointer group text-left mt-0.5 pt-2 border-t border-white/5 transition-colors"
             >
               <div className="flex items-center gap-3.5 min-w-0 flex-1">
-                <div className="w-9 h-9 rounded-[10px] bg-[#161414] flex items-center justify-center shrink-0 border border-white/[0.08] shadow-[0_2px_5px_rgba(0,0,0,0.25)]">
-                  <CopilotRibbonIcon className="w-4 h-4" />
+                <div className="w-9 h-9 flex items-center justify-center shrink-0">
+                  <MessageCircle className="w-5 h-5 text-[#4cc2ff]" strokeWidth={1.8} />
                 </div>
                 <div className="flex flex-col min-w-0">
                   <span className="text-[13px] sm:text-[13.5px] font-normal text-neutral-800 dark:text-neutral-100 group-hover:text-black dark:group-hover:text-white truncate">

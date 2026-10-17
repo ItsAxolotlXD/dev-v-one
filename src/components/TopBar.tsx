@@ -291,6 +291,14 @@ export const TopBar: React.FC<TopBarProps> = ({
       { id: 'set-fontscale', title: 'Text Scaling & Typography', keywords: 'settings text scaling font size zoom cỡ chữ', type: 'setting', onSelect: () => navigate('/settings') },
       { id: 'set-keyboard', title: 'Native Virtual Keyboard', keywords: 'settings native virtual keyboard bàn phím ảo', type: 'setting', onSelect: () => navigate('/settings') },
       { id: 'set-aspect', title: 'Stream Aspect Ratio', keywords: 'settings stream aspect ratio tỉ lệ khung hình 16:9 4:3', type: 'setting', onSelect: () => navigate('/settings') },
+      { id: 'set-autohide', title: 'Auto-hide Side View', keywords: 'settings auto hide sidebar collapse tự động ẩn thanh bên', type: 'setting', onSelect: () => navigate('/settings') },
+      { id: 'set-motion', title: 'Motion & Movements', keywords: 'settings motion movements animation reduce chuyển động hiệu ứng', type: 'setting', onSelect: () => navigate('/settings') },
+      { id: 'set-search', title: 'Customize Search Categories', keywords: 'settings search spotlight categories tìm kiếm tv news channels', type: 'setting', onSelect: () => navigate('/settings') },
+      { id: 'set-keybinds', title: 'Custom Keybinds & Shortcuts', keywords: 'settings keybinds shortcuts keyboard phím tắt', type: 'setting', onSelect: () => navigate('/settings') },
+      { id: 'set-navigation', title: 'Navigation Bar', keywords: 'settings navigation bar side view topbar floaty thanh điều hướng', type: 'setting', onSelect: () => navigate('/settings') },
+      { id: 'set-opacity', title: 'Transparency & Opacity', keywords: 'settings transparency opacity độ trong suốt', type: 'setting', onSelect: () => navigate('/settings') },
+      { id: 'set-experimental', title: 'Experimental Features', keywords: 'settings experimental dev preview beta thử nghiệm', type: 'setting', onSelect: () => navigate('/settings') },
+      { id: 'set-reset', title: 'Reset Settings', keywords: 'settings reset restore defaults khôi phục mặc định', type: 'setting', onSelect: () => navigate('/settings') },
 
       // Tools
       { id: 'tool-sticky', title: 'Sticky Note', keywords: 'tools sticky note ghi chú dán', type: 'tool', onSelect: () => navigate('/notes') },
