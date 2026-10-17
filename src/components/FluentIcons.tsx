@@ -4,6 +4,41 @@ import { useSettings, SearchIconTreatment } from '../hooks/useSettings';
 export const SPARKLE_SEARCH_ICON_URL = 'https://static.wikia.nocookie.net/ep-deo/images/6/6c/Search_sparkle.png/revision/latest/scale-to-width-down/1000?cb=20261015133722';
 export const GLOBE_SEARCH_ICON_URL = 'https://static.wikia.nocookie.net/ftv/images/5/5b/Ic_fluent_globe_search_24_regular.png/revision/latest?cb=20260508150432&path-prefix=vi';
 
+export const APP_TAB_ICON_URLS = {
+  home: 'https://www.elevenforum.com/data/attachments/30/30188-c9f25938bd40f9c2e3af267cc96b3e28.jpg?hash=yfJZOL1A-c',
+  taskManager: 'https://winaero.com/blog/wp-content/uploads/2021/05/taskmgr-task-manager-fluent-modern-icon.png',
+  bank: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/icons8-dollar-bag-96-VS47W4Ne5wDfcYmkNYfhA4QnNrQtXK.png',
+  social: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/icons8-google-chat-96-ciTkuoafHNKIjmnY0bljKs26z9mreM.png',
+  articles: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-1cDnOYLe4OqU4bObf5RNScKEBnWTYu.png',
+  updates: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/icons8-windows-update-96-4mcypPrTOJSBRugr5X89FWjNiQtrEx.png',
+  widgets: 'https://www.elevenforum.com/data/attachments/151/151773-6032f62cef01cd41415c88a760f59b31.jpg?hash=MN8WMBUfR7',
+  people: 'https://static.wikia.nocookie.net/logopedia/images/0/05/People.png/revision/latest/scale-to-width-down/200?cb=20200711202510',
+  edge: 'https://upload.wikimedia.org/wikipedia/commons/7/7e/Microsoft_Edge_logo_%282019%29.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original',
+  fileExplorer: 'https://static.wikia.nocookie.net/logopedia/images/5/51/File_Explorer.png/revision/latest?cb=20210615232646',
+  watch: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e3/Microsoft_Clipchamp_%282025%E2%80%93present%29.svg/1280px-Microsoft_Clipchamp_%282025%E2%80%93present%29.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail',
+  notes: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/post-it-paper-sticky-notes-22390_256-Ck6XAzV1mJhbLfqUSd5fxMeOSMhq0B.png',
+  gallery: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/icons8-photo-gallery-96-4tJhaieXrtShrMFtc7m5dgGWBP98BO.png',
+  camera: 'https://static.wikia.nocookie.net/logopedia/images/3/38/Camera_Win10X.svg/revision/latest/scale-to-width-down/200?cb=20221230185750',
+  paint: 'https://winaero.com/blog/wp-content/uploads/2020/04/colorful-fluent-Paint-3D-icon-big.png',
+  inkCanvas: 'https://store-images.s-microsoft.com/image/apps.35459.13942044577806852.30d26a11-3c35-4481-a6ad-4a6d8171eea3.33745dc3-f2ab-4774-a56a-f539701253bd?h=210',
+  calculator: 'https://static.wikia.nocookie.net/logopedia/images/5/54/Calculator_9.svg/revision/latest/scale-to-width-down/150?cb=20200623110053',
+  snippingTool: 'data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D',
+  feedback: 'https://upload.wikimedia.org/wikipedia/commons/1/18/Windows_Feedback_Hub_Icon.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original',
+  settings: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ac/Windows_Settings_icon.svg/3840px-Windows_Settings_icon.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail',
+} as const;
+
+export type AppTabIconName = keyof typeof APP_TAB_ICON_URLS;
+
+export const AppTabIcon: React.FC<{ name: AppTabIconName; className?: string; alt?: string }> = ({ name, className = 'size-5', alt = '' }) => (
+  <img
+    src={APP_TAB_ICON_URLS[name]}
+    alt={alt}
+    aria-hidden={alt ? undefined : true}
+    referrerPolicy="no-referrer"
+    className={`shrink-0 object-contain ${className}`}
+  />
+);
+
 export const FLUENT_ICON_URLS = {
   home: 'https://raw.githubusercontent.com/microsoft/fluentui-system-icons/main/assets/Home/SVG/ic_fluent_home_48_regular.svg',
   watch: 'https://raw.githubusercontent.com/microsoft/fluentui-system-icons/refs/heads/main/assets/Movies%20and%20TV/SVG/ic_fluent_movies_and_tv_24_regular.svg',

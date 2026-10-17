@@ -11,6 +11,7 @@ import {
   FluentSearchIcon, 
   FluentSettingsIcon,
   FluentWidgetsIcon,
+  APP_TAB_ICON_URLS,
   FLUENT_ICON_URLS 
 } from './FluentIcons';
 import { useSettings } from '../hooks/useSettings';
@@ -52,11 +53,11 @@ interface TabItem {
 }
 
 const DOCK_TABS: TabItem[] = [
-  { id: 'dock-home', label: 'Home', route: '/', image: FLUENT_ICON_URLS.home, icon: FluentHomeIcon },
-  { id: 'dock-tv', label: 'Watch', route: '/live-tv', image: FLUENT_ICON_URLS.liveTv, icon: FluentLiveTvIcon },
-  { id: 'dock-news', label: 'Articles', route: '/news', image: FLUENT_ICON_URLS.news, icon: FluentNewsIcon },
-  { id: 'dock-widgets', label: 'Widgets', route: '/widgets', icon: FluentWidgetsIcon },
-  { id: 'dock-settings', label: 'Settings', route: '/settings', image: FLUENT_ICON_URLS.settings, icon: FluentSettingsIcon },
+  { id: 'dock-home', label: 'Home', route: '/', image: APP_TAB_ICON_URLS.home, icon: FluentHomeIcon },
+  { id: 'dock-tv', label: 'Watch', route: '/live-tv', image: APP_TAB_ICON_URLS.watch, icon: FluentLiveTvIcon },
+  { id: 'dock-news', label: 'Articles', route: '/news', image: APP_TAB_ICON_URLS.articles, icon: FluentNewsIcon },
+  { id: 'dock-widgets', label: 'Widgets', route: '/widgets', image: APP_TAB_ICON_URLS.widgets, icon: FluentWidgetsIcon },
+  { id: 'dock-settings', label: 'Settings', route: '/settings', image: APP_TAB_ICON_URLS.settings, icon: FluentSettingsIcon },
   { id: 'dock-search', label: 'Search', isAction: true, image: FLUENT_ICON_URLS.search, icon: FluentSearchIcon },
   { id: 'dock-more', label: 'More', isAction: true, image: MORE_ICON, icon: LayoutGrid },
 ];
@@ -280,6 +281,16 @@ export const BottomDock: React.FC<BottomDockProps> = ({
 
     if (active) {
       const activeColor = '#FFFFFF';
+      if (hasImage && ['dock-home', 'dock-tv', 'dock-news', 'dock-widgets', 'dock-settings'].includes(item.id)) {
+        return (
+          <img
+            src={item.image}
+            alt={item.label}
+            referrerPolicy="no-referrer"
+            className={`${iconSizeClasses} ${spinClass} object-contain shrink-0 transition-transform duration-200`}
+          />
+        );
+      }
       if (hasImage) {
         return (
           <div
@@ -317,9 +328,11 @@ export const BottomDock: React.FC<BottomDockProps> = ({
           referrerPolicy="no-referrer"
           onError={() => setImageErrors((prev) => ({ ...prev, [item.id]: true }))}
           className={`${iconSizeClasses} ${spinClass} object-contain shrink-0 transition-all duration-150 ${
-            isBlackIcon
-              ? 'brightness-0'
-              : 'filter brightness-0 invert'
+            item.id === 'dock-news'
+              ? ''
+              : isBlackIcon
+                ? 'brightness-0'
+                : 'filter brightness-0 invert'
           } ${isSelectedOrHovered ? 'opacity-100' : 'opacity-75'}`}
         />
       );

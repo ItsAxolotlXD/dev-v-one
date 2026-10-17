@@ -352,7 +352,7 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
               className="w-full flex items-center justify-between px-2.5 py-2 rounded-[12px] hover:bg-white/[0.08] active:bg-white/[0.12] cursor-pointer group text-left transition-colors"
             >
               <div className="flex items-center gap-3.5 min-w-0 flex-1">
-                <div className="w-9 h-9 flex items-center justify-center shrink-0 overflow-hidden">
+                <div className="w-9 h-9 rounded-[10px] bg-[#063b70] flex items-center justify-center shrink-0 overflow-hidden border border-white/[0.08] shadow-[0_2px_5px_rgba(0,0,0,0.25)]">
                   {aspect.logo ? (
                     <img src={aspect.logo} alt="" className="w-6 h-6 object-contain" />
                   ) : (
