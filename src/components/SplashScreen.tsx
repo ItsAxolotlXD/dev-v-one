@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { SpinningRing } from './SpinningRing';
 
 const LOGO_SRC = 'https://static.wikia.nocookie.net/ep-deo/images/d/d4/V-one-dev.png/revision/latest?cb=20261012151735';
-const MICROSOFT_LOGO_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-81WhRr8wYLJ2V3J1orhhaK7qEchE0V.png';
+const MICROSOFT_LOGO_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-r1SabPVCokA68COSioto4rPEgZkHxF.png';
 
 interface SplashScreenProps {
   duration?: number; // duration in ms, default 700ms for fast startup
@@ -91,7 +91,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
       <img
         src={MICROSOFT_LOGO_SRC}
         alt="Microsoft"
-        className="microsoft-splash-logo absolute bottom-5 left-1/2 w-32 max-w-[40vw] -translate-x-1/2 object-contain opacity-90 sm:bottom-7 sm:w-40"
+        className="microsoft-splash-logo absolute bottom-5 left-1/2 w-28 max-w-[40vw] -translate-x-1/2 object-contain opacity-90 sm:bottom-7 sm:w-36"
         style={{ bottom: 'max(1.25rem, env(safe-area-inset-bottom))' }}
       />
     </div>
