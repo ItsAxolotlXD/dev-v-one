@@ -6,6 +6,7 @@ export const GLOBE_SEARCH_ICON_URL = 'https://static.wikia.nocookie.net/ftv/imag
 
 export const MAIL_TAB_ICON_URL = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-w08Tu7AUdI6LLJeWquYKJiNuuzCnVN.png';
 export const CALENDAR_TAB_ICON_URL = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-EOTmadFpTcD8ViTHEiYhPMCbFvwgFn.png';
+export const STORE_ICON_URL = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-rwSh33P3L1Yzqgl0DKUj5mbVNzFKj1.png';
 
 export const APP_TAB_ICON_URLS = {
   mail: MAIL_TAB_ICON_URL,

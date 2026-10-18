@@ -16,13 +16,13 @@ import {
   UploadCloud,
   DownloadCloud,
   RefreshCw,
-  Pencil,
-  Store
+  Pencil
 } from 'lucide-react';
 import { 
   AppTabIcon,
   MAIL_TAB_ICON_URL,
   CALENDAR_TAB_ICON_URL,
+  STORE_ICON_URL,
   FluentHomeIcon, 
   FluentWatchIcon,
   FluentLiveTvIcon, 
@@ -1064,7 +1064,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               aria-label="Store"
               className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${currentRoute === '/store' ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs' : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'}`}
             >
-              <Store className="w-5 h-5 shrink-0 text-[#1688e5]" />
+              <img src={STORE_ICON_URL} alt="" className="size-5 shrink-0 object-contain" />
               <span className="truncate text-[13.5px]">Store</span>
             </button>
           </div>
@@ -1809,7 +1809,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 aria-label="Store"
                 className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${currentRoute === '/store' ? 'bg-black/5 dark:bg-white/[0.08] shadow-xs' : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'}`}
               >
-                <Store className="w-5 h-5 text-[#1688e5]" />
+                <img src={STORE_ICON_URL} alt="" className="size-5 object-contain" />
               </button>
 
               {/* Divider: Social */}

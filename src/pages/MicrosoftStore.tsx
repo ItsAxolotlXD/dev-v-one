@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowRight, Check, ChevronRight, Download, LoaderCircle, Search, Sparkles, Star, Store, X } from 'lucide-react';
-import { AppTabIcon, FluentCraftmineIcon, FluentPhotopeaIcon } from '../components/FluentIcons';
+import { AppTabIcon, FluentCraftmineIcon, FluentPhotopeaIcon, STORE_ICON_URL } from '../components/FluentIcons';
 import { STORE_APPS, type StoreApp } from '../data/storeApps';
 
 interface MicrosoftStoreProps {
@@ -13,15 +13,8 @@ interface MicrosoftStoreProps {
 const categories = ['All', 'Productivity', 'Social', 'Entertainment', 'Creativity', 'Utilities'] as const;
 type Category = typeof categories[number];
 
-const WindowsMark = ({ className = 'size-6' }: { className?: string }) => (
-  <span className={`grid grid-cols-2 gap-[2px] ${className}`} aria-hidden="true">
-    <span className="bg-[#f35325]" /><span className="bg-[#81bc06]" />
-    <span className="bg-[#05a6f0]" /><span className="bg-[#ffba08]" />
-  </span>
-);
-
 function AppArtwork({ app, className = 'size-14' }: { app: StoreApp; className?: string }) {
-  const iconClassName = `${className} shrink-0 rounded-[14px] bg-white/[0.06] p-2.5`;
+  const iconClassName = `${className} shrink-0`;
   if (app.icon === 'craftmine') {
     return <span className={`flex items-center justify-center ${iconClassName}`}><FluentCraftmineIcon className="size-full text-white" /></span>;
   }
@@ -78,7 +71,7 @@ function InstallAppDialog({ app, open, installing, secondsRemaining, onInstall, 
     >
       <div className="p-6 sm:p-7">
         <div className="flex items-start gap-4">
-          <AppArtwork app={app} className="size-14 rounded-xl" />
+          <AppArtwork app={app} className="size-14" />
           <div className="min-w-0 pt-1">
             <h2 id="install-first-title" className="text-xl font-semibold tracking-tight">Install your app first</h2>
             <p className="mt-2 text-sm leading-5 text-white/65">Install {app.name} before opening it. It will be ready on this device once installation finishes.</p>
@@ -166,7 +159,7 @@ export const MicrosoftStore: React.FC<MicrosoftStoreProps> = ({ installedApps, o
       <header className="sticky top-0 z-20 border-b border-white/10 bg-[#101012]/95 backdrop-blur-xl">
         <div className="mx-auto flex max-w-[1500px] flex-wrap items-center gap-x-8 gap-y-3 px-5 py-4 sm:px-8 lg:px-10">
           <button type="button" onClick={() => { setSelectedAppId(null); setActiveSection('Home'); }} className="flex items-center gap-3 text-left" aria-label="Store home">
-            <WindowsMark className="size-6" />
+            <img src={STORE_ICON_URL} alt="" className="size-6 object-contain" />
             <span className="text-lg font-medium tracking-tight">Store</span>
           </button>
           <nav aria-label="Store sections" className="order-3 flex w-full items-center gap-6 sm:order-none sm:w-auto">
@@ -193,7 +186,7 @@ export const MicrosoftStore: React.FC<MicrosoftStoreProps> = ({ installedApps, o
             <button type="button" onClick={() => setSelectedAppId(null)} className="mb-6 inline-flex items-center gap-2 text-sm text-white/55 transition hover:text-white"><ChevronRight className="size-4 rotate-180" /> Back to Store</button>
             <div className="rounded-[28px] border border-white/10 bg-gradient-to-br from-[#0b5eaa] via-[#084a88] to-[#10283d] p-6 sm:p-10 lg:p-12">
               <div className="flex flex-col gap-7 sm:flex-row sm:items-start">
-                <AppArtwork app={selectedApp} className="size-20 rounded-[20px] p-4" />
+                <AppArtwork app={selectedApp} className="size-20" />
                 <div className="max-w-3xl flex-1">
                   <p className="text-sm font-medium text-white/65">{selectedApp.publisher}</p>
                   <h1 className="mt-1 text-3xl font-semibold tracking-tight sm:text-4xl">{selectedApp.name}</h1>
@@ -213,7 +206,7 @@ export const MicrosoftStore: React.FC<MicrosoftStoreProps> = ({ installedApps, o
             </div>
             <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_280px]">
               <section className="rounded-2xl border border-white/10 bg-[#1b1b1d] p-6"><h2 className="text-lg font-semibold">About this app</h2><p className="mt-3 text-sm leading-6 text-white/65">{selectedApp.description} Install it to add it to your Windows experience. Your installed apps are saved on this device.</p></section>
-              <section className="rounded-2xl border border-white/10 bg-[#1b1b1d] p-6"><h2 className="text-lg font-semibold">Discover more</h2><div className="mt-4 flex flex-col gap-4">{STORE_APPS.filter((app) => app.id !== selectedApp.id).slice(0, 3).map((app) => <button key={app.id} type="button" onClick={() => setSelectedAppId(app.id)} className="flex items-center gap-3 text-left"><AppArtwork app={app} className="size-11 rounded-xl p-2.5" /><span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium">{app.name}</span><span className="text-xs text-white/50">{app.category}</span></span><ChevronRight className="size-4 text-white/40" /></button>)}</div></section>
+              <section className="rounded-2xl border border-white/10 bg-[#1b1b1d] p-6"><h2 className="text-lg font-semibold">Discover more</h2><div className="mt-4 flex flex-col gap-4">{STORE_APPS.filter((app) => app.id !== selectedApp.id).slice(0, 3).map((app) => <button key={app.id} type="button" onClick={() => setSelectedAppId(app.id)} className="flex items-center gap-3 text-left"><AppArtwork app={app} className="size-11" /><span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium">{app.name}</span><span className="text-xs text-white/50">{app.category}</span></span><ChevronRight className="size-4 text-white/40" /></button>)}</div></section>
             </div>
           </section>
         ) : (
@@ -231,7 +224,7 @@ export const MicrosoftStore: React.FC<MicrosoftStoreProps> = ({ installedApps, o
                   </div>
                   <button type="button" onClick={() => setSelectedAppId(featuredApp.id)} className="group relative flex min-h-[210px] items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-[#509e4a] via-[#254c56] to-[#182a46] p-8 text-left sm:min-h-[280px]">
                     <span className="absolute inset-0 opacity-25" style={{ backgroundImage: 'linear-gradient(135deg, transparent 24%, rgba(255,255,255,.16) 25%, transparent 26%), linear-gradient(45deg, transparent 24%, rgba(255,255,255,.12) 25%, transparent 26%)', backgroundSize: '48px 48px' }} />
-                    <span className="relative flex flex-col items-center gap-4 text-center transition group-hover:scale-105"><AppArtwork app={featuredApp} className="size-24 rounded-[24px] p-5" /><span className="text-2xl font-semibold">Craftmine</span><span className="text-sm text-white/70">Build something extraordinary</span></span>
+                    <span className="relative flex flex-col items-center gap-4 text-center transition group-hover:scale-105"><AppArtwork app={featuredApp} className="size-24" /><span className="text-2xl font-semibold">Craftmine</span><span className="text-sm text-white/70">Build something extraordinary</span></span>
                   </button>
                 </div>
               </section>
@@ -253,7 +246,7 @@ export const MicrosoftStore: React.FC<MicrosoftStoreProps> = ({ installedApps, o
 
             <section className="mt-12 rounded-2xl border border-white/10 bg-[#1b1b1d] p-5 sm:p-6">
               <div className="flex items-center justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.16em] text-white/45">Your library</p><h2 className="mt-1 text-xl font-semibold">Installed apps</h2></div><button type="button" onClick={() => setActiveSection('Apps')} className="text-sm text-[#75cfff] hover:text-white">Browse store</button></div>
-              {installedApps.length ? <div className="mt-5 flex gap-3 overflow-x-auto pb-1">{STORE_APPS.filter((app) => installedApps.includes(app.id)).map((app) => <button key={app.id} type="button" onClick={() => navigate(app.route)} className="flex min-w-[190px] items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-3 text-left transition hover:bg-white/[0.08]"><AppArtwork app={app} className="size-11 rounded-xl p-2.5" /><span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium">{app.name}</span><span className="text-xs text-white/50">Installed</span></span><Check className="size-4 text-[#71d39a]" /></button>)}</div> : <p className="mt-4 text-sm text-white/55">Apps you install will appear here.</p>}
+              {installedApps.length ? <div className="mt-5 flex gap-3 overflow-x-auto pb-1">{STORE_APPS.filter((app) => installedApps.includes(app.id)).map((app) => <button key={app.id} type="button" onClick={() => navigate(app.route)} className="flex min-w-[190px] items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-3 text-left transition hover:bg-white/[0.08]"><AppArtwork app={app} className="size-11" /><span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium">{app.name}</span><span className="text-xs text-white/50">Installed</span></span><Check className="size-4 text-[#71d39a]" /></button>)}</div> : <p className="mt-4 text-sm text-white/55">Apps you install will appear here.</p>}
             </section>
             <p className="mt-8 flex items-center justify-center gap-2 text-xs text-white/35"><Store className="size-3.5" /> A curated collection for your Windows desktop</p>
           </>

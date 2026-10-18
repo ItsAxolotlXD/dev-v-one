@@ -226,6 +226,7 @@ body.rounded-search-boxes [id*="search-box"] {
   border-radius: 9999px !important;
 }
 
+
 /* ========================================================
    INSIDER FLAG: WEBVIEW SDK TEST PREVIEW (Windows App SDK Test Preview)
    1. Nền trang tab chính, thanh bên (Sidebar) và thanh trên cùng (TopBar) đều đổi thành màu xám tối (#141414)
@@ -6902,6 +6903,14 @@ html.spatial-glass-dark-content:not(.light-mode) .floaty-bar__item.is-active {
 html:not(.light-mode) .floaty-bar__item.is-active span,
 html.spatial-glass-dark-content:not(.light-mode) .floaty-bar__item.is-active span {
   color: #FFFFFF !important;
+}
+
+#root button,
+#root [role="button"],
+#root input[type="button"],
+#root input[type="submit"],
+#root input[type="reset"] {
+  border-radius: 5px !important;
 }
 
 .floaty-bar__item.is-active div[style*="background-color"],
