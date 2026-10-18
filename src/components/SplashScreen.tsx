@@ -1,31 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { SpinningRing } from './SpinningRing';
 
-const LOGO_SRC = 'https://static.wikia.nocookie.net/ep-deo/images/d/d4/V-one-dev.png/revision/latest?cb=20261012151735';
+const LOGO_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-TPopUU7m6WTCETjfIVB68A850AyvGg.png';
+const MICROSOFT_LOGO_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-r1SabPVCokA68COSioto4rPEgZkHxF.png';
 
 interface SplashScreenProps {
-  duration?: number; // duration in ms, default 700ms for fast startup
+  duration?: number; // duration in ms, defaults to 3 seconds
   onFinish?: () => void;
   subtitle?: string;
   isClosable?: boolean;
 }
 
 export const SplashScreen: React.FC<SplashScreenProps> = ({
-  duration = 700,
+  duration = 3000,
   onFinish,
   subtitle,
   isClosable = true
 }) => {
   const [isVisible, setIsVisible] = useState(true);
-  const [isFadingOut, setIsFadingOut] = useState(false);
   const [logoError, setLogoError] = useState(false);
 
   const dismiss = () => {
-    setIsFadingOut(true);
-    setTimeout(() => {
-      setIsVisible(false);
-      onFinish?.();
-    }, 180);
+    setIsVisible(false);
+    onFinish?.();
   };
 
   useEffect(() => {
@@ -55,9 +52,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
       onClick={() => {
         if (isClosable) dismiss();
       }}
-      className={`fixed inset-0 z-[99999] bg-[#1b1f24] dark:bg-[#1b1f24] text-white dark:text-white flex flex-col items-center justify-center select-none transition-all duration-200 ${
-        isFadingOut ? 'opacity-0 pointer-events-none' : 'opacity-100'
-      } ${isClosable ? 'cursor-pointer' : ''}`}
+      className={`fixed inset-0 z-[99999] bg-[#1b1f24] dark:bg-[#1b1f24] text-white dark:text-white flex flex-col items-center justify-center select-none ${isClosable ? 'cursor-pointer' : ''}`}
     >
       {/* Splash content: logo, spinning ring and subtitle all centered together with enlarged gap */}
       <div className="flex flex-col items-center justify-center gap-12 sm:gap-16 text-center px-6 max-w-md w-full">
@@ -66,7 +61,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
           {!logoError ? (
             <img
               src={LOGO_SRC}
-              alt="Sparkle (Dev)"
+              alt="Microsoft Edge Dev"
               referrerPolicy="no-referrer"
               className="h-16 sm:h-20 md:h-24 w-auto max-w-[180px] sm:max-w-[220px] object-contain drop-shadow-md transition-all"
               onError={() => setLogoError(true)}
@@ -86,6 +81,13 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
           )}
         </div>
       </div>
+
+      <img
+        src={MICROSOFT_LOGO_SRC}
+        alt="Microsoft"
+        className="microsoft-splash-logo absolute bottom-5 left-1/2 w-28 max-w-[40vw] -translate-x-1/2 object-contain opacity-90 sm:bottom-7 sm:w-36"
+        style={{ bottom: 'max(1.25rem, env(safe-area-inset-bottom))' }}
+      />
     </div>
   );
 };

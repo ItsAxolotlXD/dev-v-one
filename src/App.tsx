@@ -741,8 +741,8 @@ export default function App() {
       <div className="fixed inset-0 z-[999999] bg-[#0c0d0e] text-white flex flex-col items-center justify-center p-6 select-none font-sans">
         <div className="flex flex-col items-center text-center max-w-md space-y-6 animate-in fade-in duration-300">
           <img
-            src="https://static.wikia.nocookie.net/ep-deo/images/d/d4/V-one-dev.png/"
-            alt="Sparkle (Dev)"
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-TPopUU7m6WTCETjfIVB68A850AyvGg.png"
+            alt="Microsoft Edge Dev"
             referrerPolicy="no-referrer"
             className="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-md"
           />
@@ -1053,8 +1053,8 @@ export default function App() {
       {/* App Native Virtual Keyboard for Touch Devices */}
       <NativeKeyboard />
 
-      {/* Startup Splash Screen (nhanh, mượt mà: 700ms) */}
-      <SplashScreen duration={700} onFinish={() => setIsSplashFinished(true)} />
+      {/* Startup Splash Screen (3 seconds) */}
+      <SplashScreen duration={3000} onFinish={() => setIsSplashFinished(true)} />
 
       {/* Update Sparkle (Dev) Splash Screen */}
       {isUpdating && (

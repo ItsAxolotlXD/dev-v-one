@@ -1128,14 +1128,44 @@ html.light-mode #vplay-splash-screen {
   animation-delay: 0.24s;
 }
 
-/* Copilot Search Flyout: Completely disable slide-up and item animations */
-.copilot-flyout-container,
+/* Copilot flyouts disable incidental animations; search results opt into their own entrance motion. */
+.copilot-flyout-container:not(.copilot-search-results-container),
 .copilot-flyout-container *,
 .copilot-flyout-container > *,
 .copilot-flyout-container > * > *,
 .copilot-flyout-container > * > * > * {
   animation: none !important;
   transform: none !important;
+}
+
+@keyframes copilotSearchResultsSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.copilot-flyout-container.copilot-search-results-container {
+  animation: copilotSearchResultsSlideDown 200ms cubic-bezier(0.16, 1, 0.3, 1) both !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .copilot-flyout-container.copilot-search-results-container {
+    animation: none !important;
+  }
+}
+
+.microsoft-splash-logo {
+  mix-blend-mode: screen;
+}
+
+html.light-mode .microsoft-splash-logo {
+  background-color: #000;
+  mix-blend-mode: normal;
 }
 
 /* Fluent Progress Ring Continuous Spin */

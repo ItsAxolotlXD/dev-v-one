@@ -71,7 +71,7 @@ import { DiscordWelcomeModal } from './DiscordWelcomeModal';
 import { UnderConstructionModal } from './UnderConstructionModal';
 import { parseM3UPlaylist, downloadPlaylistFile } from '../utils/m3uParser';
 
-const LOGO_SRC = 'https://static.wikia.nocookie.net/ep-deo/images/d/d4/V-one-dev.png/revision/latest?cb=20261012151735';
+const LOGO_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-TPopUU7m6WTCETjfIVB68A850AyvGg.png';
 
 interface MorphingIndicatorProps {
   containerRef: React.RefObject<HTMLDivElement | null>;
@@ -954,7 +954,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           >
             <img 
               src={LOGO_SRC}
-              alt="Sparkle (Dev)" 
+              alt="Microsoft Edge Dev"
               referrerPolicy="no-referrer"
               className="h-6 w-auto object-contain drop-shadow-sm"
             />
