@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowRight, Check, ChevronRight, Download, LoaderCircle, Search, Sparkles, Star, Store, X } from 'lucide-react';
+import { ArrowRight, Check, ChevronRight, Download, LoaderCircle, Search, Star, Store, X } from 'lucide-react';
 import { AppTabIcon, FluentCraftmineIcon, FluentPhotopeaIcon, STORE_ICON_URL } from '../components/FluentIcons';
 import { STORE_APPS, type StoreApp } from '../data/storeApps';
 
@@ -110,8 +110,6 @@ export const MicrosoftStore: React.FC<MicrosoftStoreProps> = ({ installedApps, o
       return matchesCategory && matchesSection && matchesQuery;
     });
   }, [activeCategory, activeSection, search]);
-  const featuredApp = STORE_APPS.find((app) => app.id === 'craftmine')!;
-
   useEffect(() => () => {
     if (installTimeoutRef.current !== null) window.clearTimeout(installTimeoutRef.current);
     if (installIntervalRef.current !== null) window.clearInterval(installIntervalRef.current);
@@ -211,24 +209,6 @@ export const MicrosoftStore: React.FC<MicrosoftStoreProps> = ({ installedApps, o
           </section>
         ) : (
           <>
-            {activeSection === 'Home' && !search && (
-              <section className="relative mb-10 overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-br from-[#0b62ad] via-[#073d72] to-[#171d32] p-6 sm:p-10 lg:p-12">
-                <div className="pointer-events-none absolute -right-10 -top-20 size-72 rounded-full bg-[#38a9ff]/20 blur-3xl" />
-                <div className="relative grid items-center gap-8 lg:grid-cols-[1.05fr_0.95fr]">
-                  <div className="max-w-xl">
-                    <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs text-white/80"><Sparkles className="size-3.5" /> Featured collection</p>
-                    <p className="mt-5 text-sm font-medium text-white/70">Made for your next adventure</p>
-                    <p className="mt-4 max-w-lg text-sm leading-6 text-white/70 sm:text-base">A little inspiration for your day. Discover tools, creativity, and entertainment picked for you.</p>
-                    <button type="button" onClick={() => { setActiveSection('Games'); setSelectedAppId(featuredApp.id); }} className="mt-6 inline-flex h-11 items-center gap-2 rounded-lg bg-[#65d1ff] px-5 text-sm font-semibold text-[#08243a] transition hover:bg-[#96e1ff]">Explore Craftmine <ArrowRight className="size-4" /></button>
-                  </div>
-                  <button type="button" onClick={() => setSelectedAppId(featuredApp.id)} className="group relative flex min-h-[210px] items-center justify-center overflow-hidden rounded-2xl p-8 text-left sm:min-h-[280px]" style={{ background: `linear-gradient(135deg, ${featuredApp.accent} 0%, ${featuredApp.accent}b8 48%, #101012 100%)` }}>
-                    <span className="absolute inset-0 opacity-25" style={{ backgroundImage: 'linear-gradient(135deg, transparent 24%, rgba(255,255,255,.16) 25%, transparent 26%), linear-gradient(45deg, transparent 24%, rgba(255,255,255,.12) 25%, transparent 26%)', backgroundSize: '48px 48px' }} />
-                    <span className="relative flex flex-col items-center gap-4 text-center transition group-hover:scale-105"><AppArtwork app={featuredApp} className="size-24" /><span className="text-2xl font-semibold">Craftmine</span><span className="text-sm text-white/70">Build something extraordinary</span></span>
-                  </button>
-                </div>
-              </section>
-            )}
-
             <section>
               <div className="flex flex-wrap items-end justify-between gap-4">
                 <div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#61caff]">{activeSection === 'Home' ? 'Made for you' : activeSection}</p><h2 className="mt-1 text-2xl font-semibold tracking-tight sm:text-3xl">{search ? 'Search results' : activeSection === 'Home' ? 'Essential apps' : `Explore ${activeSection.toLowerCase()}`}</h2></div>
