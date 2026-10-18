@@ -330,12 +330,12 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
   return (
     <div
       key="windows-search-copilot-flyout"
-      className={`context-menu copilot-flyout-container absolute top-full left-1/2 right-auto w-[min(680px,calc(100vw-24px))] max-w-[calc(100vw-24px)] -translate-x-1/2 z-[999] select-none font-sans overflow-hidden max-h-[min(70vh,540px)] rounded-[12px] mt-2 shadow-[0_18px_45px_rgba(0,0,0,0.28)] flex flex-col ${
+      className={`context-menu copilot-flyout-container absolute top-full left-1/2 right-auto w-[min(680px,calc(100vw-24px))] max-w-[calc(100vw-24px)] -translate-x-1/2 z-[999] select-none font-sans overflow-hidden max-h-[min(70vh,540px)] mt-2 shadow-[0_18px_45px_rgba(0,0,0,0.28)] flex flex-col ${
         activeMode === 'search'
-          ? 'border border-black/10 bg-white text-[#1f2937]'
+          ? 'rounded-none border border-black/10 bg-white text-[#1f2937]'
           : settings.windowsAppSdkPreview
-            ? '!border !border-white/[0.12] !bg-[#2b2b2b] text-white'
-            : 'border border-black/10 dark:border-white/10 bg-white dark:bg-[#202124] text-[#1f2937] dark:text-neutral-100'
+            ? 'rounded-[12px] !border !border-white/[0.12] !bg-[#2b2b2b] text-white'
+            : 'rounded-[12px] border border-black/10 dark:border-white/10 bg-white dark:bg-[#202124] text-[#1f2937] dark:text-neutral-100'
       }`}
       style={{
         backdropFilter: 'none',
@@ -356,13 +356,13 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
                   type="button"
                   aria-pressed={selectedAspect?.id === matchingAspects[0].id}
                   onClick={() => setSelectedAspectId(matchingAspects[0].id)}
-                  className={`group flex w-full items-center gap-3 rounded-[3px] border px-2.5 py-2.5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4] ${
+                  className={`group flex w-full items-center gap-3 rounded-none border px-2.5 py-2.5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4] ${
                     selectedAspect?.id === matchingAspects[0].id
                       ? 'border-[#a7cce8] bg-[#cce8fa] text-[#1f2937]'
                       : 'border-transparent hover:bg-black/5'
                   }`}
                 >
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-[3px] bg-[#0078d4] text-white">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-none bg-[#0078d4] text-white">
                     {matchingAspects[0].logo ? (
                       <img src={matchingAspects[0].logo} alt="" className="h-6 w-6 object-contain" />
                     ) : (
@@ -388,7 +388,7 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
                         type="button"
                         aria-pressed={selectedAspect?.id === aspect.id}
                         onClick={() => setSelectedAspectId(aspect.id)}
-                        className={`group flex w-full items-center gap-2.5 rounded-[3px] px-2 py-1.5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4] ${
+                        className={`group flex w-full items-center gap-2.5 rounded-none px-2 py-1.5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4] ${
                           selectedAspect?.id === aspect.id
                             ? 'bg-[#cce8fa] text-[#1f2937]'
                             : 'hover:bg-black/5'
@@ -409,7 +409,7 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
                 <section className="mt-4" aria-label="Matching search history">
                   <h3 className="mb-1 px-1 text-[11px] font-semibold uppercase tracking-wide text-neutral-500">Search history</h3>
                   {matchingHistory.map((item) => (
-                    <button key={item} type="button" onClick={() => handleItemClick(item)} className="flex w-full items-center gap-2.5 rounded-[3px] px-2 py-1.5 text-left text-[12px] hover:bg-black/5">
+                    <button key={item} type="button" onClick={() => handleItemClick(item)} className="flex w-full items-center gap-2.5 rounded-none px-2 py-1.5 text-left text-[12px] hover:bg-black/5">
                       <History className="h-4 w-4 shrink-0 text-neutral-500" />
                       <span className="truncate">{item}</span>
                     </button>
@@ -419,11 +419,35 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
 
               <section className="mt-4 border-t border-black/10 pt-3" aria-label="Search the web">
                 <h3 className="mb-1 px-1 text-[11px] font-semibold uppercase tracking-wide text-neutral-500">Search the web</h3>
-                <button type="button" onClick={() => handleAskCopilot(searchQuery)} className="group flex w-full items-center gap-2.5 rounded-[3px] px-2 py-2 text-left transition-colors hover:bg-black/5">
-                  <MessageCircle className="h-4 w-4 shrink-0 text-[#0078d4]" />
-                  <span className="min-w-0 flex-1 truncate text-[12px]">Ask Copilot: “{searchQuery}”</span>
-                  <Sparkles className="h-3.5 w-3.5 shrink-0 text-[#0078d4]" />
-                </button>
+                <div className="flex flex-col gap-0.5">
+                  <a
+                    href={`https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Find on web with Google: ${searchQuery}`}
+                    className="group flex w-full items-center gap-2.5 rounded-none px-2 py-2 text-left text-[12px] transition-colors hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4]"
+                  >
+                    <Search className="h-4 w-4 shrink-0 text-[#4285f4]" />
+                    <span className="min-w-0 flex-1 truncate">Find on web: Google</span>
+                    <ExternalLink className="h-3.5 w-3.5 shrink-0 text-neutral-400" />
+                  </a>
+                  <a
+                    href={`https://www.bing.com/search?q=${encodeURIComponent(searchQuery)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Find on web with Bing: ${searchQuery}`}
+                    className="group flex w-full items-center gap-2.5 rounded-none px-2 py-2 text-left text-[12px] transition-colors hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4]"
+                  >
+                    <Search className="h-4 w-4 shrink-0 text-[#008373]" />
+                    <span className="min-w-0 flex-1 truncate">Find on web: Bing</span>
+                    <ExternalLink className="h-3.5 w-3.5 shrink-0 text-neutral-400" />
+                  </a>
+                  <button type="button" onClick={() => handleAskCopilot(searchQuery)} className="group flex w-full items-center gap-2.5 rounded-none px-2 py-2 text-left transition-colors hover:bg-black/5">
+                    <MessageCircle className="h-4 w-4 shrink-0 text-[#0078d4]" />
+                    <span className="min-w-0 flex-1 truncate text-[12px]">Ask Copilot: “{searchQuery}”</span>
+                    <Sparkles className="h-3.5 w-3.5 shrink-0 text-[#0078d4]" />
+                  </button>
+                </div>
               </section>
             </div>
 
@@ -443,21 +467,21 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
                   </div>
 
                   <div className="space-y-0.5 p-3 sm:p-4" aria-label="Selected result actions">
-                    <button type="button" onClick={() => { selectedAspect.onSelect(); onClose(); }} className="flex w-full items-center gap-3 rounded-[3px] px-2.5 py-2 text-left text-[12px] text-[#2b2b2b] transition-colors hover:bg-[#f2f2f2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4]">
+                    <button type="button" onClick={() => { selectedAspect.onSelect(); onClose(); }} className="flex w-full items-center gap-3 rounded-none px-2.5 py-2 text-left text-[12px] text-[#2b2b2b] transition-colors hover:bg-[#f2f2f2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4]">
                       <ExternalLink className="h-4 w-4 text-[#0078d4]" />
                       <span>Open</span>
                     </button>
                     {selectedAspect.type === 'setting' && (
-                      <button type="button" onClick={() => { navigate('/settings'); onClose(); }} className="flex w-full items-center gap-3 rounded-[3px] px-2.5 py-2 text-left text-[12px] text-[#2b2b2b] transition-colors hover:bg-[#f2f2f2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4]">
+                      <button type="button" onClick={() => { navigate('/settings'); onClose(); }} className="flex w-full items-center gap-3 rounded-none px-2.5 py-2 text-left text-[12px] text-[#2b2b2b] transition-colors hover:bg-[#f2f2f2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4]">
                         <Settings2 className="h-4 w-4 text-[#0078d4]" />
                         <span>App settings</span>
                       </button>
                     )}
-                    <button type="button" onClick={() => { navigate(`/search?q=${encodeURIComponent(selectedAspect.title)}`); onClose(); }} className="flex w-full items-center gap-3 rounded-[3px] px-2.5 py-2 text-left text-[12px] text-[#2b2b2b] transition-colors hover:bg-[#f2f2f2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4]">
+                    <button type="button" onClick={() => { navigate(`/search?q=${encodeURIComponent(selectedAspect.title)}`); onClose(); }} className="flex w-full items-center gap-3 rounded-none px-2.5 py-2 text-left text-[12px] text-[#2b2b2b] transition-colors hover:bg-[#f2f2f2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4]">
                       <Search className="h-4 w-4 text-[#0078d4]" />
                       <span>Search the web</span>
                     </button>
-                    <button type="button" onClick={handleCopyResult} className="flex w-full items-center gap-3 rounded-[3px] px-2.5 py-2 text-left text-[12px] text-[#2b2b2b] transition-colors hover:bg-[#f2f2f2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4]">
+                    <button type="button" onClick={handleCopyResult} className="flex w-full items-center gap-3 rounded-none px-2.5 py-2 text-left text-[12px] text-[#2b2b2b] transition-colors hover:bg-[#f2f2f2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4]">
                       {copiedId === selectedAspect.id ? <Check className="h-4 w-4 text-emerald-600" /> : <Copy className="h-4 w-4 text-[#0078d4]" />}
                       <span>{copiedId === selectedAspect.id ? 'Copied' : 'Copy name'}</span>
                     </button>
@@ -475,13 +499,13 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
         ) : (
           <div className="flex max-h-[min(70vh,520px)] flex-col overflow-y-auto bg-[#f1f1f1] p-2" style={{ animation: 'none', transform: 'none' }}>
             {displayedHistory.map((item) => (
-              <div key={item} className="group flex w-full items-center gap-1 rounded-[3px] transition-colors hover:bg-black/5">
+              <div key={item} className="group flex w-full items-center gap-1 rounded-none transition-colors hover:bg-black/5">
                 <button
                   type="button"
                   onClick={() => handleItemClick(item)}
                   className="flex min-w-0 flex-1 items-center gap-3 px-2.5 py-2 text-left"
                 >
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[3px] bg-[#e5e7eb] text-neutral-600"><History className="h-4 w-4" /></span>
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-none bg-[#e5e7eb] text-neutral-600"><History className="h-4 w-4" /></span>
                   <span className="min-w-0 flex-1 truncate text-[13px]">{item}</span>
                 </button>
                 <button type="button" onClick={(event) => handleRemoveHistoryItem(event, item)} title="Remove from history" aria-label={`Remove ${item} from search history`} className="mr-2 rounded p-1 text-neutral-500 opacity-0 transition-opacity hover:bg-black/10 group-hover:opacity-100 focus-visible:opacity-100 dark:hover:bg-white/10">
