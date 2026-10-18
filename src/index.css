@@ -1141,11 +1141,11 @@ html.light-mode #vplay-splash-screen {
 @keyframes copilotSearchResultsSlideDown {
   from {
     opacity: 0;
-    transform: translate(-50%, -10px);
+    transform: translateY(-10px);
   }
   to {
     opacity: 1;
-    transform: translate(-50%, 0);
+    transform: translateY(0);
   }
 }
 

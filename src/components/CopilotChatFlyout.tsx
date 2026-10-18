@@ -330,7 +330,7 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
   return (
     <div
       key="windows-search-copilot-flyout"
-      className={`context-menu copilot-flyout-container absolute top-full left-1/2 right-auto w-[min(680px,calc(100vw-24px))] max-w-[calc(100vw-24px)] -translate-x-1/2 z-[999] select-none font-sans overflow-hidden max-h-[min(70vh,540px)] mt-2 shadow-[0_18px_45px_rgba(0,0,0,0.28)] flex flex-col ${activeMode === 'search' ? 'copilot-search-results-container' : ''} ${
+      className={`context-menu copilot-flyout-container absolute top-full right-auto w-[min(680px,calc(100vw-24px))] max-w-[calc(100vw-24px)] -translate-x-1/2 z-[999] select-none font-sans overflow-hidden max-h-[min(70vh,540px)] mt-2 shadow-[0_18px_45px_rgba(0,0,0,0.28)] flex flex-col ${activeMode === 'search' ? 'copilot-search-results-container' : ''} ${
         activeMode === 'search'
           ? 'rounded-none border border-black/10 bg-white text-[#1f2937]'
           : settings.windowsAppSdkPreview
@@ -338,11 +338,11 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
             : 'rounded-[12px] border border-black/10 dark:border-white/10 bg-white dark:bg-[#202124] text-[#1f2937] dark:text-neutral-100'
       }`}
       style={{
+        left: 'calc(50% - 16px)',
         backdropFilter: 'none',
         WebkitBackdropFilter: 'none',
         backgroundColor: activeMode === 'search' ? '#ffffff' : settings.windowsAppSdkPreview ? '#2b2b2b' : undefined,
         animation: 'none',
-        transform: 'translateX(-50%)',
       }}
     >
       {/* ================= MODE 1: WINDOWS SEARCH FLYOUT (MATCHING USER SCREENSHOT) ================= */}
