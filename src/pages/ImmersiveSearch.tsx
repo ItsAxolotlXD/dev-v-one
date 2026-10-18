@@ -283,7 +283,7 @@ export const ImmersiveSearch: React.FC<ImmersiveSearchProps> = ({
   return (
     <div 
       id="immersive-search-page"
-      className="w-full min-h-[calc(100vh-80px)] text-[#111827] dark:text-white px-3 sm:px-6 md:px-10 py-4 sm:py-6 select-none"
+      className="dark w-full min-h-[calc(100vh-80px)] bg-[#101216] text-[#111827] dark:text-white px-3 sm:px-6 md:px-10 py-4 sm:py-6 select-none"
     >
       <div className="max-w-6xl mx-auto space-y-7 sm:space-y-9">
         {/* Top Search Bar Row */}

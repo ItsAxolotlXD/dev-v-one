@@ -16,7 +16,8 @@ import {
   UploadCloud,
   DownloadCloud,
   RefreshCw,
-  Pencil
+  Pencil,
+  Monitor
 } from 'lucide-react';
 import { 
   AppTabIcon,
@@ -1083,6 +1084,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
           </div>
 
+          <div className="shrink-0">
+            <button
+              type="button"
+              id={isMobile ? 'mobile-nav-sparkos' : 'sidebar-nav-sparkos'}
+              data-nav-active={currentRoute === '/sparkos' ? 'true' : undefined}
+              onClick={() => handleNavClick('/sparkos')}
+              title="SparkOS"
+              aria-label="SparkOS"
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${currentRoute === '/sparkos' ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs' : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'}`}
+            >
+              <Monitor aria-hidden="true" className="size-5 shrink-0 text-[#1684e8]" />
+              <span className="truncate text-[13.5px]">SparkOS</span>
+            </button>
+          </div>
+
           {/* Productivity tabs */}
           <div className="shrink-0 flex flex-col gap-0.5">
             {[
@@ -1500,7 +1516,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <div className="flex items-center gap-3.5 truncate">
-                <AppTabIcon name="snippingTool" className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <FluentSnippingToolIcon className="w-5 h-5 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Snipping Tool</span>
               </div>
               {getDownloadIndicator('/snipping-tool', isCollapsed)}
@@ -1687,8 +1703,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <>
       {/* 1. Desktop Persistent Sidebar */}
       {settings.dockToSidebar && (
-        <aside 
+        <motion.aside
           id="waves-desktop-sidebar"
+          initial={false}
+          animate={{ width: effectiveCollapsed ? 48 : 260 }}
+          transition={shouldAnimateSidebar ? { type: 'spring', stiffness: 420, damping: 24, mass: 0.72 } : { duration: 0 }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           className={`hidden md:flex flex-col h-screen ${
@@ -1697,11 +1716,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               : 'bg-[#f3f3f3] dark:bg-[#1b1f24] border-r border-[#e5e5e5] dark:border-[#2e2e2e]'
           } text-[#111827] dark:text-white select-none shrink-0 fixed top-0 z-40 overflow-visible shadow-none ${
             settings.sidebarPosition === 'right' ? 'right-0' : 'left-0'
-          } ${
-            shouldAnimateSidebar ? 'transition-[width] duration-300 ease-in-out' : 'transition-none'
-          } ${
-            effectiveCollapsed ? 'w-[48px]' : 'w-[260px]'
-          }`}
+          } ${effectiveCollapsed ? 'w-[48px]' : 'w-[260px]'}`}
           style={{
             backgroundColor: settings.windowsAppSdkPreview ? '#141414' : (settings.theme === 'light' ? '#f3f3f3' : '#1b1f24'),
             backdropFilter: 'none',
@@ -1841,6 +1856,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${currentRoute === '/store' ? 'bg-black/5 dark:bg-white/[0.08] shadow-xs' : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'}`}
               >
                 <img src={STORE_ICON_URL} alt="" className="size-5 object-contain" />
+              </button>
+
+              <button
+                type="button"
+                id="sidebar-collapsed-sparkos"
+                data-nav-active={currentRoute === '/sparkos' ? 'true' : undefined}
+                onClick={() => handleNavClick('/sparkos')}
+                title="SparkOS"
+                aria-label="SparkOS"
+                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${currentRoute === '/sparkos' ? 'bg-black/5 dark:bg-white/[0.08] shadow-xs' : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'}`}
+              >
+                <Monitor aria-hidden="true" className="size-5 text-[#1684e8]" />
               </button>
 
               {/* Divider: Social */}
@@ -2258,7 +2285,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </div>
             </div>
           )}
-        </aside>
+        </motion.aside>
       )}
 
       {/* 2. Mobile Drawer Navigation with Smooth Animation */}

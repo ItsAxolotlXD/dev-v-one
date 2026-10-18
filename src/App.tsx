@@ -55,6 +55,7 @@ import { Calculator } from './pages/Calculator';
 import { SnippingTool } from './pages/SnippingTool';
 import { FeedbackHub } from './pages/FeedbackHub';
 import { MicrosoftStore } from './pages/MicrosoftStore';
+import { SparkOS } from './pages/SparkOS';
 import { getStoreAppForRoute } from './data/storeApps';
 import { ProductivityTab } from './pages/ProductivityTabs';
 import { SpinningRing } from './components/SpinningRing';
@@ -536,15 +537,21 @@ export default function App() {
     }
   };
 
+  const isSparkOSRoute = currentRoute === '/sparkos';
+
   // Render Page Content based on currentRoute
-  const renderContent = () => {
+  const renderContentForRoute = (route: string, appNavigate: (path: string) => void = navigate, inSparkOSWindow = false) => {
+    const navigate = appNavigate;
     // Route matching for news detail: /news/:slug
-    if (currentRoute.startsWith('/news/')) {
-      const slug = currentRoute.replace('/news/', '');
+    if (route.startsWith('/news/')) {
+      const slug = route.replace('/news/', '');
       return <Article slug={slug} navigate={navigate} fontSize={articleFontSize} />;
     }
 
-    switch (currentRoute) {
+    switch (route) {
+      case '/sparkos':
+        return <SparkOS navigate={navigate} installedApps={installedApps} renderApp={(appRoute, windowNavigate) => renderContentForRoute(appRoute, windowNavigate, true)} />;
+
       case '/':
       case '/home':
         return (
@@ -648,6 +655,10 @@ export default function App() {
             navigate={navigate}
             onSelectChannel={setCurrentChannel}
             onClose={() => {
+              if (inSparkOSWindow) {
+                navigate('/');
+                return;
+              }
               const target = previousRouteRef.current && previousRouteRef.current !== '/search' ? previousRouteRef.current : '/';
               navigate(target);
             }}
@@ -746,7 +757,7 @@ export default function App() {
         return <CameraApp navigate={navigate} />;
 
       case '/copilot':
-        return <CopilotPage navigate={navigate} />;
+        return <CopilotPage navigate={navigate} embedded={inSparkOSWindow} />;
 
       case '/calculator':
       case '/calc':
@@ -785,8 +796,11 @@ export default function App() {
     }
   };
 
+  const renderContent = () => renderContentForRoute(currentRoute, navigate);
+
   const isOfficeRoute = currentRoute === '/notes' || currentRoute === '/write';
   const isFullBleedRoute =
+    isSparkOSRoute ||
     currentRoute === '/store' ||
     isOfficeRoute ||
     currentRoute === '/mail' ||
@@ -873,7 +887,7 @@ export default function App() {
         <div
         data-immersive-sidebar={settings.immersiveSidebar}
       data-sidebar-position={settings.sidebarPosition}
-      className={`min-h-screen ${settings.superDarkMode ? 'bg-black' : 'bg-[#f9f9f9] dark:bg-[#1b1f24]'} text-[#111827] dark:text-[#E0E0E6] flex font-sans selection:bg-[#4cc2ff] selection:text-black relative`}
+      className={`min-h-screen ${settings.superDarkMode ? 'bg-black' : 'bg-[#f9f9f9] dark:bg-[#1b1f24]'} text-[#111827] dark:text-[#E0E0E6] flex font-sans selection:bg-[#4cc2ff] selection:text-black relative ${isSparkOSRoute ? '!h-[100dvh] !min-h-0 !overflow-hidden !bg-black' : ''}`}
     >
       {/* 5-second device cursor busy overlay before splash screen */}
       {crashPhase === 'cursor-busy' && (
@@ -892,7 +906,7 @@ export default function App() {
       />
 
       {/* Sidebar Navigation (Desktop + Mobile Drawer) */}
-      {(settings.navigationMode === 'sidebar' || isMobileSidebarOpen) && (
+      {!isSparkOSRoute && (settings.navigationMode === 'sidebar' || isMobileSidebarOpen) && (
         <Sidebar
           currentRoute={currentRoute}
           navigate={navigate}
@@ -930,7 +944,7 @@ export default function App() {
       {/* Main App Container */}
       <div className={`main-app-container flex-1 flex flex-col min-w-0 min-h-screen transition-[padding] duration-300 ease-in-out ${
         settings.windowsAppSdkPreview ? 'bg-[#141414]' : 'bg-[#f3f3f3] dark:bg-[#1b1f24]'
-      } ${
+      } ${isSparkOSRoute ? '!h-full !min-h-0 !p-0 !bg-black !transition-none' : ''} ${
         settings.navigationMode === 'topbar'
           ? 'md:pl-0 md:pr-0 pb-10'
           : !settings.dockToSidebar || settings.navigationMode !== 'sidebar'
@@ -944,7 +958,7 @@ export default function App() {
                 : 'md:pl-[260px]'
       }`}>
         {/* TopBar Header */}
-        {!isOfficeRoute && currentRoute !== '/store' && (
+        {!isSparkOSRoute && !isOfficeRoute && currentRoute !== '/store' && (
           <TopBar
             currentRoute={currentRoute}
             navigate={navigate}
@@ -991,9 +1005,9 @@ export default function App() {
           settings.navigationMode === 'floaty' && !isFullBleedRoute
             ? 'pb-28 sm:pb-32'
             : ''
-        }`}>
+        } ${isSparkOSRoute ? '!h-full !min-h-0 !p-0 !max-w-none !bg-black' : ''}`}>
           {/* Dynamic Page Content: No slide-up animation when switching pages */}
-          {isTabLoading ? (
+          {isTabLoading && !isSparkOSRoute ? (
             <div key={`tab-loading-${currentRoute}`} className={`w-full h-full flex-1 flex flex-col items-center justify-center min-h-[calc(100vh-3.5rem)] ${
               settings.windowsAppSdkPreview ? 'bg-[#141414]' : 'bg-[#f3f4f6] dark:bg-[#202024]'
             }`}>
@@ -1012,7 +1026,7 @@ export default function App() {
       </div>
 
       {/* Floaty bar navigation (Tab View) */}
-      {settings.navigationMode === 'floaty' && (
+      {!isSparkOSRoute && settings.navigationMode === 'floaty' && (
         <BottomDock
           currentRoute={currentRoute}
           navigate={navigate}

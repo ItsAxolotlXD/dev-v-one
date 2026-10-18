@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useSystemTasks } from '../context/SystemTasksContext';
 import { SpinningRing } from '../components/SpinningRing';
+import { sparkOSResetOobeEvent } from '../components/SparkOSBootSetup';
 
 export const COPILOT_ICON_SRC = 'https://upload.wikimedia.org/wikipedia/vi/a/aa/Microsoft_Copilot_Icon.svg';
 
@@ -35,9 +36,10 @@ interface ChatMessage {
 
 interface CopilotPageProps {
   navigate?: (route: string) => void;
+  embedded?: boolean;
 }
 
-export const CopilotPage: React.FC<CopilotPageProps> = ({ navigate }) => {
+export const CopilotPage: React.FC<CopilotPageProps> = ({ navigate, embedded = false }) => {
   const { isTaskRunning, restartTask } = useSystemTasks();
   const isCopilotRunning = isTaskRunning('task-copilot');
 
@@ -62,7 +64,8 @@ export const CopilotPage: React.FC<CopilotPageProps> = ({ navigate }) => {
 
   // Auto-scroll to bottom of messages
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const messageList = chatEndRef.current?.parentElement;
+    messageList?.scrollTo({ top: messageList.scrollHeight, behavior: 'smooth' });
   }, [messages, isLoading]);
 
   // Handle URL query parameter (e.g. from TopBar /find or /search redirect)
@@ -145,6 +148,19 @@ export const CopilotPage: React.FC<CopilotPageProps> = ({ navigate }) => {
 
     setMessages((prev) => [...prev, userMsg]);
     setInputVal('');
+
+    if (/^\/oobe\s+reset$/i.test(message)) {
+      const confirmation: ChatMessage = {
+        id: `ai-${Date.now()}`,
+        role: 'model',
+        text: embedded ? 'Đang khởi động lại OOBE của SparkOS…' : 'Lệnh này chỉ hoạt động trong Copilot bên trong SparkOS.',
+        timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
+      };
+      setMessages((prev) => [...prev, confirmation]);
+      if (embedded) window.setTimeout(() => window.dispatchEvent(new Event(sparkOSResetOobeEvent)), 650);
+      return;
+    }
+
     setIsLoading(true);
 
     const isSearchCmd = /^\/(find|search)\b/i.test(message);
@@ -290,7 +306,7 @@ export const CopilotPage: React.FC<CopilotPageProps> = ({ navigate }) => {
 
 
   return (
-    <div className="w-full h-[calc(100vh-3.5rem)] bg-transparent text-[#111827] dark:text-[#f3f4f6] flex flex-col p-3 sm:px-6 sm:pt-4 sm:pb-3 select-none font-sans overflow-hidden">
+    <div className={`w-full ${embedded ? 'h-full min-h-0' : 'h-[calc(100vh-3.5rem)]'} bg-transparent text-[#111827] dark:text-[#f3f4f6] flex flex-col p-3 sm:px-6 sm:pt-4 sm:pb-3 select-none font-sans overflow-hidden`}>
       {/* 1. Header Banner */}
       <div className="max-w-4xl w-full mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-black/10 dark:border-white/10 shrink-0">
         <div className="flex items-center gap-3.5">
