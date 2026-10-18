@@ -1053,8 +1053,8 @@ export default function App() {
       {/* App Native Virtual Keyboard for Touch Devices */}
       <NativeKeyboard />
 
-      {/* Startup Splash Screen (nhanh, mượt mà: 700ms) */}
-      <SplashScreen duration={700} onFinish={() => setIsSplashFinished(true)} />
+      {/* Startup Splash Screen (3 seconds) */}
+      <SplashScreen duration={3000} onFinish={() => setIsSplashFinished(true)} />
 
       {/* Update Sparkle (Dev) Splash Screen */}
       {isUpdating && (
