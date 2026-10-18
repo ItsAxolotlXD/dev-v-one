@@ -1,6 +1,6 @@
 import type { AppTabIconName } from '../components/FluentIcons';
 
-export type StoreAppIcon = AppTabIconName | 'mail' | 'calendar' | 'craftmine' | 'photopea';
+export type StoreAppIcon = AppTabIconName | 'craftmine' | 'photopea';
 
 export interface StoreApp {
   id: string;

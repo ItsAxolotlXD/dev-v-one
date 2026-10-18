@@ -21,6 +21,8 @@ import {
 } from 'lucide-react';
 import { 
   AppTabIcon,
+  MAIL_TAB_ICON_URL,
+  CALENDAR_TAB_ICON_URL,
   FluentHomeIcon, 
   FluentWatchIcon,
   FluentLiveTvIcon, 
@@ -62,8 +64,6 @@ import {
   FluentFeedbackHubIcon
 } from './FluentIcons';
 
-const MAIL_TAB_ICON = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-w08Tu7AUdI6LLJeWquYKJiNuuzCnVN.png';
-const CALENDAR_TAB_ICON = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-EOTmadFpTcD8ViTHEiYhPMCbFvwgFn.png';
 import { useFavorites } from '../hooks/useFavorites';
 import { useSettings } from '../hooks/useSettings';
 import { CHANNELS_DATA } from '../data/channels';
@@ -1060,20 +1060,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
               id={isMobile ? 'mobile-nav-microsoft-store' : 'sidebar-nav-microsoft-store'}
               data-nav-active={currentRoute === '/store' ? 'true' : undefined}
               onClick={() => handleNavClick('/store')}
-              title="Microsoft Store"
-              aria-label="Microsoft Store"
+              title="Store"
+              aria-label="Store"
               className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${currentRoute === '/store' ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs' : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'}`}
             >
               <Store className="w-5 h-5 shrink-0 text-[#1688e5]" />
-              <span className="truncate text-[13.5px]">Microsoft Store</span>
+              <span className="truncate text-[13.5px]">Store</span>
             </button>
           </div>
 
           {/* Productivity tabs */}
           <div className="shrink-0 flex flex-col gap-0.5">
             {[
-              { route: '/mail', label: 'Mail', icon: MAIL_TAB_ICON },
-              { route: '/calendar', label: 'Calendar', icon: CALENDAR_TAB_ICON },
+              { route: '/mail', label: 'Mail', icon: MAIL_TAB_ICON_URL },
+              { route: '/calendar', label: 'Calendar', icon: CALENDAR_TAB_ICON_URL },
             ].map((item) => {
               const active = currentRoute === item.route;
               return (
@@ -1737,8 +1737,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
               {/* Productivity icons */}
   {[
-    { route: '/mail', label: 'Mail', icon: MAIL_TAB_ICON },
-    { route: '/calendar', label: 'Calendar', icon: CALENDAR_TAB_ICON },
+    { route: '/mail', label: 'Mail', icon: MAIL_TAB_ICON_URL },
+    { route: '/calendar', label: 'Calendar', icon: CALENDAR_TAB_ICON_URL },
   ].map((item) => (
     <button
       key={item.route}
@@ -1805,8 +1805,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 id="sidebar-collapsed-microsoft-store"
                 data-nav-active={currentRoute === '/store' ? 'true' : undefined}
                 onClick={() => handleNavClick('/store')}
-                title="Microsoft Store"
-                aria-label="Microsoft Store"
+                title="Store"
+                aria-label="Store"
                 className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${currentRoute === '/store' ? 'bg-black/5 dark:bg-white/[0.08] shadow-xs' : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'}`}
               >
                 <Store className="w-5 h-5 text-[#1688e5]" />

@@ -1,7 +1,7 @@
-import React, { useMemo, useState } from 'react';
-import { ArrowRight, Check, ChevronRight, Download, Gamepad2, Image, Mail, Search, Sparkles, Star, Store, CalendarDays, X } from 'lucide-react';
-import { AppTabIcon } from '../components/FluentIcons';
-import { STORE_APPS, type StoreApp, type StoreAppIcon } from '../data/storeApps';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { ArrowRight, Check, ChevronRight, Download, LoaderCircle, Search, Sparkles, Star, Store, X } from 'lucide-react';
+import { AppTabIcon, FluentCraftmineIcon, FluentPhotopeaIcon } from '../components/FluentIcons';
+import { STORE_APPS, type StoreApp } from '../data/storeApps';
 
 interface MicrosoftStoreProps {
   installedApps: string[];
@@ -21,15 +21,17 @@ const WindowsMark = ({ className = 'size-6' }: { className?: string }) => (
 );
 
 function AppArtwork({ app, className = 'size-14' }: { app: StoreApp; className?: string }) {
-  const classNames = `${className} shrink-0 rounded-[14px] p-3 shadow-sm`;
-  if (app.icon === 'mail') return <span className={`flex items-center justify-center ${classNames}`} style={{ backgroundColor: app.accent }}><Mail className="size-full text-white" strokeWidth={1.8} /></span>;
-  if (app.icon === 'calendar') return <span className={`flex items-center justify-center ${classNames}`} style={{ backgroundColor: app.accent }}><CalendarDays className="size-full text-white" strokeWidth={1.8} /></span>;
-  if (app.icon === 'craftmine') return <span className={`flex items-center justify-center ${classNames}`} style={{ backgroundColor: app.accent }}><Gamepad2 className="size-full text-white" strokeWidth={1.8} /></span>;
-  if (app.icon === 'photopea') return <span className={`flex items-center justify-center ${classNames}`} style={{ backgroundColor: app.accent }}><Image className="size-full text-white" strokeWidth={1.8} /></span>;
-  return <span className={`flex items-center justify-center ${classNames}`} style={{ backgroundColor: app.accent }}><AppTabIcon name={app.icon as StoreAppIcon} className="size-full object-contain brightness-0 invert" /></span>;
+  const iconClassName = `${className} shrink-0 rounded-[14px] bg-white/[0.06] p-2.5`;
+  if (app.icon === 'craftmine') {
+    return <span className={`flex items-center justify-center ${iconClassName}`}><FluentCraftmineIcon className="size-full text-white" /></span>;
+  }
+  if (app.icon === 'photopea') {
+    return <span className={`flex items-center justify-center ${iconClassName}`}><FluentPhotopeaIcon className="size-full text-white" /></span>;
+  }
+  return <span className={`flex items-center justify-center ${iconClassName}`}><AppTabIcon name={app.icon} className="size-full object-contain" alt={`${app.name} icon`} /></span>;
 }
 
-const AppCard: React.FC<{ app: StoreApp; installed: boolean; onInstall: () => void; onOpen: () => void }> = ({ app, installed, onInstall, onOpen }) => {
+const AppCard: React.FC<{ app: StoreApp; installed: boolean; installing: boolean; blocked: boolean; secondsRemaining: number; onInstall: () => void; onOpen: () => void }> = ({ app, installed, installing, blocked, secondsRemaining, onInstall, onOpen }) => {
   return (
     <article className="group flex min-h-[230px] flex-col rounded-2xl border border-white/[0.08] bg-[#1b1b1d] p-4 transition hover:-translate-y-0.5 hover:border-white/20 hover:bg-[#222224]">
       <button type="button" onClick={onOpen} className="flex items-start gap-3 text-left">
@@ -43,13 +45,55 @@ const AppCard: React.FC<{ app: StoreApp; installed: boolean; onInstall: () => vo
       <p className="mt-4 line-clamp-2 min-h-10 text-[13px] leading-5 text-white/65">{app.description}</p>
       <div className="mt-auto flex items-center justify-between gap-3 pt-4">
         <span className="text-[11px] text-white/45">{app.category}</span>
-        <button type="button" onClick={installed ? onOpen : onInstall} className="inline-flex h-9 min-w-[92px] items-center justify-center gap-2 rounded-lg bg-[#0878d1] px-3 text-xs font-semibold text-white transition hover:bg-[#1688e5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63c8ff]">
-          {installed ? <><Check className="size-3.5" /> Open</> : <><Download className="size-3.5" /> Install</>}
+        <button type="button" onClick={installed ? onOpen : onInstall} disabled={!installed && blocked} aria-busy={installing} className="inline-flex h-9 min-w-[110px] items-center justify-center gap-2 rounded-lg bg-[#0878d1] px-3 text-xs font-semibold text-white transition hover:bg-[#1688e5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63c8ff] disabled:cursor-wait disabled:opacity-80">
+          {installed ? <><Check className="size-3.5" /> Open</> : installing ? <><LoaderCircle className="size-3.5 animate-spin" /> {secondsRemaining}s</> : <><Download className="size-3.5" /> Install</>}
         </button>
       </div>
     </article>
   );
 };
+
+function InstallAppDialog({ app, open, installing, secondsRemaining, onInstall, onClose }: { app: StoreApp; open: boolean; installing: boolean; secondsRemaining: number; onInstall: () => void; onClose: () => void }) {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    if (open && !dialog.open) dialog.showModal();
+    if (!open && dialog.open) dialog.close();
+    return () => {
+      if (dialog.open) dialog.close();
+    };
+  }, [open]);
+
+  return (
+    <dialog
+      ref={dialogRef}
+      onCancel={(event) => {
+        event.preventDefault();
+        if (!installing) onClose();
+      }}
+      className="fixed left-1/2 top-1/2 m-0 w-[min(92vw,420px)] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-white/10 bg-[#1b1b1d] p-0 text-white shadow-2xl backdrop:bg-black/70 backdrop:backdrop-blur-sm"
+      aria-labelledby="install-first-title"
+    >
+      <div className="p-6 sm:p-7">
+        <div className="flex items-start gap-4">
+          <AppArtwork app={app} className="size-14 rounded-xl" />
+          <div className="min-w-0 pt-1">
+            <h2 id="install-first-title" className="text-xl font-semibold tracking-tight">Install your app first</h2>
+            <p className="mt-2 text-sm leading-5 text-white/65">Install {app.name} before opening it. It will be ready on this device once installation finishes.</p>
+          </div>
+        </div>
+        <div className="mt-7 flex justify-end gap-3">
+          <button type="button" onClick={onClose} disabled={installing} className="h-10 rounded-lg border border-white/20 px-4 text-sm text-white/75 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50">Not now</button>
+          <button type="button" onClick={onInstall} disabled={installing} aria-busy={installing} className="inline-flex h-10 min-w-[140px] items-center justify-center gap-2 rounded-lg bg-[#1688e5] px-4 text-sm font-semibold text-white transition hover:bg-[#2998f1] disabled:cursor-wait disabled:opacity-90">
+            {installing ? <><LoaderCircle className="size-4 animate-spin" /> Installing {secondsRemaining}s</> : <><Download className="size-4" /> Install app</>}
+          </button>
+        </div>
+      </div>
+    </dialog>
+  );
+}
 
 export const MicrosoftStore: React.FC<MicrosoftStoreProps> = ({ installedApps, onInstall, onUninstall, navigate }) => {
   const requestedId = new URLSearchParams(window.location.search).get('app');
@@ -58,6 +102,11 @@ export const MicrosoftStore: React.FC<MicrosoftStoreProps> = ({ installedApps, o
   const [search, setSearch] = useState('');
   const [activeSection, setActiveSection] = useState<'Home' | 'Apps' | 'Games'>('Home');
   const [notice, setNotice] = useState('');
+  const [installingAppId, setInstallingAppId] = useState<string | null>(null);
+  const [installSecondsRemaining, setInstallSecondsRemaining] = useState(20);
+  const [isInstallDialogOpen, setIsInstallDialogOpen] = useState(Boolean(requestedId && !installedApps.includes(requestedId)));
+  const installTimeoutRef = useRef<number | null>(null);
+  const installIntervalRef = useRef<number | null>(null);
   const selectedApp = STORE_APPS.find((app) => app.id === selectedAppId);
   const matchingApps = useMemo(() => {
     const query = search.trim().toLocaleLowerCase();
@@ -70,24 +119,55 @@ export const MicrosoftStore: React.FC<MicrosoftStoreProps> = ({ installedApps, o
   }, [activeCategory, activeSection, search]);
   const featuredApp = STORE_APPS.find((app) => app.id === 'craftmine')!;
 
+  useEffect(() => () => {
+    if (installTimeoutRef.current !== null) window.clearTimeout(installTimeoutRef.current);
+    if (installIntervalRef.current !== null) window.clearInterval(installIntervalRef.current);
+  }, []);
+
   const install = (app: StoreApp) => {
-    onInstall(app.id);
-    setNotice(`${app.name} is ready to use.`);
-    window.setTimeout(() => setNotice(''), 2600);
+    if (installingAppId) return;
+    setInstallingAppId(app.id);
+    setInstallSecondsRemaining(20);
+    const completesAt = Date.now() + 20_000;
+    installIntervalRef.current = window.setInterval(() => {
+      setInstallSecondsRemaining(Math.max(0, Math.ceil((completesAt - Date.now()) / 1000)));
+    }, 250);
+    installTimeoutRef.current = window.setTimeout(() => {
+      if (installIntervalRef.current !== null) window.clearInterval(installIntervalRef.current);
+      installIntervalRef.current = null;
+      installTimeoutRef.current = null;
+      onInstall(app.id);
+      setInstallingAppId(null);
+      setInstallSecondsRemaining(20);
+      setIsInstallDialogOpen(false);
+      setNotice(`${app.name} is ready to use.`);
+      window.setTimeout(() => setNotice(''), 2600);
+    }, 20_000);
+  };
+
+  const closeInstallDialog = () => {
+    if (installingAppId) return;
+    setIsInstallDialogOpen(false);
+    if (new URLSearchParams(window.location.search).has('app')) {
+      window.history.replaceState(null, '', '/store');
+    }
   };
 
   const launch = (app: StoreApp) => {
     if (installedApps.includes(app.id)) navigate(app.route);
-    else setSelectedAppId(app.id);
+    else {
+      setSelectedAppId(app.id);
+      setIsInstallDialogOpen(true);
+    }
   };
 
   return (
     <div className="min-h-[calc(100vh-3.5rem)] bg-[#101012] text-white">
       <header className="sticky top-0 z-20 border-b border-white/10 bg-[#101012]/95 backdrop-blur-xl">
         <div className="mx-auto flex max-w-[1500px] flex-wrap items-center gap-x-8 gap-y-3 px-5 py-4 sm:px-8 lg:px-10">
-          <button type="button" onClick={() => { setSelectedAppId(null); setActiveSection('Home'); }} className="flex items-center gap-3 text-left" aria-label="Microsoft Store home">
+          <button type="button" onClick={() => { setSelectedAppId(null); setActiveSection('Home'); }} className="flex items-center gap-3 text-left" aria-label="Store home">
             <WindowsMark className="size-6" />
-            <span className="text-lg font-medium tracking-tight">Microsoft <span className="font-light text-white/70">Store</span></span>
+            <span className="text-lg font-medium tracking-tight">Store</span>
           </button>
           <nav aria-label="Store sections" className="order-3 flex w-full items-center gap-6 sm:order-none sm:w-auto">
             {(['Home', 'Apps', 'Games'] as const).map((section) => (
@@ -98,12 +178,14 @@ export const MicrosoftStore: React.FC<MicrosoftStoreProps> = ({ installedApps, o
           </nav>
           <label className="ml-auto flex h-10 min-w-[220px] flex-1 items-center gap-2 rounded-full border border-white/15 bg-[#1b1b1e] px-3.5 focus-within:border-[#53c7ff] sm:max-w-[340px]">
             <Search className="size-4 shrink-0 text-white/55" />
-            <input value={search} onChange={(event) => { setSearch(event.target.value); setSelectedAppId(null); }} placeholder="Search apps, games, and more" className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white/40" aria-label="Search the Microsoft Store" />
+            <input value={search} onChange={(event) => { setSearch(event.target.value); setSelectedAppId(null); }} placeholder="Search apps, games, and more" className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white/40" aria-label="Search Store" />
             {search && <button type="button" onClick={() => setSearch('')} aria-label="Clear search"><X className="size-4 text-white/50" /></button>}
           </label>
           <button type="button" onClick={() => { setActiveCategory('All'); setActiveSection('Apps'); setSelectedAppId(null); }} className="hidden items-center gap-2 rounded-full border border-white/15 px-3.5 py-2 text-xs text-white/80 transition hover:bg-white/10 sm:flex"><Download className="size-3.5" /> Library <span className="rounded-full bg-white/10 px-1.5 py-0.5 text-[10px]">{installedApps.length}</span></button>
         </div>
       </header>
+
+      {selectedApp && <InstallAppDialog app={selectedApp} open={isInstallDialogOpen} installing={installingAppId === selectedApp.id} secondsRemaining={installSecondsRemaining} onInstall={() => install(selectedApp)} onClose={closeInstallDialog} />}
 
       <main className="mx-auto max-w-[1500px] px-5 pb-16 pt-7 sm:px-8 lg:px-10">
         {selectedApp ? (
@@ -121,7 +203,7 @@ export const MicrosoftStore: React.FC<MicrosoftStoreProps> = ({ installedApps, o
                     {installedApps.includes(selectedApp.id) ? (
                       <button type="button" onClick={() => navigate(selectedApp.route)} className="inline-flex h-11 items-center gap-2 rounded-lg bg-[#66d2ff] px-8 text-sm font-semibold text-[#062235] transition hover:bg-[#8cddff]"><ArrowRight className="size-4" /> Open</button>
                     ) : (
-                      <button type="button" onClick={() => install(selectedApp)} className="inline-flex h-11 items-center gap-2 rounded-lg bg-[#66d2ff] px-8 text-sm font-semibold text-[#062235] transition hover:bg-[#8cddff]"><Download className="size-4" /> Install</button>
+                      <button type="button" onClick={() => install(selectedApp)} disabled={Boolean(installingAppId)} aria-busy={installingAppId === selectedApp.id} className="inline-flex h-11 min-w-[132px] items-center justify-center gap-2 rounded-lg bg-[#66d2ff] px-6 text-sm font-semibold text-[#062235] transition hover:bg-[#8cddff] disabled:cursor-wait disabled:opacity-90">{installingAppId === selectedApp.id ? <><LoaderCircle className="size-4 animate-spin" /> Installing {installSecondsRemaining}s</> : <><Download className="size-4" /> Install</>}</button>
                     )}
                     {installedApps.includes(selectedApp.id) && <button type="button" onClick={() => { onUninstall(selectedApp.id); setNotice(`${selectedApp.name} was uninstalled.`); }} className="h-11 rounded-lg border border-white/25 px-5 text-sm text-white/85 transition hover:bg-white/10">Uninstall</button>}
                   </div>
@@ -164,7 +246,7 @@ export const MicrosoftStore: React.FC<MicrosoftStoreProps> = ({ installedApps, o
                 {categories.map((category) => <button key={category} type="button" onClick={() => setActiveCategory(category)} className={`shrink-0 rounded-full border px-4 py-2 text-xs transition ${activeCategory === category ? 'border-[#65d1ff] bg-[#65d1ff] text-[#08243a]' : 'border-white/15 bg-white/[0.03] text-white/65 hover:bg-white/10 hover:text-white'}`}>{category}</button>)}
               </div>
               <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                {matchingApps.map((app) => <AppCard key={app.id} app={app} installed={installedApps.includes(app.id)} onInstall={() => install(app)} onOpen={() => launch(app)} />)}
+                {matchingApps.map((app) => <AppCard key={app.id} app={app} installed={installedApps.includes(app.id)} installing={installingAppId === app.id} blocked={Boolean(installingAppId)} secondsRemaining={installSecondsRemaining} onInstall={() => install(app)} onOpen={() => launch(app)} />)}
               </div>
               {matchingApps.length === 0 && <div className="mt-5 rounded-2xl border border-white/10 bg-[#1b1b1d] px-6 py-12 text-center"><Search className="mx-auto size-7 text-white/35" /><h3 className="mt-3 text-lg font-medium">No apps found</h3><p className="mt-1 text-sm text-white/55">Try another name or category.</p></div>}
             </section>
