@@ -896,6 +896,7 @@ export default function App() {
         <Sidebar
           currentRoute={currentRoute}
           navigate={navigate}
+          installedApps={installedApps}
           onOpenSearch={handleOpenSearch}
           onSelectChannel={setCurrentChannel}
           isCollapsed={isSidebarCollapsed}

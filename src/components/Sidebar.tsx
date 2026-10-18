@@ -71,6 +71,7 @@ import { Channel, NewsArticle } from '../types';
 import { DiscordWelcomeModal } from './DiscordWelcomeModal';
 import { UnderConstructionModal } from './UnderConstructionModal';
 import { parseM3UPlaylist, downloadPlaylistFile } from '../utils/m3uParser';
+import { getStoreAppForRoute } from '../data/storeApps';
 
 const LOGO_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-TPopUU7m6WTCETjfIVB68A850AyvGg.png';
 
@@ -201,6 +202,7 @@ const MorphingVerticalIndicator: React.FC<MorphingIndicatorProps> = ({
 interface SidebarProps {
   currentRoute: string;
   navigate: (route: string, state?: any) => void;
+  installedApps: string[];
   onOpenSearch: () => void;
   selectedChannel?: Channel | null;
   onSelectChannel?: (channel: Channel) => void;
@@ -228,6 +230,7 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({
   currentRoute,
   navigate,
+  installedApps,
   onOpenSearch,
   onSelectChannel,
   isCollapsed = false,
@@ -252,6 +255,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const { settings } = useSettings();
   const { favoriteChannelIds } = useFavorites();
+
+  const getDownloadIndicator = (route: string, collapsed = isCollapsed) => {
+    const app = getStoreAppForRoute(route);
+    if (!app || installedApps.includes(app.id)) return null;
+    return (
+      <DownloadCloud
+        className={`pointer-events-none absolute ${collapsed ? 'bottom-1 right-1 size-3' : 'right-2 top-1/2 size-3.5 -translate-y-1/2'} rounded-full bg-white p-[1px] text-[#0078d4] dark:bg-[#242424] dark:text-[#4cc2ff]`}
+        aria-hidden="true"
+      />
+    );
+  };
 
   const handleGoBack = () => {
     if (window.history.length > 1) {
@@ -1087,6 +1101,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 >
                   <img src={item.icon} alt="" className="size-5 shrink-0 object-contain" />
                   <span className="truncate text-[13.5px]">{item.label}</span>
+                  {getDownloadIndicator(item.route)}
                 </button>
               );
             })}
@@ -1116,6 +1131,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               <AppTabIcon name="bank" className="w-5 h-5 shrink-0" />
               <span className="truncate text-[13.5px]">Swift Bank</span>
+              {getDownloadIndicator('/swift-bank')}
             </button>
           </div>
 
@@ -1135,6 +1151,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               <AppTabIcon name="social" className="w-5 h-5 shrink-0" />
               <span className="truncate text-[13.5px]">Swift Social</span>
+              {getDownloadIndicator('/swift')}
             </button>
           </div>
 
@@ -1154,6 +1171,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               <AppTabIcon name="people" className="w-5 h-5 shrink-0 text-black dark:text-white" />
               <span className="truncate text-[13.5px]">People</span>
+              {getDownloadIndicator('/friends')}
             </button>
           </div>
 
@@ -1173,6 +1191,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               <FluentLogosFandomIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
               <span className="truncate text-[13.5px]">Logos Fandom</span>
+              {getDownloadIndicator('/logos-fandom')}
             </button>
           </div>
 
@@ -1192,6 +1211,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               <FluentMinecraftWikiIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
               <span className="truncate text-[13.5px]">Minecraft Wiki</span>
+              {getDownloadIndicator('/minecraft-wiki')}
             </button>
           </div>
 
@@ -1243,8 +1263,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               <div className="flex items-center gap-3.5 truncate">
                 <AppTabIcon name="edge" className="w-5 h-5 shrink-0 text-black dark:text-white" />
-                <span className="truncate text-[13.5px]">Microsoft Edge</span>
-              </div>
+              <span className="truncate text-[13.5px]">Microsoft Edge</span>
+            </div>
+            {getDownloadIndicator('/edge', isCollapsed)}
             </button>
           </div>
 
@@ -1287,6 +1308,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <AppTabIcon name="watch" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Watch</span>
               </div>
+              {getDownloadIndicator('/live-tv', isCollapsed)}
 
               {/* Submenu toggle */}
               <div
@@ -1352,6 +1374,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <AppTabIcon name="notes" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Notes</span>
               </div>
+              {getDownloadIndicator('/notes', isCollapsed)}
             </button>
           </div>
 
@@ -1373,6 +1396,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <AppTabIcon name="gallery" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Gallery</span>
               </div>
+              {getDownloadIndicator('/gallery', isCollapsed)}
             </button>
           </div>
 
@@ -1394,6 +1418,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <AppTabIcon name="camera" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Camera</span>
               </div>
+              {getDownloadIndicator('/camera', isCollapsed)}
             </button>
           </div>
 
@@ -1415,6 +1440,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <AppTabIcon name="paint" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Paint</span>
               </div>
+              {getDownloadIndicator('/paint', isCollapsed)}
   </button>
   </div>
 
@@ -1433,6 +1459,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       }`}
     >
       <div className="flex items-center gap-3.5 truncate"><AppTabIcon name="inkCanvas" className="w-5 h-5" /><span className="truncate text-[13.5px]">Ink Canvas</span></div>
+      {getDownloadIndicator('/ink-space', isCollapsed)}
     </button>
   </div>
   
@@ -1454,6 +1481,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <AppTabIcon name="calculator" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Calculator</span>
               </div>
+              {getDownloadIndicator('/calculator', isCollapsed)}
             </button>
           </div>
 
@@ -1475,6 +1503,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <AppTabIcon name="snippingTool" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Snipping Tool</span>
               </div>
+              {getDownloadIndicator('/snipping-tool', isCollapsed)}
             </button>
           </div>
 
@@ -1552,6 +1581,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               <FluentCraftmineIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
               <span className="truncate text-[13.5px]">Craftmine</span>
+              {getDownloadIndicator('/craftmine', isCollapsed)}
             </button>
           </div>
 
@@ -1571,6 +1601,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               <FluentPhotopeaIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
               <span className="truncate text-[13.5px]">Photopea</span>
+              {getDownloadIndicator('/photopea', isCollapsed)}
             </button>
           </div>
 
@@ -1829,6 +1860,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 }`}
               >
                 <AppTabIcon name="bank" className="w-5 h-5" />
+                {getDownloadIndicator('/swift-bank', true)}
               </button>
 
               {/* Swift Social Icon */}
@@ -1845,6 +1877,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 }`}
               >
                 <AppTabIcon name="social" className="w-5 h-5" />
+                {getDownloadIndicator('/swift', true)}
               </button>
 
               {/* Friends Icon */}
@@ -1861,6 +1894,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 }`}
               >
                 <AppTabIcon name="people" className="w-5 h-5 text-black dark:text-white" />
+                {getDownloadIndicator('/friends', true)}
               </button>
 
               {/* Logos Fandom Icon */}
@@ -1877,6 +1911,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 }`}
               >
                 <FluentLogosFandomIcon className="w-5 h-5 text-black dark:text-white" />
+                {getDownloadIndicator('/logos-fandom', true)}
               </button>
 
               {/* Minecraft Wiki Icon */}
@@ -1893,6 +1928,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 }`}
               >
                 <FluentMinecraftWikiIcon className="w-5 h-5 text-black dark:text-white" />
+                {getDownloadIndicator('/minecraft-wiki', true)}
               </button>
 
               {/* Divider: Apps */}
@@ -1933,6 +1969,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 }`}
               >
                 <AppTabIcon name="edge" className="w-5 h-5 text-black dark:text-white" />
+                {getDownloadIndicator('/edge', true)}
               </button>
 
               {/* 3. File Explorer Icon */}
@@ -1965,6 +2002,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 }`}
               >
                 <AppTabIcon name="watch" className="w-5 h-5 text-black dark:text-white" />
+                {getDownloadIndicator('/live-tv', true)}
               </button>
 
               {/* 5. Notes Icon */}
@@ -1981,6 +2019,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 }`}
               >
                 <AppTabIcon name="notes" className="w-5 h-5 text-black dark:text-white" />
+                {getDownloadIndicator('/notes', true)}
               </button>
 
               {/* 6. Gallery Icon */}
@@ -1997,6 +2036,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 }`}
               >
                 <AppTabIcon name="gallery" className="w-5 h-5 text-black dark:text-white" />
+                {getDownloadIndicator('/gallery', true)}
               </button>
 
               {/* 7. Camera Icon */}
@@ -2013,6 +2053,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 }`}
               >
                 <AppTabIcon name="camera" className="w-5 h-5 text-black dark:text-white" />
+                {getDownloadIndicator('/camera', true)}
               </button>
 
               {/* 8. Paint Icon */}
@@ -2029,6 +2070,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 }`}
               >
                 <AppTabIcon name="paint" className="w-5 h-5 text-black dark:text-white" />
+                {getDownloadIndicator('/paint', true)}
               </button>
 
               {/* Clock Icon */}
@@ -2135,6 +2177,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 }`}
               >
                 <FluentCraftmineIcon className="w-5 h-5 text-black dark:text-white" />
+                {getDownloadIndicator('/craftmine', true)}
               </button>
 
               {/* Photopea Icon */}
@@ -2151,6 +2194,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 }`}
               >
                 <FluentPhotopeaIcon className="w-5 h-5 text-black dark:text-white" />
+                {getDownloadIndicator('/photopea', true)}
               </button>
 
               {/* 7. Discord Icon */}

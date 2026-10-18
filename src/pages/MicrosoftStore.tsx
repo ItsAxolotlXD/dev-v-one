@@ -184,7 +184,7 @@ export const MicrosoftStore: React.FC<MicrosoftStoreProps> = ({ installedApps, o
         {selectedApp ? (
           <section className="animate-in fade-in duration-200">
             <button type="button" onClick={() => setSelectedAppId(null)} className="mb-6 inline-flex items-center gap-2 text-sm text-white/55 transition hover:text-white"><ChevronRight className="size-4 rotate-180" /> Back to Store</button>
-            <div className="rounded-[28px] border border-white/10 bg-gradient-to-br from-[#0b5eaa] via-[#084a88] to-[#10283d] p-6 sm:p-10 lg:p-12">
+            <div className="rounded-[28px] p-6 sm:p-10 lg:p-12" style={{ background: `linear-gradient(135deg, ${selectedApp.accent} 0%, ${selectedApp.accent}b8 48%, #101012 100%)` }}>
               <div className="flex flex-col gap-7 sm:flex-row sm:items-start">
                 <AppArtwork app={selectedApp} className="size-20" />
                 <div className="max-w-3xl flex-1">
@@ -218,11 +218,10 @@ export const MicrosoftStore: React.FC<MicrosoftStoreProps> = ({ installedApps, o
                   <div className="max-w-xl">
                     <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs text-white/80"><Sparkles className="size-3.5" /> Featured collection</p>
                     <p className="mt-5 text-sm font-medium text-white/70">Made for your next adventure</p>
-                    <h1 className="mt-2 text-3xl font-semibold leading-tight tracking-tight sm:text-5xl">Find your next<br className="hidden sm:block" /> favorite app.</h1>
                     <p className="mt-4 max-w-lg text-sm leading-6 text-white/70 sm:text-base">A little inspiration for your day. Discover tools, creativity, and entertainment picked for you.</p>
                     <button type="button" onClick={() => { setActiveSection('Games'); setSelectedAppId(featuredApp.id); }} className="mt-6 inline-flex h-11 items-center gap-2 rounded-lg bg-[#65d1ff] px-5 text-sm font-semibold text-[#08243a] transition hover:bg-[#96e1ff]">Explore Craftmine <ArrowRight className="size-4" /></button>
                   </div>
-                  <button type="button" onClick={() => setSelectedAppId(featuredApp.id)} className="group relative flex min-h-[210px] items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-[#509e4a] via-[#254c56] to-[#182a46] p-8 text-left sm:min-h-[280px]">
+                  <button type="button" onClick={() => setSelectedAppId(featuredApp.id)} className="group relative flex min-h-[210px] items-center justify-center overflow-hidden rounded-2xl p-8 text-left sm:min-h-[280px]" style={{ background: `linear-gradient(135deg, ${featuredApp.accent} 0%, ${featuredApp.accent}b8 48%, #101012 100%)` }}>
                     <span className="absolute inset-0 opacity-25" style={{ backgroundImage: 'linear-gradient(135deg, transparent 24%, rgba(255,255,255,.16) 25%, transparent 26%), linear-gradient(45deg, transparent 24%, rgba(255,255,255,.12) 25%, transparent 26%)', backgroundSize: '48px 48px' }} />
                     <span className="relative flex flex-col items-center gap-4 text-center transition group-hover:scale-105"><AppArtwork app={featuredApp} className="size-24" /><span className="text-2xl font-semibold">Craftmine</span><span className="text-sm text-white/70">Build something extraordinary</span></span>
                   </button>
