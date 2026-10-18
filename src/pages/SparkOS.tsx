@@ -5,6 +5,7 @@ import type { LucideIcon } from 'lucide-react';
 import { AppTabIcon, STORE_ICON_URL } from '../components/FluentIcons';
 import type { AppTabIconName } from '../components/FluentIcons';
 import { FluentClockIcon, FluentSnippingToolIcon } from '../components/FluentIcons';
+import { useIsMobile } from '../hooks/useIsMobile';
 import { hasSparkOSSetup, SparkOSBootScreen, SparkOSBootSetup } from '../components/SparkOSBootSetup';
 import {
   BatteryFull,
@@ -120,6 +121,7 @@ function WindowsMark({ className = 'size-[18px]' }: { className?: string }) {
 }
 
 export function SparkOS({ navigate, renderApp }: SparkOSProps) {
+  const isMobile = useIsMobile();
   const [bootFinished, setBootFinished] = useState(false);
   const [setupComplete, setSetupComplete] = useState(false);
   const [startOpen, setStartOpen] = useState(true);
@@ -134,12 +136,13 @@ export function SparkOS({ navigate, renderApp }: SparkOSProps) {
   const dragRef = useRef<{ id: string; startX: number; startY: number; originX: number; originY: number } | null>(null);
 
   useEffect(() => {
+    if (isMobile) return;
     const timer = window.setTimeout(() => {
       setSetupComplete(hasSparkOSSetup());
       setBootFinished(true);
     }, 1800);
     return () => window.clearTimeout(timer);
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(new Date()), 30_000);
@@ -240,6 +243,21 @@ export function SparkOS({ navigate, renderApp }: SparkOSProps) {
   const formattedTime = new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' }).format(now);
   const formattedDate = new Intl.DateTimeFormat(undefined, { weekday: 'short', month: 'numeric', day: 'numeric' }).format(now);
 
+  if (isMobile) {
+    return (
+      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 px-5 py-8 backdrop-blur-md">
+        <section role="dialog" aria-modal="true" aria-labelledby="sparkos-mobile-title" aria-describedby="sparkos-mobile-description" className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#17191f] p-6 text-center text-white shadow-2xl">
+          <div aria-hidden="true" className="mx-auto mb-5 flex size-14 items-center justify-center rounded-2xl bg-white/[0.06] text-sky-300">
+            <Monitor className="size-7" />
+          </div>
+          <h1 id="sparkos-mobile-title" className="text-xl font-semibold tracking-tight">Get a Bộ PC, silly</h1>
+          <p id="sparkos-mobile-description" className="mt-3 text-sm leading-6 text-slate-300">SparkOS only available for those who use computers 🤓👆</p>
+          <button type="button" onClick={() => navigate('/')} className="mt-6 w-full rounded-xl bg-sky-500 px-4 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-sky-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#17191f]">Back to home</button>
+        </section>
+      </div>
+    );
+  }
+
   if (!bootFinished) return <SparkOSBootScreen />;
   if (!setupComplete) return <SparkOSBootSetup onComplete={() => setSetupComplete(true)} />;
 
@@ -276,26 +294,26 @@ export function SparkOS({ navigate, renderApp }: SparkOSProps) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.98 }}
             transition={{ duration: 0.18, ease: 'easeOut' }}
-            className={`absolute z-10 flex min-h-[260px] min-w-[300px] flex-col overflow-hidden rounded-lg border border-white/25 bg-[#f8fafc] text-slate-900 shadow-[0_24px_72px_rgba(0,0,0,.48)] ${appWindow.maximized ? 'inset-x-2 top-2 bottom-[54px] w-auto' : 'h-[min(70dvh,560px)] w-[min(860px,calc(100vw-24px))]'}`}
+            className={`dark absolute z-10 flex min-h-[260px] min-w-[300px] flex-col overflow-hidden rounded-lg border border-white/10 bg-[#111318] text-slate-100 shadow-[0_24px_72px_rgba(0,0,0,.48)] ${appWindow.maximized ? 'inset-x-2 top-2 bottom-[54px] w-auto' : 'h-[min(70dvh,560px)] w-[min(860px,calc(100vw-24px))]'}`}
             style={appWindow.maximized ? { zIndex: appWindow.id === activeWindowId ? 20 : 10 } : { left: appWindow.x, top: appWindow.y, zIndex: appWindow.id === activeWindowId ? 20 : 10 }}
           >
             <div
-              className="flex h-10 shrink-0 touch-none items-center justify-between border-b border-slate-200 bg-white/95 px-3"
+              className="flex h-10 shrink-0 touch-none items-center justify-between border-b border-white/10 bg-[#1a1c21] px-3"
               onPointerDown={(event) => beginWindowDrag(event, appWindow)}
               onDoubleClick={() => setWindows((current) => current.map((item) => item.id === appWindow.id ? { ...item, maximized: !item.maximized } : item))}
               onContextMenu={(event) => openContextMenu(event, undefined, appWindow.id)}
             >
               <div className="flex min-w-0 items-center gap-2.5">
                 <span className="flex size-6 shrink-0 items-center justify-center">{renderDesktopIcon(appWindow.route, 'size-5')}</span>
-                <span className="truncate text-xs font-medium text-slate-700">{appWindow.name}</span>
+                <span className="truncate text-xs font-medium text-slate-200">{appWindow.name}</span>
               </div>
               <div className="flex shrink-0 items-center">
-                <button type="button" onClick={() => setWindows((current) => current.map((item) => item.id === appWindow.id ? { ...item, minimized: true } : item))} aria-label={`Minimize ${appWindow.name}`} className="rounded p-2 text-slate-600 hover:bg-slate-100"><Minimize2 aria-hidden="true" className="size-4" /></button>
-                <button type="button" onClick={() => setWindows((current) => current.map((item) => item.id === appWindow.id ? { ...item, maximized: !item.maximized } : item))} aria-label={`${appWindow.maximized ? 'Restore' : 'Maximize'} ${appWindow.name}`} className="rounded p-2 text-slate-600 hover:bg-slate-100"><Maximize2 aria-hidden="true" className="size-4" /></button>
+                <button type="button" onClick={() => setWindows((current) => current.map((item) => item.id === appWindow.id ? { ...item, minimized: true } : item))} aria-label={`Minimize ${appWindow.name}`} className="rounded p-2 text-slate-300 transition-colors hover:bg-white/10"><Minimize2 aria-hidden="true" className="size-4" /></button>
+                <button type="button" onClick={() => setWindows((current) => current.map((item) => item.id === appWindow.id ? { ...item, maximized: !item.maximized } : item))} aria-label={`${appWindow.maximized ? 'Restore' : 'Maximize'} ${appWindow.name}`} className="rounded p-2 text-slate-300 transition-colors hover:bg-white/10"><Maximize2 aria-hidden="true" className="size-4" /></button>
                 <button type="button" onClick={() => closeWindow(appWindow.id)} aria-label={`Close ${appWindow.name}`} className="rounded p-2 text-slate-600 hover:bg-red-500 hover:text-white"><X aria-hidden="true" className="size-4" /></button>
               </div>
             </div>
-            <div className="min-h-0 flex-1 overflow-auto bg-white text-slate-900" onClick={(event) => event.stopPropagation()}>
+            <div className="dark min-h-0 flex-1 overflow-auto bg-[#101216] text-slate-100" style={{ colorScheme: 'dark' }} onClick={(event) => event.stopPropagation()}>
               {renderApp(appWindow.route, (route) => {
                 const targetRoute = route.split('?')[0];
                 const targetApp = apps.find((item) => item.route === targetRoute);
@@ -325,6 +343,7 @@ export function SparkOS({ navigate, renderApp }: SparkOSProps) {
               <Search aria-hidden="true" className="size-[17px] shrink-0 text-slate-300" />
               <input
                 ref={searchRef}
+                onFocus={() => launch('/search', false, 'Search')}
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 onKeyDown={handleSearchKeyDown}
@@ -354,11 +373,11 @@ export function SparkOS({ navigate, renderApp }: SparkOSProps) {
                     type="button"
                     onClick={() => launch(route)}
                     onContextMenu={(event) => openContextMenu(event, apps.find((app) => app.route === route))}
-                    className="group flex min-h-[clamp(48px,7dvh,72px)] flex-col items-center justify-center gap-1.5 rounded-md px-1 py-1.5 text-center transition-colors hover:bg-white/10 focus-visible:bg-white/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50"
+                    className="group flex min-h-[clamp(56px,7dvh,78px)] flex-col items-center justify-center gap-1.5 rounded-md px-1 py-1.5 text-center transition-colors hover:bg-white/10 focus-visible:bg-white/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50"
                     aria-label={`Open ${name}`}
                   >
-                    <span className="flex size-[clamp(28px,5dvh,40px)] items-center justify-center transition-transform group-hover:scale-110">
-                      {renderDesktopIcon(route, 'size-[23px]')}
+                    <span className="flex size-[clamp(36px,6dvh,48px)] items-center justify-center transition-transform group-hover:scale-110">
+                      {renderDesktopIcon(route, 'size-[30px]')}
                     </span>
                     <span className="max-w-full truncate text-[10px] leading-tight text-slate-100 sm:text-[11px]">{name}</span>
                   </button>

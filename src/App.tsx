@@ -540,7 +540,7 @@ export default function App() {
   const isSparkOSRoute = currentRoute === '/sparkos';
 
   // Render Page Content based on currentRoute
-  const renderContentForRoute = (route: string, appNavigate: (path: string) => void = navigate) => {
+  const renderContentForRoute = (route: string, appNavigate: (path: string) => void = navigate, inSparkOSWindow = false) => {
     const navigate = appNavigate;
     // Route matching for news detail: /news/:slug
     if (route.startsWith('/news/')) {
@@ -550,7 +550,7 @@ export default function App() {
 
     switch (route) {
       case '/sparkos':
-        return <SparkOS navigate={navigate} renderApp={(appRoute, windowNavigate) => renderContentForRoute(appRoute, windowNavigate)} />;
+        return <SparkOS navigate={navigate} renderApp={(appRoute, windowNavigate) => renderContentForRoute(appRoute, windowNavigate, true)} />;
 
       case '/':
       case '/home':
@@ -655,6 +655,10 @@ export default function App() {
             navigate={navigate}
             onSelectChannel={setCurrentChannel}
             onClose={() => {
+              if (inSparkOSWindow) {
+                navigate('/');
+                return;
+              }
               const target = previousRouteRef.current && previousRouteRef.current !== '/search' ? previousRouteRef.current : '/';
               navigate(target);
             }}
