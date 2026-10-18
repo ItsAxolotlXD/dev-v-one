@@ -550,7 +550,7 @@ export default function App() {
 
     switch (route) {
       case '/sparkos':
-        return <SparkOS navigate={navigate} renderApp={(appRoute, windowNavigate) => renderContentForRoute(appRoute, windowNavigate, true)} />;
+        return <SparkOS navigate={navigate} installedApps={installedApps} renderApp={(appRoute, windowNavigate) => renderContentForRoute(appRoute, windowNavigate, true)} />;
 
       case '/':
       case '/home':
@@ -757,7 +757,7 @@ export default function App() {
         return <CameraApp navigate={navigate} />;
 
       case '/copilot':
-        return <CopilotPage navigate={navigate} />;
+        return <CopilotPage navigate={navigate} embedded={inSparkOSWindow} />;
 
       case '/calculator':
       case '/calc':

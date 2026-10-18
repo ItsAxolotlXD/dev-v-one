@@ -1,10 +1,16 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { ArrowLeft, ArrowRight, BookOpen, Check, Globe, Plane, ShieldCheck, UserRound, Wifi } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BookOpen, Check, Globe, Monitor, Plane, ShieldCheck, UserRound, Wifi } from 'lucide-react';
 
 const setupStorageKey = 'sparkos-oobe-profile';
 const regions = ['Australia', 'Canada', 'France', 'Germany', 'Japan', 'Singapore', 'United Kingdom', 'United States', 'Vietnam'];
-const setupSteps = ['Region', 'Keyboard', 'Network', 'Account', 'Privacy'];
+const setupSteps = ['Region', 'Keyboard', 'Network', 'Account', 'Device name', 'Experience', 'Privacy', 'Ready'];
+const experiences = [
+  { name: 'Personal', detail: 'Everyday browsing, communication, and entertainment.' },
+  { name: 'School', detail: 'Study, research, and stay organized.' },
+  { name: 'Work', detail: 'Focus on collaboration and productivity.' },
+  { name: 'Gaming', detail: 'Make room for games and streaming.' },
+];
 
 interface SparkOSBootSetupProps {
   onComplete: () => void;
@@ -46,15 +52,18 @@ export function SparkOSBootSetup({ onComplete }: SparkOSBootSetupProps) {
   const [keyboard, setKeyboard] = useState('US');
   const [network, setNetwork] = useState('Connect later');
   const [userName, setUserName] = useState('Alex');
+  const [deviceName, setDeviceName] = useState('SparkOS-PC');
+  const [experience, setExperience] = useState('Personal');
   const [privacy, setPrivacy] = useState({ location: true, diagnostics: true, tailored: false });
 
   useEffect(() => {
     if (step === 3) document.getElementById('sparkos-account-name')?.focus();
+    if (step === 4) document.getElementById('sparkos-device-name')?.focus();
   }, [step]);
 
   const finishSetup = () => {
     try {
-      window.localStorage.setItem(setupStorageKey, JSON.stringify({ region, keyboard, network, userName: userName.trim(), privacy }));
+      window.localStorage.setItem(setupStorageKey, JSON.stringify({ region, keyboard, network, userName: userName.trim(), deviceName: deviceName.trim(), experience, privacy }));
     } catch {
       // Keep the setup usable when browser storage is unavailable.
     }
@@ -171,6 +180,34 @@ export function SparkOSBootSetup({ onComplete }: SparkOSBootSetupProps) {
                 )}
                 {step === 4 && (
                   <section aria-labelledby="setup-heading">
+                    <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.13em] text-[#087bd1]">Name your device</p>
+                    <h1 id="setup-heading" className="mb-2 text-[clamp(24px,3vw,34px)] font-semibold leading-tight tracking-[-0.035em] text-[#17191d]">Give your PC a name</h1>
+                    <p className="mb-5 max-w-lg text-[13px] leading-5 text-[#697481]">This name helps you recognize your device when sharing or connecting to it.</p>
+                    <label htmlFor="sparkos-device-name" className="mb-2 block text-[12px] font-medium text-[#404a55]">Device name</label>
+                    <div className="flex max-w-md items-center gap-3 rounded-xl border border-[#dce2e9] bg-white/80 px-4 py-3 focus-within:border-[#087bd1] focus-within:ring-2 focus-within:ring-[#087bd1]/15">
+                      <Monitor aria-hidden="true" className="size-5 shrink-0 text-[#087bd1]" />
+                      <input id="sparkos-device-name" value={deviceName} onChange={(event) => setDeviceName(event.target.value.replace(/[^a-zA-Z0-9-]/g, '').slice(0, 24))} maxLength={24} className="w-full bg-transparent text-[14px] text-[#20252b] outline-none" placeholder="SparkOS-PC" />
+                    </div>
+                    <p className="mt-2 text-[11px] text-[#75808d]">Use up to 24 letters, numbers, or hyphens.</p>
+                  </section>
+                )}
+                {step === 5 && (
+                  <section aria-labelledby="setup-heading">
+                    <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.13em] text-[#087bd1]">Make it yours</p>
+                    <h1 id="setup-heading" className="mb-2 text-[clamp(24px,3vw,34px)] font-semibold leading-tight tracking-[-0.035em] text-[#17191d]">How will you use this device?</h1>
+                    <p className="mb-5 max-w-lg text-[13px] leading-5 text-[#697481]">Choose an experience to personalize your SparkOS setup.</p>
+                    <div className="grid gap-2.5 sm:grid-cols-2">
+                      {experiences.map((item) => (
+                        <button key={item.name} type="button" onClick={() => setExperience(item.name)} aria-pressed={experience === item.name} className={`flex min-h-[92px] items-start justify-between gap-3 rounded-xl border p-4 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087bd1] ${experience === item.name ? 'border-[#087bd1] bg-[#e9f4ff]' : 'border-[#dce2e9] bg-white/70 hover:bg-white'}`}>
+                          <span><span className="block text-[14px] font-medium text-[#20252b]">{item.name}</span><span className="mt-1 block text-[11px] leading-4 text-[#75808d]">{item.detail}</span></span>
+                          {experience === item.name && <Check aria-hidden="true" className="size-4 shrink-0 text-[#087bd1]" />}
+                        </button>
+                      ))}
+                    </div>
+                  </section>
+                )}
+                {step === 6 && (
+                  <section aria-labelledby="setup-heading">
                     <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.13em] text-[#087bd1]">Choose your privacy settings</p>
                     <h1 id="setup-heading" className="mb-2 text-[clamp(24px,3vw,34px)] font-semibold leading-tight tracking-[-0.035em]">You&apos;re in control</h1>
                     <p className="mb-5 max-w-lg text-[13px] leading-5 text-[#697481]">Choose what SparkOS can use. You can change these options at any time.</p>
@@ -189,6 +226,28 @@ export function SparkOSBootSetup({ onComplete }: SparkOSBootSetupProps) {
                     <p className="mt-3 flex items-center gap-2 text-[11px] text-[#78828d]"><ShieldCheck aria-hidden="true" className="size-4" />Your choices stay on this device.</p>
                   </section>
                 )}
+                {step === 7 && (
+                  <section aria-labelledby="setup-heading">
+                    <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.13em] text-[#087bd1]">Almost there</p>
+                    <h1 id="setup-heading" className="mb-2 text-[clamp(24px,3vw,34px)] font-semibold leading-tight tracking-[-0.035em] text-[#17191d]">Your SparkOS is ready</h1>
+                    <p className="mb-5 max-w-lg text-[13px] leading-5 text-[#697481]">Take a moment to review your setup before heading to the desktop.</p>
+                    <dl className="divide-y divide-[#e2e7ed] rounded-xl border border-[#dce2e9] bg-white/75 px-4">
+                      {[
+                        ['Region', region],
+                        ['Keyboard', keyboard],
+                        ['Network', network],
+                        ['Profile', userName.trim()],
+                        ['Device name', deviceName.trim()],
+                        ['Experience', experience],
+                      ].map(([label, value]) => (
+                        <div key={label} className="flex min-h-12 items-center justify-between gap-4 py-2 text-[12px]">
+                          <dt className="text-[#75808d]">{label}</dt>
+                          <dd className="truncate text-right font-medium text-[#20252b]">{value}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </section>
+                )}
               </motion.div>
             </AnimatePresence>
           </div>
@@ -197,7 +256,7 @@ export function SparkOSBootSetup({ onComplete }: SparkOSBootSetupProps) {
             {step > 0 ? (
               <button type="button" onClick={() => setStep((current) => current - 1)} className="inline-flex h-10 items-center gap-2 rounded-lg px-3 text-[13px] font-medium text-[#4c5966] transition-colors hover:bg-[#eaf0f6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087bd1]"><ArrowLeft aria-hidden="true" className="size-4" />Back</button>
             ) : <span className="text-[11px] text-[#86909b]">SparkOS setup</span>}
-            <button type="button" onClick={continueSetup} disabled={step === 3 && !userName.trim()} className="inline-flex h-10 min-w-[124px] items-center justify-center gap-2 rounded-lg bg-[#087bd1] px-5 text-[13px] font-medium text-white shadow-[0_4px_12px_rgba(8,123,209,.18)] transition-colors hover:bg-[#006fbe] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087bd1] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">{step === setupSteps.length - 1 ? 'Start SparkOS' : 'Continue'}{step < setupSteps.length - 1 && <ArrowRight aria-hidden="true" className="size-4" />}</button>
+            <button type="button" onClick={continueSetup} disabled={(step === 3 && !userName.trim()) || (step === 4 && !deviceName.trim())} className="inline-flex h-10 min-w-[124px] items-center justify-center gap-2 rounded-lg bg-[#087bd1] px-5 text-[13px] font-medium text-white shadow-[0_4px_12px_rgba(8,123,209,.18)] transition-colors hover:bg-[#006fbe] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087bd1] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">{step === setupSteps.length - 1 ? 'Start SparkOS' : 'Continue'}{step < setupSteps.length - 1 && <ArrowRight aria-hidden="true" className="size-4" />}</button>
           </footer>
         </div>
       </motion.section>
