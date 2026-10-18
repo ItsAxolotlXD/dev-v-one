@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { SpinningRing } from './SpinningRing';
 
-const LOGO_SRC = 'https://static.wikia.nocookie.net/ep-deo/images/d/d4/V-one-dev.png/revision/latest?cb=20261012151735';
+const LOGO_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-TPopUU7m6WTCETjfIVB68A850AyvGg.png';
 const MICROSOFT_LOGO_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-r1SabPVCokA68COSioto4rPEgZkHxF.png';
 
 interface SplashScreenProps {
@@ -61,7 +61,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
           {!logoError ? (
             <img
               src={LOGO_SRC}
-              alt="Sparkle (Dev)"
+              alt="Microsoft Edge Dev"
               referrerPolicy="no-referrer"
               className="h-16 sm:h-20 md:h-24 w-auto max-w-[180px] sm:max-w-[220px] object-contain drop-shadow-md transition-all"
               onError={() => setLogoError(true)}
