@@ -430,7 +430,7 @@ export function SparkOS({ navigate, renderApp }: SparkOSProps) {
             aria-expanded={startOpen}
             className={`flex size-10 items-center justify-center rounded-md transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 ${startOpen ? 'bg-white/[0.08]' : ''}`}
           >
-            <Globe aria-hidden="true" className="size-[21px] text-sky-200" />
+            <WindowsMark className="size-[18px]" />
           </button>
           <button
             type="button"
