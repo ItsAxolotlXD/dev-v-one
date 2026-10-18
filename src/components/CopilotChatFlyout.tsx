@@ -330,7 +330,7 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
   return (
     <div
       key="windows-search-copilot-flyout"
-      className={`context-menu copilot-flyout-container absolute top-full left-1/2 right-auto w-[min(680px,calc(100vw-24px))] max-w-[calc(100vw-24px)] -translate-x-1/2 z-[999] select-none font-sans overflow-hidden max-h-[min(70vh,540px)] mt-2 shadow-[0_18px_45px_rgba(0,0,0,0.28)] flex flex-col ${
+      className={`context-menu copilot-flyout-container absolute top-full left-1/2 right-auto w-[min(680px,calc(100vw-24px))] max-w-[calc(100vw-24px)] -translate-x-1/2 z-[999] select-none font-sans overflow-hidden max-h-[min(70vh,540px)] mt-2 shadow-[0_18px_45px_rgba(0,0,0,0.28)] flex flex-col ${activeMode === 'search' ? 'copilot-search-results-container' : ''} ${
         activeMode === 'search'
           ? 'rounded-none border border-black/10 bg-white text-[#1f2937]'
           : settings.windowsAppSdkPreview
