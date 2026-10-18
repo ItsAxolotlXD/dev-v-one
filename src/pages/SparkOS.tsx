@@ -7,7 +7,7 @@ import type { AppTabIconName } from '../components/FluentIcons';
 import { FluentClockIcon, FluentSnippingToolIcon } from '../components/FluentIcons';
 import { getStoreAppForRoute, type StoreApp } from '../data/storeApps';
 import { useIsMobile } from '../hooks/useIsMobile';
-import { hasSparkOSSetup, SparkOSBootScreen, SparkOSBootSetup } from '../components/SparkOSBootSetup';
+import { hasSparkOSSetup, resetSparkOSSetup, sparkOSResetOobeEvent, SparkOSBootScreen, SparkOSBootSetup } from '../components/SparkOSBootSetup';
 import {
   BatteryFull,
   Bell,
@@ -165,6 +165,19 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
   useEffect(() => {
     const timer = window.setInterval(() => setNow(new Date()), 30_000);
     return () => window.clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const handleOobeReset = () => {
+      resetSparkOSSetup();
+      setWindows([]);
+      setActiveWindowId(null);
+      setActivePanel(null);
+      setStartOpen(false);
+      setSetupComplete(false);
+    };
+    window.addEventListener(sparkOSResetOobeEvent, handleOobeReset);
+    return () => window.removeEventListener(sparkOSResetOobeEvent, handleOobeReset);
   }, []);
 
   useEffect(() => () => {

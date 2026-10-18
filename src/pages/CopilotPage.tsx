@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useSystemTasks } from '../context/SystemTasksContext';
 import { SpinningRing } from '../components/SpinningRing';
+import { sparkOSResetOobeEvent } from '../components/SparkOSBootSetup';
 
 export const COPILOT_ICON_SRC = 'https://upload.wikimedia.org/wikipedia/vi/a/aa/Microsoft_Copilot_Icon.svg';
 
@@ -147,6 +148,19 @@ export const CopilotPage: React.FC<CopilotPageProps> = ({ navigate, embedded = f
 
     setMessages((prev) => [...prev, userMsg]);
     setInputVal('');
+
+    if (/^\/oobe\s+reset$/i.test(message)) {
+      const confirmation: ChatMessage = {
+        id: `ai-${Date.now()}`,
+        role: 'model',
+        text: embedded ? 'Đang khởi động lại OOBE của SparkOS…' : 'Lệnh này chỉ hoạt động trong Copilot bên trong SparkOS.',
+        timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
+      };
+      setMessages((prev) => [...prev, confirmation]);
+      if (embedded) window.setTimeout(() => window.dispatchEvent(new Event(sparkOSResetOobeEvent)), 650);
+      return;
+    }
+
     setIsLoading(true);
 
     const isSearchCmd = /^\/(find|search)\b/i.test(message);

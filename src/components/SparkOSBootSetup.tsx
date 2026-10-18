@@ -3,6 +3,15 @@ import { AnimatePresence, motion } from 'motion/react';
 import { ArrowLeft, ArrowRight, BookOpen, Check, Globe, Monitor, Plane, ShieldCheck, UserRound, Wifi } from 'lucide-react';
 
 const setupStorageKey = 'sparkos-oobe-profile';
+export const sparkOSResetOobeEvent = 'sparkos:reset-oobe';
+
+export function resetSparkOSSetup(): void {
+  try {
+    window.localStorage.removeItem(setupStorageKey);
+  } catch {
+    // Keep reset usable when browser storage is unavailable.
+  }
+}
 const regions = ['Australia', 'Canada', 'France', 'Germany', 'Japan', 'Singapore', 'United Kingdom', 'United States', 'Vietnam'];
 const setupSteps = ['Region', 'Keyboard', 'Network', 'Account', 'Device name', 'Experience', 'Privacy', 'Ready'];
 const experiences = [
