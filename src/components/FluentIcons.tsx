@@ -4,7 +4,13 @@ import { useSettings, SearchIconTreatment } from '../hooks/useSettings';
 export const SPARKLE_SEARCH_ICON_URL = 'https://static.wikia.nocookie.net/ep-deo/images/6/6c/Search_sparkle.png/revision/latest/scale-to-width-down/1000?cb=20261015133722';
 export const GLOBE_SEARCH_ICON_URL = 'https://static.wikia.nocookie.net/ftv/images/5/5b/Ic_fluent_globe_search_24_regular.png/revision/latest?cb=20260508150432&path-prefix=vi';
 
+export const MAIL_TAB_ICON_URL = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-w08Tu7AUdI6LLJeWquYKJiNuuzCnVN.png';
+export const CALENDAR_TAB_ICON_URL = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-EOTmadFpTcD8ViTHEiYhPMCbFvwgFn.png';
+export const STORE_ICON_URL = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-rwSh33P3L1Yzqgl0DKUj5mbVNzFKj1.png';
+
 export const APP_TAB_ICON_URLS = {
+  mail: MAIL_TAB_ICON_URL,
+  calendar: CALENDAR_TAB_ICON_URL,
   home: 'https://www.elevenforum.com/data/attachments/30/30188-c9f25938bd40f9c2e3af267cc96b3e28.jpg?hash=yfJZOL1A-c',
   taskManager: 'https://winaero.com/blog/wp-content/uploads/2021/05/taskmgr-task-manager-fluent-modern-icon.png',
   bank: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/icons8-dollar-bag-96-VS47W4Ne5wDfcYmkNYfhA4QnNrQtXK.png',
