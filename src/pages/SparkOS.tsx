@@ -317,7 +317,7 @@ export function SparkOS({ navigate, renderApp }: SparkOSProps) {
           initial={{ opacity: 0, y: 38, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 38, scale: 0.98 }}
-          transition={{ duration: 0.2, ease: 'easeOut' }}
+          transition={{ type: 'spring', stiffness: 420, damping: 23, mass: 0.72 }}
           className="absolute left-1/2 top-1/2 z-20 flex h-[min(82dvh,610px)] w-[min(710px,calc(100vw-24px))] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-[8px] border border-white/10 bg-[#111c22]/75 shadow-[0_28px_90px_rgba(0,0,0,.5)] backdrop-blur-2xl"
         >
           <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-5 pb-2 pt-[clamp(12px,4dvh,32px)] sm:px-9">
@@ -348,7 +348,7 @@ export function SparkOS({ navigate, renderApp }: SparkOSProps) {
 
             {visibleApps.length ? (
               <div className="grid grid-cols-4 gap-x-1 gap-y-1 sm:grid-cols-5 sm:gap-x-3 sm:gap-y-2">
-                {visibleApps.map(({ name, route, surface }) => (
+                {visibleApps.map(({ name, route }) => (
                   <button
                     key={name}
                     type="button"
@@ -357,7 +357,7 @@ export function SparkOS({ navigate, renderApp }: SparkOSProps) {
                     className="group flex min-h-[clamp(48px,7dvh,72px)] flex-col items-center justify-center gap-1.5 rounded-md px-1 py-1.5 text-center transition-colors hover:bg-white/10 focus-visible:bg-white/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50"
                     aria-label={`Open ${name}`}
                   >
-                    <span className={`flex size-[clamp(28px,5dvh,40px)] items-center justify-center rounded-[9px] border border-white/10 ${surface} shadow-md transition-transform group-hover:scale-105`}>
+                    <span className="flex size-[clamp(28px,5dvh,40px)] items-center justify-center transition-transform group-hover:scale-110">
                       {renderDesktopIcon(route, 'size-[23px]')}
                     </span>
                     <span className="max-w-full truncate text-[10px] leading-tight text-slate-100 sm:text-[11px]">{name}</span>

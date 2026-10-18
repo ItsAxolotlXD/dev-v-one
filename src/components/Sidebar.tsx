@@ -1703,8 +1703,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <>
       {/* 1. Desktop Persistent Sidebar */}
       {settings.dockToSidebar && (
-        <aside 
+        <motion.aside
           id="waves-desktop-sidebar"
+          initial={false}
+          animate={{ width: effectiveCollapsed ? 48 : 260 }}
+          transition={shouldAnimateSidebar ? { type: 'spring', stiffness: 420, damping: 24, mass: 0.72 } : { duration: 0 }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           className={`hidden md:flex flex-col h-screen ${
@@ -1713,11 +1716,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               : 'bg-[#f3f3f3] dark:bg-[#1b1f24] border-r border-[#e5e5e5] dark:border-[#2e2e2e]'
           } text-[#111827] dark:text-white select-none shrink-0 fixed top-0 z-40 overflow-visible shadow-none ${
             settings.sidebarPosition === 'right' ? 'right-0' : 'left-0'
-          } ${
-            shouldAnimateSidebar ? 'transition-[width] duration-300 ease-in-out' : 'transition-none'
-          } ${
-            effectiveCollapsed ? 'w-[48px]' : 'w-[260px]'
-          }`}
+          } ${effectiveCollapsed ? 'w-[48px]' : 'w-[260px]'}`}
           style={{
             backgroundColor: settings.windowsAppSdkPreview ? '#141414' : (settings.theme === 'light' ? '#f3f3f3' : '#1b1f24'),
             backdropFilter: 'none',
@@ -2286,7 +2285,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </div>
             </div>
           )}
-        </aside>
+        </motion.aside>
       )}
 
       {/* 2. Mobile Drawer Navigation with Smooth Animation */}
