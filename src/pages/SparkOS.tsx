@@ -5,6 +5,7 @@ import type { LucideIcon } from 'lucide-react';
 import { AppTabIcon, STORE_ICON_URL } from '../components/FluentIcons';
 import type { AppTabIconName } from '../components/FluentIcons';
 import { FluentClockIcon, FluentSnippingToolIcon } from '../components/FluentIcons';
+import { hasSparkOSSetup, SparkOSBootScreen, SparkOSBootSetup } from '../components/SparkOSBootSetup';
 import {
   BatteryFull,
   Calculator,
@@ -119,6 +120,8 @@ function WindowsMark({ className = 'size-[18px]' }: { className?: string }) {
 }
 
 export function SparkOS({ navigate, renderApp }: SparkOSProps) {
+  const [bootFinished, setBootFinished] = useState(false);
+  const [setupComplete, setSetupComplete] = useState(false);
   const [startOpen, setStartOpen] = useState(true);
   const [showAllApps, setShowAllApps] = useState(false);
   const [query, setQuery] = useState('');
@@ -129,6 +132,14 @@ export function SparkOS({ navigate, renderApp }: SparkOSProps) {
   const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const dragRef = useRef<{ id: string; startX: number; startY: number; originX: number; originY: number } | null>(null);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setSetupComplete(hasSparkOSSetup());
+      setBootFinished(true);
+    }, 1800);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(new Date()), 30_000);
@@ -228,6 +239,9 @@ export function SparkOS({ navigate, renderApp }: SparkOSProps) {
 
   const formattedTime = new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' }).format(now);
   const formattedDate = new Intl.DateTimeFormat(undefined, { weekday: 'short', month: 'numeric', day: 'numeric' }).format(now);
+
+  if (!bootFinished) return <SparkOSBootScreen />;
+  if (!setupComplete) return <SparkOSBootSetup onComplete={() => setSetupComplete(true)} />;
 
   return (
     <main
