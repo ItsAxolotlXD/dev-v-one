@@ -513,7 +513,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       },
       {
         id: 'friends',
-        label: 'Friends',
+        label: 'People',
         secondary: '100 Bạn bè Sparkle (Dev)',
         route: '/friends',
         icon: FluentFriendsIcon,
@@ -1129,7 +1129,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               id={isMobile ? 'mobile-nav-friends' : 'sidebar-nav-friends'}
               data-nav-active={(currentRoute === '/friends' || currentRoute.startsWith('/friends')) ? 'true' : undefined}
               onClick={() => handleNavClick('/friends')}
-              title="Friends - Danh sách 100 người dùng Sparkle (Dev)"
+              title="People - Danh sách 100 người dùng Sparkle (Dev)"
               className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
                 (currentRoute === '/friends' || currentRoute.startsWith('/friends'))
                   ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
@@ -1137,7 +1137,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <AppTabIcon name="people" className="w-5 h-5 shrink-0 text-black dark:text-white" />
-              <span className="truncate text-[13.5px]">Friends</span>
+              <span className="truncate text-[13.5px]">People</span>
             </button>
           </div>
 
@@ -1825,7 +1825,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 id="sidebar-collapsed-friends"
                 data-nav-active={(currentRoute === '/friends' || currentRoute.startsWith('/friends')) ? 'true' : undefined}
                 onClick={() => handleNavClick('/friends')}
-                title="Friends - 100 Người dùng"
+                title="People - 100 Người dùng"
                 className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
                   (currentRoute === '/friends' || currentRoute.startsWith('/friends'))
                     ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'

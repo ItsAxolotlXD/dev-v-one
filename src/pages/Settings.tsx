@@ -169,6 +169,8 @@ export const Settings: React.FC<SettingsProps> = ({
   const [isSaving, setIsSaving] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [internalSearchQuery, setInternalSearchQuery] = useState('');
+  const [searchResultCount, setSearchResultCount] = useState(0);
+  const settingsContentRef = useRef<HTMLDivElement>(null);
 
   const searchQuery = externalSearchQuery !== undefined ? externalSearchQuery : internalSearchQuery;
   const setSearchQuery = (q: string) => {
@@ -282,8 +284,57 @@ export const Settings: React.FC<SettingsProps> = ({
     return text.toLowerCase().includes(searchQuery.toLowerCase().trim());
   };
 
+  useEffect(() => {
+    const root = settingsContentRef.current;
+    if (!root) return;
+
+    const query = searchQuery.trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase();
+    const sections = Array.from(root.querySelectorAll('[id^="settings-section-"]')) as HTMLElement[];
+    let visibleRows = 0;
+
+    sections.forEach((section) => {
+      const sectionKeywords = (section.dataset.settingsSearchLabel || section.id)
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLocaleLowerCase();
+      const sectionMatches = Boolean(query) && sectionKeywords.includes(query);
+      const indexedRows = Array.from(section.querySelectorAll(
+        '[id^="setting-"], [id^="keybind-row-"], [data-settings-search-item]'
+      )) as HTMLElement[];
+      const directRows = Array.from(section.children).filter((child) =>
+        !child.classList.contains('divider-line') &&
+        !indexedRows.some((indexedRow) => child.contains(indexedRow))
+      ) as HTMLElement[];
+      const rows = [...indexedRows, ...directRows];
+      let sectionVisibleRows = 0;
+
+      rows.forEach((row) => {
+        const searchableText = `${row.textContent || ''} ${row.id} ${row.dataset.settingsSearchItem || ''}`
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toLocaleLowerCase();
+        const isVisible = !query || sectionMatches || searchableText.includes(query);
+        row.style.display = isVisible ? '' : 'none';
+        if (isVisible) sectionVisibleRows += 1;
+      });
+
+      section.querySelectorAll<HTMLElement>('.divider-line').forEach((divider) => {
+        divider.style.display = query ? 'none' : '';
+      });
+
+      const sectionContainer = section.parentElement;
+      if (sectionContainer && sectionContainer.children.length <= 2) {
+        sectionContainer.style.display = query && sectionVisibleRows === 0 ? 'none' : '';
+      }
+      section.style.display = query && sectionVisibleRows === 0 ? 'none' : '';
+      visibleRows += sectionVisibleRows;
+    });
+
+    setSearchResultCount(visibleRows);
+  }, [searchQuery]);
+
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-6 pb-28 pt-2 select-none">
+    <div ref={settingsContentRef} className="w-full max-w-7xl mx-auto space-y-6 pb-28 pt-2 select-none">
       {/* 1. Top Header on Main Category View OR Minimal Back Bar on Subpage */}
       {true ? (
         <div className="space-y-2">
@@ -378,6 +429,13 @@ export const Settings: React.FC<SettingsProps> = ({
                 </button>
               </div>
             </div>
+            {searchQuery.trim() && (
+              <p role="status" aria-live="polite" className="pt-1 text-xs text-[#6B7280] dark:text-[#9CA3AF]">
+                {searchResultCount > 0
+                  ? `${searchResultCount} matching settings`
+                  : 'No matching settings found'}
+              </p>
+            )}
           </div>
         </div>
       ) : (
@@ -544,6 +602,7 @@ export const Settings: React.FC<SettingsProps> = ({
           {/* Thông tin phần mềm & Giới thiệu (Chuyển xuống cuối trang Cài đặt) */}
           <section 
             id="settings-section-version"
+            data-settings-search-label="About"
             className="fluent-reveal-item setting-card p-4 sm:p-5 rounded-[8px] bg-white dark:bg-[#38383d] border border-[#e5e5e5] dark:border-[#383838] shadow-xs space-y-3.5 select-none"
           >
             <div className="p-3.5 sm:p-4 rounded-[18px] bg-black/[0.03] dark:bg-white/5 space-y-3 select-text">
@@ -650,6 +709,7 @@ export const Settings: React.FC<SettingsProps> = ({
             {true && (
               <section 
                 id="settings-section-spatial-glass"
+                data-settings-search-label="Fluent Design"
                 className="rounded-[8px] bg-white dark:bg-[#38383d] border border-[#e5e5e5] dark:border-[#383838] shadow-xs overflow-hidden select-none"
               >
                 {/* 1. Fluent Design Master Toggle */}
@@ -810,6 +870,7 @@ export const Settings: React.FC<SettingsProps> = ({
             {true && (
               <section 
                 id="settings-section-interface"
+                data-settings-search-label="Interface"
                 className="rounded-[8px] bg-white dark:bg-[#38383d] border border-[#e5e5e5] dark:border-[#383838] shadow-xs overflow-hidden select-none"
               >
                 {/* 1. Chế độ ứng dụng (Ban ngày / Ban đêm) */}
@@ -1050,6 +1111,7 @@ export const Settings: React.FC<SettingsProps> = ({
             {true && (
               <section 
                 id="settings-section-tools"
+                data-settings-search-label="Tools"
                 className="rounded-[8px] bg-white dark:bg-[#38383d] border border-[#e5e5e5] dark:border-[#383838] shadow-xs overflow-hidden select-none"
               >
                 {/* 1. Tỉ lệ khung hình */}
@@ -1152,6 +1214,7 @@ export const Settings: React.FC<SettingsProps> = ({
                   </div>
                   <section 
                     id="settings-section-page-loading"
+                    data-settings-search-label="Accessibility"
                     className="rounded-[8px] bg-white dark:bg-[#38383d] border border-[#e5e5e5] dark:border-[#383838] shadow-xs overflow-hidden"
                   >
                     {/* Option 1: Page loading */}
@@ -1225,6 +1288,7 @@ export const Settings: React.FC<SettingsProps> = ({
                   </div>
                   <section 
                     id="settings-section-motion"
+                    data-settings-search-label="Accessibility"
                     className="rounded-[8px] bg-white dark:bg-[#38383d] border border-[#e5e5e5] dark:border-[#383838] shadow-xs overflow-hidden"
                   >
                     {/* Reduce all animation */}
@@ -1383,6 +1447,7 @@ export const Settings: React.FC<SettingsProps> = ({
                   </div>
                   <section 
                     id="settings-section-search"
+                    data-settings-search-label="Accessibility"
                     className="rounded-[8px] bg-white dark:bg-[#38383d] border border-[#e5e5e5] dark:border-[#383838] shadow-xs overflow-hidden"
                   >
                     {/* Danh mục */}
@@ -1557,6 +1622,7 @@ export const Settings: React.FC<SettingsProps> = ({
                   </div>
                   <section 
                     id="settings-section-keyboard"
+                    data-settings-search-label="Accessibility"
                     className="rounded-[8px] bg-white dark:bg-[#38383d] border border-[#e5e5e5] dark:border-[#383838] shadow-xs overflow-hidden"
                   >
                     {/* Bàn phím số */}
@@ -1678,6 +1744,7 @@ export const Settings: React.FC<SettingsProps> = ({
                   </div>
                   <section 
                     id="settings-section-keybinds"
+                    data-settings-search-label="Keyboard shortcuts"
                     className="rounded-[8px] bg-white dark:bg-[#38383d] border border-[#e5e5e5] dark:border-[#383838] shadow-xs overflow-hidden"
                   >
                     {/* Keybind items list */}
@@ -1832,6 +1899,7 @@ export const Settings: React.FC<SettingsProps> = ({
             {true && (
               <section 
                 id="settings-section-experimental"
+                data-settings-search-label="Insider Flags"
                 className="rounded-[8px] bg-white dark:bg-[#38383d] border border-[#e5e5e5] dark:border-[#383838] shadow-xs overflow-visible relative z-20 select-none"
               >
                 {/* Native keyboard */}

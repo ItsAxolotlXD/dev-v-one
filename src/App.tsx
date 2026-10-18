@@ -885,6 +885,8 @@ export default function App() {
             currentRoute={currentRoute}
             navigate={navigate}
             onOpenSearch={handleOpenSearch}
+            settingsSearchQuery={currentTabSearchQuery}
+            onSettingsSearchChange={handleTabSearchChange}
             onOpenMobileMenu={() => setIsMobileSidebarOpen(true)}
             currentChannel={currentChannel}
             channels={channels}
