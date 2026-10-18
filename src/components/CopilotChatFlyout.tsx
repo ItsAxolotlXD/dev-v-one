@@ -330,15 +330,17 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
   return (
     <div
       key="windows-search-copilot-flyout"
-      className={`context-menu copilot-flyout-container absolute top-full left-1/2 right-auto w-[min(680px,calc(100vw-24px))] max-w-[calc(100vw-24px)] -translate-x-1/2 z-[999] select-none font-sans overflow-hidden max-h-[min(70vh,540px)] ${
-        settings.windowsAppSdkPreview
-          ? 'rounded-[12px] mt-2 !bg-[#2b2b2b] !border !border-white/[0.12] shadow-[0_18px_45px_rgba(0,0,0,0.38)] text-white'
-          : 'rounded-[12px] mt-2 border border-black/10 dark:border-white/10 bg-white dark:bg-[#202124] shadow-[0_18px_45px_rgba(0,0,0,0.28)] text-[#1f2937] dark:text-neutral-100'
-      } flex flex-col`}
+      className={`context-menu copilot-flyout-container absolute top-full left-1/2 right-auto w-[min(680px,calc(100vw-24px))] max-w-[calc(100vw-24px)] -translate-x-1/2 z-[999] select-none font-sans overflow-hidden max-h-[min(70vh,540px)] rounded-[12px] mt-2 shadow-[0_18px_45px_rgba(0,0,0,0.28)] flex flex-col ${
+        activeMode === 'search'
+          ? 'border border-black/10 bg-white text-[#1f2937]'
+          : settings.windowsAppSdkPreview
+            ? '!border !border-white/[0.12] !bg-[#2b2b2b] text-white'
+            : 'border border-black/10 dark:border-white/10 bg-white dark:bg-[#202124] text-[#1f2937] dark:text-neutral-100'
+      }`}
       style={{
         backdropFilter: 'none',
         WebkitBackdropFilter: 'none',
-        backgroundColor: settings.windowsAppSdkPreview ? '#2b2b2b' : undefined,
+        backgroundColor: activeMode === 'search' ? '#ffffff' : settings.windowsAppSdkPreview ? '#2b2b2b' : undefined,
         animation: 'none',
         transform: 'translateX(-50%)',
       }}
@@ -347,8 +349,8 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
       {activeMode === 'search' ? (
         normalizedQuery ? (
           <div className="grid min-h-0 flex-1 grid-cols-1 sm:grid-cols-[minmax(0,0.94fr)_minmax(270px,1.06fr)]" style={{ animation: 'none', transform: 'none' }}>
-            <div className="min-h-0 overflow-y-auto border-b border-black/10 bg-[#f3f3f3] p-3.5 dark:border-white/10 dark:bg-[#252525] sm:border-b-0 sm:border-r sm:p-4">
-              <h2 className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Best match</h2>
+            <div className="min-h-0 overflow-y-auto border-b border-black/10 bg-[#f1f1f1] p-3.5 sm:border-b-0 sm:border-r sm:p-4">
+              <h2 className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-wide text-neutral-500">Best match</h2>
               {matchingAspects[0] ? (
                 <button
                   type="button"
@@ -356,8 +358,8 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
                   onClick={() => setSelectedAspectId(matchingAspects[0].id)}
                   className={`group flex w-full items-center gap-3 rounded-[3px] border px-2.5 py-2.5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4] ${
                     selectedAspect?.id === matchingAspects[0].id
-                      ? 'border-[#a7cce8] bg-[#cce8fa] text-[#1f2937] dark:border-[#3579a8] dark:bg-[#174a70] dark:text-white'
-                      : 'border-transparent hover:bg-black/5 dark:hover:bg-white/[0.07]'
+                      ? 'border-[#a7cce8] bg-[#cce8fa] text-[#1f2937]'
+                      : 'border-transparent hover:bg-black/5'
                   }`}
                 >
                   <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-[3px] bg-[#0078d4] text-white">
@@ -369,16 +371,16 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-[13px] font-semibold">{matchingAspects[0].title}</span>
-                    <span className="mt-0.5 block text-[11px] text-neutral-600 dark:text-neutral-300">{matchingAspects[0].type === 'setting' ? 'Setting' : matchingAspects[0].type === 'news' ? 'Article' : matchingAspects[0].type === 'channel' ? 'Channel' : 'App'}</span>
+                    <span className="mt-0.5 block text-[11px] text-neutral-600">{matchingAspects[0].type === 'setting' ? 'Setting' : matchingAspects[0].type === 'news' ? 'Article' : matchingAspects[0].type === 'channel' ? 'Channel' : 'App'}</span>
                   </span>
                 </button>
               ) : (
-                <p className="rounded-sm px-2.5 py-3 text-[13px] text-neutral-600 dark:text-neutral-300">No matching apps or settings</p>
+                <p className="rounded-sm px-2.5 py-3 text-[13px] text-neutral-600">No matching apps or settings</p>
               )}
 
               {matchingAspects.length > 1 && (
                 <section className="mt-4" aria-label="More matching apps">
-                  <h3 className="mb-1 px-1 text-[11px] font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Apps &amp; settings</h3>
+                  <h3 className="mb-1 px-1 text-[11px] font-semibold uppercase tracking-wide text-neutral-500">Apps &amp; settings</h3>
                   <div className="space-y-0.5">
                     {matchingAspects.slice(1, 10).map((aspect) => (
                       <button
@@ -388,11 +390,11 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
                         onClick={() => setSelectedAspectId(aspect.id)}
                         className={`group flex w-full items-center gap-2.5 rounded-[3px] px-2 py-1.5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4] ${
                           selectedAspect?.id === aspect.id
-                            ? 'bg-[#cce8fa] text-[#1f2937] dark:bg-[#174a70] dark:text-white'
-                            : 'hover:bg-black/5 dark:hover:bg-white/[0.07]'
+                            ? 'bg-[#cce8fa] text-[#1f2937]'
+                            : 'hover:bg-black/5'
                         }`}
                       >
-                        <span className="flex h-6 w-6 shrink-0 items-center justify-center overflow-hidden text-[#0078d4] dark:text-[#75c7ff]">
+                        <span className="flex h-6 w-6 shrink-0 items-center justify-center overflow-hidden text-[#0078d4]">
                           {aspect.logo ? <img src={aspect.logo} alt="" className="h-5 w-5 object-contain" /> : aspect.type === 'news' ? <Newspaper className="h-4 w-4" /> : aspect.type === 'channel' ? <Tv className="h-4 w-4" /> : aspect.type === 'setting' ? <Settings2 className="h-4 w-4" /> : aspect.type === 'tool' ? <Wrench className="h-4 w-4" /> : <AppWindow className="h-4 w-4" />}
                         </span>
                         <span className="min-w-0 flex-1 truncate text-[12px]">{aspect.title}</span>
@@ -405,9 +407,9 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
 
               {matchingHistory.length > 0 && (
                 <section className="mt-4" aria-label="Matching search history">
-                  <h3 className="mb-1 px-1 text-[11px] font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Search history</h3>
+                  <h3 className="mb-1 px-1 text-[11px] font-semibold uppercase tracking-wide text-neutral-500">Search history</h3>
                   {matchingHistory.map((item) => (
-                    <button key={item} type="button" onClick={() => handleItemClick(item)} className="flex w-full items-center gap-2.5 rounded-[3px] px-2 py-1.5 text-left text-[12px] hover:bg-black/5 dark:hover:bg-white/[0.07]">
+                    <button key={item} type="button" onClick={() => handleItemClick(item)} className="flex w-full items-center gap-2.5 rounded-[3px] px-2 py-1.5 text-left text-[12px] hover:bg-black/5">
                       <History className="h-4 w-4 shrink-0 text-neutral-500" />
                       <span className="truncate">{item}</span>
                     </button>
@@ -415,20 +417,20 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
                 </section>
               )}
 
-              <section className="mt-4 border-t border-black/10 pt-3 dark:border-white/10" aria-label="Search the web">
-                <h3 className="mb-1 px-1 text-[11px] font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Search the web</h3>
-                <button type="button" onClick={() => handleAskCopilot(searchQuery)} className="group flex w-full items-center gap-2.5 rounded-[3px] px-2 py-2 text-left transition-colors hover:bg-black/5 dark:hover:bg-white/[0.07]">
-                  <MessageCircle className="h-4 w-4 shrink-0 text-[#0078d4] dark:text-[#75c7ff]" />
+              <section className="mt-4 border-t border-black/10 pt-3" aria-label="Search the web">
+                <h3 className="mb-1 px-1 text-[11px] font-semibold uppercase tracking-wide text-neutral-500">Search the web</h3>
+                <button type="button" onClick={() => handleAskCopilot(searchQuery)} className="group flex w-full items-center gap-2.5 rounded-[3px] px-2 py-2 text-left transition-colors hover:bg-black/5">
+                  <MessageCircle className="h-4 w-4 shrink-0 text-[#0078d4]" />
                   <span className="min-w-0 flex-1 truncate text-[12px]">Ask Copilot: “{searchQuery}”</span>
-                  <Sparkles className="h-3.5 w-3.5 shrink-0 text-[#0078d4] dark:text-[#75c7ff]" />
+                  <Sparkles className="h-3.5 w-3.5 shrink-0 text-[#0078d4]" />
                 </button>
               </section>
             </div>
 
-            <div className="flex min-h-[230px] min-w-0 flex-col bg-white dark:bg-[#202124] sm:min-h-[390px]">
+            <div className="flex min-h-[230px] min-w-0 flex-col bg-white sm:min-h-[390px]">
               {selectedAspect ? (
                 <>
-                  <div className="flex flex-1 flex-col items-center justify-center border-b border-black/[0.08] px-5 py-7 text-center dark:border-white/[0.08]">
+                  <div className="flex flex-1 flex-col items-center justify-center border-b border-black/[0.08] px-5 py-7 text-center">
                     <span className="mb-3 flex h-[54px] w-[54px] items-center justify-center overflow-hidden rounded-[5px] bg-[#0078d4] text-white shadow-sm">
                       {selectedAspect.logo ? (
                         <img src={selectedAspect.logo} alt="" className="h-9 w-9 object-contain" />
@@ -436,27 +438,27 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
                         selectedAspect.type === 'news' ? <Newspaper className="h-7 w-7" /> : selectedAspect.type === 'channel' ? <Tv className="h-7 w-7" /> : selectedAspect.type === 'setting' ? <Settings2 className="h-7 w-7" /> : selectedAspect.type === 'tool' ? <Wrench className="h-7 w-7" /> : <AppWindow className="h-7 w-7" />
                       )}
                     </span>
-                    <h2 className="max-w-full truncate text-[16px] font-medium text-[#222] dark:text-white">{selectedAspect.title}</h2>
-                    <p className="mt-0.5 text-[12px] text-neutral-500 dark:text-neutral-400">{selectedAspect.type === 'setting' ? 'Setting' : selectedAspect.type === 'news' ? 'Article' : selectedAspect.type === 'channel' ? 'Channel' : selectedAspect.type === 'tool' ? 'Tool' : 'App'}</p>
+                    <h2 className="max-w-full truncate text-[16px] font-medium text-[#222]">{selectedAspect.title}</h2>
+                    <p className="mt-0.5 text-[12px] text-neutral-500">{selectedAspect.type === 'setting' ? 'Setting' : selectedAspect.type === 'news' ? 'Article' : selectedAspect.type === 'channel' ? 'Channel' : selectedAspect.type === 'tool' ? 'Tool' : 'App'}</p>
                   </div>
 
                   <div className="space-y-0.5 p-3 sm:p-4" aria-label="Selected result actions">
-                    <button type="button" onClick={() => { selectedAspect.onSelect(); onClose(); }} className="flex w-full items-center gap-3 rounded-[3px] px-2.5 py-2 text-left text-[12px] text-[#2b2b2b] transition-colors hover:bg-[#f2f2f2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4] dark:text-neutral-100 dark:hover:bg-white/[0.08]">
-                      <ExternalLink className="h-4 w-4 text-[#0078d4] dark:text-[#75c7ff]" />
+                    <button type="button" onClick={() => { selectedAspect.onSelect(); onClose(); }} className="flex w-full items-center gap-3 rounded-[3px] px-2.5 py-2 text-left text-[12px] text-[#2b2b2b] transition-colors hover:bg-[#f2f2f2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4]">
+                      <ExternalLink className="h-4 w-4 text-[#0078d4]" />
                       <span>Open</span>
                     </button>
                     {selectedAspect.type === 'setting' && (
-                      <button type="button" onClick={() => { navigate('/settings'); onClose(); }} className="flex w-full items-center gap-3 rounded-[3px] px-2.5 py-2 text-left text-[12px] text-[#2b2b2b] transition-colors hover:bg-[#f2f2f2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4] dark:text-neutral-100 dark:hover:bg-white/[0.08]">
-                        <Settings2 className="h-4 w-4 text-[#0078d4] dark:text-[#75c7ff]" />
+                      <button type="button" onClick={() => { navigate('/settings'); onClose(); }} className="flex w-full items-center gap-3 rounded-[3px] px-2.5 py-2 text-left text-[12px] text-[#2b2b2b] transition-colors hover:bg-[#f2f2f2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4]">
+                        <Settings2 className="h-4 w-4 text-[#0078d4]" />
                         <span>App settings</span>
                       </button>
                     )}
-                    <button type="button" onClick={() => { navigate(`/search?q=${encodeURIComponent(selectedAspect.title)}`); onClose(); }} className="flex w-full items-center gap-3 rounded-[3px] px-2.5 py-2 text-left text-[12px] text-[#2b2b2b] transition-colors hover:bg-[#f2f2f2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4] dark:text-neutral-100 dark:hover:bg-white/[0.08]">
-                      <Search className="h-4 w-4 text-[#0078d4] dark:text-[#75c7ff]" />
+                    <button type="button" onClick={() => { navigate(`/search?q=${encodeURIComponent(selectedAspect.title)}`); onClose(); }} className="flex w-full items-center gap-3 rounded-[3px] px-2.5 py-2 text-left text-[12px] text-[#2b2b2b] transition-colors hover:bg-[#f2f2f2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4]">
+                      <Search className="h-4 w-4 text-[#0078d4]" />
                       <span>Search the web</span>
                     </button>
-                    <button type="button" onClick={handleCopyResult} className="flex w-full items-center gap-3 rounded-[3px] px-2.5 py-2 text-left text-[12px] text-[#2b2b2b] transition-colors hover:bg-[#f2f2f2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4] dark:text-neutral-100 dark:hover:bg-white/[0.08]">
-                      {copiedId === selectedAspect.id ? <Check className="h-4 w-4 text-emerald-600" /> : <Copy className="h-4 w-4 text-[#0078d4] dark:text-[#75c7ff]" />}
+                    <button type="button" onClick={handleCopyResult} className="flex w-full items-center gap-3 rounded-[3px] px-2.5 py-2 text-left text-[12px] text-[#2b2b2b] transition-colors hover:bg-[#f2f2f2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4]">
+                      {copiedId === selectedAspect.id ? <Check className="h-4 w-4 text-emerald-600" /> : <Copy className="h-4 w-4 text-[#0078d4]" />}
                       <span>{copiedId === selectedAspect.id ? 'Copied' : 'Copy name'}</span>
                     </button>
                   </div>
@@ -465,21 +467,21 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
                 <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
                   <Search className="mb-3 h-7 w-7 text-neutral-400" />
                   <p className="text-[13px] font-medium">No results found</p>
-                  <p className="mt-1 text-[12px] text-neutral-500 dark:text-neutral-400">Try another search or ask Copilot.</p>
+                  <p className="mt-1 text-[12px] text-neutral-500">Try another search or ask Copilot.</p>
                 </div>
               )}
             </div>
           </div>
         ) : (
-          <div className="flex max-h-[min(70vh,520px)] flex-col overflow-y-auto bg-[#f3f3f3] p-2 dark:bg-[#252525]" style={{ animation: 'none', transform: 'none' }}>
+          <div className="flex max-h-[min(70vh,520px)] flex-col overflow-y-auto bg-[#f1f1f1] p-2" style={{ animation: 'none', transform: 'none' }}>
             {displayedHistory.map((item) => (
-              <div key={item} className="group flex w-full items-center gap-1 rounded-[3px] transition-colors hover:bg-black/5 dark:hover:bg-white/[0.08]">
+              <div key={item} className="group flex w-full items-center gap-1 rounded-[3px] transition-colors hover:bg-black/5">
                 <button
                   type="button"
                   onClick={() => handleItemClick(item)}
                   className="flex min-w-0 flex-1 items-center gap-3 px-2.5 py-2 text-left"
                 >
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[3px] bg-[#e5e7eb] text-neutral-600 dark:bg-[#3a3a3a] dark:text-neutral-200"><History className="h-4 w-4" /></span>
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[3px] bg-[#e5e7eb] text-neutral-600"><History className="h-4 w-4" /></span>
                   <span className="min-w-0 flex-1 truncate text-[13px]">{item}</span>
                 </button>
                 <button type="button" onClick={(event) => handleRemoveHistoryItem(event, item)} title="Remove from history" aria-label={`Remove ${item} from search history`} className="mr-2 rounded p-1 text-neutral-500 opacity-0 transition-opacity hover:bg-black/10 group-hover:opacity-100 focus-visible:opacity-100 dark:hover:bg-white/10">
