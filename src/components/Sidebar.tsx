@@ -16,7 +16,8 @@ import {
   UploadCloud,
   DownloadCloud,
   RefreshCw,
-  Pencil
+  Pencil,
+  Store
 } from 'lucide-react';
 import { 
   AppTabIcon,
@@ -507,7 +508,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {
         id: 'swift',
         label: 'Swift',
-        secondary: 'Mạng xã hội đa năng',
+        secondary: 'Mạng x�� hội đa năng',
         route: '/swift',
         icon: FluentSwiftSocialIcon,
       },
@@ -1050,6 +1051,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               <AppTabIcon name="widgets" className="w-5 h-5 shrink-0 text-black dark:text-white" />
               <span className="truncate text-[13.5px]">Widgets</span>
+            </button>
+          </div>
+
+          <div className="shrink-0">
+            <button
+              type="button"
+              id={isMobile ? 'mobile-nav-microsoft-store' : 'sidebar-nav-microsoft-store'}
+              data-nav-active={currentRoute === '/store' ? 'true' : undefined}
+              onClick={() => handleNavClick('/store')}
+              title="Microsoft Store"
+              aria-label="Microsoft Store"
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${currentRoute === '/store' ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs' : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'}`}
+            >
+              <Store className="w-5 h-5 shrink-0 text-[#1688e5]" />
+              <span className="truncate text-[13.5px]">Microsoft Store</span>
             </button>
           </div>
 
@@ -1782,6 +1798,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 }`}
               >
                 <AppTabIcon name="widgets" className="w-5 h-5 text-black dark:text-white" />
+              </button>
+
+              <button
+                type="button"
+                id="sidebar-collapsed-microsoft-store"
+                data-nav-active={currentRoute === '/store' ? 'true' : undefined}
+                onClick={() => handleNavClick('/store')}
+                title="Microsoft Store"
+                aria-label="Microsoft Store"
+                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${currentRoute === '/store' ? 'bg-black/5 dark:bg-white/[0.08] shadow-xs' : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'}`}
+              >
+                <Store className="w-5 h-5 text-[#1688e5]" />
               </button>
 
               {/* Divider: Social */}

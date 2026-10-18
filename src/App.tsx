@@ -54,6 +54,8 @@ import { MinecraftWiki } from './pages/MinecraftWiki';
 import { Calculator } from './pages/Calculator';
 import { SnippingTool } from './pages/SnippingTool';
 import { FeedbackHub } from './pages/FeedbackHub';
+import { MicrosoftStore } from './pages/MicrosoftStore';
+import { getStoreAppForRoute } from './data/storeApps';
 import { ProductivityTab } from './pages/ProductivityTabs';
 import { SpinningRing } from './components/SpinningRing';
 import { CHANNELS_DATA } from './data/channels';
@@ -92,10 +94,28 @@ export default function App() {
     };
   }, []);
 
+  const [installedApps, setInstalledApps] = useState<string[]>(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('microsoft_store_installed_apps') || '[]');
+      return Array.isArray(saved) ? saved.filter((id): id is string => typeof id === 'string') : [];
+    } catch {
+      return [];
+    }
+  });
+
   // Navigation Route State (supports browser pathname or internal state)
   const [currentRoute, setCurrentRoute] = useState<string>(() => {
-    return window.location.pathname === '/' ? '/' : window.location.pathname;
+    const initialPath = window.location.pathname === '/' ? '/' : window.location.pathname;
+    const requestedApp = getStoreAppForRoute(initialPath);
+    return requestedApp && !installedApps.includes(requestedApp.id) ? '/store' : initialPath;
   });
+
+  useEffect(() => {
+    const requestedApp = getStoreAppForRoute(window.location.pathname);
+    if (requestedApp && !installedApps.includes(requestedApp.id)) {
+      window.history.replaceState(null, '', `/store?app=${requestedApp.id}`);
+    }
+  }, []);
   const [routeState, setRouteState] = useState<any>(null);
   const previousRouteRef = useRef<string>('/');
   const [isTabLoading, setIsTabLoading] = useState(false);
@@ -277,29 +297,33 @@ export default function App() {
 
   // Perform actual navigation
   const executeNavigation = useCallback((path: string, state?: any) => {
-    const targetRoute = path.includes('?') ? path.split('?')[0] : path;
+    const requestedApp = getStoreAppForRoute(path);
+    const targetPath = requestedApp && !installedApps.includes(requestedApp.id)
+      ? `/store?app=${requestedApp.id}`
+      : path;
+    const targetRoute = targetPath.includes('?') ? targetPath.split('?')[0] : targetPath;
     const isDifferentTab = targetRoute !== currentRoute;
 
     if (currentRoute !== '/search') {
       previousRouteRef.current = currentRoute;
     }
 
-    setRouteState(state);
+    setRouteState(requestedApp && !installedApps.includes(requestedApp.id) ? { storeAppId: requestedApp.id } : state);
     
     // Parse query params if any
-    if (path.includes('?')) {
-      const [parsedBaseRoute, query] = path.split('?');
+    if (targetPath.includes('?')) {
+      const [parsedBaseRoute, query] = targetPath.split('?');
       const params = new URLSearchParams(query);
       const chSlug = params.get('channel');
       if (chSlug) {
         const matched = channels.find((c) => c.slug === chSlug);
         if (matched) setCurrentChannel(matched);
       }
-      window.history.pushState(null, '', path);
+      window.history.pushState(null, '', targetPath);
       setCurrentRoute(parsedBaseRoute);
     } else {
-      window.history.pushState(null, '', path);
-      setCurrentRoute(path);
+      window.history.pushState(null, '', targetPath);
+      setCurrentRoute(targetRoute);
     }
 
     // Instant scroll to top on navigation (bỏ slide up)
@@ -314,7 +338,28 @@ export default function App() {
         setTabLoadCount((c) => c + 1);
       }, 1000);
     }
-  }, [channels, currentRoute]);
+  }, [channels, currentRoute, installedApps]);
+
+  const installStoreApp = (appId: string) => {
+    setInstalledApps((current) => {
+      if (current.includes(appId)) return current;
+      const next = [...current, appId];
+      try {
+        localStorage.setItem('microsoft_store_installed_apps', JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+  };
+
+  const uninstallStoreApp = (appId: string) => {
+    setInstalledApps((current) => {
+      const next = current.filter((id) => id !== appId);
+      try {
+        localStorage.setItem('microsoft_store_installed_apps', JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+  };
 
   // Navigation handler
   const navigate = useCallback((path: string, state?: any) => {
@@ -421,6 +466,13 @@ export default function App() {
         return;
       }
       const path = window.location.pathname;
+      const requestedApp = getStoreAppForRoute(path);
+      if (requestedApp && !installedApps.includes(requestedApp.id)) {
+        window.history.replaceState(null, '', `/store?app=${requestedApp.id}`);
+        setCurrentRoute('/store');
+        setRouteState(null);
+        return;
+      }
       const isTabSwitch = path !== currentRoute;
       const params = new URLSearchParams(window.location.search);
       const chSlug = params.get('channel');
@@ -442,7 +494,7 @@ export default function App() {
 
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, [channels, currentRoute, hasChanges, triggerUnsavedTooltip]);
+  }, [channels, currentRoute, hasChanges, triggerUnsavedTooltip, installedApps]);
 
   // Handle page reload / unload when settings are unsaved
   useEffect(() => {
@@ -709,6 +761,16 @@ export default function App() {
       case '/feedback':
         return <FeedbackHub navigate={navigate} />;
 
+      case '/store':
+        return (
+          <MicrosoftStore
+            installedApps={installedApps}
+            onInstall={installStoreApp}
+            onUninstall={uninstallStoreApp}
+            navigate={navigate}
+          />
+        );
+
       case '/updates':
         return <Updates navigate={navigate} onOpenUpdate={() => setIsUpdating(true)} />;
 
@@ -725,6 +787,7 @@ export default function App() {
 
   const isOfficeRoute = currentRoute === '/notes' || currentRoute === '/write';
   const isFullBleedRoute =
+    currentRoute === '/store' ||
     isOfficeRoute ||
     currentRoute === '/mail' ||
     currentRoute.startsWith('/mail') ||
@@ -880,7 +943,7 @@ export default function App() {
                 : 'md:pl-[260px]'
       }`}>
         {/* TopBar Header */}
-        {!isOfficeRoute && (
+        {!isOfficeRoute && currentRoute !== '/store' && (
           <TopBar
             currentRoute={currentRoute}
             navigate={navigate}
@@ -937,7 +1000,7 @@ export default function App() {
             </div>
           ) : (
             <div
-              key={`tab-loaded-${currentRoute}-${tabLoadCount}`}
+              key={`tab-loaded-${currentRoute}-${tabLoadCount}-${routeState?.storeAppId ?? ''}`}
               className="w-full h-full rounded-tl-[10px] rounded-tr-none rounded-br-none rounded-bl-none overflow-hidden"
             >
               {renderContent()}
