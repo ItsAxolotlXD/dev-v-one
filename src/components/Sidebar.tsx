@@ -1516,7 +1516,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <div className="flex items-center gap-3.5 truncate">
-                <AppTabIcon name="snippingTool" className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <FluentSnippingToolIcon className="w-5 h-5 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Snipping Tool</span>
               </div>
               {getDownloadIndicator('/snipping-tool', isCollapsed)}

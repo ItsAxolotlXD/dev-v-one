@@ -540,16 +540,17 @@ export default function App() {
   const isSparkOSRoute = currentRoute === '/sparkos';
 
   // Render Page Content based on currentRoute
-  const renderContent = () => {
+  const renderContentForRoute = (route: string, appNavigate: (path: string) => void = navigate) => {
+    const navigate = appNavigate;
     // Route matching for news detail: /news/:slug
-    if (currentRoute.startsWith('/news/')) {
-      const slug = currentRoute.replace('/news/', '');
+    if (route.startsWith('/news/')) {
+      const slug = route.replace('/news/', '');
       return <Article slug={slug} navigate={navigate} fontSize={articleFontSize} />;
     }
 
-    switch (currentRoute) {
+    switch (route) {
       case '/sparkos':
-        return <SparkOS navigate={navigate} />;
+        return <SparkOS navigate={navigate} renderApp={(appRoute, windowNavigate) => renderContentForRoute(appRoute, windowNavigate)} />;
 
       case '/':
       case '/home':
@@ -790,6 +791,8 @@ export default function App() {
         );
     }
   };
+
+  const renderContent = () => renderContentForRoute(currentRoute, navigate);
 
   const isOfficeRoute = currentRoute === '/notes' || currentRoute === '/write';
   const isFullBleedRoute =
