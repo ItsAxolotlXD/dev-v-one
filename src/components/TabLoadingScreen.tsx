@@ -54,7 +54,7 @@ export const TabLoadingScreen: React.FC<TabLoadingScreenProps> = ({ route = '', 
         title: 'Copilot',
         icon: (
           <img
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-sWuIr1HhLnODRgmQp2xPwRYP3JmvRu.png"
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-ktjUfkuiQhCSfrVMDIVEFg8vUxLupK.png"
             alt="Copilot"
             className={`${iconClass} object-contain`}
           />

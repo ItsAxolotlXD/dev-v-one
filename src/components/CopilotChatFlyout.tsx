@@ -345,7 +345,7 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
       key="windows-search-copilot-flyout"
       className={`context-menu copilot-flyout-container absolute top-full right-auto w-[min(680px,calc(100vw-24px))] max-w-[calc(100vw-24px)] -translate-x-1/2 z-[999] select-none font-sans overflow-hidden max-h-[min(70vh,540px)] mt-2 shadow-[0_18px_45px_rgba(0,0,0,0.28)] flex flex-col ${activeMode === 'search' ? 'copilot-search-results-container' : ''} ${
         activeMode === 'search'
-          ? 'rounded-none border border-white/10 bg-[#1b1b1f] text-white'
+          ? 'rounded-none border border-black/10 bg-white text-[#1f2937]'
           : settings.windowsAppSdkPreview
             ? 'rounded-[12px] !border !border-white/[0.12] !bg-[#2b2b2b] text-white'
             : 'rounded-[12px] border border-black/10 dark:border-white/10 bg-white dark:bg-[#202124] text-[#1f2937] dark:text-neutral-100'
@@ -510,7 +510,7 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
             </div>
           </div>
         ) : (
-          <div className="max-h-[min(70vh,560px)] overflow-y-auto bg-[#1b1b1f] px-4 pb-5 pt-3 text-white" style={{ animation: 'none', transform: 'none' }}>
+          <div className="max-h-[min(70vh,560px)] overflow-y-auto bg-white px-4 pb-5 pt-3 text-[#1f2937]" style={{ animation: 'none', transform: 'none' }}>
             <div className="mb-3 flex items-center gap-2 border-b border-[#d8d8d8] pb-2">
               <FluentSearchIcon className="h-4 w-4 text-[#666]" />
               <span className="text-[13px] text-[#666]">Find Microsoft 365 apps</span>
@@ -524,7 +524,7 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
                   onClick={() => handleItemClick(app.name)}
                   className="group flex min-h-[76px] flex-col items-center justify-center gap-1.5 rounded-[6px] px-1 py-2 text-center transition-colors hover:bg-[#f0f0f0] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4]"
                 >
-                  <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-[7px] bg-transparent">
+                  <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-[7px] bg-[#f6f6f6] shadow-sm">
                     {app.customIcon ? (
                       <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-NOuKOqoK8fkffl4Wksr70hn9QFcGsI.png" alt="" className="h-8 w-8 object-contain" />
                     ) : (
