@@ -524,9 +524,9 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
                   onClick={() => handleItemClick(app.name)}
                   className="group flex min-h-[76px] flex-col items-center justify-center gap-1.5 rounded-[6px] px-1 py-2 text-center transition-colors hover:bg-[#f0f0f0] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4]"
                 >
-                  <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-[7px] bg-[#f6f6f6] shadow-sm">
+                  <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-[7px] bg-transparent">
                     {app.customIcon ? (
-                      <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-NOuKOqoK8fkffl4Wksr70hn9QFcGsI.png" alt="" className="h-8 w-8 object-contain" />
+                      <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-7bX9C6ZMjpXAbn0eXLI2Wk6ZhwUwk0.png" alt="" className="h-8 w-8 object-contain" />
                     ) : (
                       <AppTabIcon name={app.icon} className="h-8 w-8" alt="" />
                     )}
