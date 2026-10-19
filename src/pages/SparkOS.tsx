@@ -89,7 +89,7 @@ const apps: DesktopApp[] = [
   { name: 'News', route: '/news', icon: Newspaper, color: 'text-rose-200', surface: 'bg-rose-500/20' },
   { name: 'Files', route: '/file-explorer', icon: Folder, color: 'text-amber-200', surface: 'bg-amber-400/20' },
   { name: 'Snip & Sketch', route: '/snipping-tool', icon: Scissors, color: 'text-orange-200', surface: 'bg-orange-500/20' },
-  { name: 'Settings', route: '/settings', icon: Settings, color: 'text-slate-200', surface: 'bg-slate-400/20' },
+  { name: 'PC Settings', route: '/pc-settings', icon: Settings, color: 'text-slate-200', surface: 'bg-slate-400/20' },
   { name: 'Calculator', route: '/calculator', icon: Calculator, color: 'text-cyan-200', surface: 'bg-cyan-500/20' },
   { name: 'Clock', route: '/clock', icon: Clock3, color: 'text-violet-200', surface: 'bg-violet-500/20' },
   { name: 'Paint', route: '/ms-paint', icon: Paintbrush, color: 'text-rose-200', surface: 'bg-rose-500/20' },
@@ -108,7 +108,7 @@ const recentApps = [
 const sidebarIconNames: Record<string, AppTabIconName> = {
   '/edge': 'edge', '/mail': 'mail', '/calendar': 'calendar', '/notes': 'notes',
   '/photos': 'gallery', '/task-manager': 'taskManager', '/camera': 'camera',
-  '/news': 'articles', '/file-explorer': 'fileExplorer', '/settings': 'settings',
+  '/news': 'articles', '/file-explorer': 'fileExplorer', '/pc-settings': 'settings',
   '/calculator': 'calculator', '/paint': 'paint', '/ms-paint': 'paint',
   '/feedback-hub': 'feedback', '/live-tv': 'watch', '/friends': 'people', '/swift': 'social',
 };
@@ -141,7 +141,7 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
   const [query, setQuery] = useState('');
   const [now, setNow] = useState(() => new Date());
   const [windows, setWindows] = useState<AppWindow[]>([]);
-  const [pinnedRoutes, setPinnedRoutes] = useState(['/edge', '/file-explorer', '/mail']);
+  const [pinnedRoutes, setPinnedRoutes] = useState(['/edge', '/file-explorer', '/mail', '/pc-settings']);
   const [activeWindowId, setActiveWindowId] = useState<string | null>(null);
   const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null);
   const [activePanel, setActivePanel] = useState<'task-view' | 'widgets' | 'action-center' | 'notifications' | 'copilot' | null>(null);

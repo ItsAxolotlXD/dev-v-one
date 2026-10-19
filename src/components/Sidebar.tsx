@@ -585,6 +585,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     if ((route === '/logos-fandom' || route === '/logos-wiki' || route === '/fandom') && (currentRoute === '/logos-fandom' || currentRoute.startsWith('/logos-fandom') || currentRoute === '/logos-wiki' || currentRoute === '/fandom')) return true;
     if ((route === '/minecraft-wiki' || route === '/mc-wiki' || route === '/wiki') && (currentRoute === '/minecraft-wiki' || currentRoute.startsWith('/minecraft-wiki') || currentRoute === '/mc-wiki' || currentRoute === '/wiki')) return true;
     if (route === '/settings' && (currentRoute === '/settings' || currentRoute.startsWith('/settings'))) return true;
+  if (route === '/pc-settings' && (currentRoute === '/pc-settings' || currentRoute.startsWith('/pc-settings'))) return true;
     if (route === '/about' && (currentRoute === '/about' || currentRoute.startsWith('/about'))) return true;
     if (route !== '/' && currentRoute.startsWith(route)) return true;
     return false;
@@ -989,7 +990,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <MorphingVerticalIndicator
             containerRef={containerRef}
             currentRoute={currentRoute}
-            dependencyKey={`${navItems.length}-${isLiveTvExpanded}-${currentRoute}`}
+            dependencyKey={`${navItems.length}-${isLiveTvExpanded}-${currentRoute}-pc-settings`}
             isWebViewSdk={settings.windowsAppSdkPreview}
           />
 
@@ -1671,7 +1672,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </AnimatePresence>
           </div>
 
-          {/* Bottom Settings Tab Item */}
+          {/* Bottom Settings Tab Items */}
+          <button
+            type="button"
+            id={isMobile ? 'mobile-nav-pc-settings' : 'sidebar-nav-pc-settings'}
+            data-nav-active={isCurrentActive('/pc-settings') ? 'true' : undefined}
+            onClick={() => handleNavClick('/pc-settings')}
+            title="PC Settings"
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              isCurrentActive('/pc-settings')
+                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+            }`}
+          >
+            <AppTabIcon name="settings" className="w-5 h-5 shrink-0 settings-spin-icon text-black dark:text-white" />
+            <span className="truncate text-[13.5px]">PC Settings</span>
+          </button>
+
           <button
             type="button"
             id={isMobile ? 'mobile-nav-settings' : 'sidebar-nav-settings'}
@@ -1684,13 +1701,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
             }`}
           >
-            {isCurrentActive('/settings') && (
-              <span
-                aria-hidden="true"
-                className="sidebar-static-indicator absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[14px] bg-[#4cc2ff] rounded-full z-30 pointer-events-none"
-                style={{ transition: 'none', animation: 'none' }}
-              />
-            )}
             <AppTabIcon name="settings" className="w-5 h-5 shrink-0 settings-spin-icon text-black dark:text-white" />
             <span className="truncate text-[13.5px]">Settings</span>
           </button>
@@ -2156,7 +2166,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 id="sidebar-collapsed-cookbook"
                 data-nav-active={(currentRoute === '/cookbook' || currentRoute.startsWith('/cookbook')) ? 'true' : undefined}
                 onClick={() => handleNavClick('/cookbook')}
-                title="Cookbook - Ẩm thực"
+                title="Cookbook - Ẩm th��c"
                 className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
                   (currentRoute === '/cookbook' || currentRoute.startsWith('/cookbook'))
                     ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
