@@ -141,7 +141,7 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
   const [query, setQuery] = useState('');
   const [now, setNow] = useState(() => new Date());
   const [windows, setWindows] = useState<AppWindow[]>([]);
-  const [pinnedRoutes, setPinnedRoutes] = useState(['/edge', '/file-explorer', '/mail']);
+  const [pinnedRoutes, setPinnedRoutes] = useState(['/edge', '/file-explorer', '/mail', '/pc-settings']);
   const [activeWindowId, setActiveWindowId] = useState<string | null>(null);
   const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null);
   const [activePanel, setActivePanel] = useState<'task-view' | 'widgets' | 'action-center' | 'notifications' | 'copilot' | null>(null);
