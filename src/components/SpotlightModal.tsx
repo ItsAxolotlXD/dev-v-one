@@ -48,6 +48,7 @@ const CATEGORY_ITEMS = [
   { id: 'cat-snip', title: 'Snipping Tool', route: '/snipping-tool', icon: FluentSnippingToolIcon, color: '#0078d4' },
   { id: 'cat-feedback', title: 'Feedback Hub', route: '/feedback-hub', icon: FluentFeedbackHubIcon, color: '#0078d4' },
   { id: 'cat-settings', title: 'Settings', route: '/settings', icon: SettingsIcon, color: '#4cc2ff' },
+  { id: 'cat-pc-settings', title: 'PC Settings', route: '/pc-settings', icon: SettingsIcon, color: '#4cc2ff' },
 ];
 
 const SETTINGS_SHORTCUTS = [
