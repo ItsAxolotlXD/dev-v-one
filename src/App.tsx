@@ -56,6 +56,7 @@ import { SnippingTool } from './pages/SnippingTool';
 import { FeedbackHub } from './pages/FeedbackHub';
 import { MicrosoftStore } from './pages/MicrosoftStore';
 import { SparkOS } from './pages/SparkOS';
+import { SparkOSSettings } from './pages/SparkOSSettings';
 import { getStoreAppForRoute } from './data/storeApps';
 import { ProductivityTab } from './pages/ProductivityTabs';
 import { SpinningRing } from './components/SpinningRing';
@@ -551,6 +552,9 @@ export default function App() {
     switch (route) {
       case '/sparkos':
         return <SparkOS navigate={navigate} installedApps={installedApps} renderApp={(appRoute, windowNavigate) => renderContentForRoute(appRoute, windowNavigate, true)} />;
+
+      case '/pc-settings':
+        return <SparkOSSettings />;
 
       case '/':
       case '/home':
