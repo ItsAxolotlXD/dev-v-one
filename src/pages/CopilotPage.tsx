@@ -19,7 +19,7 @@ import { useSystemTasks } from '../context/SystemTasksContext';
 import { SpinningRing } from '../components/SpinningRing';
 import { sparkOSResetOobeEvent } from '../components/SparkOSBootSetup';
 
-export const COPILOT_ICON_SRC = 'https://upload.wikimedia.org/wikipedia/vi/a/aa/Microsoft_Copilot_Icon.svg';
+export const COPILOT_ICON_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-ktjUfkuiQhCSfrVMDIVEFg8vUxLupK.png';
 
 const POPULAR_EMOJIS = [
   '😀', '😂', '😍', '🎉', '🚀', '✨', '💡', '🔥', 
