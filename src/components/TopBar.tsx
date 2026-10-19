@@ -207,7 +207,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   // WebView SDK follows the native layout: search stays on the left by default.
   const searchExperience = settings.windowsAppSdkPreview
     ? 'left'
-    : (settings.experimentalSearchExperience || 'right');
+    : (settings.experimentalSearchExperience || 'left');
   const isMobile = useIsMobile();
   const [logoError, setLogoError] = useState(false);
   const [localSearchQuery, setLocalSearchQuery] = useState('');

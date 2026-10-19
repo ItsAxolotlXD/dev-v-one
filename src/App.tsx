@@ -822,7 +822,7 @@ export default function App() {
       <div className="fixed inset-0 z-[999999] bg-[#0c0d0e] text-white flex flex-col items-center justify-center p-6 select-none font-sans">
         <div className="flex flex-col items-center text-center max-w-md space-y-6 animate-in fade-in duration-300">
           <img
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-TPopUU7m6WTCETjfIVB68A850AyvGg.png"
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-7bX9C6ZMjpXAbn0eXLI2Wk6ZhwUwk0.png"
             alt="Microsoft Edge Dev"
             referrerPolicy="no-referrer"
             className="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-md"
@@ -1020,7 +1020,7 @@ export default function App() {
           ) : (
             <div
               key={`tab-loaded-${currentRoute}-${tabLoadCount}-${routeState?.storeAppId ?? ''}`}
-              className="w-full h-full rounded-tl-[10px] rounded-tr-none rounded-br-none rounded-bl-none overflow-hidden"
+              className="tab-page-zoom-in w-full h-full rounded-tl-[10px] rounded-tr-none rounded-br-none rounded-bl-none overflow-hidden"
             >
               {renderContent()}
             </div>

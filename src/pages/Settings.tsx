@@ -2024,7 +2024,7 @@ export const Settings: React.FC<SettingsProps> = ({
                       aria-expanded={isSearchExpDropdownOpen}
                     >
                       <span className="truncate text-left">
-                        {SEARCH_EXP_OPTIONS.find((o) => o.value === (draftSettings.windowsAppSdkPreview ? 'left' : (draftSettings.experimentalSearchExperience || 'right')))?.label || 'Move search to the right (default)'}
+                        {SEARCH_EXP_OPTIONS.find((o) => o.value === (draftSettings.windowsAppSdkPreview ? 'left' : (draftSettings.experimentalSearchExperience || 'left')))?.label || 'Move search to the left (default)'}
                       </span>
                       <ChevronDown
                         className={`w-4 h-4 text-[#6B7280] dark:text-[#9CA3AF] transition-transform duration-200 shrink-0 ${
@@ -2046,7 +2046,7 @@ export const Settings: React.FC<SettingsProps> = ({
                           }}
                         >
                           {SEARCH_EXP_OPTIONS.map((opt) => {
-                            const isSelected = (draftSettings.experimentalSearchExperience || 'right') === opt.value;
+                            const isSelected = (draftSettings.experimentalSearchExperience || 'left') === opt.value;
                             return (
                               <button
                                 key={opt.value}

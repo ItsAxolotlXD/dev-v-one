@@ -96,7 +96,7 @@ export const DEFAULT_SETTINGS: SystemSettings = {
   developerMode: false,
   triangleExperiment: true,
   triangleExperimentVersion: 1,
-  experimentalSearchExperience: 'right',
+  experimentalSearchExperience: 'left',
   roundedSearchBox: false,
   searchIconTreatment: 'default',
   windowsAppSdkPreview: false,
@@ -188,7 +188,7 @@ export const getStoredSettings = (): SystemSettings => {
           ? (typeof parsed.triangleExperiment === 'boolean' ? parsed.triangleExperiment : true)
           : true,
         triangleExperimentVersion: 1,
-        experimentalSearchExperience: parsed.experimentalSearchExperience || 'right',
+        experimentalSearchExperience: parsed.experimentalSearchExperience || 'left',
         roundedSearchBox: typeof parsed.roundedSearchBox === 'boolean' ? parsed.roundedSearchBox : false,
         searchIconTreatment: (['default', 'flipped', 'sparkle', 'globe'].includes(parsed.searchIconTreatment) ? parsed.searchIconTreatment : 'default') as SearchIconTreatment,
         windowsAppSdkPreview: typeof parsed.windowsAppSdkPreview === 'boolean' 
