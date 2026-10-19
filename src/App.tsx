@@ -1020,7 +1020,7 @@ export default function App() {
           ) : (
             <div
               key={`tab-loaded-${currentRoute}-${tabLoadCount}-${routeState?.storeAppId ?? ''}`}
-              className="w-full h-full rounded-tl-[10px] rounded-tr-none rounded-br-none rounded-bl-none overflow-hidden"
+              className="tab-page-zoom-in w-full h-full rounded-tl-[10px] rounded-tr-none rounded-br-none rounded-bl-none overflow-hidden"
             >
               {renderContent()}
             </div>
