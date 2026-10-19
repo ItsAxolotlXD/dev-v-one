@@ -75,7 +75,7 @@ import { parseM3UPlaylist, downloadPlaylistFile } from '../utils/m3uParser';
 import { getStoreAppForRoute } from '../data/storeApps';
 
 const LOGO_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-TPopUU7m6WTCETjfIVB68A850AyvGg.png';
-const COPILOT_ICON_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-ktjUfkuiQhCSfrVMDIVEFg8vUxLupK.png';
+const COPILOT_ICON_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-sWuIr1HhLnODRgmQp2xPwRYP3JmvRu.png';
 
 interface MorphingIndicatorProps {
   containerRef: React.RefObject<HTMLDivElement | null>;

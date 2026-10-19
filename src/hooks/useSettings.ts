@@ -45,6 +45,7 @@ export interface SystemSettings {
   triangleExperiment: boolean;
   triangleExperimentVersion?: number;
   experimentalSearchExperience?: 'right' | 'left' | 'hidden';
+  experimentalColoredScheme: boolean;
   roundedSearchBox?: boolean;
   searchIconTreatment: SearchIconTreatment;
   windowsAppSdkPreview: boolean;
@@ -96,7 +97,8 @@ export const DEFAULT_SETTINGS: SystemSettings = {
   developerMode: false,
   triangleExperiment: true,
   triangleExperimentVersion: 1,
-  experimentalSearchExperience: 'right',
+  experimentalSearchExperience: 'left',
+  experimentalColoredScheme: false,
   roundedSearchBox: false,
   searchIconTreatment: 'default',
   windowsAppSdkPreview: false,
@@ -188,7 +190,8 @@ export const getStoredSettings = (): SystemSettings => {
           ? (typeof parsed.triangleExperiment === 'boolean' ? parsed.triangleExperiment : true)
           : true,
         triangleExperimentVersion: 1,
-        experimentalSearchExperience: parsed.experimentalSearchExperience || 'right',
+        experimentalSearchExperience: parsed.experimentalSearchExperience || 'left',
+        experimentalColoredScheme: typeof parsed.experimentalColoredScheme === 'boolean' ? parsed.experimentalColoredScheme : false,
         roundedSearchBox: typeof parsed.roundedSearchBox === 'boolean' ? parsed.roundedSearchBox : false,
         searchIconTreatment: (['default', 'flipped', 'sparkle', 'globe'].includes(parsed.searchIconTreatment) ? parsed.searchIconTreatment : 'default') as SearchIconTreatment,
         windowsAppSdkPreview: typeof parsed.windowsAppSdkPreview === 'boolean' 
@@ -261,6 +264,10 @@ export const applySystemSettings = (settings: SystemSettings) => {
     document.documentElement.style.setProperty('--spatial-glass-bg', `rgba(255, 255, 255, ${opacityVal})`);
     document.documentElement.style.setProperty('--spatial-glass-blur', `${blurPx}px`);
   }
+
+  // Experimental colored scheme: opt the whole interface into the magenta palette.
+  document.documentElement.classList.toggle('experimental-colored-scheme', settings.experimentalColoredScheme === true);
+  document.body?.classList.toggle('experimental-colored-scheme', settings.experimentalColoredScheme === true);
 
   // Rounded Search Box: 100% round pill shape across entire app
   if (settings.roundedSearchBox) {

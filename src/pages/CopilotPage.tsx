@@ -19,7 +19,7 @@ import { useSystemTasks } from '../context/SystemTasksContext';
 import { SpinningRing } from '../components/SpinningRing';
 import { sparkOSResetOobeEvent } from '../components/SparkOSBootSetup';
 
-export const COPILOT_ICON_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-ktjUfkuiQhCSfrVMDIVEFg8vUxLupK.png';
+export const COPILOT_ICON_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-sWuIr1HhLnODRgmQp2xPwRYP3JmvRu.png';
 
 const POPULAR_EMOJIS = [
   '😀', '😂', '😍', '🎉', '🚀', '✨', '💡', '🔥', 
