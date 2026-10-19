@@ -19,7 +19,9 @@ import {
   Wrench,
 } from 'lucide-react';
 import { useSettings } from '../hooks/useSettings';
-import { FluentSearchIcon } from './FluentIcons';
+import { AppTabIcon, FluentSearchIcon } from './FluentIcons';
+import type { AppTabIconName } from './FluentIcons';
+import { STORE_APPS } from '../data/storeApps';
 
 interface ChatMessage {
   id: string;
@@ -51,6 +53,17 @@ const DEFAULT_HISTORY_ITEMS: Array<{ id: string; query: string; route?: string }
   { id: 'h-3', query: 'calculator', route: '/clock' },
   { id: 'h-4', query: 'microsoft maps', route: '/widgets' },
   { id: 'h-5', query: 'notepad', route: '/notes' },
+];
+
+const SEARCH_APP_ITEMS = [
+  ...STORE_APPS.map((app) => ({
+    id: app.id,
+    name: app.name,
+    route: app.route,
+    icon: (app.icon === 'craftmine' || app.icon === 'photopea' ? 'home' : app.icon) as AppTabIconName,
+    customIcon: false,
+  })),
+  { id: 'copilot', name: 'Copilot', route: '/copilot', icon: 'home' as const, customIcon: true },
 ];
 
 const ROUTE_SHORTCUTS: Record<string, string> = {
@@ -497,23 +510,41 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
             </div>
           </div>
         ) : (
-          <div className="flex max-h-[min(70vh,520px)] flex-col overflow-y-auto bg-[#f1f1f1] p-2" style={{ animation: 'none', transform: 'none' }}>
-            {displayedHistory.map((item) => (
-              <div key={item} className="group flex w-full items-center gap-1 rounded-none transition-colors hover:bg-black/5">
+          <div className="max-h-[min(70vh,560px)] overflow-y-auto bg-white px-4 pb-5 pt-3 text-[#1f2937]" style={{ animation: 'none', transform: 'none' }}>
+            <div className="mb-3 flex items-center gap-2 border-b border-[#d8d8d8] pb-2">
+              <FluentSearchIcon className="h-4 w-4 text-[#666]" />
+              <span className="text-[13px] text-[#666]">Find Microsoft 365 apps</span>
+              <X className="ml-auto h-4 w-4 text-[#777]" />
+            </div>
+            <div className="grid grid-cols-4 gap-x-2 gap-y-1.5 sm:grid-cols-5" aria-label="All apps">
+              {SEARCH_APP_ITEMS.map((app) => (
                 <button
+                  key={app.id}
                   type="button"
-                  onClick={() => handleItemClick(item)}
-                  className="flex min-w-0 flex-1 items-center gap-3 px-2.5 py-2 text-left"
+                  onClick={() => handleItemClick(app.name)}
+                  className="group flex min-h-[76px] flex-col items-center justify-center gap-1.5 rounded-[6px] px-1 py-2 text-center transition-colors hover:bg-[#f0f0f0] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4]"
                 >
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-none bg-[#e5e7eb] text-neutral-600"><History className="h-4 w-4" /></span>
-                  <span className="min-w-0 flex-1 truncate text-[13px]">{item}</span>
+                  <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-[7px] bg-[#f6f6f6] shadow-sm">
+                    {app.customIcon ? (
+                      <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-NOuKOqoK8fkffl4Wksr70hn9QFcGsI.png" alt="" className="h-8 w-8 object-contain" />
+                    ) : (
+                      <AppTabIcon name={app.icon} className="h-8 w-8" alt="" />
+                    )}
+                  </span>
+                  <span className="line-clamp-2 text-[11px] leading-tight text-[#252525]">{app.name}</span>
                 </button>
-                <button type="button" onClick={(event) => handleRemoveHistoryItem(event, item)} title="Remove from history" aria-label={`Remove ${item} from search history`} className="mr-2 rounded p-1 text-neutral-500 opacity-0 transition-opacity hover:bg-black/10 group-hover:opacity-100 focus-visible:opacity-100 dark:hover:bg-white/10">
-                  <X className="h-3.5 w-3.5" />
-                </button>
+              ))}
+            </div>
+            <div className="mt-4 border-t border-[#d8d8d8] pt-3">
+              <div className="grid grid-cols-4 gap-x-2 sm:grid-cols-5">
+                {displayedHistory.slice(0, 5).map((item) => (
+                  <button key={item} type="button" onClick={() => handleItemClick(item)} className="flex min-h-[66px] flex-col items-center justify-center gap-1 rounded-[6px] px-1 py-1 text-center hover:bg-[#f0f0f0]">
+                    <History className="h-5 w-5 text-[#666]" />
+                    <span className="line-clamp-2 text-[10px] text-[#555]">{item}</span>
+                  </button>
+                ))}
               </div>
-            ))}
-            {displayedHistory.length === 0 && <p className="px-3 py-4 text-[13px] text-neutral-500">No recent searches</p>}
+            </div>
           </div>
         )
       ) : (
