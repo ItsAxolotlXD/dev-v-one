@@ -1,5 +1,6 @@
 import React from 'react';
-import { ChevronRight, ChevronDown, Folder, Home, Newspaper, RefreshCw, LayoutGrid, Store, Sparkles } from 'lucide-react';
+import { ChevronRight, ChevronDown, Folder } from 'lucide-react';
+import { AppTabIcon } from '../components/FluentIcons';
 import { Channel } from '../types';
 
 interface XAMLHomeProps {
@@ -9,12 +10,12 @@ interface XAMLHomeProps {
 }
 
 const quickAccess = [
-  { label: 'Home', route: '/', icon: Home, color: 'text-cyan-400' },
-  { label: 'Articles', route: '/news', icon: Newspaper, color: 'text-emerald-400' },
-  { label: 'Updates', route: '/updates', icon: RefreshCw, color: 'text-slate-300' },
-  { label: 'Widgets', route: '/widgets', icon: LayoutGrid, color: 'text-sky-400' },
-  { label: 'Store', route: '/store', icon: Store, color: 'text-rose-300' },
-  { label: 'SparkOS', route: '/sparkos', icon: Sparkles, color: 'text-purple-400' },
+  { label: 'Home', route: '/', icon: 'home' as const },
+  { label: 'Articles', route: '/news', icon: 'articles' as const },
+  { label: 'Updates', route: '/updates', icon: 'updates' as const },
+  { label: 'Widgets', route: '/widgets', icon: 'widgets' as const },
+  { label: 'Store', route: '/store', icon: 'store' as const },
+  { label: 'SparkOS', route: '/sparkos', icon: 'sparkos' as const },
 ];
 
 export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, onNavigate }) => {
@@ -27,10 +28,10 @@ export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, o
         </div>
 
         <div className="flex flex-col">
-          {quickAccess.map(({ label, route, icon: Icon, color }) => (
+          {quickAccess.map(({ label, route, icon }) => (
             <button key={label} type="button" onClick={() => onNavigate(route)} className="grid min-h-9 cursor-default grid-cols-[1fr_155px] items-center px-1 text-left text-[13px] hover:bg-[#111111]">
               <div className="flex items-center gap-2">
-                <Icon className={`size-4 ${color}`} strokeWidth={1.5} />
+                <AppTabIcon name={icon} className="size-4 shrink-0" />
                 <span>{label}</span>
               </div>
               <span className="text-[#777]">App</span>
