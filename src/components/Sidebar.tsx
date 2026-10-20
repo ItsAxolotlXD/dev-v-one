@@ -17,8 +17,7 @@ import {
   DownloadCloud,
   RefreshCw,
   Pencil,
-  Monitor,
-  Code2
+  Monitor
 } from 'lucide-react';
 import { 
   AppTabIcon,
@@ -77,6 +76,7 @@ import { getStoreAppForRoute } from '../data/storeApps';
 
 const LOGO_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-7bX9C6ZMjpXAbn0eXLI2Wk6ZhwUwk0.png';
 const COPILOT_ICON_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-7bX9C6ZMjpXAbn0eXLI2Wk6ZhwUwk0.png';
+const XAML_ICON_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-kj8VATj48xgpu6hRIVOSoJomQMTGnR.png';
 
 interface MorphingIndicatorProps {
   containerRef: React.RefObject<HTMLDivElement | null>;
@@ -1738,7 +1738,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
             }`}
           >
-            <Code2 aria-hidden="true" className="size-5 shrink-0 text-[#1684e8]" />
+            <img src={XAML_ICON_SRC} alt="" aria-hidden="true" className="size-5 shrink-0 object-contain" />
             <span className="truncate text-[13.5px]">XAML Controls</span>
           </button>
 
@@ -2369,6 +2369,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   }`}
                 >
                   <FluentSettingsIcon className="w-5 h-5 text-[#111827] dark:text-white" />
+                </button>
+
+                {/* Bottom Settings Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-xaml-controls"
+                  data-nav-active={isCurrentActive('/xaml-controls') ? 'true' : undefined}
+                  onClick={() => handleNavClick('/xaml-controls')}
+                  title="XAML Controls"
+                  className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    isCurrentActive('/xaml-controls')
+                      ? 'bg-black/5 dark:bg-white/[0.08] text-[#111827] dark:text-white shadow-xs'
+                      : 'text-[#4b5563] dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-[#111827] dark:hover:text-white'
+                  }`}
+                >
+                  <img src={XAML_ICON_SRC} alt="" aria-hidden="true" className="size-5 object-contain" />
                 </button>
 
                 {/* Bottom Settings Icon */}
