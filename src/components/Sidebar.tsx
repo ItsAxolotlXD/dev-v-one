@@ -76,6 +76,7 @@ import { getStoreAppForRoute } from '../data/storeApps';
 
 const LOGO_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-7bX9C6ZMjpXAbn0eXLI2Wk6ZhwUwk0.png';
 const COPILOT_ICON_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-7bX9C6ZMjpXAbn0eXLI2Wk6ZhwUwk0.png';
+const XAML_ICON_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-kj8VATj48xgpu6hRIVOSoJomQMTGnR.png';
 
 interface MorphingIndicatorProps {
   containerRef: React.RefObject<HTMLDivElement | null>;
@@ -1692,6 +1693,55 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </AnimatePresence>
           </div>
 
+          {/* XAML navigation */}
+          <button
+            type="button"
+            id={isMobile ? 'mobile-nav-xaml-home' : 'sidebar-nav-xaml-home'}
+            data-nav-active={isCurrentActive('/xaml-home') ? 'true' : undefined}
+            onClick={() => handleNavClick('/xaml-home')}
+            title="XAML Home"
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              isCurrentActive('/xaml-home')
+                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+            }`}
+          >
+            <FluentHomeIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+            <span className="truncate text-[13.5px]">XAML Home</span>
+          </button>
+
+          <button
+            type="button"
+            id={isMobile ? 'mobile-nav-xaml-settings' : 'sidebar-nav-xaml-settings'}
+            data-nav-active={isCurrentActive('/xaml-settings') ? 'true' : undefined}
+            onClick={() => handleNavClick('/xaml-settings')}
+            title="XAML Settings"
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              isCurrentActive('/xaml-settings')
+                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+            }`}
+          >
+            <FluentSettingsIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+            <span className="truncate text-[13.5px]">XAML Settings</span>
+          </button>
+
+          <button
+            type="button"
+            id={isMobile ? 'mobile-nav-xaml-controls' : 'sidebar-nav-xaml-controls'}
+            data-nav-active={isCurrentActive('/xaml-controls') ? 'true' : undefined}
+            onClick={() => handleNavClick('/xaml-controls')}
+            title="XAML Controls"
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              isCurrentActive('/xaml-controls')
+                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+            }`}
+          >
+            <img src={XAML_ICON_SRC} alt="" aria-hidden="true" className="size-5 shrink-0 object-contain" />
+            <span className="truncate text-[13.5px]">XAML Controls</span>
+          </button>
+
           {/* Bottom Settings Tab Items */}
           <button
             type="button"
@@ -2289,6 +2339,53 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     {isSignInFlyoutOpen && renderSignInFlyout(true)}
                   </AnimatePresence>
                 </div>
+
+                {/* Collapsed XAML navigation */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-xaml-home"
+                  data-nav-active={isCurrentActive('/xaml-home') ? 'true' : undefined}
+                  onClick={() => handleNavClick('/xaml-home')}
+                  title="XAML Home"
+                  className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    isCurrentActive('/xaml-home')
+                      ? 'bg-black/5 dark:bg-white/[0.08] text-[#111827] dark:text-white shadow-xs'
+                      : 'text-[#4b5563] dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-[#111827] dark:hover:text-white'
+                  }`}
+                >
+                  <FluentHomeIcon className="w-5 h-5 text-[#111827] dark:text-white" />
+                </button>
+
+                <button
+                  type="button"
+                  id="sidebar-collapsed-xaml-settings"
+                  data-nav-active={isCurrentActive('/xaml-settings') ? 'true' : undefined}
+                  onClick={() => handleNavClick('/xaml-settings')}
+                  title="XAML Settings"
+                  className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    isCurrentActive('/xaml-settings')
+                      ? 'bg-black/5 dark:bg-white/[0.08] text-[#111827] dark:text-white shadow-xs'
+                      : 'text-[#4b5563] dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-[#111827] dark:hover:text-white'
+                  }`}
+                >
+                  <FluentSettingsIcon className="w-5 h-5 text-[#111827] dark:text-white" />
+                </button>
+
+                {/* Bottom Settings Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-xaml-controls"
+                  data-nav-active={isCurrentActive('/xaml-controls') ? 'true' : undefined}
+                  onClick={() => handleNavClick('/xaml-controls')}
+                  title="XAML Controls"
+                  className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    isCurrentActive('/xaml-controls')
+                      ? 'bg-black/5 dark:bg-white/[0.08] text-[#111827] dark:text-white shadow-xs'
+                      : 'text-[#4b5563] dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-[#111827] dark:hover:text-white'
+                  }`}
+                >
+                  <img src={XAML_ICON_SRC} alt="" aria-hidden="true" className="size-5 object-contain" />
+                </button>
 
                 {/* Bottom Settings Icon */}
                 <button

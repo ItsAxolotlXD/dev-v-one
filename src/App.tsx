@@ -18,10 +18,11 @@ import { NativeKeyboard } from './components/NativeKeyboard';
 import { NativeKeyboardProvider } from './context/NativeKeyboardContext';
 import { NotesProvider } from './context/NotesContext';
 import { StickyNoteWidget } from './components/StickyNoteWidget';
-import { TabLoadingScreen } from './components/TabLoadingScreen';
 import { GlobalContextMenu } from './components/GlobalContextMenu';
 import { Home } from './pages/Home';
 import { XAMLHome } from './pages/XAMLHome';
+import { XAMLSettings } from './pages/XAMLSettings';
+import { XAMLControls } from './pages/XAMLControls';
 import { LiveTV } from './pages/LiveTV';
 import { TestChannels } from './pages/TestChannels';
 import { News } from './pages/News';
@@ -120,25 +121,8 @@ export default function App() {
     }
   }, []);
   const [routeState, setRouteState] = useState<any>(null);
+  const isSettingsRoute = currentRoute === '/settings' || currentRoute === '/xaml-settings';
   const previousRouteRef = useRef<string>('/');
-  const [isTabLoading, setIsTabLoading] = useState(false);
-  const [tabLoadCount, setTabLoadCount] = useState(0);
-  const tabLoadingTimerRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    setIsTabLoading(true);
-    tabLoadingTimerRef.current = setTimeout(() => {
-      setIsTabLoading(false);
-      setTabLoadCount((c) => c + 1);
-    }, 400);
-
-    return () => {
-      if (tabLoadingTimerRef.current) clearTimeout(tabLoadingTimerRef.current);
-    };
-  }, []);
-
-
-
   // Tab-specific search state for Floating Search Bar
   const [tabSearchQueries, setTabSearchQueries] = useState<Record<string, string>>({});
   const currentTabSearchQuery = tabSearchQueries[currentRoute] || '';
@@ -193,7 +177,6 @@ export default function App() {
 
   // Modals state
   const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState(false);
-  const [isSplashFinished, setIsSplashFinished] = useState(false);
   const [isUnderConstructionOpen, setIsUnderConstructionOpen] = useState(false);
   const [isSpotlightOpen, setIsSpotlightOpen] = useState(false);
   const [isCustomStreamModalOpen, setIsCustomStreamModalOpen] = useState(false);
@@ -305,8 +288,6 @@ export default function App() {
       ? `/store?app=${requestedApp.id}`
       : path;
     const targetRoute = targetPath.includes('?') ? targetPath.split('?')[0] : targetPath;
-    const isDifferentTab = targetRoute !== currentRoute;
-
     if (currentRoute !== '/search') {
       previousRouteRef.current = currentRoute;
     }
@@ -329,18 +310,7 @@ export default function App() {
       setCurrentRoute(targetRoute);
     }
 
-    // Instant scroll to top on navigation (bỏ slide up)
     window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
-
-    // 1-second splash screen on entering a new tab
-    if (isDifferentTab) {
-      if (tabLoadingTimerRef.current) clearTimeout(tabLoadingTimerRef.current);
-      setIsTabLoading(true);
-      tabLoadingTimerRef.current = setTimeout(() => {
-        setIsTabLoading(false);
-        setTabLoadCount((c) => c + 1);
-      }, 1000);
-    }
   }, [channels, currentRoute, installedApps]);
 
   const installStoreApp = (appId: string) => {
@@ -367,8 +337,8 @@ export default function App() {
   // Navigation handler
   const navigate = useCallback((path: string, state?: any) => {
     // If currently on settings and there are unsaved changes, prompt before leaving
-    if (currentRoute === '/settings' && hasChanges) {
-      const isStillSettings = path === '/settings' || path.startsWith('/settings?') || path.startsWith('/settings#');
+    if (isSettingsRoute && hasChanges) {
+      const isStillSettings = path === '/settings' || path === '/xaml-settings' || path.startsWith('/settings?') || path.startsWith('/settings#') || path.startsWith('/xaml-settings?') || path.startsWith('/xaml-settings#');
       if (!isStillSettings) {
         setPendingNavigation({ path, state });
         setIsUnsavedSettingsModalOpen(true);
@@ -462,7 +432,7 @@ export default function App() {
   // Handle browser back / forward navigation
   useEffect(() => {
     const handlePopState = () => {
-      if (currentRoute === '/settings' && hasChanges) {
+      if (isSettingsRoute && hasChanges) {
         window.history.pushState(null, '', '/settings');
         setPendingNavigation({ path: window.location.pathname });
         setIsUnsavedSettingsModalOpen(true);
@@ -476,7 +446,6 @@ export default function App() {
         setRouteState(null);
         return;
       }
-      const isTabSwitch = path !== currentRoute;
       const params = new URLSearchParams(window.location.search);
       const chSlug = params.get('channel');
       if (chSlug) {
@@ -485,14 +454,6 @@ export default function App() {
       }
       setCurrentRoute(path);
 
-      if (isTabSwitch) {
-        if (tabLoadingTimerRef.current) clearTimeout(tabLoadingTimerRef.current);
-        setIsTabLoading(true);
-        tabLoadingTimerRef.current = setTimeout(() => {
-          setIsTabLoading(false);
-          setTabLoadCount((c) => c + 1);
-        }, 1000);
-      }
     };
 
     window.addEventListener('popstate', handlePopState);
@@ -502,7 +463,7 @@ export default function App() {
   // Handle page reload / unload when settings are unsaved
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (currentRoute === '/settings' && hasChanges) {
+      if (isSettingsRoute && hasChanges) {
         e.preventDefault();
         e.returnValue = '';
         return '';
@@ -578,6 +539,19 @@ export default function App() {
             channels={channels}
           />
         );
+
+      case '/xaml-settings':
+        return (
+          <XAMLSettings
+            searchQuery={currentTabSearchQuery}
+            onSearchChange={handleTabSearchChange}
+            onOpenUpdate={() => setIsUpdating(true)}
+            onOpenOfficeTool={handleOpenOfficeTool}
+          />
+        );
+
+      case '/xaml-controls':
+        return <XAMLControls />;
 
       case '/live-tv':
         return (
@@ -888,7 +862,7 @@ export default function App() {
             onClick={restartSystem}
             className="px-6 py-2.5 rounded-[6px] bg-white text-[#0078d7] hover:bg-neutral-100 font-bold text-xs sm:text-sm shadow-lg transition-transform active:scale-95 cursor-pointer"
           >
-            Khởi động lại Sparkle (Dev)
+            Khởi động l��i Sparkle (Dev)
           </button>
         </div>
       </div>
@@ -951,7 +925,6 @@ export default function App() {
           onChangeFontSize={handleFontSizeChange}
           onOpenUpdate={() => setIsUpdating(true)}
           onOpenOfficeTool={handleOpenOfficeTool}
-          isSplashFinished={isSplashFinished}
         />
       )}
 
@@ -1010,31 +983,20 @@ export default function App() {
         <main className={`main-tab-page flex-1 w-full mx-auto rounded-tl-[10px] rounded-tr-none rounded-br-none rounded-bl-none overflow-hidden ${
           settings.windowsAppSdkPreview
             ? '!bg-[#141414] text-white'
-            : (isTabLoading
-              ? 'bg-[#f3f4f6] dark:bg-[#202024] p-0 max-w-none pt-0 text-neutral-800 dark:text-neutral-100'
-              : (currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home' || isFullBleedRoute || currentRoute === '/craftmine' || currentRoute === '/photopea' || currentRoute === '/logos-fandom' || currentRoute === '/logos-wiki' || currentRoute === '/minecraft-wiki' || currentRoute === '/mc-wiki' || currentRoute === '/vlc' || currentRoute.startsWith('/vlc') || currentRoute === '/media-player' || currentRoute === '/schedule' || currentRoute.startsWith('/schedule') || currentRoute === '/cookbook' || currentRoute === '/swift' || currentRoute === '/friends' || currentRoute === '/edge' || currentRoute === '/browser' || currentRoute === '/camera' || currentRoute === '/photos' || currentRoute === '/gallery' || currentRoute === '/paint' || currentRoute === '/ms-paint' || currentRoute === '/file-explorer' || currentRoute === '/files' || currentRoute === '/copilot' || currentRoute === '/direct-cut' || currentRoute === '/video-editor' || currentRoute === '/edit' || currentRoute === '/swift-bank' || currentRoute === '/bank' || currentRoute === '/swiftbank' || currentRoute === '/clock' || currentRoute === '/alarm' || currentRoute === '/timer' || currentRoute === '/stopwatch' || currentRoute === '/world-clock' || currentRoute === '/calculator' || currentRoute === '/calc' || currentRoute === '/snipping-tool' || currentRoute === '/snip' || currentRoute === '/snipping' || currentRoute === '/feedback-hub' || currentRoute === '/feedback'
+            : (currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home' || isFullBleedRoute || currentRoute === '/craftmine' || currentRoute === '/photopea' || currentRoute === '/logos-fandom' || currentRoute === '/logos-wiki' || currentRoute === '/minecraft-wiki' || currentRoute === '/mc-wiki' || currentRoute === '/vlc' || currentRoute.startsWith('/vlc') || currentRoute === '/media-player' || currentRoute === '/schedule' || currentRoute.startsWith('/schedule') || currentRoute === '/cookbook' || currentRoute === '/swift' || currentRoute === '/friends' || currentRoute === '/edge' || currentRoute === '/browser' || currentRoute === '/camera' || currentRoute === '/photos' || currentRoute === '/gallery' || currentRoute === '/paint' || currentRoute === '/ms-paint' || currentRoute === '/file-explorer' || currentRoute === '/files' || currentRoute === '/copilot' || currentRoute === '/direct-cut' || currentRoute === '/video-editor' || currentRoute === '/edit' || currentRoute === '/swift-bank' || currentRoute === '/bank' || currentRoute === '/swiftbank' || currentRoute === '/clock' || currentRoute === '/alarm' || currentRoute === '/timer' || currentRoute === '/stopwatch' || currentRoute === '/world-clock' || currentRoute === '/calculator' || currentRoute === '/calc' || currentRoute === '/snipping-tool' || currentRoute === '/snip' || currentRoute === '/snipping' || currentRoute === '/feedback-hub' || currentRoute === '/feedback')
                 ? 'p-0 max-w-none pt-0 bg-[#f9f9f9] dark:bg-[#282c31]' 
-                : 'px-4 sm:px-6 md:px-8 py-5 max-w-7xl bg-[#f9f9f9] dark:bg-[#282c31]'))
+                : 'px-4 sm:px-6 md:px-8 py-5 max-w-7xl bg-[#f9f9f9] dark:bg-[#282c31]'
         } ${
           settings.navigationMode === 'floaty' && !isFullBleedRoute
             ? 'pb-28 sm:pb-32'
             : ''
         } ${isSparkOSRoute || currentRoute === '/xaml-home' ? '!h-full !min-h-0 !p-0 !max-w-none !bg-black' : ''}`}>
-          {/* Dynamic Page Content: No slide-up animation when switching pages */}
-          {isTabLoading && !isSparkOSRoute ? (
-            <div key={`tab-loading-${currentRoute}`} className={`w-full h-full flex-1 flex flex-col items-center justify-center min-h-[calc(100vh-3.5rem)] ${
-              settings.windowsAppSdkPreview ? 'bg-[#141414]' : 'bg-[#f3f4f6] dark:bg-[#202024]'
-            }`}>
-              <TabLoadingScreen route={currentRoute} />
-            </div>
-          ) : (
-            <div
-              key={`tab-loaded-${currentRoute}-${tabLoadCount}-${routeState?.storeAppId ?? ''}`}
-              className={`${currentRoute === '/xaml-home' ? 'tab-page-slide-up' : ''} w-full h-full rounded-tl-[10px] rounded-tr-none rounded-br-none rounded-bl-none overflow-hidden`}
-            >
-              {renderContent()}
-            </div>
-          )}
+          <div
+            key={`tab-loaded-${currentRoute}-${routeState?.storeAppId ?? ''}`}
+            className={`${currentRoute === '/xaml-home' ? 'tab-page-slide-up' : ''} w-full h-full rounded-tl-[10px] rounded-tr-none rounded-br-none rounded-bl-none overflow-hidden`}
+          >
+            {renderContent()}
+          </div>
         </main>
 
       </div>
@@ -1144,9 +1106,6 @@ export default function App() {
 
       {/* App Native Virtual Keyboard for Touch Devices */}
       <NativeKeyboard />
-
-      {/* Startup Splash Screen (3 seconds) */}
-      <SplashScreen duration={3000} onFinish={() => setIsSplashFinished(true)} />
 
       {/* Update Sparkle (Dev) Splash Screen */}
       {isUpdating && (

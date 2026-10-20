@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
 import { ChevronRight, ChevronDown, Folder } from 'lucide-react';
 import { AppTabIcon } from '../components/FluentIcons';
 import { Channel } from '../types';
@@ -16,6 +17,7 @@ const quickAccess = [
   { label: 'Widgets', route: '/widgets', icon: 'widgets' as const },
   { label: 'Store', route: '/store', icon: 'store' as const },
   { label: 'SparkOS', route: '/sparkos', icon: 'sparkos' as const },
+  { label: 'Settings', route: '/xaml-settings', icon: 'settings' as const },
 ];
 
 export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, onNavigate }) => {
@@ -33,32 +35,39 @@ export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, o
           <span>Quick access</span>
         </button>
 
-        {expanded.quickAccess && <div className="xaml-category-items flex flex-col">
-          {quickAccess.map(({ label, route, icon }) => (
-            <button key={label} type="button" onClick={() => onNavigate(route)} className="grid min-h-9 cursor-default grid-cols-[1fr_155px] items-center px-1 text-left text-[13px] hover:bg-[#111111]">
-              <div className="flex items-center gap-2">
-                <AppTabIcon name={icon} className="size-4 shrink-0" />
-                <span>{label}</span>
-              </div>
-              <span className="text-[#777]">App</span>
-            </button>
-          ))}
-        </div>}
+        <AnimatePresence initial={false}>
+          {expanded.quickAccess && <motion.div key="quick-access" initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }} className="overflow-hidden">
+            <div className="xaml-category-items flex flex-col">
+              {quickAccess.map(({ label, route, icon }) => (
+                <button key={label} type="button" onClick={() => onNavigate(route)} className="grid min-h-9 cursor-default grid-cols-[1fr_155px] items-center px-1 text-left text-[13px] hover:bg-[#111111]">
+                  <div className="flex items-center gap-2">
+                    <AppTabIcon name={icon} className="size-4 shrink-0" />
+                    <span>{label}</span>
+                  </div>
+                  <span className="text-[#777]">App</span>
+                </button>
+              ))}
+            </div>
+          </motion.div>}
+        </AnimatePresence>
 
         <button type="button" onClick={() => toggleCategory('favorites')} className="mt-1 flex cursor-default items-center gap-1 text-[13px]">
           {expanded.favorites ? <ChevronDown className="size-3 text-[#bdbdbd]" /> : <ChevronRight className="size-3 text-[#bdbdbd]" />}
           <span>Favorites</span>
         </button>
-        {expanded.favorites && <div className="xaml-category-items flex min-h-8 items-center gap-2 px-1 text-[13px]">
-          <Folder className="size-4 text-[#8d8d8d]" strokeWidth={1.5} />
-          <span className="text-[#dedede]">No Items</span>
-        </div>}
+        <AnimatePresence initial={false}>
+          {expanded.favorites && <motion.div key="favorites" initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }} className="overflow-hidden">
+            <div className="xaml-category-items flex min-h-8 items-center gap-2 px-1 text-[13px]"><Folder className="size-4 text-[#8d8d8d]" strokeWidth={1.5} /><span className="text-[#dedede]">No Items</span></div>
+          </motion.div>}
+        </AnimatePresence>
 
         <button type="button" onClick={() => toggleCategory('recent')} className="mt-1 flex cursor-default items-center gap-1 text-[13px]">
           {expanded.recent ? <ChevronDown className="size-3 text-[#bdbdbd]" /> : <ChevronRight className="size-3 text-[#bdbdbd]" />}
           <span>Recent</span>
         </button>
-        {expanded.recent && <div className="xaml-category-items min-h-8 px-1 text-[13px] text-[#777]">No Items</div>}
+        <AnimatePresence initial={false}>
+          {expanded.recent && <motion.div key="recent" initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }} className="xaml-category-items min-h-8 overflow-hidden px-1 text-[13px] text-[#777]">No Items</motion.div>}
+        </AnimatePresence>
 
         <div className="mt-5 border-t border-[#202020] pt-3">
           <button type="button" onClick={() => toggleCategory('liveChannels')} className="mb-1 flex cursor-default items-center gap-1 text-[13px]">
@@ -66,17 +75,15 @@ export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, o
             <span>Live channels</span>
             <span className="ml-1 text-[11px] text-[#777]">{channels.length}</span>
           </button>
-          {expanded.liveChannels && <div className="xaml-category-items flex flex-col">
-            {channels.map((channel) => (
-              <button key={channel.id} type="button" onClick={() => onSelectChannel(channel)} className="grid min-h-11 cursor-default grid-cols-[34px_1fr_155px] items-center gap-1 px-1 text-left text-[13px] hover:bg-[#171717]">
-                <span className="flex size-7 items-center justify-center">
-                  <img src={channel.logo} alt="" className="max-h-6 max-w-7 object-contain" referrerPolicy="no-referrer" />
-                </span>
-                <span className="truncate text-[#ededed]">{channel.name}</span>
-                <span className="truncate text-[#8f8f8f]">{channel.currentProgram?.title || channel.category}</span>
-              </button>
-            ))}
-          </div>}
+          <AnimatePresence initial={false}>
+            {expanded.liveChannels && <motion.div key="live-channels" initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }} className="overflow-hidden">
+              <div className="xaml-category-items flex flex-col">
+                {channels.map((channel) => (
+                  <button key={channel.id} type="button" onClick={() => onSelectChannel(channel)} className="grid min-h-11 cursor-default grid-cols-[34px_1fr_155px] items-center gap-1 px-1 text-left text-[13px] hover:bg-[#171717]"><span className="flex size-7 items-center justify-center"><img src={channel.logo} alt="" className="max-h-6 max-w-7 object-contain" referrerPolicy="no-referrer" /></span><span className="truncate text-[#ededed]">{channel.name}</span><span className="truncate text-[#8f8f8f]">{channel.currentProgram?.title || channel.category}</span></button>
+                ))}
+              </div>
+            </motion.div>}
+          </AnimatePresence>
         </div>
       </div>
     </section>
