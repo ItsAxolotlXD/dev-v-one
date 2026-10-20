@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ChevronRight, ChevronDown, Folder } from 'lucide-react';
 import { AppTabIcon } from '../components/FluentIcons';
 import { Channel } from '../types';
@@ -19,15 +19,21 @@ const quickAccess = [
 ];
 
 export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, onNavigate }) => {
+  const [expanded, setExpanded] = useState({ quickAccess: true, favorites: true, recent: false, liveChannels: true });
+
+  const toggleCategory = (category: keyof typeof expanded) => {
+    setExpanded((current) => ({ ...current, [category]: !current[category] }));
+  };
+
   return (
     <section className="min-h-[calc(100vh-3.5rem)] w-full bg-black px-1 pb-10 text-[#e8e8e8] font-sans">
       <div className="mx-auto w-full max-w-5xl">
-        <div className="flex items-center gap-1 py-1 text-[13px] font-normal">
-          <ChevronDown className="size-3 text-[#bdbdbd]" />
+        <button type="button" onClick={() => toggleCategory('quickAccess')} className="flex cursor-default items-center gap-1 py-1 text-[13px] font-normal">
+          {expanded.quickAccess ? <ChevronDown className="size-3 text-[#bdbdbd]" /> : <ChevronRight className="size-3 text-[#bdbdbd]" />}
           <span>Quick access</span>
-        </div>
+        </button>
 
-        <div className="flex flex-col">
+        {expanded.quickAccess && <div className="xaml-category-items flex flex-col">
           {quickAccess.map(({ label, route, icon }) => (
             <button key={label} type="button" onClick={() => onNavigate(route)} className="grid min-h-9 cursor-default grid-cols-[1fr_155px] items-center px-1 text-left text-[13px] hover:bg-[#111111]">
               <div className="flex items-center gap-2">
@@ -37,29 +43,30 @@ export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, o
               <span className="text-[#777]">App</span>
             </button>
           ))}
-        </div>
+        </div>}
 
-        <div className="mt-1 flex items-center gap-1 text-[13px]">
-          <ChevronDown className="size-3 text-[#bdbdbd]" />
+        <button type="button" onClick={() => toggleCategory('favorites')} className="mt-1 flex cursor-default items-center gap-1 text-[13px]">
+          {expanded.favorites ? <ChevronDown className="size-3 text-[#bdbdbd]" /> : <ChevronRight className="size-3 text-[#bdbdbd]" />}
           <span>Favorites</span>
-        </div>
-        <div className="flex min-h-8 items-center gap-2 px-1 text-[13px]">
+        </button>
+        {expanded.favorites && <div className="xaml-category-items flex min-h-8 items-center gap-2 px-1 text-[13px]">
           <Folder className="size-4 text-[#8d8d8d]" strokeWidth={1.5} />
           <span className="text-[#dedede]">No Items</span>
-        </div>
+        </div>}
 
-        <div className="mt-1 flex items-center gap-1 text-[13px]">
-          <ChevronRight className="size-3 text-[#bdbdbd]" />
+        <button type="button" onClick={() => toggleCategory('recent')} className="mt-1 flex cursor-default items-center gap-1 text-[13px]">
+          {expanded.recent ? <ChevronDown className="size-3 text-[#bdbdbd]" /> : <ChevronRight className="size-3 text-[#bdbdbd]" />}
           <span>Recent</span>
-        </div>
+        </button>
+        {expanded.recent && <div className="xaml-category-items min-h-8 px-1 text-[13px] text-[#777]">No Items</div>}
 
         <div className="mt-5 border-t border-[#202020] pt-3">
-          <div className="mb-1 flex items-center gap-1 text-[13px]">
-            <ChevronDown className="size-3 text-[#bdbdbd]" />
+          <button type="button" onClick={() => toggleCategory('liveChannels')} className="mb-1 flex cursor-default items-center gap-1 text-[13px]">
+            {expanded.liveChannels ? <ChevronDown className="size-3 text-[#bdbdbd]" /> : <ChevronRight className="size-3 text-[#bdbdbd]" />}
             <span>Live channels</span>
             <span className="ml-1 text-[11px] text-[#777]">{channels.length}</span>
-          </div>
-          <div className="flex flex-col">
+          </button>
+          {expanded.liveChannels && <div className="xaml-category-items flex flex-col">
             {channels.map((channel) => (
               <button key={channel.id} type="button" onClick={() => onSelectChannel(channel)} className="grid min-h-11 cursor-default grid-cols-[34px_1fr_155px] items-center gap-1 px-1 text-left text-[13px] hover:bg-[#171717]">
                 <span className="flex size-7 items-center justify-center">
@@ -69,7 +76,7 @@ export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, o
                 <span className="truncate text-[#8f8f8f]">{channel.currentProgram?.title || channel.category}</span>
               </button>
             ))}
-          </div>
+          </div>}
         </div>
       </div>
     </section>
