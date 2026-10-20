@@ -59,7 +59,7 @@ export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel })
           </div>
           <div className="flex flex-col">
             {channels.map((channel) => (
-              <button key={channel.id} type="button" onClick={() => onSelectChannel(channel)} className="grid min-h-11 grid-cols-[34px_1fr_155px] items-center gap-1 border-b border-[#111] px-1 text-left text-[13px] hover:bg-[#171717]">
+              <button key={channel.id} type="button" onClick={() => onSelectChannel(channel)} className="grid min-h-11 cursor-default grid-cols-[34px_1fr_155px] items-center gap-1 px-1 text-left text-[13px] hover:scale-100 hover:bg-[#171717]">
                 <span className="flex size-7 items-center justify-center">
                   <img src={channel.logo} alt="" className="max-h-6 max-w-7 object-contain" referrerPolicy="no-referrer" />
                 </span>
