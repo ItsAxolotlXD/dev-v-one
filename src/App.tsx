@@ -22,6 +22,7 @@ import { GlobalContextMenu } from './components/GlobalContextMenu';
 import { Home } from './pages/Home';
 import { XAMLHome } from './pages/XAMLHome';
 import { XAMLSettings } from './pages/XAMLSettings';
+import { XAMLControls } from './pages/XAMLControls';
 import { LiveTV } from './pages/LiveTV';
 import { TestChannels } from './pages/TestChannels';
 import { News } from './pages/News';
@@ -548,6 +549,9 @@ export default function App() {
             onOpenOfficeTool={handleOpenOfficeTool}
           />
         );
+
+      case '/xaml-controls':
+        return <XAMLControls />;
 
       case '/live-tv':
         return (

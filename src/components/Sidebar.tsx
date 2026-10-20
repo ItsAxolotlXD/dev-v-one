@@ -17,7 +17,8 @@ import {
   DownloadCloud,
   RefreshCw,
   Pencil,
-  Monitor
+  Monitor,
+  Code2
 } from 'lucide-react';
 import { 
   AppTabIcon,
@@ -1723,6 +1724,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
           >
             <FluentSettingsIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
             <span className="truncate text-[13.5px]">XAML Settings</span>
+          </button>
+
+          <button
+            type="button"
+            id={isMobile ? 'mobile-nav-xaml-controls' : 'sidebar-nav-xaml-controls'}
+            data-nav-active={isCurrentActive('/xaml-controls') ? 'true' : undefined}
+            onClick={() => handleNavClick('/xaml-controls')}
+            title="XAML Controls"
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              isCurrentActive('/xaml-controls')
+                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+            }`}
+          >
+            <Code2 aria-hidden="true" className="size-5 shrink-0 text-[#1684e8]" />
+            <span className="truncate text-[13.5px]">XAML Controls</span>
           </button>
 
           {/* Bottom Settings Tab Items */}
