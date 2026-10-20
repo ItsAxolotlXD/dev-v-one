@@ -1014,7 +1014,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
           </div>
 
-          {/* 2. Articles */}
+          {/* 2. XAML Home */}
+          <div className="shrink-0">
+            <button
+              type="button"
+              id={isMobile ? 'mobile-nav-xaml-home' : 'sidebar-nav-xaml-home'}
+              data-nav-active={currentRoute === '/xaml-home' ? 'true' : undefined}
+              onClick={() => handleNavClick('/xaml-home')}
+              title="XAML Home"
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                currentRoute === '/xaml-home'
+                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+              }`}
+            >
+              <AppTabIcon name="home" className="w-5 h-5 shrink-0 text-black dark:text-white" />
+              <span className="truncate text-[13.5px]">XAML Home</span>
+            </button>
+          </div>
+
+          {/* 3. Articles */}
           <div className="shrink-0">
             <button
               type="button"
