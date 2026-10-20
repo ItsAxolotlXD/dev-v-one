@@ -1,22 +1,23 @@
 import React from 'react';
-import { ChevronRight, ChevronDown, Folder, Monitor, Download, FileText, Image, Music, Film } from 'lucide-react';
+import { ChevronRight, ChevronDown, Folder, Home, Newspaper, RefreshCw, LayoutGrid, Store, Sparkles } from 'lucide-react';
 import { Channel } from '../types';
 
 interface XAMLHomeProps {
   channels: Channel[];
   onSelectChannel: (channel: Channel) => void;
+  onNavigate: (route: string) => void;
 }
 
 const quickAccess = [
-  { label: 'Desktop', icon: Monitor, color: 'text-cyan-400', date: '3/26/2023 10:35 AM' },
-  { label: 'Downloads', icon: Download, color: 'text-emerald-400', date: '3/3/2023 8:57 AM' },
-  { label: 'Documents', icon: FileText, color: 'text-slate-300', date: '3/23/2023 3:06 PM', selected: true },
-  { label: 'Pictures', icon: Image, color: 'text-sky-400', date: '3/31/2023 7:29 AM' },
-  { label: 'Music', icon: Music, color: 'text-rose-300', date: '2/25/2023 1:54 PM' },
-  { label: 'Videos', icon: Film, color: 'text-purple-400', date: '2/2/2023 11:46 AM' },
+  { label: 'Home', route: '/', icon: Home, color: 'text-cyan-400' },
+  { label: 'Articles', route: '/news', icon: Newspaper, color: 'text-emerald-400' },
+  { label: 'Updates', route: '/updates', icon: RefreshCw, color: 'text-slate-300' },
+  { label: 'Widgets', route: '/widgets', icon: LayoutGrid, color: 'text-sky-400' },
+  { label: 'Store', route: '/store', icon: Store, color: 'text-rose-300' },
+  { label: 'SparkOS', route: '/sparkos', icon: Sparkles, color: 'text-purple-400' },
 ];
 
-export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel }) => {
+export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, onNavigate }) => {
   return (
     <section className="min-h-[calc(100vh-3.5rem)] w-full bg-black px-1 pb-10 text-[#e8e8e8] font-sans">
       <div className="mx-auto w-full max-w-5xl">
@@ -26,14 +27,14 @@ export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel })
         </div>
 
         <div className="flex flex-col">
-          {quickAccess.map(({ label, icon: Icon, color, date, selected }) => (
-            <div key={label} className={`grid min-h-9 grid-cols-[1fr_155px] items-center px-1 text-[13px] ${selected ? 'bg-[#171717]' : 'hover:bg-[#111111]'}`}>
+          {quickAccess.map(({ label, route, icon: Icon, color }) => (
+            <button key={label} type="button" onClick={() => onNavigate(route)} className="grid min-h-9 cursor-default grid-cols-[1fr_155px] items-center px-1 text-left text-[13px] hover:bg-[#111111]">
               <div className="flex items-center gap-2">
                 <Icon className={`size-4 ${color}`} strokeWidth={1.5} />
                 <span>{label}</span>
               </div>
-              <span className="text-[#d0d0d0]">{date}</span>
-            </div>
+              <span className="text-[#777]">App</span>
+            </button>
           ))}
         </div>
 
