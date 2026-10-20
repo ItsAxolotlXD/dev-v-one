@@ -21,6 +21,7 @@ import { StickyNoteWidget } from './components/StickyNoteWidget';
 import { GlobalContextMenu } from './components/GlobalContextMenu';
 import { Home } from './pages/Home';
 import { XAMLHome } from './pages/XAMLHome';
+import { XAMLSettings } from './pages/XAMLSettings';
 import { LiveTV } from './pages/LiveTV';
 import { TestChannels } from './pages/TestChannels';
 import { News } from './pages/News';
@@ -119,6 +120,7 @@ export default function App() {
     }
   }, []);
   const [routeState, setRouteState] = useState<any>(null);
+  const isSettingsRoute = currentRoute === '/settings' || currentRoute === '/xaml-settings';
   const previousRouteRef = useRef<string>('/');
   // Tab-specific search state for Floating Search Bar
   const [tabSearchQueries, setTabSearchQueries] = useState<Record<string, string>>({});
@@ -334,8 +336,8 @@ export default function App() {
   // Navigation handler
   const navigate = useCallback((path: string, state?: any) => {
     // If currently on settings and there are unsaved changes, prompt before leaving
-    if (currentRoute === '/settings' && hasChanges) {
-      const isStillSettings = path === '/settings' || path.startsWith('/settings?') || path.startsWith('/settings#');
+    if (isSettingsRoute && hasChanges) {
+      const isStillSettings = path === '/settings' || path === '/xaml-settings' || path.startsWith('/settings?') || path.startsWith('/settings#') || path.startsWith('/xaml-settings?') || path.startsWith('/xaml-settings#');
       if (!isStillSettings) {
         setPendingNavigation({ path, state });
         setIsUnsavedSettingsModalOpen(true);
@@ -429,7 +431,7 @@ export default function App() {
   // Handle browser back / forward navigation
   useEffect(() => {
     const handlePopState = () => {
-      if (currentRoute === '/settings' && hasChanges) {
+      if (isSettingsRoute && hasChanges) {
         window.history.pushState(null, '', '/settings');
         setPendingNavigation({ path: window.location.pathname });
         setIsUnsavedSettingsModalOpen(true);
@@ -460,7 +462,7 @@ export default function App() {
   // Handle page reload / unload when settings are unsaved
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (currentRoute === '/settings' && hasChanges) {
+      if (isSettingsRoute && hasChanges) {
         e.preventDefault();
         e.returnValue = '';
         return '';
@@ -534,6 +536,16 @@ export default function App() {
             onSelectChannel={setCurrentChannel}
             onNavigate={navigate}
             channels={channels}
+          />
+        );
+
+      case '/xaml-settings':
+        return (
+          <XAMLSettings
+            searchQuery={currentTabSearchQuery}
+            onSearchChange={handleTabSearchChange}
+            onOpenUpdate={() => setIsUpdating(true)}
+            onOpenOfficeTool={handleOpenOfficeTool}
           />
         );
 

@@ -17,6 +17,7 @@ const quickAccess = [
   { label: 'Widgets', route: '/widgets', icon: 'widgets' as const },
   { label: 'Store', route: '/store', icon: 'store' as const },
   { label: 'SparkOS', route: '/sparkos', icon: 'sparkos' as const },
+  { label: 'Settings', route: '/xaml-settings', icon: 'settings' as const },
 ];
 
 export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, onNavigate }) => {
