@@ -126,6 +126,7 @@ export default function App() {
   const tabLoadingTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
+    if (window.location.pathname === '/xaml-home') return;
     setIsTabLoading(true);
     tabLoadingTimerRef.current = setTimeout(() => {
       setIsTabLoading(false);
@@ -333,7 +334,7 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
 
     // 1-second splash screen on entering a new tab
-    if (isDifferentTab) {
+    if (isDifferentTab && targetRoute !== '/xaml-home') {
       if (tabLoadingTimerRef.current) clearTimeout(tabLoadingTimerRef.current);
       setIsTabLoading(true);
       tabLoadingTimerRef.current = setTimeout(() => {
@@ -485,7 +486,7 @@ export default function App() {
       }
       setCurrentRoute(path);
 
-      if (isTabSwitch) {
+      if (isTabSwitch && path !== '/xaml-home') {
         if (tabLoadingTimerRef.current) clearTimeout(tabLoadingTimerRef.current);
         setIsTabLoading(true);
         tabLoadingTimerRef.current = setTimeout(() => {
@@ -888,7 +889,7 @@ export default function App() {
             onClick={restartSystem}
             className="px-6 py-2.5 rounded-[6px] bg-white text-[#0078d7] hover:bg-neutral-100 font-bold text-xs sm:text-sm shadow-lg transition-transform active:scale-95 cursor-pointer"
           >
-            Khởi động lại Sparkle (Dev)
+            Khởi động l��i Sparkle (Dev)
           </button>
         </div>
       </div>
@@ -1021,7 +1022,7 @@ export default function App() {
             : ''
         } ${isSparkOSRoute || currentRoute === '/xaml-home' ? '!h-full !min-h-0 !p-0 !max-w-none !bg-black' : ''}`}>
           {/* Dynamic Page Content: No slide-up animation when switching pages */}
-          {isTabLoading && !isSparkOSRoute ? (
+          {isTabLoading && !isSparkOSRoute && currentRoute !== '/xaml-home' ? (
             <div key={`tab-loading-${currentRoute}`} className={`w-full h-full flex-1 flex flex-col items-center justify-center min-h-[calc(100vh-3.5rem)] ${
               settings.windowsAppSdkPreview ? 'bg-[#141414]' : 'bg-[#f3f4f6] dark:bg-[#202024]'
             }`}>
@@ -1146,7 +1147,9 @@ export default function App() {
       <NativeKeyboard />
 
       {/* Startup Splash Screen (3 seconds) */}
-      <SplashScreen duration={3000} onFinish={() => setIsSplashFinished(true)} />
+      {currentRoute !== '/xaml-home' && (
+        <SplashScreen duration={3000} onFinish={() => setIsSplashFinished(true)} />
+      )}
 
       {/* Update Sparkle (Dev) Splash Screen */}
       {isUpdating && (
