@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { getRecallActivities, type RecallActivity } from '../services/recallService';
 import { ChevronRight, ExternalLink, Mic, MoreHorizontal, Search, SlidersHorizontal } from 'lucide-react';
 
 type Match = { title: string; age: string; source: string; image: string; kind: 'All' | 'Word' | 'Edge' | 'PowerPoint' | 'Outlook'; accent: string };
@@ -28,6 +29,15 @@ function MatchCard({ item, key: _key }: { item: Match; key?: string }) {
 export function Recall(_props: { navigate?: (path: string) => void }) {
   const [query, setQuery] = useState('Korean restaurant that Alice');
   const [activeFilter, setActiveFilter] = useState('All');
+  const [activities, setActivities] = useState<RecallActivity[]>([]);
+
+  useEffect(() => {
+    let active = true;
+    void getRecallActivities().then(({ activities: nextActivities }) => {
+      if (active) setActivities(nextActivities);
+    }).catch(() => undefined);
+    return () => { active = false; };
+  }, []);
   const filter = (items: Match[]) => items.filter((item) => (activeFilter === 'All' || item.kind === activeFilter) && `${item.title} ${item.source}`.toLowerCase().includes(query.toLowerCase()));
   const text = useMemo(() => filter(textMatches), [query, activeFilter]);
   const visual = useMemo(() => filter(visualMatches), [query, activeFilter]);
@@ -35,7 +45,8 @@ export function Recall(_props: { navigate?: (path: string) => void }) {
   return <main className="min-h-full overflow-y-auto bg-[#edf6fb] text-slate-800 dark:bg-[#151c24] dark:text-white">
     <div className="mx-auto flex w-full max-w-[1180px] flex-col gap-7 px-5 py-4 sm:px-10 lg:px-14">
       <header className="flex items-center gap-4"><div className="flex size-7 items-center justify-center rounded-full bg-sky-500 text-white"><Search className="size-3.5" /></div><div className="flex flex-1 items-center justify-center gap-2"><label className="flex h-8 w-full max-w-[385px] items-center gap-2 rounded-full border border-slate-200 bg-white/85 px-3 shadow-sm dark:border-white/10 dark:bg-white/10"><Search className="size-3.5 text-slate-400" /><input aria-label="Search your history" value={query} onChange={(e) => setQuery(e.target.value)} className="min-w-0 flex-1 bg-transparent text-[11px] outline-none" /><Mic className="size-3.5 text-slate-400" /></label><button type="button" className="flex h-8 items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-3 text-[10px] dark:border-white/10 dark:bg-white/10"><SlidersHorizontal className="size-3" /> Timeline</button></div><button type="button" className="text-slate-400" aria-label="More options"><MoreHorizontal className="size-4" /></button></header>
-      <section className="flex flex-col gap-5"><h1 className="text-2xl font-semibold tracking-tight">Results</h1><nav className="flex items-center gap-2 overflow-x-auto" aria-label="Result filters">{filters.map((filterName) => <button key={filterName} type="button" onClick={() => setActiveFilter(filterName)} className={`rounded-full px-3 py-1.5 text-[10px] font-medium transition ${activeFilter === filterName ? 'bg-sky-600 text-white' : 'border border-slate-200 bg-white/60 text-slate-600 hover:bg-white dark:border-white/10 dark:bg-white/[0.06] dark:text-slate-300'}`}>{filterName}</button>)}<button type="button" className="ml-1 text-[10px] text-sky-700 hover:underline dark:text-sky-300">View File Explorer results <ExternalLink className="ml-1 inline size-3" /></button></nav>
+      <section className="flex flex-col gap-5"><h1 className="text-2xl font-semibold tracking-tight">Results</h1>
+        <section className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5" aria-label="Activity summary">{[['tab', 'Tabs'], ['channel', 'Channels'], ['article', 'Articles'], ['copilot', 'Copilot chats'], ['note', 'Notes'], ['photo-captured', 'Photos'], ['photo-saved', 'Saved photos'], ['calculation', 'Calculations'], ['sparkos', 'SparkOS uses']].map(([type, label]) => <div key={type} className="rounded-xl border border-slate-200/70 bg-white/55 px-3 py-2 dark:border-white/10 dark:bg-white/[0.06]"><div className="text-lg font-semibold">{activities.filter((activity) => activity.type === type).length}</div><div className="text-[10px] text-slate-500 dark:text-slate-400">{label}</div></div>)}</section><nav className="flex items-center gap-2 overflow-x-auto" aria-label="Result filters">{filters.map((filterName) => <button key={filterName} type="button" onClick={() => setActiveFilter(filterName)} className={`rounded-full px-3 py-1.5 text-[10px] font-medium transition ${activeFilter === filterName ? 'bg-sky-600 text-white' : 'border border-slate-200 bg-white/60 text-slate-600 hover:bg-white dark:border-white/10 dark:bg-white/[0.06] dark:text-slate-300'}`}>{filterName}</button>)}<button type="button" className="ml-1 text-[10px] text-sky-700 hover:underline dark:text-sky-300">View File Explorer results <ExternalLink className="ml-1 inline size-3" /></button></nav>
         <ResultSection title="Text matches" items={text} />
         <ResultSection title="Visual matches" items={visual} />
       </section>

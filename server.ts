@@ -15,6 +15,22 @@ const PORT = 3000;
 
 app.use(express.json({ limit: '10mb' }));
 
+const recallActivities: Array<Record<string, unknown>> = [];
+app.post('/api/recall/activity', (req, res) => {
+  const { type, title, source, route, metadata } = req.body ?? {};
+  const allowedTypes = ['tab', 'channel', 'article', 'copilot', 'note', 'photo-captured', 'photo-saved', 'calculation', 'sparkos'];
+  if (!allowedTypes.includes(type) || typeof title !== 'string' || title.length > 200) {
+    return res.status(400).json({ error: 'Invalid Recall activity' });
+  }
+  recallActivities.unshift({ id: `recall-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, type, title, source: typeof source === 'string' ? source.slice(0, 120) : undefined, route: typeof route === 'string' ? route.slice(0, 200) : undefined, metadata: metadata && typeof metadata === 'object' ? metadata : undefined, createdAt: new Date().toISOString() });
+  recallActivities.splice(1000);
+  return res.status(201).json({ ok: true });
+});
+app.get('/api/recall/activity', (req, res) => {
+  const limit = Math.min(Math.max(Number(req.query.limit) || 100, 1), 500);
+  return res.json({ activities: recallActivities.slice(0, limit) });
+});
+
 // Initialize Google GenAI
 const apiKey = process.env.GEMINI_API_KEY;
 const ai = apiKey

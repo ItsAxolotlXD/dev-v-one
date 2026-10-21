@@ -60,6 +60,7 @@ import { MicrosoftStore } from './pages/MicrosoftStore';
 import { SparkOS } from './pages/SparkOS';
 import { SparkOSSettings } from './pages/SparkOSSettings';
 import { Recall } from './pages/Recall';
+import { recordRecallActivity } from './services/recallService';
 import { getStoreAppForRoute } from './data/storeApps';
 import { ProductivityTab } from './pages/ProductivityTabs';
 import { SpinningRing } from './components/SpinningRing';
@@ -124,6 +125,13 @@ export default function App() {
   const [routeState, setRouteState] = useState<any>(null);
   const isSettingsRoute = currentRoute === '/settings' || currentRoute === '/xaml-settings';
   const previousRouteRef = useRef<string>('/');
+
+  useEffect(() => {
+    if (previousRouteRef.current === currentRoute) return;
+    previousRouteRef.current = currentRoute;
+    const type = currentRoute === '/sparkos' ? 'sparkos' : 'tab';
+    void recordRecallActivity({ type, title: currentRoute === '/' ? 'Home' : currentRoute.replace(/^\//, '').replaceAll('-', ' '), route: currentRoute });
+  }, [currentRoute]);
   // Tab-specific search state for Floating Search Bar
   const [tabSearchQueries, setTabSearchQueries] = useState<Record<string, string>>({});
   const currentTabSearchQuery = tabSearchQueries[currentRoute] || '';

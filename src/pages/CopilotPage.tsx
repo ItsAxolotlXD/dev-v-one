@@ -18,6 +18,7 @@ import {
 import { useSystemTasks } from '../context/SystemTasksContext';
 import { SpinningRing } from '../components/SpinningRing';
 import { sparkOSResetOobeEvent } from '../components/SparkOSBootSetup';
+import { recordRecallActivity } from '../services/recallService';
 
 export const COPILOT_ICON_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-7bX9C6ZMjpXAbn0eXLI2Wk6ZhwUwk0.png';
 
@@ -137,6 +138,7 @@ export const CopilotPage: React.FC<CopilotPageProps> = ({ navigate, embedded = f
   const handleSendMessage = async (textToSend?: string) => {
     if (!isCopilotRunning) return;
     const message = (textToSend || inputVal).trim();
+    void recordRecallActivity({ type: 'copilot', title: 'Copilot chat', source: message.slice(0, 100), route: '/copilot' });
     if (!message || isLoading) return;
 
     const userMsg: ChatMessage = {
