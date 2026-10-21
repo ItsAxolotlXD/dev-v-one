@@ -49,6 +49,7 @@ const CATEGORY_ITEMS = [
   { id: 'cat-feedback', title: 'Feedback Hub', route: '/feedback-hub', icon: FluentFeedbackHubIcon, color: '#0078d4' },
   { id: 'cat-settings', title: 'Settings', route: '/settings', icon: SettingsIcon, color: '#4cc2ff' },
   { id: 'cat-pc-settings', title: 'PC Settings', route: '/pc-settings', icon: SettingsIcon, color: '#4cc2ff' },
+  { id: 'cat-recall', title: 'Recall', route: '/recall', icon: SettingsIcon, color: '#38bdf8' },
 ];
 
 const SETTINGS_SHORTCUTS = [

@@ -59,6 +59,7 @@ import { FeedbackHub } from './pages/FeedbackHub';
 import { MicrosoftStore } from './pages/MicrosoftStore';
 import { SparkOS } from './pages/SparkOS';
 import { SparkOSSettings } from './pages/SparkOSSettings';
+import { Recall } from './pages/Recall';
 import { getStoreAppForRoute } from './data/storeApps';
 import { ProductivityTab } from './pages/ProductivityTabs';
 import { SpinningRing } from './components/SpinningRing';
@@ -517,6 +518,9 @@ export default function App() {
 
       case '/pc-settings':
         return <SparkOSSettings />;
+
+      case '/recall':
+        return <Recall navigate={navigate} />;
 
       case '/':
       case '/home':
