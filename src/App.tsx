@@ -988,8 +988,8 @@ export default function App() {
           settings.windowsAppSdkPreview
             ? '!bg-[#141414] text-white'
             : (currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home' || isFullBleedRoute || currentRoute === '/craftmine' || currentRoute === '/photopea' || currentRoute === '/logos-fandom' || currentRoute === '/logos-wiki' || currentRoute === '/minecraft-wiki' || currentRoute === '/mc-wiki' || currentRoute === '/vlc' || currentRoute.startsWith('/vlc') || currentRoute === '/media-player' || currentRoute === '/schedule' || currentRoute.startsWith('/schedule') || currentRoute === '/cookbook' || currentRoute === '/swift' || currentRoute === '/friends' || currentRoute === '/edge' || currentRoute === '/browser' || currentRoute === '/camera' || currentRoute === '/photos' || currentRoute === '/gallery' || currentRoute === '/paint' || currentRoute === '/ms-paint' || currentRoute === '/file-explorer' || currentRoute === '/files' || currentRoute === '/copilot' || currentRoute === '/direct-cut' || currentRoute === '/video-editor' || currentRoute === '/edit' || currentRoute === '/swift-bank' || currentRoute === '/bank' || currentRoute === '/swiftbank' || currentRoute === '/clock' || currentRoute === '/alarm' || currentRoute === '/timer' || currentRoute === '/stopwatch' || currentRoute === '/world-clock' || currentRoute === '/calculator' || currentRoute === '/calc' || currentRoute === '/snipping-tool' || currentRoute === '/snip' || currentRoute === '/snipping' || currentRoute === '/feedback-hub' || currentRoute === '/feedback')
-                ? 'p-0 max-w-none pt-0 bg-[#f9f9f9] dark:bg-[#282c31]' 
-                : 'px-4 sm:px-6 md:px-8 py-5 max-w-7xl bg-[#f9f9f9] dark:bg-[#282c31]'
+                ? 'p-0 max-w-none pt-0 app-global-background'
+                : 'px-4 sm:px-6 md:px-8 py-5 max-w-7xl app-global-background'
         } ${
           settings.navigationMode === 'floaty' && !isFullBleedRoute
             ? 'pb-28 sm:pb-32'
