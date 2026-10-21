@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { FluentCameraIcon } from '../components/FluentIcons';
 import { MediaItem } from './PhotosApp';
+import { logRecallActivity } from '../services/recallService';
 
 interface CameraAppProps {
   navigate?: (route: string) => void;
@@ -214,6 +215,20 @@ export const CameraApp: React.FC<CameraAppProps> = ({ navigate }) => {
       const updated = [newMedia, ...list];
       localStorage.setItem('vone_photos_media', JSON.stringify(updated));
       showToast('📸 Đã lưu ảnh vào Gallery (Photos)');
+
+      try {
+        logRecallActivity({
+          type: 'gallery',
+          appName: 'Gallery',
+          title: newMedia.title,
+          subtitle: `Độ phân giải ${newMedia.resolution} • Album Camera Roll`,
+          durationText: 'You spent < 1m on this activity recently',
+          badgeText: 'Gallery - Photos',
+          thumbnail: dataUrl,
+          route: '/photos',
+          searchKeywords: `camera photo gallery anh chup ${newMedia.title}`.toLowerCase()
+        });
+      } catch {}
     } catch (e) {
       console.error('Save to gallery failed:', e);
     }

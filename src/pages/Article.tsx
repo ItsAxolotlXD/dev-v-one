@@ -22,6 +22,8 @@ import {
   X
 } from 'lucide-react';
 
+import { logRecallActivity } from '../services/recallService';
+
 interface ArticleProps {
   slug: string;
   navigate: (route: string) => void;
@@ -44,6 +46,22 @@ export const Article: React.FC<ArticleProps> = ({ slug, navigate, fontSize = 16 
   });
 
   const article = NEWS_DATA.find((a) => a.slug === slug) || NEWS_DATA[0];
+
+  React.useEffect(() => {
+    if (article) {
+      logRecallActivity({
+        type: 'article',
+        appName: 'Articles',
+        title: article.title,
+        subtitle: article.subtitle || article.excerpt,
+        durationText: 'You spent < 1m on this activity recently',
+        badgeText: 'Articles & News',
+        thumbnail: article.coverImage || '/banners/thoi_su_19h.webp',
+        route: `/article/${article.slug}`,
+        searchKeywords: `${article.title} ${article.category}`.toLowerCase(),
+      });
+    }
+  }, [article.slug]);
 
   const { isNewsBookmarked, toggleBookmarkNews } = useFavorites();
   const bookmarked = isNewsBookmarked(article.slug);

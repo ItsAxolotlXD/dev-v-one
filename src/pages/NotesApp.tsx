@@ -30,6 +30,7 @@ import {
 import { FluentNotesIcon } from '../components/FluentIcons';
 import { exportDocx, exportWritePdf } from '../utils/officeExport';
 import { useNotes, STICKY_COLORS } from '../context/NotesContext';
+import { logRecallActivity } from '../services/recallService';
 
 interface NotesAppProps {
   navigate: (route: string) => void;
@@ -181,6 +182,27 @@ export const NotesApp: React.FC<NotesAppProps> = ({ navigate }) => {
       }
     }
   }, [noteContent, updateStats]);
+
+  // Log note editing to Recall
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (noteContent && noteContent.trim().length > 0) {
+        const text = noteContent.replace(/<[^>]*>/g, '').trim();
+        logRecallActivity({
+          type: 'notes',
+          appName: 'Notes',
+          title: text.slice(0, 45) || 'Ghi chú công việc',
+          subtitle: text.length > 45 ? `${text.slice(0, 80)}...` : 'Tài liệu ghi chú người dùng',
+          durationText: 'You spent < 1m on this activity recently',
+          badgeText: 'Sticky Notes',
+          thumbnail: 'https://images.unsplash.com/photo-1517842645767-c639042777db?w=800&auto=format&fit=crop&q=80',
+          route: '/notes',
+          searchKeywords: `notes sticky ${text.slice(0, 60)}`.toLowerCase()
+        });
+      }
+    }, 2500);
+    return () => clearTimeout(timer);
+  }, [noteContent]);
 
   // Selection & Range management
   const saveSelection = useCallback(() => {

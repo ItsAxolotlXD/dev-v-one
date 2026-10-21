@@ -20,6 +20,7 @@ import { CategoryIcon } from '../components/CategoryIcon';
 import { searchEpgSchedule, EpgSearchResultItem } from '../services/epgService';
 import { SpinningRing } from '../components/SpinningRing';
 import { useIsMobile } from '../hooks/useIsMobile';
+import { logRecallActivity } from '../services/recallService';
 
 
 interface ImmersiveSearchProps {
@@ -178,6 +179,25 @@ export const ImmersiveSearch: React.FC<ImmersiveSearchProps> = ({
     }
   });
   const [activeTab, setActiveTab] = useState<'all' | 'channels' | 'epg' | 'news'>('all');
+
+  useEffect(() => {
+    if (query.trim().length >= 2) {
+      const timer = setTimeout(() => {
+        logRecallActivity({
+          type: 'search',
+          appName: 'Immersive Search',
+          title: `Tìm kiếm: "${query.trim()}"`,
+          subtitle: 'Tìm kiếm tổng hợp Kênh, Lịch phát sóng & Tin tức',
+          durationText: 'You spent < 1m on this activity recently',
+          badgeText: 'Spotlight Search',
+          thumbnail: '/banners/asiad_2026.jpg',
+          route: `/search?q=${encodeURIComponent(query.trim())}`,
+          searchKeywords: `search tim kiem ${query.trim()}`.toLowerCase()
+        });
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [query]);
   const [epgResults, setEpgResults] = useState<EpgSearchResultItem[]>([]);
   const [isSearchingEpg, setIsSearchingEpg] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);

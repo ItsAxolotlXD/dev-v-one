@@ -8,6 +8,7 @@ import { FluentClockIcon, FluentSnippingToolIcon } from '../components/FluentIco
 import { getStoreAppForRoute, type StoreApp } from '../data/storeApps';
 import { useIsMobile } from '../hooks/useIsMobile';
 import { hasSparkOSSetup, resetSparkOSSetup, sparkOSResetOobeEvent, SparkOSBootScreen, SparkOSBootSetup } from '../components/SparkOSBootSetup';
+import { logRecallActivity } from '../services/recallService';
 import {
   BatteryFull,
   Bell,
@@ -252,6 +253,21 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
       minimized: false, maximized: false, loading: true, desktopId: activeDesktop,
     }]);
     setActiveWindowId(id);
+
+    try {
+      logRecallActivity({
+        type: 'sparkos',
+        appName: 'SparkOS',
+        title: `SparkOS - ${name}`,
+        subtitle: `Cửa sổ đa nhiệm Desktop: ${name}`,
+        durationText: 'You spent < 1m on this activity recently',
+        badgeText: `SparkOS: ${name}`,
+        thumbnail: '/sparkos-wallpaper.png',
+        route: `/sparkos`,
+        searchKeywords: `sparkos desktop window ${name}`.toLowerCase()
+      });
+    } catch {}
+
     const splashTimer = window.setTimeout(() => {
       setWindows((current) => current.map((appWindow) => appWindow.id === id ? { ...appWindow, loading: false } : appWindow));
       splashTimersRef.current.delete(id);

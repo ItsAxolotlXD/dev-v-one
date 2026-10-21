@@ -2,6 +2,7 @@ import { useSyncExternalStore } from 'react';
 import { CustomKeybinds } from '../types';
 import { DEFAULT_KEYBINDS } from '../utils/keybinds';
 import { keyboardSound } from '../utils/keyboardSound';
+import { logRecallActivity } from '../services/recallService';
 
 export type SearchIconTreatment = 'default' | 'flipped' | 'sparkle' | 'globe';
 
@@ -471,6 +472,20 @@ export const updateMultipleSettings = (newSettings: Partial<SystemSettings>) => 
     }
   });
   notifyDraftListeners();
+
+  try {
+    logRecallActivity({
+      type: 'settings',
+      appName: 'Settings',
+      title: 'Tùy chỉnh hệ thống & Giao diện',
+      subtitle: `Chủ đề: ${settingsStore.theme === 'light' ? 'Sáng' : 'Tối'} • Cỡ chữ mức ${settingsStore.fontScale}`,
+      durationText: 'You spent < 1m on this activity recently',
+      badgeText: 'Settings',
+      thumbnail: '/banners/vplay_background.webp',
+      route: '/settings',
+      searchKeywords: 'settings cai dat tuy chinh he thong theme giao dien'
+    });
+  } catch {}
 };
 
 export const useSettings = () => {

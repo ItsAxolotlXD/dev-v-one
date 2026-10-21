@@ -19,9 +19,7 @@ import { NativeKeyboardProvider } from './context/NativeKeyboardContext';
 import { NotesProvider } from './context/NotesContext';
 import { StickyNoteWidget } from './components/StickyNoteWidget';
 import { GlobalContextMenu } from './components/GlobalContextMenu';
-import { Home } from './pages/Home';
 import { XAMLHome } from './pages/XAMLHome';
-import { XAMLSettings } from './pages/XAMLSettings';
 import { XAMLControls } from './pages/XAMLControls';
 import { LiveTV } from './pages/LiveTV';
 import { TestChannels } from './pages/TestChannels';
@@ -57,9 +55,11 @@ import { Calculator } from './pages/Calculator';
 import { SnippingTool } from './pages/SnippingTool';
 import { FeedbackHub } from './pages/FeedbackHub';
 import { MicrosoftStore } from './pages/MicrosoftStore';
+import { RecallApp } from './pages/RecallApp';
 import { SparkOS } from './pages/SparkOS';
 import { SparkOSSettings } from './pages/SparkOSSettings';
 import { getStoreAppForRoute } from './data/storeApps';
+import { logRecallActivity } from './services/recallService';
 import { ProductivityTab } from './pages/ProductivityTabs';
 import { SpinningRing } from './components/SpinningRing';
 import { CHANNELS_DATA } from './data/channels';
@@ -121,7 +121,7 @@ export default function App() {
     }
   }, []);
   const [routeState, setRouteState] = useState<any>(null);
-  const isSettingsRoute = currentRoute === '/settings' || currentRoute === '/xaml-settings';
+  const isSettingsRoute = currentRoute === '/settings';
   const previousRouteRef = useRef<string>('/');
   // Tab-specific search state for Floating Search Bar
   const [tabSearchQueries, setTabSearchQueries] = useState<Record<string, string>>({});
@@ -166,11 +166,23 @@ export default function App() {
     return CHANNELS_DATA[0];
   });
 
-  // Track recent channel in localStorage
+  // Track recent channel in localStorage & log to Recall
   useEffect(() => {
     if (currentChannel?.id) {
       try {
         localStorage.setItem('vplay_recent_channel_id', currentChannel.id);
+        logRecallActivity({
+          type: 'livetv',
+          appName: 'Live TV',
+          appId: 'live-tv',
+          title: `${currentChannel.name} - ${currentChannel.currentProgram || 'Trực tiếp'}`,
+          subtitle: currentChannel.description || 'Xem kênh truyền hình trực tiếp',
+          durationText: 'You spent < 1m on this activity recently',
+          badgeText: `${currentChannel.shortName || currentChannel.name} - Live TV`,
+          thumbnail: currentChannel.logo || '/banners/thoi_su_19h_hd.webp',
+          route: `/live-tv?channel=${currentChannel.slug}`,
+          searchKeywords: `${currentChannel.name} ${currentChannel.slug} live tv truyen hinh`.toLowerCase()
+        });
       } catch {}
     }
   }, [currentChannel]);
@@ -310,6 +322,38 @@ export default function App() {
       setCurrentRoute(targetRoute);
     }
 
+    // Automatically log activity to Recall (excluding recall itself)
+    if (targetRoute && targetRoute !== '/recall') {
+      const routeTypeMap: Record<string, { type: 'tab' | 'sparkos' | 'notes' | 'paint' | 'ink' | 'gallery' | 'settings' | 'search' | 'article'; name: string; badge: string }> = {
+        '/store': { type: 'tab', name: 'Microsoft Store', badge: 'Microsoft Store' },
+        '/sparkos': { type: 'sparkos', name: 'SparkOS', badge: 'SparkOS Session' },
+        '/notes': { type: 'notes', name: 'Notes', badge: 'Sticky Notes' },
+        '/write': { type: 'notes', name: 'Notes', badge: 'Sticky Notes' },
+        '/ms-paint': { type: 'paint', name: 'Paint', badge: 'Untitled - Paint' },
+        '/paint': { type: 'paint', name: 'Paint', badge: 'Untitled - Paint' },
+        '/ink-space': { type: 'ink', name: 'Ink Canvas', badge: 'Ink Canvas' },
+        '/photos': { type: 'gallery', name: 'Gallery', badge: 'Gallery - Photos' },
+        '/camera': { type: 'gallery', name: 'Camera', badge: 'Camera' },
+        '/mail': { type: 'tab', name: 'Outlook', badge: 'Mail - Outlook' },
+        '/calendar': { type: 'tab', name: 'Calendar', badge: 'Calendar' },
+        '/settings': { type: 'settings', name: 'Settings', badge: 'Settings' },
+        '/search': { type: 'search', name: 'Search', badge: 'Spotlight Search' },
+        '/news': { type: 'article', name: 'Articles', badge: 'Articles & News' },
+      };
+      const info = routeTypeMap[targetRoute];
+      if (info) {
+        logRecallActivity({
+          type: info.type,
+          appName: info.name,
+          title: `${info.name} Workspace`,
+          subtitle: `Accessed ${info.name}`,
+          durationText: 'You spent < 1m on this activity recently',
+          badgeText: info.badge,
+          route: targetPath,
+        });
+      }
+    }
+
     window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
   }, [channels, currentRoute, installedApps]);
 
@@ -338,7 +382,7 @@ export default function App() {
   const navigate = useCallback((path: string, state?: any) => {
     // If currently on settings and there are unsaved changes, prompt before leaving
     if (isSettingsRoute && hasChanges) {
-      const isStillSettings = path === '/settings' || path === '/xaml-settings' || path.startsWith('/settings?') || path.startsWith('/settings#') || path.startsWith('/xaml-settings?') || path.startsWith('/xaml-settings#');
+      const isStillSettings = path === '/settings' || path.startsWith('/settings?') || path.startsWith('/settings#');
       if (!isStillSettings) {
         setPendingNavigation({ path, state });
         setIsUnsavedSettingsModalOpen(true);
@@ -520,33 +564,12 @@ export default function App() {
 
       case '/':
       case '/home':
-        return (
-          <Home
-            navigate={navigate}
-            onSelectChannel={setCurrentChannel}
-            channels={channels}
-            searchQuery={currentTabSearchQuery}
-            onSearchChange={handleTabSearchChange}
-            onOpenSpotlight={() => setIsSpotlightOpen(true)}
-          />
-        );
-
       case '/xaml-home':
         return (
-            <XAMLHome
+          <XAMLHome
             onSelectChannel={setCurrentChannel}
             onNavigate={navigate}
             channels={channels}
-          />
-        );
-
-      case '/xaml-settings':
-        return (
-          <XAMLSettings
-            searchQuery={currentTabSearchQuery}
-            onSearchChange={handleTabSearchChange}
-            onOpenUpdate={() => setIsUpdating(true)}
-            onOpenOfficeTool={handleOpenOfficeTool}
           />
         );
 
@@ -618,12 +641,10 @@ export default function App() {
 
       case '/about':
         return (
-          <Home
-            navigate={navigate}
+          <XAMLHome
             onSelectChannel={setCurrentChannel}
+            onNavigate={navigate}
             channels={channels}
-            searchQuery={currentTabSearchQuery}
-            onSearchChange={handleTabSearchChange}
           />
         );
 
@@ -770,14 +791,17 @@ export default function App() {
           />
         );
 
+      case '/recall':
+        return <RecallApp navigate={navigate} />;
+
       case '/updates':
         return <Updates navigate={navigate} onOpenUpdate={() => setIsUpdating(true)} />;
 
       default:
         return (
-          <Home
-            navigate={navigate}
+          <XAMLHome
             onSelectChannel={setCurrentChannel}
+            onNavigate={navigate}
             channels={channels}
           />
         );
@@ -789,6 +813,8 @@ export default function App() {
   const isOfficeRoute = currentRoute === '/notes' || currentRoute === '/write';
   const isFullBleedRoute =
     isSparkOSRoute ||
+    currentRoute === '/recall' ||
+    currentRoute.startsWith('/recall') ||
     currentRoute === '/store' ||
     isOfficeRoute ||
     currentRoute === '/mail' ||

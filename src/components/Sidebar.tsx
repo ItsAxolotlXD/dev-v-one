@@ -62,7 +62,8 @@ import {
   FluentMinecraftWikiIcon,
   FluentCalculatorIcon,
   FluentSnippingToolIcon,
-  FluentFeedbackHubIcon
+  FluentFeedbackHubIcon,
+  FluentRecallIcon
 } from './FluentIcons';
 
 import { useFavorites } from '../hooks/useFavorites';
@@ -288,53 +289,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const [isDiscordModalOpen, setIsDiscordModalOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isToolsFlyoutOpen, setIsToolsFlyoutOpen] = useState(false);
-  const [isSignInFlyoutOpen, setIsSignInFlyoutOpen] = useState(false);
-  const [isSignInUnderConstructionOpen, setIsSignInUnderConstructionOpen] = useState(false);
-  const [signedInAccount, setSignedInAccount] = useState<string | null>(null);
-  const [signInToast, setSignInToast] = useState<string | null>(null);
-
-  const toggleSignInFlyout = () => {
-    setIsSignInFlyoutOpen((prev) => !prev);
-    if (isToolsFlyoutOpen) setIsToolsFlyoutOpen(false);
-  };
 
   const toggleToolsFlyout = () => {
     setIsToolsFlyoutOpen((prev) => !prev);
-    if (isSignInFlyoutOpen) setIsSignInFlyoutOpen(false);
   };
-
-  const handleSignInAction = (provider: string) => {
-    setIsSignInFlyoutOpen(false);
-    if (provider === 'Sign out') {
-      setSignedInAccount(null);
-      setSignInToast('Signed out of account');
-      return;
-    }
-    // Any sign in attempt opens the under construction dialog
-    setIsSignInUnderConstructionOpen(true);
-  };
-
-  useEffect(() => {
-    if (!signInToast) return;
-    const timer = setTimeout(() => setSignInToast(null), 3000);
-    return () => clearTimeout(timer);
-  }, [signInToast]);
 
   // Close flyouts when clicking outside
   useEffect(() => {
-    if (!isToolsFlyoutOpen && !isSignInFlyoutOpen) return;
+    if (!isToolsFlyoutOpen) return;
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement | null;
       if (isToolsFlyoutOpen && target && !target.closest('.tools-flyout-container')) {
         setIsToolsFlyoutOpen(false);
       }
-      if (isSignInFlyoutOpen && target && !target.closest('.signin-flyout-container') && !target.closest('.signin-toggle-btn')) {
-        setIsSignInFlyoutOpen(false);
-      }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isToolsFlyoutOpen, isSignInFlyoutOpen]);
+  }, [isToolsFlyoutOpen]);
 
   // Touch swipe to close mobile drawer
   const drawerTouchStartX = useRef<number | null>(null);
@@ -566,7 +537,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   }, [settings.developerMode]);
 
   const isCurrentActive = (route: string) => {
-    if (route === '/' && (currentRoute === '/' || currentRoute === '/home')) return true;
+    if ((route === '/' || route === '/xaml-home') && (currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home')) return true;
     if (route === '/copilot' && (currentRoute === '/copilot' || currentRoute.startsWith('/copilot'))) return true;
     if (route === '/news' && (currentRoute === '/news' || currentRoute.startsWith('/article') || currentRoute.startsWith('/news/'))) return true;
     if (route === '/updates' && (currentRoute === '/updates' || currentRoute.startsWith('/updates'))) return true;
@@ -586,8 +557,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     if ((route === '/friends' || route === '/ban-be') && (currentRoute === '/friends' || currentRoute.startsWith('/friends') || currentRoute === '/ban-be')) return true;
     if ((route === '/logos-fandom' || route === '/logos-wiki' || route === '/fandom') && (currentRoute === '/logos-fandom' || currentRoute.startsWith('/logos-fandom') || currentRoute === '/logos-wiki' || currentRoute === '/fandom')) return true;
     if ((route === '/minecraft-wiki' || route === '/mc-wiki' || route === '/wiki') && (currentRoute === '/minecraft-wiki' || currentRoute.startsWith('/minecraft-wiki') || currentRoute === '/mc-wiki' || currentRoute === '/wiki')) return true;
+    if ((route === '/feedback' || route === '/feedback-hub') && (currentRoute === '/feedback' || currentRoute === '/feedback-hub' || currentRoute.startsWith('/feedback'))) return true;
     if (route === '/settings' && (currentRoute === '/settings' || currentRoute.startsWith('/settings'))) return true;
-  if (route === '/pc-settings' && (currentRoute === '/pc-settings' || currentRoute.startsWith('/pc-settings'))) return true;
     if (route === '/about' && (currentRoute === '/about' || currentRoute.startsWith('/about'))) return true;
     if (route !== '/' && currentRoute.startsWith(route)) return true;
     return false;
@@ -790,138 +761,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     );
   };
 
-  // Render Flyout Menu for Sign in with distinct pure slide-up animation and acrylic blur
-  const renderSignInFlyout = (isCollapsedMode = false) => {
-    return (
-      <motion.div
-        key="signin-flyout-panel"
-        initial={settings.windowsAppSdkPreview ? false : { opacity: 0, y: 26 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={settings.windowsAppSdkPreview ? undefined : { opacity: 0, y: 18 }}
-        transition={settings.windowsAppSdkPreview ? { duration: 0 } : { duration: 0.44, ease: [0.16, 1, 0.3, 1] }}
-        className={`context-menu signin-flyout-panel signin-flyout-container absolute z-50 w-[264px] ${
-          settings.windowsAppSdkPreview
-            ? '!bg-[#2b2b2b] text-[#f3f3f3] !border-0 !border-none !backdrop-blur-none shadow-[0_8px_24px_rgba(0,0,0,0.5)]'
-            : 'bg-white/70 dark:bg-[#1c1c1c]/70 backdrop-blur-3xl backdrop-saturate-150 border border-black/10 dark:border-white/10 shadow-[0_16px_48px_rgba(0,0,0,0.22),0_2px_8px_rgba(0,0,0,0.08)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.7),0_2px_8px_rgba(255,255,255,0.04)]'
-        } rounded-[10px] p-1.5 space-y-0.5 text-[#111827] dark:text-white select-none ${
-          isCollapsedMode
-            ? settings.sidebarPosition === 'right'
-              ? 'right-[54px] bottom-0'
-              : 'left-[54px] bottom-0'
-            : 'bottom-full mb-2 left-0 right-0 sm:left-0 sm:right-auto sm:w-[264px]'
-        }`}
-        style={settings.windowsAppSdkPreview ? {
-          backgroundColor: '#2b2b2b',
-          border: 'none',
-          backdropFilter: 'none',
-          WebkitBackdropFilter: 'none',
-          boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
-        } : {
-          backdropFilter: 'blur(32px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(32px) saturate(180%)',
-          boxShadow: '0 16px 40px rgba(0,0,0,0.25), 0 2px 8px rgba(0,0,0,0.1)',
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Signed in status header */}
-        {signedInAccount && (
-          <div className="px-3 py-2 mb-1 rounded-[6px] bg-black/[0.04] dark:bg-white/[0.04] border-0 border-none flex items-center justify-between">
-            <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-6 h-6 rounded-full bg-[#0078d4]/15 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff] flex items-center justify-center text-xs font-bold shrink-0 border border-[#0078d4]/30 dark:border-[#4cc2ff]/30">
-                {signedInAccount[0]}
-              </div>
-              <div className="min-w-0 truncate">
-                <div className="text-[12px] font-medium text-[#111827] dark:text-white truncate">{signedInAccount}</div>
-                <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">Active account</div>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={() => handleSignInAction('Sign out')}
-              className="text-[11px] text-neutral-500 hover:text-rose-500 hover:underline px-1.5 py-0.5 rounded cursor-pointer transition-colors"
-            >
-              Sign out
-            </button>
-          </div>
-        )}
 
-        {/* 1. Sign in with Sparkle (Dev) */}
-        <button
-          type="button"
-          onClick={() => handleSignInAction('Sparkle (Dev)')}
-          className="w-full h-[40px] px-3 rounded-[6px] flex items-center gap-3 text-[13px] text-[#111827] dark:text-white hover:bg-black/[0.05] dark:hover:bg-white/[0.08] active:bg-black/[0.08] dark:active:bg-white/[0.12] transition-colors cursor-pointer text-left"
-        >
-          <div className="w-5 h-5 rounded-[5px] bg-gradient-to-br from-[#0078d4] to-[#4cc2ff] flex items-center justify-center shrink-0 border border-[#4cc2ff]/40 shadow-xs">
-            <span className="text-white font-black text-xs leading-none">S</span>
-          </div>
-          <span className="font-medium truncate">Sign in with Sparkle (Dev)</span>
-        </button>
-
-        {/* 2. Sign in with Apple */}
-        <button
-          type="button"
-          onClick={() => handleSignInAction('Apple')}
-          className="w-full h-[40px] px-3 rounded-[6px] flex items-center gap-3 text-[13px] text-[#111827] dark:text-white hover:bg-black/[0.05] dark:hover:bg-white/[0.08] active:bg-black/[0.08] dark:active:bg-white/[0.12] transition-colors cursor-pointer text-left"
-        >
-          <div className="w-5 h-5 flex items-center justify-center shrink-0">
-            <svg className="w-4 h-4 fill-current text-[#111827] dark:text-white" viewBox="0 0 24 24">
-              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.62-.75 1.04-1.8 0.92-2.85-.9.04-1.99.6-2.63 1.35-.58.67-1.09 1.74-.96 2.77 1 .08 2.05-.52 2.67-1.27z"/>
-            </svg>
-          </div>
-          <span className="font-medium truncate">Sign in with Apple</span>
-        </button>
-
-        {/* 3. Sign in with Google */}
-        <button
-          type="button"
-          onClick={() => handleSignInAction('Google')}
-          className="w-full h-[40px] px-3 rounded-[6px] flex items-center gap-3 text-[13px] text-[#111827] dark:text-white hover:bg-black/[0.05] dark:hover:bg-white/[0.08] active:bg-black/[0.08] dark:active:bg-white/[0.12] transition-colors cursor-pointer text-left"
-        >
-          <div className="w-5 h-5 flex items-center justify-center shrink-0">
-            <svg className="w-4 h-4" viewBox="0 0 24 24">
-              <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
-              <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
-              <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
-              <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
-            </svg>
-          </div>
-          <span className="font-medium truncate">Sign in with Google</span>
-        </button>
-
-        {/* 4. Sign in with Microsoft */}
-        <button
-          type="button"
-          onClick={() => handleSignInAction('Microsoft')}
-          className="w-full h-[40px] px-3 rounded-[6px] flex items-center gap-3 text-[13px] text-[#111827] dark:text-white hover:bg-black/[0.05] dark:hover:bg-white/[0.08] active:bg-black/[0.08] dark:active:bg-white/[0.12] transition-colors cursor-pointer text-left"
-        >
-          <div className="w-5 h-5 flex items-center justify-center shrink-0">
-            <svg className="w-4 h-4" viewBox="0 0 24 24">
-              <rect x="1" y="1" width="10" height="10" fill="#F25022"/>
-              <rect x="13" y="1" width="10" height="10" fill="#7FBA00"/>
-              <rect x="1" y="13" width="10" height="10" fill="#00A4EF"/>
-              <rect x="13" y="13" width="10" height="10" fill="#FFB900"/>
-            </svg>
-          </div>
-          <span className="font-medium truncate">Sign in with Microsoft</span>
-        </button>
-
-        {/* Divider */}
-        <div className="my-1.5 mx-1 h-[1px] bg-black/[0.08] dark:bg-white/[0.08]" />
-
-        {/* 5. Continue without account */}
-        <button
-          type="button"
-          onClick={() => handleSignInAction('Guest')}
-          className="w-full h-[40px] px-3 rounded-[6px] flex items-center gap-3 text-[13px] text-neutral-600 dark:text-neutral-300 hover:text-black dark:hover:text-white hover:bg-black/[0.05] dark:hover:bg-white/[0.08] active:bg-black/[0.08] dark:active:bg-white/[0.12] transition-colors cursor-pointer text-left"
-        >
-          <div className="w-5 h-5 flex items-center justify-center shrink-0">
-            <FluentPersonDeleteIcon className="w-4 h-4 text-neutral-500 dark:text-neutral-400 shrink-0" />
-          </div>
-          <span className="font-normal truncate">Continue without account</span>
-        </button>
-      </motion.div>
-    );
-  };
 
   // Render Full Windows 10 Settings Style Sidebar Content
   const renderSidebarBody = (isMobile: boolean = false) => {
@@ -992,39 +832,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <MorphingVerticalIndicator
             containerRef={containerRef}
             currentRoute={currentRoute}
-            dependencyKey={`${navItems.length}-${isLiveTvExpanded}-${currentRoute}-pc-settings`}
+            dependencyKey={`${navItems.length}-${isLiveTvExpanded}-${currentRoute}`}
             isWebViewSdk={settings.windowsAppSdkPreview}
           />
 
-          {/* 1. Home */}
-          <div className="shrink-0">
-            <button
-              type="button"
-              id={isMobile ? 'mobile-nav-home' : 'sidebar-nav-home'}
-              data-nav-active={currentRoute === '/' ? 'true' : undefined}
-              onClick={() => handleNavClick('/')}
-              title="Home"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
-                currentRoute === '/'
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
-                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-              }`}
-            >
-              <AppTabIcon name="home" className="w-5 h-5 shrink-0 text-black dark:text-white" />
-              <span className="truncate text-[13.5px]">Home</span>
-            </button>
-          </div>
-
-          {/* 2. XAML Home */}
+          {/* XAML Home */}
           <div className="shrink-0">
             <button
               type="button"
               id={isMobile ? 'mobile-nav-xaml-home' : 'sidebar-nav-xaml-home'}
-              data-nav-active={currentRoute === '/xaml-home' ? 'true' : undefined}
-              onClick={() => handleNavClick('/xaml-home')}
+              data-nav-active={(currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home') ? 'true' : undefined}
+              onClick={() => handleNavClick('/')}
               title="XAML Home"
               className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
-                currentRoute === '/xaml-home'
+                (currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home')
                   ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
@@ -1118,6 +939,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               <Monitor aria-hidden="true" className="size-5 shrink-0 text-[#1684e8]" />
               <span className="truncate text-[13.5px]">SparkOS</span>
+            </button>
+          </div>
+
+          {/* Recall (preview) */}
+          <div className="shrink-0">
+            <button
+              type="button"
+              id={isMobile ? 'mobile-nav-recall' : 'sidebar-nav-recall'}
+              data-nav-active={(currentRoute === '/recall' || currentRoute.startsWith('/recall')) ? 'true' : undefined}
+              onClick={() => handleNavClick('/recall')}
+              title="Recall (preview)"
+              aria-label="Recall"
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                (currentRoute === '/recall' || currentRoute.startsWith('/recall'))
+                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+              }`}
+            >
+              <FluentRecallIcon className="w-5 h-5 shrink-0" />
+              <span className="truncate text-[13.5px]">Recall</span>
             </button>
           </div>
 
@@ -1666,66 +1507,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* Bottom Section: Sign In (placed directly above Settings) & Settings */}
         <div className="px-2.5 py-2 shrink-0 mt-auto space-y-1 relative signin-flyout-container">
           {/* Sign In item placed directly ABOVE Settings tab */}
-          <div className="relative">
+          {/* Give Feedback item placed directly above Settings */}
+          <div>
             <button
               type="button"
-              id={isMobile ? 'mobile-nav-signin' : 'sidebar-nav-signin'}
-              onClick={toggleSignInFlyout}
-              title="Sign in"
-              className={`sidebar-nav-item signin-toggle-btn w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
-                isSignInFlyoutOpen
-                  ? 'bg-black/10 dark:bg-white/[0.12] text-black dark:text-white font-medium shadow-xs'
+              id={isMobile ? 'mobile-nav-feedback' : 'sidebar-nav-feedback'}
+              data-nav-active={isCurrentActive('/feedback') ? 'true' : undefined}
+              onClick={() => handleNavClick('/feedback')}
+              title="Give Feedback"
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                isCurrentActive('/feedback')
+                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <div className="flex items-center gap-3.5 truncate">
-                <FluentUserIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
-                <span className="truncate text-[13.5px]">
-                  {signedInAccount ? signedInAccount : 'Sign in'}
-                </span>
-              </div>
-              <ChevronRight className={`w-3.5 h-3.5 text-neutral-500 dark:text-neutral-400 transition-transform ${isSignInFlyoutOpen ? 'rotate-90' : ''}`} />
+              <FluentFeedbackHubIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+              <span className="truncate text-[13.5px]">Give Feedback</span>
             </button>
-
-            {/* Render Flyout Menu for Sign in */}
-            <AnimatePresence>
-              {isSignInFlyoutOpen && renderSignInFlyout(false)}
-            </AnimatePresence>
           </div>
 
-          {/* XAML navigation */}
-          <button
-            type="button"
-            id={isMobile ? 'mobile-nav-xaml-home' : 'sidebar-nav-xaml-home'}
-            data-nav-active={isCurrentActive('/xaml-home') ? 'true' : undefined}
-            onClick={() => handleNavClick('/xaml-home')}
-            title="XAML Home"
-            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
-              isCurrentActive('/xaml-home')
-                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
-                : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-            }`}
-          >
-            <FluentHomeIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
-            <span className="truncate text-[13.5px]">XAML Home</span>
-          </button>
-
-          <button
-            type="button"
-            id={isMobile ? 'mobile-nav-xaml-settings' : 'sidebar-nav-xaml-settings'}
-            data-nav-active={isCurrentActive('/xaml-settings') ? 'true' : undefined}
-            onClick={() => handleNavClick('/xaml-settings')}
-            title="XAML Settings"
-            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
-              isCurrentActive('/xaml-settings')
-                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
-                : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-            }`}
-          >
-            <FluentSettingsIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
-            <span className="truncate text-[13.5px]">XAML Settings</span>
-          </button>
-
+          {/* XAML Controls */}
           <button
             type="button"
             id={isMobile ? 'mobile-nav-xaml-controls' : 'sidebar-nav-xaml-controls'}
@@ -1742,23 +1543,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <span className="truncate text-[13.5px]">XAML Controls</span>
           </button>
 
-          {/* Bottom Settings Tab Items */}
-          <button
-            type="button"
-            id={isMobile ? 'mobile-nav-pc-settings' : 'sidebar-nav-pc-settings'}
-            data-nav-active={isCurrentActive('/pc-settings') ? 'true' : undefined}
-            onClick={() => handleNavClick('/pc-settings')}
-            title="PC Settings"
-            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
-              isCurrentActive('/pc-settings')
-                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
-                : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-            }`}
-          >
-            <AppTabIcon name="settings" className="w-5 h-5 shrink-0 settings-spin-icon text-black dark:text-white" />
-            <span className="truncate text-[13.5px]">PC Settings</span>
-          </button>
-
+          {/* Bottom Settings Tab Item */}
           <button
             type="button"
             id={isMobile ? 'mobile-nav-settings' : 'sidebar-nav-settings'}
@@ -1845,15 +1630,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <Menu className="w-5 h-5 stroke-[1.75] text-black dark:text-white" />
               </button>
 
-              {/* Home Icon */}
+              {/* XAML Home Icon */}
               <button
                 type="button"
-                id="sidebar-collapsed-home"
-                data-nav-active={currentRoute === '/' ? 'true' : undefined}
+                id="sidebar-collapsed-xaml-home"
+                data-nav-active={(currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home') ? 'true' : undefined}
                 onClick={() => handleNavClick('/')}
-                title="Home"
+                title="XAML Home"
                 className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  currentRoute === '/'
+                  (currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home')
                     ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
                     : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                 }`}
@@ -1948,6 +1733,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${currentRoute === '/sparkos' ? 'bg-black/5 dark:bg-white/[0.08] shadow-xs' : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'}`}
               >
                 <Monitor aria-hidden="true" className="size-5 text-[#1684e8]" />
+              </button>
+
+              <button
+                type="button"
+                id="sidebar-collapsed-recall"
+                data-nav-active={(currentRoute === '/recall' || currentRoute.startsWith('/recall')) ? 'true' : undefined}
+                onClick={() => handleNavClick('/recall')}
+                title="Recall (preview)"
+                aria-label="Recall"
+                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  (currentRoute === '/recall' || currentRoute.startsWith('/recall'))
+                    ? 'bg-black/5 dark:bg-white/[0.08] shadow-xs'
+                    : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'
+                }`}
+              >
+                <FluentRecallIcon className="w-5 h-5" />
               </button>
 
               {/* Divider: Social */}
@@ -2317,61 +2118,27 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 </svg>
               </button>
 
-              {/* Bottom Sign In & Settings Icons */}
-              <div className="mt-auto pt-2 space-y-1 relative signin-flyout-container">
-                {/* Sign In Collapsed Button placed directly above Settings */}
-                <div className="relative">
+              {/* Bottom Give Feedback & Settings Icons */}
+              <div className="mt-auto pt-2 space-y-1 relative">
+                {/* Give Feedback Collapsed Button placed directly above Settings */}
+                <div>
                   <button
                     type="button"
-                    id="sidebar-collapsed-signin"
-                    onClick={toggleSignInFlyout}
-                    title="Sign in"
-                    className={`sidebar-nav-item signin-toggle-btn w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                      isSignInFlyoutOpen
-                        ? 'bg-black/10 dark:bg-white/[0.12] text-[#111827] dark:text-white shadow-xs'
+                    id="sidebar-collapsed-feedback"
+                    data-nav-active={isCurrentActive('/feedback') ? 'true' : undefined}
+                    onClick={() => handleNavClick('/feedback')}
+                    title="Give Feedback"
+                    className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                      isCurrentActive('/feedback')
+                        ? 'bg-black/5 dark:bg-white/[0.08] text-[#111827] dark:text-white shadow-xs'
                         : 'text-[#4b5563] dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-[#111827] dark:hover:text-white'
                     }`}
                   >
-                    <FluentUserIcon className="w-5 h-5 text-[#111827] dark:text-white" />
+                    <FluentFeedbackHubIcon className="w-5 h-5 text-[#111827] dark:text-white" />
                   </button>
-
-                  <AnimatePresence>
-                    {isSignInFlyoutOpen && renderSignInFlyout(true)}
-                  </AnimatePresence>
                 </div>
 
-                {/* Collapsed XAML navigation */}
-                <button
-                  type="button"
-                  id="sidebar-collapsed-xaml-home"
-                  data-nav-active={isCurrentActive('/xaml-home') ? 'true' : undefined}
-                  onClick={() => handleNavClick('/xaml-home')}
-                  title="XAML Home"
-                  className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                    isCurrentActive('/xaml-home')
-                      ? 'bg-black/5 dark:bg-white/[0.08] text-[#111827] dark:text-white shadow-xs'
-                      : 'text-[#4b5563] dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-[#111827] dark:hover:text-white'
-                  }`}
-                >
-                  <FluentHomeIcon className="w-5 h-5 text-[#111827] dark:text-white" />
-                </button>
-
-                <button
-                  type="button"
-                  id="sidebar-collapsed-xaml-settings"
-                  data-nav-active={isCurrentActive('/xaml-settings') ? 'true' : undefined}
-                  onClick={() => handleNavClick('/xaml-settings')}
-                  title="XAML Settings"
-                  className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                    isCurrentActive('/xaml-settings')
-                      ? 'bg-black/5 dark:bg-white/[0.08] text-[#111827] dark:text-white shadow-xs'
-                      : 'text-[#4b5563] dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-[#111827] dark:hover:text-white'
-                  }`}
-                >
-                  <FluentSettingsIcon className="w-5 h-5 text-[#111827] dark:text-white" />
-                </button>
-
-                {/* Bottom Settings Icon */}
+                {/* XAML Controls Icon */}
                 <button
                   type="button"
                   id="sidebar-collapsed-xaml-controls"
@@ -2472,29 +2239,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         onClose={() => setIsDiscordModalOpen(false)}
       />
 
-      {/* Under Construction Modal for Sign In attempts */}
-      <UnderConstructionModal
-        isOpen={isSignInUnderConstructionOpen}
-        onClose={() => setIsSignInUnderConstructionOpen(false)}
-        title="Under construction"
-        description="This feature is working in progress and might be available in future builds."
-        buttonText="Understood"
-      />
 
-      {/* Toast Feedback for Sign In Actions */}
-      <AnimatePresence>
-        {signInToast && (
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 16 }}
-            className="fixed bottom-5 left-1/2 -translate-x-1/2 sm:left-auto sm:right-6 sm:translate-x-0 z-[1000] px-4 py-2.5 rounded-[6px] bg-[#2d2d2d] border border-[#3e3e3e] shadow-2xl text-xs sm:text-sm text-white flex items-center gap-2.5 pointer-events-none"
-          >
-            <div className="w-2 h-2 rounded-full bg-[#4cc2ff] shrink-0" />
-            <span>{signInToast}</span>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </>
   );
 };

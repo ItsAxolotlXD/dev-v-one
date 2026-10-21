@@ -8,7 +8,10 @@ export const MAIL_TAB_ICON_URL = 'https://hebbkx1anhila5yf.public.blob.vercel-st
 export const CALENDAR_TAB_ICON_URL = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-EOTmadFpTcD8ViTHEiYhPMCbFvwgFn.png';
 export const STORE_ICON_URL = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-rwSh33P3L1Yzqgl0DKUj5mbVNzFKj1.png';
 
+export const RECALL_ICON_URL = 'https://www.elevenforum.com/data/attachments/117/117247-2045951e7534a61d1e4e53fb040edb01.jpg?hash=IEWVHnU0ph';
+
 export const APP_TAB_ICON_URLS = {
+  recall: RECALL_ICON_URL,
   mail: MAIL_TAB_ICON_URL,
   calendar: CALENDAR_TAB_ICON_URL,
   home: 'https://www.elevenforum.com/data/attachments/30/30188-c9f25938bd40f9c2e3af267cc96b3e28.jpg?hash=yfJZOL1A-c',
@@ -782,4 +785,39 @@ export const FluentFeedbackHubColorIcon: React.FC<{ className?: string; style?: 
     <path d="M8.5 12.5C9.8 14.5 14.2 14.5 15.5 12.5" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
   </svg>
 );
+
+export const FluentRecallIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => {
+  const [hasError, setHasError] = React.useState(false);
+  if (hasError) {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+        <rect x="2.5" y="2.5" width="19" height="19" rx="4" stroke="currentColor" strokeWidth="1.6" />
+        <circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="1.6" />
+        <path d="M12 9V12L14.5 13.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      </svg>
+    );
+  }
+  return (
+    <img
+      src={RECALL_ICON_URL}
+      alt="Recall"
+      aria-hidden="true"
+      referrerPolicy="no-referrer"
+      onError={() => setHasError(true)}
+      className={`shrink-0 object-contain ${className}`}
+      style={style}
+    />
+  );
+};
+
+export const FluentTimelineIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    {/* 3 distinct vertical scrubber lines like in Windows Recall timeline */}
+    <rect x="5" y="4" width="2" height="16" rx="1" fill="currentColor" />
+    <rect x="11" y="7" width="2" height="13" rx="1" fill="currentColor" />
+    <rect x="17" y="10" width="2" height="10" rx="1" fill="currentColor" />
+    <circle cx="12" cy="5" r="1.5" fill="currentColor" />
+  </svg>
+);
+
 

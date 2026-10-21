@@ -27,6 +27,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { FluentPaintIcon } from '../components/FluentIcons';
+import { logRecallActivity } from '../services/recallService';
 
 interface MSPaintProps {
   navigate?: (route: string) => void;
@@ -109,6 +110,21 @@ export const MSPaint: React.FC<MSPaintProps> = ({ navigate }) => {
     if (newHistory.length > 30) newHistory.shift();
     setHistory(newHistory);
     setHistoryIndex(newHistory.length - 1);
+
+    try {
+      const thumb = canvas.toDataURL('image/jpeg', 0.5);
+      logRecallActivity({
+        type: 'paint',
+        appName: 'Paint',
+        title: 'Untitled - Paint',
+        subtitle: 'Bản vẽ sáng tạo với bảng màu & cọ vẽ',
+        durationText: 'You spent < 1m on this activity recently',
+        badgeText: 'Untitled - Paint',
+        thumbnail: thumb,
+        route: '/ms-paint',
+        searchKeywords: 'paint canvas draw brush ms paint hinh ve'
+      });
+    } catch {}
   }, [history, historyIndex]);
 
   // Undo handler

@@ -113,6 +113,8 @@ export const getTabTitle = (route: string): string => {
       return 'Feedback Hub';
     case '/updates':
       return 'Updates';
+    case '/recall':
+      return 'Recall';
     case '/about':
       return 'About';
     case '/search':
@@ -127,6 +129,7 @@ export const getTabTitle = (route: string): string => {
 
 const getSearchPlaceholder = (path: string) => {
   if (path === '/' || path === '/home') return 'Search Home';
+  if (path === '/recall' || path.startsWith('/recall')) return 'Search your history';
   if (path === '/news' || path.startsWith('/article') || path.startsWith('/news/')) return 'Search news articles';
   if (path === '/updates' || path.startsWith('/updates/')) return 'Find new updates';
   if (path === '/widgets' || path.startsWith('/widgets/')) return 'Type here to search';
