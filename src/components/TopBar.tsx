@@ -483,7 +483,7 @@ export const TopBar: React.FC<TopBarProps> = ({
 
   return (
     <header className={`topbar-header w-full h-14 relative ${
-      settings.windowsAppSdkPreview ? '!bg-[#141414] !border-0 !border-b-0' : 'bg-[#f3f3f3] dark:bg-[#1b1f24]'
+      settings.windowsAppSdkPreview ? '!bg-[#141414] !border-0 !border-b-0' : 'app-global-background'
     } px-3 sm:px-6 md:px-8 flex items-center justify-between gap-3 sticky top-0 z-30 select-none`}>
       {/* 1. Left Section */}
       <div className="flex items-center gap-2 sm:gap-3 shrink-0 z-10">

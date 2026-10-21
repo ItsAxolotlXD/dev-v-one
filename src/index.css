@@ -122,14 +122,14 @@
   .app-global-background {
     background:
       radial-gradient(circle at 18% 18%, rgba(45, 53, 78, 0.62), transparent 42%),
-      linear-gradient(116deg, #252938 0%, #332c36 48%, #422d32 100%);
+      linear-gradient(116deg, #252938 0%, #332c36 48%, #422d32 100%) !important;
     color: #f5f3f6;
   }
 
   html.light-mode .app-global-background {
     background:
       radial-gradient(circle at 18% 18%, rgba(190, 213, 235, 0.9), transparent 42%),
-      linear-gradient(116deg, #dbe8f3 0%, #e9e0e4 52%, #f2dfe0 100%);
+      linear-gradient(116deg, #dbe8f3 0%, #e9e0e4 52%, #f2dfe0 100%) !important;
     color: #1f2937;
   }
 }

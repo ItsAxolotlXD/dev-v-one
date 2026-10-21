@@ -879,7 +879,7 @@ export default function App() {
         <div
         data-immersive-sidebar={settings.immersiveSidebar}
       data-sidebar-position={settings.sidebarPosition}
-      className={`min-h-screen ${settings.superDarkMode ? 'bg-black' : 'bg-[#f9f9f9] dark:bg-[#1b1f24]'} text-[#111827] dark:text-[#E0E0E6] flex font-sans selection:bg-[#4cc2ff] selection:text-black relative ${isSparkOSRoute ? '!h-[100dvh] !min-h-0 !overflow-hidden !bg-black' : ''}`}
+      className={`min-h-screen ${settings.superDarkMode ? 'bg-black' : 'app-global-background'} text-[#111827] dark:text-[#E0E0E6] flex font-sans selection:bg-[#4cc2ff] selection:text-black relative ${isSparkOSRoute ? '!h-[100dvh] !min-h-0 !overflow-hidden !bg-black' : ''}`}
     >
       {/* 5-second device cursor busy overlay before splash screen */}
       {crashPhase === 'cursor-busy' && (
@@ -934,7 +934,7 @@ export default function App() {
 
       {/* Main App Container */}
       <div className={`main-app-container flex-1 flex flex-col min-w-0 min-h-screen transition-[padding] duration-300 ease-in-out ${
-        settings.windowsAppSdkPreview ? 'bg-[#141414]' : 'bg-[#f3f3f3] dark:bg-[#1b1f24]'
+        settings.windowsAppSdkPreview ? 'bg-[#141414]' : 'app-global-background'
       } ${isSparkOSRoute ? '!h-full !min-h-0 !p-0 !bg-black !transition-none' : ''} ${
         settings.navigationMode === 'topbar'
           ? 'md:pl-0 md:pr-0 pb-10'

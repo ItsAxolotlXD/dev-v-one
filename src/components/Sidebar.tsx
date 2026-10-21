@@ -1807,12 +1807,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
           className={`hidden md:flex flex-col h-screen ${
             settings.windowsAppSdkPreview
               ? '!bg-[#141414] border-r border-[#202020]'
-              : 'bg-[#f3f3f3] dark:bg-[#1b1f24] border-r border-[#e5e5e5] dark:border-[#2e2e2e]'
+              : 'app-global-background border-r border-white/10'
           } text-[#111827] dark:text-white select-none shrink-0 fixed top-0 z-40 overflow-visible shadow-none ${
             settings.sidebarPosition === 'right' ? 'right-0' : 'left-0'
           } ${effectiveCollapsed ? 'w-[48px]' : 'w-[260px]'}`}
           style={{
-            backgroundColor: settings.windowsAppSdkPreview ? '#141414' : (settings.theme === 'light' ? '#f3f3f3' : '#1b1f24'),
+            backgroundColor: settings.windowsAppSdkPreview ? '#141414' : 'transparent',
             backdropFilter: 'none',
             WebkitBackdropFilter: 'none',
             boxShadow: 'none',
@@ -2477,10 +2477,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
               className={`relative w-[285px] max-w-[85vw] h-full ${
                 settings.windowsAppSdkPreview
                   ? '!bg-[#141414] border-r border-[#202020]'
-                  : 'bg-[#f3f3f3]/90 dark:bg-[#1b1f24]/90 border-r border-[#e5e5e5] dark:border-[#333333]'
+                  : 'app-global-background border-r border-white/10'
               } text-[#111827] dark:text-white shadow-none flex flex-col z-10 backdrop-blur-2xl`}
               style={{
-                backgroundColor: settings.windowsAppSdkPreview ? '#141414' : undefined,
+                backgroundColor: settings.windowsAppSdkPreview ? '#141414' : 'transparent',
                 backdropFilter: settings.windowsAppSdkPreview ? 'none' : 'blur(24px)',
                 WebkitBackdropFilter: settings.windowsAppSdkPreview ? 'none' : 'blur(24px)',
                 boxShadow: 'none',
