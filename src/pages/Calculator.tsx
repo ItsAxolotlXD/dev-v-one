@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { FluentCalculatorIcon, FluentCalculatorColorIcon } from '../components/FluentIcons';
 import { keyboardSound } from '../utils/keyboardSound';
+import { recordRecallActivity } from '../services/recallService';
 
 interface CalculatorProps {
   navigate?: (route: string) => void;
@@ -189,6 +190,7 @@ export const Calculator: React.FC<CalculatorProps> = ({ navigate }) => {
         timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
       };
       setHistory(prev => [newHistoryItem, ...prev.slice(0, 49)]);
+      void recordRecallActivity({ type: 'calculation', title: fullExpr, source: String(result), route: '/calculator', metadata: { expression: fullExpr, result } });
 
       setDisplayValue(String(result));
       setExpression(`${fullExpr} =`);

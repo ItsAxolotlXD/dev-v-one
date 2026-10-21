@@ -12,12 +12,13 @@ export type RecallActivity = {
 
 export async function recordRecallActivity(activity: Omit<RecallActivity, 'id' | 'createdAt'>) {
   try {
-    await fetch('/api/recall/activity', {
+    const response = await fetch('/api/recall/activity', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(activity),
       keepalive: true,
     });
+    if (response.ok) window.dispatchEvent(new Event('recall-activity-recorded'));
   } catch {
     // Activity logging must never interrupt the app flow.
   }

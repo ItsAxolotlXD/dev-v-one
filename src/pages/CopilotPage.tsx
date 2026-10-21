@@ -137,9 +137,9 @@ export const CopilotPage: React.FC<CopilotPageProps> = ({ navigate, embedded = f
 
   const handleSendMessage = async (textToSend?: string) => {
     if (!isCopilotRunning) return;
-    const message = (textToSend || inputVal).trim();
-    void recordRecallActivity({ type: 'copilot', title: 'Copilot chat', source: message.slice(0, 100), route: '/copilot' });
-    if (!message || isLoading) return;
+  const message = (textToSend || inputVal).trim();
+  if (!message || isLoading) return;
+  void recordRecallActivity({ type: 'copilot', title: 'Copilot chat', source: message.slice(0, 100), route: '/copilot' });
 
     const userMsg: ChatMessage = {
       id: `usr-${Date.now()}`,

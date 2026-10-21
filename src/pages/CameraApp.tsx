@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { FluentCameraIcon } from '../components/FluentIcons';
 import { MediaItem } from './PhotosApp';
+import { recordRecallActivity } from '../services/recallService';
 
 interface CameraAppProps {
   navigate?: (route: string) => void;
@@ -189,6 +190,7 @@ export const CameraApp: React.FC<CameraAppProps> = ({ navigate }) => {
     // Generate Data URL
     const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
     setRecentPhoto(dataUrl);
+    void recordRecallActivity({ type: 'photo-captured', title: 'Photo captured', source: 'Camera', route: '/camera', metadata: { filter: activeFilter, width, height } });
 
     // Save directly to localStorage `vone_photos_media` (Gallery storage)
     try {
@@ -407,7 +409,7 @@ export const CameraApp: React.FC<CameraAppProps> = ({ navigate }) => {
           { id: 'normal', name: 'Gốc' },
           { id: 'vivid', name: 'Rực rỡ' },
           { id: 'warm', name: 'Ấm áp' },
-          { id: 'cool', name: 'Tươi sáng' },
+          { id: 'cool', name: 'Tươi s��ng' },
           { id: 'bw', name: 'Đen trắng' },
           { id: 'vintage', name: 'Cổ điển' }
         ].map((f) => (
