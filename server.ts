@@ -183,6 +183,70 @@ app.get('/api/vnexpress-news', async (_req, res) => {
   }
 });
 
+// In-memory cache for National Today
+interface CachedHolidays {
+  timestamp: number;
+  data: Array<{ title: string; category?: string; url?: string }>;
+}
+let holidaysCache: CachedHolidays | null = null;
+const HOLIDAYS_CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes cache
+
+const FALLBACK_HOLIDAYS = [
+  { title: "National Nut Day", category: "Food & Beverage", url: "https://nationaltoday.com/national-nut-day/" },
+  { title: "INTERNATIONAL CAPS LOCK DAY", category: "Fun", url: "https://nationaltoday.com/international-caps-lock-day/" },
+  { title: "National Color Day", category: "Special Interest", url: "https://nationaltoday.com/national-color-day/" },
+  { title: "National Make a Dog’s Day", category: "Animals", url: "https://nationaltoday.com/national-make-a-dogs-day/" },
+  { title: "Smart is Cool Day", category: "Education", url: "https://nationaltoday.com/smart-is-cool-day/" },
+  { title: "International Stuttering Awareness Day", category: "Health", url: "https://nationaltoday.com/international-stuttering-awareness-day/" }
+];
+
+// Endpoint 1b: National Today Real-Time Highlights
+app.get('/api/national-today', async (_req, res) => {
+  try {
+    if (holidaysCache && Date.now() - holidaysCache.timestamp < HOLIDAYS_CACHE_TTL_MS) {
+      return res.json({ holidays: holidaysCache.data, cached: true });
+    }
+
+    const response = await fetch('https://nationaltoday.com/today/', {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`National Today HTTP ${response.status}`);
+    }
+
+    const html = await response.text();
+    const items: Array<{ title: string; category?: string; url?: string }> = [];
+    const regex = /<h3 class="card-holiday-title">([^<]+)<\/h3>/g;
+    let match;
+    while ((match = regex.exec(html)) !== null && items.length < 20) {
+      const title = match[1].trim();
+      if (title && !items.some(i => i.title.toLowerCase() === title.toLowerCase())) {
+        items.push({ title });
+      }
+    }
+
+    if (items.length > 0) {
+      holidaysCache = {
+        timestamp: Date.now(),
+        data: items
+      };
+      return res.json({ holidays: items, cached: false });
+    }
+
+    return res.json({ holidays: FALLBACK_HOLIDAYS, cached: false, fallback: true });
+  } catch (err: any) {
+    console.warn('[National Today] Error fetching feed:', err?.message);
+    if (holidaysCache && holidaysCache.data.length > 0) {
+      return res.json({ holidays: holidaysCache.data, cached: true });
+    }
+    return res.json({ holidays: FALLBACK_HOLIDAYS, cached: false, fallback: true });
+  }
+});
+
 // Endpoint 2: AI Copilot Chat & Search API
 app.post('/api/copilot', async (req, res) => {
   try {

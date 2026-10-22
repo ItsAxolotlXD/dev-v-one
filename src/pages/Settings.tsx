@@ -102,17 +102,14 @@ export const SEARCH_EXP_OPTIONS = [
   {
     value: 'right' as const,
     label: 'Move search to the right (default)',
-    desc: 'Icon search bên phải trên thanh search top bar'
   },
   {
     value: 'left' as const,
     label: 'Move search to the left',
-    desc: 'chuyển icon search sang trái trên thanh search top bar'
   },
   {
     value: 'hidden' as const,
     label: 'Hide search icon',
-    desc: 'ẩn icon search trên thanh search top bar'
   }
 ];
 
@@ -120,22 +117,41 @@ export const SEARCH_ICON_TREATMENT_OPTIONS = [
   {
     value: 'default' as const,
     label: 'Default',
-    desc: 'Icon tìm kiếm mặc định hệ thống'
   },
   {
     value: 'flipped' as const,
     label: 'Flipped',
-    desc: 'default icon but mirrored (lật đối xứng)'
   },
   {
     value: 'sparkle' as const,
     label: 'Sparkle',
-    desc: 'Icon tìm kiếm lấp lánh Sparkle'
   },
   {
     value: 'globe' as const,
     label: 'Globe',
-    desc: 'Icon tìm kiếm quả địa cầu Fluent Globe'
+  }
+];
+
+export const SEARCH_VISUAL_OPTIONS = [
+  {
+    value: 'treatment-1' as const,
+    label: 'Treatment 1: Search box (default)',
+  },
+  {
+    value: 'treatment-2' as const,
+    label: 'Treatment 2: Search button corner',
+  },
+  {
+    value: 'treatment-3' as const,
+    label: 'Treatment 3: Search button center',
+  },
+  {
+    value: 'treatment-4' as const,
+    label: 'Treatment 4: Search pill',
+  },
+  {
+    value: 'treatment-5' as const,
+    label: 'Treatment 5: Search highlights',
   }
 ];
 
@@ -192,8 +208,12 @@ export const Settings: React.FC<SettingsProps> = ({
   const [isSearchIconTreatmentDropdownOpen, setIsSearchIconTreatmentDropdownOpen] = useState(false);
   const searchIconTreatmentDropdownRef = useRef<HTMLDivElement>(null);
 
+  // Search visual experimental dropdown state
+  const [isSearchVisualDropdownOpen, setIsSearchVisualDropdownOpen] = useState(false);
+  const searchVisualDropdownRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    if (!isSearchExpDropdownOpen && !isSearchIconTreatmentDropdownOpen) return;
+    if (!isSearchExpDropdownOpen && !isSearchIconTreatmentDropdownOpen && !isSearchVisualDropdownOpen) return;
     const handleClickOutside = (e: MouseEvent) => {
       if (searchExpDropdownRef.current && !searchExpDropdownRef.current.contains(e.target as Node)) {
         setIsSearchExpDropdownOpen(false);
@@ -201,10 +221,13 @@ export const Settings: React.FC<SettingsProps> = ({
       if (searchIconTreatmentDropdownRef.current && !searchIconTreatmentDropdownRef.current.contains(e.target as Node)) {
         setIsSearchIconTreatmentDropdownOpen(false);
       }
+      if (searchVisualDropdownRef.current && !searchVisualDropdownRef.current.contains(e.target as Node)) {
+        setIsSearchVisualDropdownOpen(false);
+      }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isSearchExpDropdownOpen, isSearchIconTreatmentDropdownOpen]);
+  }, [isSearchExpDropdownOpen, isSearchIconTreatmentDropdownOpen, isSearchVisualDropdownOpen]);
 
   const shouldAnimateMotion = !draftSettings.reduceAllMotion && draftSettings.animatePageTransitions;
 
@@ -362,9 +385,6 @@ export const Settings: React.FC<SettingsProps> = ({
               </button>
             )}
           </div>
-          <p className="text-xs sm:text-sm text-[#9CA3AF]">
-            Customize your Sparkle (Dev) streaming and display experience.
-          </p>
 
           {/* Search Header - Styled and laid out exactly like TopBar search bar */}
           <div className="pt-2">
@@ -480,9 +500,6 @@ export const Settings: React.FC<SettingsProps> = ({
                 <h1 className="text-lg sm:text-xl font-bold font-square text-[#111827] dark:text-white tracking-tight leading-tight">
                   {activeCatObj.title}
                 </h1>
-                <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 truncate">
-                  {activeCatObj.subtitle}
-                </p>
               </div>
             </div>
           )}
@@ -527,7 +544,6 @@ export const Settings: React.FC<SettingsProps> = ({
                       </div>
                       <div>
                         <div className="text-sm font-semibold text-[#111827] dark:text-white">{cat.title}</div>
-                        <div className="text-xs text-[#9CA3AF]">{cat.subtitle}</div>
                       </div>
                     </div>
                     <ChevronRight className="w-4 h-4 text-[#8E8E93]" />
@@ -632,9 +648,6 @@ export const Settings: React.FC<SettingsProps> = ({
                   <div className="font-bold text-[#111827] dark:text-white text-xs sm:text-sm">
                     Test Sparkle (Dev)
                   </div>
-                  <div className="text-[11px] sm:text-xs text-[#9CA3AF] mt-0.5 leading-normal">
-                    Try our test builds of Sparkle (Dev) with new, early unreleased features.
-                  </div>
                 </div>
 
                 <a
@@ -654,9 +667,6 @@ export const Settings: React.FC<SettingsProps> = ({
                   <div className="font-bold text-[#111827] dark:text-white text-xs sm:text-sm">
                     Changelogs
                   </div>
-                  <div className="text-[11px] sm:text-xs text-[#9CA3AF] mt-0.5 leading-normal">
-                    Danh sách những sự thay đổi trong bản cập nhật mới nhất của Sparkle (Dev).
-                  </div>
                 </div>
 
                 <button
@@ -674,9 +684,6 @@ export const Settings: React.FC<SettingsProps> = ({
                 <div>
                   <div className="font-bold text-[#111827] dark:text-white text-xs sm:text-sm">
                     Update Sparkle (Dev)
-                  </div>
-                  <div className="text-[11px] sm:text-xs text-[#9CA3AF] mt-0.5 leading-normal">
-                    Kiểm tra và cập nhật phiên bản mới nhất của nền tảng Sparkle (Dev).
                   </div>
                 </div>
 
@@ -723,9 +730,6 @@ export const Settings: React.FC<SettingsProps> = ({
                         Fluent Design (Mica & Acrylic)
                       </span>
                     </div>
-                    <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
-                      Ngôn ngữ thiết kế giao diện người dùng Fluent Design của Microsoft, kết hợp hiệu ứng chất liệu Mica và Acrylic, phân cấp thị giác tinh tế và đường nét tối giản hiện đại.
-                    </div>
                   </div>
 
                   {/* Toggle Switch */}
@@ -757,9 +761,6 @@ export const Settings: React.FC<SettingsProps> = ({
                     <div className="min-w-0 flex-1">
                       <div className="font-semibold text-sm text-[#111827] dark:text-white">
                         Độ trong suốt Acrylic (Opacity)
-                      </div>
-                      <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
-                        Điều chỉnh độ trong suốt của chất liệu Acrylic Fluent Design từ 0% đến 100%. Khi trên 40%, biểu tượng và văn bản sẽ tự động cân bằng tương phản tối ưu.
                       </div>
                     </div>
                     <span className="text-xs font-mono font-semibold text-[#0078d4] dark:text-[#4cc2ff] px-2 py-0.5 rounded bg-black/5 dark:bg-white/10 shrink-0 ml-2">
@@ -817,9 +818,6 @@ export const Settings: React.FC<SettingsProps> = ({
                     <div className="min-w-0 flex-1">
                       <div className="font-semibold text-sm text-[#111827] dark:text-white">
                         Độ mờ Acrylic (Blur)
-                      </div>
-                      <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
-                        Điều chỉnh độ nhòe phông nền (backdrop blur) của chất liệu Acrylic từ 0% đến 100% cho thanh điều hướng và menu hệ thống.
                       </div>
                     </div>
                     <span className="text-xs font-mono font-semibold text-[#0078d4] dark:text-[#4cc2ff] px-2 py-0.5 rounded bg-black/5 dark:bg-white/10 shrink-0 ml-2">
@@ -880,9 +878,6 @@ export const Settings: React.FC<SettingsProps> = ({
                 >
                   <div className="min-w-0 flex-1">
                     <div className="font-semibold text-sm text-[#111827] dark:text-white">Chế độ ứng dụng</div>
-                    <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
-                      Lựa chọn giao diện sáng hoặc tối cho toàn bộ hệ thống.
-                    </div>
                   </div>
                   <div className="settings-segmented-group grid grid-cols-2 gap-1 rounded-md sm:rounded-lg bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/10 p-1 w-full sm:w-auto sm:min-w-[220px]" role="group" aria-label="Chế độ ứng dụng">
                     {([
@@ -928,11 +923,6 @@ export const Settings: React.FC<SettingsProps> = ({
                         </span>
                       )}
                     </div>
-                    <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
-                      {draftSettings.navigationMode === 'topbar'
-                        ? 'Giao diện Top View đưa thanh điều khiển lên đầu màn hình.'
-                        : 'Lựa chọn kiểu điều hướng của ứng dụng (Side View, Top View, Tab View).'}
-                    </div>
                   </div>
                   <div className="settings-segmented-group grid grid-cols-3 gap-1 rounded-md sm:rounded-lg bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/10 p-1 w-full sm:w-auto sm:min-w-[280px]" role="group" aria-label="Thanh điều hướng">
                     {([
@@ -972,9 +962,6 @@ export const Settings: React.FC<SettingsProps> = ({
                         <span className="font-semibold text-sm text-[#111827] dark:text-white">
                           Thu phóng giao diện
                         </span>
-                      </div>
-                      <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
-                        Tùy chỉnh kích cỡ giao diện ứng dụng để phù hợp với thiết bị của bạn.
                       </div>
                     </div>
                   </div>
@@ -1050,7 +1037,6 @@ export const Settings: React.FC<SettingsProps> = ({
                     >
                       <div className="min-w-0 flex-1">
                         <div className="font-semibold text-sm text-[#111827] dark:text-white">Vị trí thanh bên (Side View position)</div>
-                        <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">Chọn vị trí hiển thị thanh bên trái hoặc phải.</div>
                       </div>
                       <div className="settings-segmented-group grid grid-cols-2 gap-1 rounded-md sm:rounded-lg bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/10 p-1 w-full sm:w-auto sm:min-w-[180px]">
                         {[
@@ -1086,9 +1072,6 @@ export const Settings: React.FC<SettingsProps> = ({
                     <div className="font-semibold text-sm text-[#111827] dark:text-white">
                       Siêu chế độ tối (Super Dark Mode)
                     </div>
-                    <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
-                      Chuyển đổi giao diện sang màu đen tuyền tuyệt đối (OLED Pure Black #000000) giúp tối ưu tiết kiệm pin trên màn hình OLED và tạo cảm giác dịu mắt ban đêm.
-                    </div>
                   </div>
 
                   <button
@@ -1123,9 +1106,6 @@ export const Settings: React.FC<SettingsProps> = ({
                         Tỉ lệ khung hình
                       </span>
                     </div>
-                    <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
-                      Chuyển đổi tỉ lệ khung hình khi xem giữa 4:3 hoặc 16:9.
-                    </div>
                   </div>
                   <div className="settings-segmented-group grid grid-cols-2 gap-1 rounded-md sm:rounded-lg bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/10 p-1 w-full sm:w-auto sm:min-w-[220px]">
                     {[
@@ -1158,9 +1138,6 @@ export const Settings: React.FC<SettingsProps> = ({
                     <div className="font-semibold text-sm text-[#111827] dark:text-white">
                       Tự động ẩn Side View
                     </div>
-                    <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
-                      Tự động thu gọn thanh menu khi không di chuột vào.
-                    </div>
                   </div>
 
                   <button
@@ -1187,9 +1164,6 @@ export const Settings: React.FC<SettingsProps> = ({
                       <span className="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
                         Ghi chú
                       </span>
-                    </div>
-                    <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
-                      Ứng dụng ghi chú & soạn thảo văn bản, hỗ trợ hiển thị dưới dạng Sticky Note nổi di động.
                     </div>
                   </div>
 
@@ -1227,9 +1201,6 @@ export const Settings: React.FC<SettingsProps> = ({
                         <div className="font-semibold text-sm text-[#111827] dark:text-white">
                           Page loading
                         </div>
-                        <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
-                          Displays a spinning ring for 1 second before the page finishes loading to improve perceived performance.
-                        </div>
                       </div>
 
                       <button
@@ -1258,9 +1229,6 @@ export const Settings: React.FC<SettingsProps> = ({
                       <div className="min-w-0 flex-1 pr-2">
                         <div className="font-semibold text-sm text-[#111827] dark:text-white">
                           Load pages sequentially
-                        </div>
-                        <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
-                          Loads the initial portion of page content, then displays a loading ring for 3 seconds when scrolling down to reveal more.
                         </div>
                       </div>
 
@@ -1300,9 +1268,6 @@ export const Settings: React.FC<SettingsProps> = ({
                       <div className="min-w-0 flex-1 pr-2">
                         <div className="font-semibold text-sm text-[#111827] dark:text-white">
                           Reduce all animation
-                        </div>
-                        <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
-                          Giảm và tắt toàn bộ các hiệu ứng chuyển động trong ứng dụng.
                         </div>
                       </div>
 
@@ -1345,9 +1310,6 @@ export const Settings: React.FC<SettingsProps> = ({
                           <div className="font-semibold text-sm text-[#111827] dark:text-white">
                             Side View
                           </div>
-                          <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
-                            Hiệu ứng mở rộng/thu gọn và trượt ngăn kéo menu bên.
-                          </div>
                         </div>
 
                         <button
@@ -1381,9 +1343,6 @@ export const Settings: React.FC<SettingsProps> = ({
                           <div className="font-semibold text-sm text-[#111827] dark:text-white">
                             Hộp thoại (Modal dialog)
                           </div>
-                          <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
-                            Hiệu ứng phóng to, thu nhỏ và làm mờ các cửa sổ bật lên.
-                          </div>
                         </div>
 
                         <button
@@ -1416,9 +1375,6 @@ export const Settings: React.FC<SettingsProps> = ({
                         <div className="min-w-0 flex-1 pr-2">
                           <div className="font-semibold text-sm text-[#111827] dark:text-white">
                             Chuyển trang trong Cài đặt
-                          </div>
-                          <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
-                            Hiệu ứng trượt ngang mượt mà khi vào hoặc thoát các mục cài đặt.
                           </div>
                         </div>
 
@@ -1460,9 +1416,6 @@ export const Settings: React.FC<SettingsProps> = ({
                         <div className="font-semibold text-sm text-[#111827] dark:text-white">
                           Danh mục
                         </div>
-                        <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
-                          Hiển thị các tab và điều hướng hệ thống (Home, Live TV, News, v.v.).
-                        </div>
                       </div>
 
                       <button
@@ -1492,9 +1445,6 @@ export const Settings: React.FC<SettingsProps> = ({
                         <div className="font-semibold text-sm text-[#111827] dark:text-white">
                           Tin tức
                         </div>
-                        <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
-                          Hiển thị các bài viết tin tức, thông báo cộng đồng và sự kiện.
-                        </div>
                       </div>
 
                       <button
@@ -1523,9 +1473,6 @@ export const Settings: React.FC<SettingsProps> = ({
                       <div className="min-w-0 flex-1 pr-2">
                         <div className="font-semibold text-sm text-[#111827] dark:text-white">
                           Truyền hình
-                        </div>
-                        <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
-                          Hiển thị danh sách kênh truyền hình trực tiếp theo tên hoặc nhóm kênh.
                         </div>
                       </div>
 
@@ -1561,9 +1508,6 @@ export const Settings: React.FC<SettingsProps> = ({
                             CH #
                           </span>
                         </div>
-                        <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
-                          Cho phép gõ số kênh (ví dụ: 1, 001, #12, kênh 5) để tìm nhanh.
-                        </div>
                       </div>
 
                       <button
@@ -1592,9 +1536,6 @@ export const Settings: React.FC<SettingsProps> = ({
                       <div className="min-w-0 flex-1 pr-2">
                         <div className="font-semibold text-sm text-[#111827] dark:text-white">
                           Cài đặt
-                        </div>
-                        <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
-                          Quản lý và chuyển nhanh tới các mục tùy chọn hệ thống.
                         </div>
                       </div>
 
@@ -1635,9 +1576,6 @@ export const Settings: React.FC<SettingsProps> = ({
                         <div className="font-semibold text-sm text-[#111827] dark:text-white">
                           Bàn phím số
                         </div>
-                        <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
-                          Hiển thị bàn phím số từ 0 đến 9 ngay trên dải phím chữ.
-                        </div>
                       </div>
 
                       <button
@@ -1667,9 +1605,6 @@ export const Settings: React.FC<SettingsProps> = ({
                         <div className="font-semibold text-sm text-[#111827] dark:text-white">
                           Clipboard
                         </div>
-                        <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
-                          Danh sách lịch sử sao chép trong ứng dụng.
-                        </div>
                       </div>
 
                       <button
@@ -1698,9 +1633,6 @@ export const Settings: React.FC<SettingsProps> = ({
                       <div className="min-w-0 flex-1 pr-2">
                         <div className="font-semibold text-sm text-[#111827] dark:text-white">
                           Âm bàn phím
-                        </div>
-                        <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
-                          Phát ra tiếng "pop" khi gõ trên bàn phím.
                         </div>
                       </div>
 
@@ -1768,9 +1700,6 @@ export const Settings: React.FC<SettingsProps> = ({
                                       Đã đổi
                                     </span>
                                   )}
-                                </div>
-                                <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 leading-normal">
-                                  {def.description}
                                 </div>
                               </div>
 
@@ -2157,6 +2086,88 @@ export const Settings: React.FC<SettingsProps> = ({
                                 </div>
                                 <div className="w-5 h-5 shrink-0 flex items-center justify-center">
                                   <FluentSearchIcon className="w-4 h-4 shrink-0 text-[#111827] dark:text-white" treatment={opt.value} />
+                                </div>
+                                <div className="min-w-0 flex-1 font-semibold text-xs leading-snug">
+                                  {opt.label}
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </div>
+
+                <div className="divider-line h-[1px] bg-black/5 dark:bg-white/10 ml-4 mr-4" />
+
+                {/* Search visual experimental */}
+                <div 
+                  id="setting-experimental-search-visual"
+                  className={`px-4 py-3 sm:py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors relative ${
+                    isSearchVisualDropdownOpen ? 'z-50' : 'z-20'
+                  }`}
+                >
+                  <div className="min-w-0 flex-1 pr-2">
+                    <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
+                      <span>Search visual experimental</span>
+                      <span className="text-[10px] px-1.5 py-0.2 rounded font-bold uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
+                        Dropdown
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Dropdown Menu - always on-top */}
+                  <div className="relative shrink-0 z-[100]" ref={searchVisualDropdownRef}>
+                    <button
+                      id="btn-dropdown-search-visual"
+                      type="button"
+                      onClick={() => setIsSearchVisualDropdownOpen((prev) => !prev)}
+                      className="min-w-[240px] sm:min-w-[270px] h-9 px-3 rounded-[6px] bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 border border-black/10 dark:border-white/15 text-xs text-[#111827] dark:text-white flex items-center justify-between gap-2 transition-all cursor-pointer font-medium select-none shadow-2xs"
+                      aria-haspopup="listbox"
+                      aria-expanded={isSearchVisualDropdownOpen}
+                    >
+                      <span className="truncate text-left font-medium">
+                        {SEARCH_VISUAL_OPTIONS.find((o) => o.value === (draftSettings.searchVisualExperimental || 'treatment-1'))?.label || 'Treatment 1: Search box (default)'}
+                      </span>
+                      <ChevronDown
+                        className={`w-4 h-4 text-[#6B7280] dark:text-[#9CA3AF] transition-transform duration-200 shrink-0 ${
+                          isSearchVisualDropdownOpen ? 'rotate-180 text-[#0078d4] dark:text-[#4cc2ff]' : ''
+                        }`}
+                      />
+                    </button>
+
+                    <AnimatePresence>
+                      {isSearchVisualDropdownOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 4, scale: 0.98 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 4, scale: 0.98 }}
+                          transition={{ duration: 0.12 }}
+                          className="absolute right-0 top-full mt-1.5 z-[99999] w-72 sm:w-80 rounded-[8px] bg-white/98 dark:bg-[#25282e]/98 backdrop-blur-2xl border border-black/15 dark:border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.35)] p-1.5 space-y-1 select-none"
+                          style={{
+                            boxShadow: '0 20px 50px rgba(0,0,0,0.38), 0 4px 14px rgba(0,0,0,0.15)'
+                          }}
+                        >
+                          {SEARCH_VISUAL_OPTIONS.map((opt) => {
+                            const isSelected = (draftSettings.searchVisualExperimental || 'treatment-1') === opt.value;
+                            return (
+                              <button
+                                key={opt.value}
+                                type="button"
+                                id={`search-visual-opt-${opt.value}`}
+                                onClick={() => {
+                                  updateDraft('searchVisualExperimental', opt.value);
+                                  setIsSearchVisualDropdownOpen(false);
+                                }}
+                                className={`w-full text-left p-2.5 rounded-[6px] flex items-center gap-2.5 transition-colors cursor-pointer ${
+                                  isSelected
+                                    ? 'bg-[#0078d4]/10 dark:bg-[#4cc2ff]/15 text-[#0078d4] dark:text-[#4cc2ff]'
+                                    : 'text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10'
+                                }`}
+                              >
+                                <div className="w-4 h-4 shrink-0 flex items-center justify-center">
+                                  {isSelected && <Check className="w-4 h-4 text-[#0078d4] dark:text-[#4cc2ff]" />}
                                 </div>
                                 <div className="min-w-0 flex-1 font-semibold text-xs leading-snug">
                                   {opt.label}

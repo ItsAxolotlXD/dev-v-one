@@ -5,6 +5,7 @@ import { keyboardSound } from '../utils/keyboardSound';
 import { logRecallActivity } from '../services/recallService';
 
 export type SearchIconTreatment = 'default' | 'flipped' | 'sparkle' | 'globe';
+export type SearchVisualExperimental = 'treatment-1' | 'treatment-2' | 'treatment-3' | 'treatment-4' | 'treatment-5';
 
 export interface SystemSettings {
   theme: 'dark' | 'light';
@@ -48,6 +49,7 @@ export interface SystemSettings {
   experimentalSearchExperience?: 'right' | 'left' | 'hidden';
   roundedSearchBox?: boolean;
   searchIconTreatment: SearchIconTreatment;
+  searchVisualExperimental: SearchVisualExperimental;
   windowsAppSdkPreview: boolean;
   pageLoading: boolean;
   loadPagesSequentially: boolean;
@@ -100,6 +102,7 @@ export const DEFAULT_SETTINGS: SystemSettings = {
   experimentalSearchExperience: 'left',
   roundedSearchBox: false,
   searchIconTreatment: 'default',
+  searchVisualExperimental: 'treatment-1',
   windowsAppSdkPreview: false,
   pageLoading: true,
   loadPagesSequentially: false,
@@ -192,6 +195,7 @@ export const getStoredSettings = (): SystemSettings => {
         experimentalSearchExperience: parsed.experimentalSearchExperience || 'left',
         roundedSearchBox: typeof parsed.roundedSearchBox === 'boolean' ? parsed.roundedSearchBox : false,
         searchIconTreatment: (['default', 'flipped', 'sparkle', 'globe'].includes(parsed.searchIconTreatment) ? parsed.searchIconTreatment : 'default') as SearchIconTreatment,
+        searchVisualExperimental: (['treatment-1', 'treatment-2', 'treatment-3', 'treatment-4', 'treatment-5'].includes(parsed.searchVisualExperimental) ? parsed.searchVisualExperimental : 'treatment-1') as SearchVisualExperimental,
         windowsAppSdkPreview: typeof parsed.windowsAppSdkPreview === 'boolean' 
           ? parsed.windowsAppSdkPreview 
           : (typeof parsed.webviewSdkPreview === 'boolean' ? parsed.webviewSdkPreview : false),
@@ -274,6 +278,9 @@ export const applySystemSettings = (settings: SystemSettings) => {
 
   // Search icon treatment attribute on document
   document.documentElement.dataset.searchIconTreatment = settings.searchIconTreatment || 'default';
+
+  // Search visual experimental attribute on document
+  document.documentElement.dataset.searchVisualExperimental = settings.searchVisualExperimental || 'treatment-1';
 
   // WebView SDK / Windows App SDK Test Preview
   if (settings.windowsAppSdkPreview) {
@@ -403,6 +410,10 @@ export const updateDraftSetting = <K extends keyof SystemSettings>(key: K, value
 
     if (key === 'searchIconTreatment') {
       document.documentElement.dataset.searchIconTreatment = String(value);
+    }
+
+    if (key === 'searchVisualExperimental') {
+      document.documentElement.dataset.searchVisualExperimental = String(value);
     }
 
     if (key === 'windowsAppSdkPreview') {

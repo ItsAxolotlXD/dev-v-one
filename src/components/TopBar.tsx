@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Menu, History, X, Mic, MicOff, Search } from 'lucide-react';
+import { Menu, History, X, Mic, MicOff, Search, Sparkles } from 'lucide-react';
 import { 
   FluentHomeIcon, 
   FluentLiveTvIcon, 
@@ -18,6 +18,7 @@ import { SpinningRing } from './SpinningRing';
 
 const LOGO_SRC = 'https://static.wikia.nocookie.net/ep-deo/images/d/d4/V-one-dev.png/revision/latest?cb=20261012151735';
 const SEARCH_ICON_SRC = 'https://static.wikia.nocookie.net/ep-deo/images/3/3c/Tools_menu.png/revision/latest?cb=20260905055712';
+const EXPERIMENTAL_SEARCH_ICON_URL = 'https://static.wikia.nocookie.net/ep-deo/images/c/cf/Xperimental_Search.png/revision/latest?cb=20261022082041';
 const HOME_ICON_SRC = FLUENT_ICON_URLS.home;
 const TV_ICON_SRC = FLUENT_ICON_URLS.liveTv;
 const NEWS_ICON_SRC = FLUENT_ICON_URLS.news;
@@ -223,6 +224,49 @@ export const TopBar: React.FC<TopBarProps> = ({
   };
   const [isSearchFlyoutOpen, setIsSearchFlyoutOpen] = useState(false);
   const searchContainerRef = useRef<HTMLDivElement>(null);
+
+  // Treatment 5: Real-time Search Highlights of today
+  const [highlights, setHighlights] = useState<string[]>([]);
+  const [currentHighlightIndex, setCurrentHighlightIndex] = useState(0);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchHighlights = async () => {
+      try {
+        const res = await fetch('/api/vnexpress-news');
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data.articles) && data.articles.length > 0) {
+            const titles = data.articles
+              .slice(0, 10)
+              .map((a: any) => a.title?.trim())
+              .filter(Boolean);
+            if (isMounted && titles.length > 0) {
+              setHighlights(titles);
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Could not fetch real-time search highlights:', e);
+      }
+    };
+
+    fetchHighlights();
+    const interval = setInterval(fetchHighlights, 60000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  // Rotate highlight event text every 7 seconds
+  useEffect(() => {
+    if (highlights.length <= 1) return;
+    const timer = setInterval(() => {
+      setCurrentHighlightIndex((prev) => (prev + 1) % highlights.length);
+    }, 7000);
+    return () => clearInterval(timer);
+  }, [highlights.length]);
 
   // Speech Recognition for Copilot Voice Input
   const [isListening, setIsListening] = useState(false);
@@ -573,94 +617,224 @@ export const TopBar: React.FC<TopBarProps> = ({
         ref={searchContainerRef}
         className="flex-1 flex items-center justify-center min-w-0 px-2 sm:px-4 z-40 md:absolute md:left-1/2 md:-translate-x-1/2 md:w-full md:max-w-[460px]"
       >
-        <div className="relative w-full max-w-[460px] min-w-0 mx-auto">
-          <form onSubmit={handleSearchSubmit} className="w-full">
-            <div
-              id="topbar-search-box"
-              onClick={() => {
-                setIsSearchFlyoutOpen(true);
-              }}
-              data-flyout-open={isSearchFlyoutOpen ? "true" : "false"}
-              className={`fluent-search-box group relative w-full h-8.5 sm:h-9 ${
-                settings.windowsAppSdkPreview
-                  ? '!h-[38px] !min-h-[38px] !rounded-[9999px] !bg-[#1f1f1f] !border-0 !border-none !border-b-0 !shadow-none'
-                  : settings.roundedSearchBox
-                    ? 'rounded-full bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10'
-                    : 'rounded-[8px] bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10'
-              } flex items-center px-2.5 gap-1.5 transition-all cursor-text select-none ${
-                settings.windowsAppSdkPreview
-                  ? '!border-0 !border-none !ring-0 !outline-none'
-                  : `focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff] ${
-                      isSearchFlyoutOpen && !settings.roundedSearchBox
-                        ? 'border-b-2 border-b-[#005fb8] dark:border-b-[#4cc2ff]'
-                        : ''
-                    }`
+        <div className={`relative w-full max-w-[460px] min-w-0 mx-auto ${
+          (settings.searchVisualExperimental || 'treatment-1') === 'treatment-2'
+            ? 'flex justify-end'
+            : (settings.searchVisualExperimental || 'treatment-1') === 'treatment-3'
+            ? 'flex justify-center'
+            : (settings.searchVisualExperimental || 'treatment-1') === 'treatment-4'
+            ? 'flex justify-center'
+            : (settings.searchVisualExperimental || 'treatment-1') === 'treatment-5'
+            ? 'flex justify-center'
+            : ''
+        }`}>
+          {(settings.searchVisualExperimental || 'treatment-1') === 'treatment-2' ? (
+            /* Treatment 2: Search button corner - search icon at the right corner of the search bar area */
+            <button
+              id="topbar-search-button-corner"
+              type="button"
+              onClick={() => setIsSearchFlyoutOpen((prev) => !prev)}
+              className={`w-9 h-9 flex items-center justify-center rounded-[6px] transition-all cursor-pointer ${
+                isSearchFlyoutOpen
+                  ? 'bg-black/10 dark:bg-white/15 ring-2 ring-[#0078d4] dark:ring-[#4cc2ff]'
+                  : 'hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15'
               }`}
+              title="Search"
+              aria-label="Search"
             >
-              {/* Left Search Icon (if Move search to the left is active OR WebView SDK is enabled) */}
-              {(searchExperience === 'left' || settings.windowsAppSdkPreview) && (
-                <button
-                  type="submit"
-                  title="Search"
-                  className="text-[#a7a7a7] hover:text-white p-1 transition-colors cursor-pointer flex items-center justify-center shrink-0 -ml-0.5 mr-0"
-                >
-                  {searchQuery.trim() ? (
-                    <SpinningRing size={14} strokeWidth={3.5} color="#4cc2ff" />
-                  ) : (
-<Search className="size-[20px] shrink-0" strokeWidth={1.7} />
-                  )}
-                </button>
-              )}
-
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                  setIsSearchFlyoutOpen(true);
+              <img
+                src={EXPERIMENTAL_SEARCH_ICON_URL}
+                alt="Search"
+                referrerPolicy="no-referrer"
+                className="w-5 h-5 object-contain select-none"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                  const parent = e.currentTarget.parentElement;
+                  if (parent && !parent.querySelector('.fallback-search-icon')) {
+                    const fallback = document.createElement('span');
+                    fallback.className = 'fallback-search-icon text-[#0078d4] dark:text-[#4cc2ff] flex items-center justify-center';
+                    fallback.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>`;
+                    parent.appendChild(fallback);
+                  }
                 }}
+              />
+            </button>
+          ) : (settings.searchVisualExperimental || 'treatment-1') === 'treatment-3' ? (
+            /* Treatment 3: Search button center - search icon in the center of the search bar area */
+            <button
+              id="topbar-search-button-center"
+              type="button"
+              onClick={() => setIsSearchFlyoutOpen((prev) => !prev)}
+              className={`w-9 h-9 flex items-center justify-center rounded-[6px] transition-all cursor-pointer ${
+                isSearchFlyoutOpen
+                  ? 'bg-black/10 dark:bg-white/15 ring-2 ring-[#0078d4] dark:ring-[#4cc2ff]'
+                  : 'hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15'
+              }`}
+              title="Search"
+              aria-label="Search"
+            >
+              <img
+                src={EXPERIMENTAL_SEARCH_ICON_URL}
+                alt="Search"
+                referrerPolicy="no-referrer"
+                className="w-5 h-5 object-contain select-none"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                  const parent = e.currentTarget.parentElement;
+                  if (parent && !parent.querySelector('.fallback-search-icon')) {
+                    const fallback = document.createElement('span');
+                    fallback.className = 'fallback-search-icon text-[#0078d4] dark:text-[#4cc2ff] flex items-center justify-center';
+                    fallback.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>`;
+                    parent.appendChild(fallback);
+                  }
+                }}
+              />
+            </button>
+          ) : (settings.searchVisualExperimental || 'treatment-1') === 'treatment-4' ? (
+            /* Treatment 4: Search pill - shorter, pill-shaped button, borderless, turns blue gradient when clicked */
+            <button
+              id="topbar-search-pill"
+              type="button"
+              onClick={() => setIsSearchFlyoutOpen((prev) => !prev)}
+              className={`group relative h-8.5 sm:h-9 px-4 rounded-full flex items-center gap-2 transition-all duration-200 cursor-pointer select-none font-medium text-xs sm:text-[13px] border-0 border-none !border-none ${
+                isSearchFlyoutOpen
+                  ? 'bg-gradient-to-r from-[#005fb8] via-[#0078d4] to-[#4cc2ff] text-white shadow-[0_2px_14px_rgba(0,120,212,0.45)] scale-[1.02]'
+                  : 'bg-black/5 dark:bg-[#282c31] hover:bg-black/10 dark:hover:bg-[#32363c] text-[#4b5563] dark:text-[#d1d5db]'
+              }`}
+              title="Search"
+              aria-label="Search"
+            >
+              <Search className={`w-4 h-4 shrink-0 transition-colors ${
+                isSearchFlyoutOpen ? 'text-white' : 'text-[#71717a] dark:text-[#a0a6b2] group-hover:text-black dark:group-hover:text-white'
+              }`} />
+              <span className="truncate max-w-[120px] sm:max-w-[150px]">
+                {searchQuery.trim() || 'Search'}
+              </span>
+            </button>
+          ) : (settings.searchVisualExperimental || 'treatment-1') === 'treatment-5' ? (
+            /* Treatment 5: Search highlights - borderless pill, today's real-time event placeholder, blue gradient when clicked */
+            <button
+              id="topbar-search-highlights"
+              type="button"
+              onClick={() => setIsSearchFlyoutOpen((prev) => !prev)}
+              className={`group relative h-8.5 sm:h-9 max-w-full px-3.5 sm:px-4 rounded-full flex items-center gap-2 transition-all duration-200 cursor-pointer select-none font-medium text-xs sm:text-[13px] border-0 border-none !border-none ${
+                isSearchFlyoutOpen
+                  ? 'bg-gradient-to-r from-[#005fb8] via-[#0078d4] to-[#4cc2ff] text-white shadow-[0_2px_14px_rgba(0,120,212,0.45)] scale-[1.02]'
+                  : 'bg-black/5 dark:bg-[#282c31] hover:bg-black/10 dark:hover:bg-[#32363c] text-[#4b5563] dark:text-[#d1d5db]'
+              }`}
+              title={highlights[currentHighlightIndex] || 'Search highlights - Sự kiện hôm nay'}
+              aria-label="Search highlights"
+            >
+              <div className="w-4 h-4 shrink-0 flex items-center justify-center">
+                {isSearchFlyoutOpen ? (
+                  <Search className="w-4 h-4 text-white shrink-0" />
+                ) : (
+                  <Sparkles className="w-3.5 h-3.5 text-[#0078d4] dark:text-[#4cc2ff] shrink-0 group-hover:rotate-12 transition-transform" />
+                )}
+              </div>
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={currentHighlightIndex}
+                  initial={{ opacity: 0, y: 3 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -3 }}
+                  transition={{ duration: 0.25 }}
+                  className="truncate max-w-[190px] sm:max-w-[280px] text-left text-xs sm:text-[13px]"
+                >
+                  {searchQuery.trim() || highlights[currentHighlightIndex] || 'Sự kiện hôm nay: Tin tức thời sự 24h'}
+                </motion.span>
+              </AnimatePresence>
+            </button>
+          ) : (
+            /* Treatment 1: Search box (default) */
+            <form onSubmit={handleSearchSubmit} className="w-full">
+              <div
+                id="topbar-search-box"
                 onClick={() => {
                   setIsSearchFlyoutOpen(true);
                 }}
-                onFocus={() => {
-                  setIsSearchFlyoutOpen(true);
-                }}
-                placeholder={getSearchPlaceholder(currentRoute)}
-                className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#a0a6b2] outline-none border-none py-1 pr-9 no-fluent-line"
-              />
-
-              {/* Right Action Icons: Clear button and Right Search Icon */}
-              <div className="absolute right-2 flex items-center gap-1 z-10">
-                {searchQuery ? (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSearchQuery('');
-                      setIsSearchFlyoutOpen(false);
-                    }}
-                    title="Clear search"
-                    className="text-[#71717a] dark:text-neutral-300 hover:text-[#111827] dark:hover:text-white p-1 transition-colors cursor-pointer rounded-full hover:bg-black/5 dark:hover:bg-white/10"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                ) : null}
-
-                {searchExperience !== 'left' && !settings.windowsAppSdkPreview && searchExperience !== 'hidden' && (
+                data-flyout-open={isSearchFlyoutOpen ? "true" : "false"}
+                className={`fluent-search-box group relative w-full h-8.5 sm:h-9 ${
+                  settings.windowsAppSdkPreview
+                    ? '!h-[38px] !min-h-[38px] !rounded-[9999px] !bg-[#1f1f1f] !border-0 !border-none !border-b-0 !shadow-none'
+                    : settings.roundedSearchBox
+                      ? 'rounded-full bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10'
+                      : 'rounded-[8px] bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10'
+                } flex items-center px-2.5 gap-1.5 transition-all cursor-text select-none ${
+                  settings.windowsAppSdkPreview
+                    ? '!border-0 !border-none !ring-0 !outline-none'
+                    : `focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff] ${
+                        isSearchFlyoutOpen && !settings.roundedSearchBox
+                          ? 'border-b-2 border-b-[#005fb8] dark:border-b-[#4cc2ff]'
+                          : ''
+                      }`
+                }`}
+              >
+                {/* Left Search Icon (if Move search to the left is active OR WebView SDK is enabled) */}
+                {(searchExperience === 'left' || settings.windowsAppSdkPreview) && (
                   <button
                     type="submit"
                     title="Search"
-                    className="text-[#71717a] dark:text-neutral-200 hover:text-[#0078d4] dark:hover:text-[#4cc2ff] p-1 transition-colors cursor-pointer flex items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10"
+                    className="text-[#a7a7a7] hover:text-white p-1 transition-colors cursor-pointer flex items-center justify-center shrink-0 -ml-0.5 mr-0"
                   >
                     {searchQuery.trim() ? (
-<SpinningRing size={17} strokeWidth={3.5} color="#4cc2ff" />
+                      <SpinningRing size={14} strokeWidth={3.5} color="#4cc2ff" />
                     ) : (
-<Search className="size-[18px] shrink-0" strokeWidth={2.2} />
+                      <Search className="size-[20px] shrink-0" strokeWidth={1.7} />
                     )}
                   </button>
                 )}
+
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setIsSearchFlyoutOpen(true);
+                  }}
+                  onClick={() => {
+                    setIsSearchFlyoutOpen(true);
+                  }}
+                  onFocus={() => {
+                    setIsSearchFlyoutOpen(true);
+                  }}
+                  placeholder={getSearchPlaceholder(currentRoute)}
+                  className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#a0a6b2] outline-none border-none py-1 pr-9 no-fluent-line"
+                />
+
+                {/* Right Action Icons: Clear button and Right Search Icon */}
+                <div className="absolute right-2 flex items-center gap-1 z-10">
+                  {searchQuery ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSearchQuery('');
+                        setIsSearchFlyoutOpen(false);
+                      }}
+                      title="Clear search"
+                      className="text-[#71717a] dark:text-neutral-300 hover:text-[#111827] dark:hover:text-white p-1 transition-colors cursor-pointer rounded-full hover:bg-black/5 dark:hover:bg-white/10"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  ) : null}
+
+                  {searchExperience !== 'left' && !settings.windowsAppSdkPreview && searchExperience !== 'hidden' && (
+                    <button
+                      type="submit"
+                      title="Search"
+                      className="text-[#71717a] dark:text-neutral-200 hover:text-[#0078d4] dark:hover:text-[#4cc2ff] p-1 transition-colors cursor-pointer flex items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10"
+                    >
+                      {searchQuery.trim() ? (
+                        <SpinningRing size={17} strokeWidth={3.5} color="#4cc2ff" />
+                      ) : (
+                        <Search className="size-[18px] shrink-0" strokeWidth={2.2} />
+                      )}
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
-          </form>
+            </form>
+          )}
 
           {/* Integrated AI Copilot Chat & Search Flyout */}
           {isSearchFlyoutOpen && (
