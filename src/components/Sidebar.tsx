@@ -417,6 +417,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
         icon: FluentWidgetsIcon,
       },
       {
+        id: 'mail',
+        label: 'Mail',
+        secondary: 'Outlook Mail',
+        route: '/mail',
+        icon: () => <img src={MAIL_TAB_ICON_URL} alt="Mail" className="w-5 h-5 object-contain" />,
+      },
+      {
+        id: 'calendar',
+        label: 'Calendar',
+        secondary: 'Lịch & sự kiện',
+        route: '/calendar',
+        icon: () => <img src={CALENDAR_TAB_ICON_URL} alt="Calendar" className="w-5 h-5 object-contain" />,
+      },
+      {
         id: 'edge',
         label: 'Microsoft Edge',
         secondary: 'Edge',
@@ -514,13 +528,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         route: '/logos-fandom',
         icon: FluentLogosFandomIcon,
       },
-      {
-        id: 'minecraft-wiki',
-        label: 'Minecraft Wiki',
-        secondary: 'Bách khoa toàn thư minecraft.wiki',
-        route: '/minecraft-wiki',
-        icon: FluentMinecraftWikiIcon,
-      },
+
     ];
 
     if (settings.developerMode) {
@@ -874,24 +882,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
           </div>
 
-          {/* 3. Updates */}
-          <div className="shrink-0">
-            <button
-              type="button"
-              id={isMobile ? 'mobile-nav-updates' : 'sidebar-nav-updates'}
-              data-nav-active={(currentRoute === '/updates' || currentRoute.startsWith('/updates')) ? 'true' : undefined}
-              onClick={() => handleNavClick('/updates')}
-              title="Updates"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
-                (currentRoute === '/updates' || currentRoute.startsWith('/updates'))
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
-                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-              }`}
-            >
-              <AppTabIcon name="updates" className="w-5 h-5 shrink-0" />
-              <span className="truncate text-[13.5px]">Updates</span>
-            </button>
-          </div>
+
 
           {/* 4. Widgets */}
           <div className="shrink-0">
@@ -962,29 +953,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
           </div>
 
-          {/* Productivity tabs */}
-          <div className="shrink-0 flex flex-col gap-0.5">
-            {[
-              { route: '/mail', label: 'Mail', icon: MAIL_TAB_ICON_URL },
-              { route: '/calendar', label: 'Calendar', icon: CALENDAR_TAB_ICON_URL },
-            ].map((item) => {
-              const active = currentRoute === item.route;
-              return (
-                <button
-                  key={item.route}
-                  type="button"
-                  data-nav-active={active ? 'true' : undefined}
-                  onClick={() => handleNavClick(item.route)}
-                  title={item.label}
-                  className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${active ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs' : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'}`}
-                >
-                  <img src={item.icon} alt="" className="size-5 shrink-0 object-contain" />
-                  <span className="truncate text-[13.5px]">{item.label}</span>
-                  {getDownloadIndicator(item.route)}
-                </button>
-              );
-            })}
-          </div>
+
 
           {/* Divider & Category Heading: Social (Bên trên category Apps) */}
           <div className="my-2 mx-1 h-[1px] bg-black/10 dark:bg-white/10" />
@@ -1074,25 +1043,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
           </div>
 
-          {/* 5. Minecraft Wiki */}
-          <div className="w-full">
-            <button
-              type="button"
-              id={isMobile ? 'mobile-nav-minecraft-wiki' : 'sidebar-nav-minecraft-wiki'}
-              data-nav-active={(currentRoute === '/minecraft-wiki' || currentRoute === '/mc-wiki' || currentRoute === '/wiki') ? 'true' : undefined}
-              onClick={() => handleNavClick('/minecraft-wiki')}
-              title="Minecraft Wiki - Bách khoa toàn thư chính thức minecraft.wiki"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
-                (currentRoute === '/minecraft-wiki' || currentRoute === '/mc-wiki' || currentRoute === '/wiki')
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
-                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-              }`}
-            >
-              <FluentMinecraftWikiIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
-              <span className="truncate text-[13.5px]">Minecraft Wiki</span>
-              {getDownloadIndicator('/minecraft-wiki')}
-            </button>
-          </div>
+
 
           {/* Divider & Category Heading: Apps */}
           <div className="my-2 mx-1 h-[1px] bg-black/10 dark:bg-white/10" />
@@ -1100,6 +1051,31 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <h2 className="text-black dark:text-[#a1a1aa] text-[11px] font-semibold tracking-wider uppercase select-none">
               Apps
             </h2>
+          </div>
+
+          {/* Mail & Calendar in Apps section */}
+          <div className="shrink-0 flex flex-col gap-0.5">
+            {[
+              { route: '/mail', label: 'Mail', icon: MAIL_TAB_ICON_URL },
+              { route: '/calendar', label: 'Calendar', icon: CALENDAR_TAB_ICON_URL },
+            ].map((item) => {
+              const active = currentRoute === item.route;
+              return (
+                <button
+                  key={item.route}
+                  type="button"
+                  id={isMobile ? `mobile-nav-${item.label.toLowerCase()}` : `sidebar-nav-${item.label.toLowerCase()}`}
+                  data-nav-active={active ? 'true' : undefined}
+                  onClick={() => handleNavClick(item.route)}
+                  title={item.label}
+                  className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${active ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs' : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'}`}
+                >
+                  <img src={item.icon} alt="" className="size-5 shrink-0 object-contain" />
+                  <span className="truncate text-[13.5px]">{item.label}</span>
+                  {getDownloadIndicator(item.route)}
+                </button>
+              );
+            })}
           </div>
 
           {/* 1. Copilot */}
@@ -1364,27 +1340,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
           </div>
 
-          {/* 10. Snipping Tool */}
-          <div className="w-full">
-            <button
-              type="button"
-              id={isMobile ? 'mobile-nav-snipping-tool' : 'sidebar-nav-snipping-tool'}
-              data-nav-active={(currentRoute === '/snipping-tool' || currentRoute === '/snip' || currentRoute === '/snipping') ? 'true' : undefined}
-              onClick={() => handleNavClick('/snipping-tool')}
-              title="Snipping Tool - Chụp ảnh màn hình"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
-                (currentRoute === '/snipping-tool' || currentRoute === '/snip' || currentRoute === '/snipping')
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
-                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-              }`}
-            >
-              <div className="flex items-center gap-3.5 truncate">
-                <FluentSnippingToolIcon className="w-5 h-5 text-black dark:text-white" />
-                <span className="truncate text-[13.5px]">Snipping Tool</span>
-              </div>
-              {getDownloadIndicator('/snipping-tool', isCollapsed)}
-            </button>
-          </div>
+
 
           {/* Divider & Category Heading: System */}
           <div className="my-2 mx-1 h-[1px] bg-black/10 dark:bg-white/10" />
@@ -1507,24 +1463,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* Bottom Section: Sign In (placed directly above Settings) & Settings */}
         <div className="px-2.5 py-2 shrink-0 mt-auto space-y-1 relative signin-flyout-container">
           {/* Sign In item placed directly ABOVE Settings tab */}
-          {/* Give Feedback item placed directly above Settings */}
-          <div>
-            <button
-              type="button"
-              id={isMobile ? 'mobile-nav-feedback' : 'sidebar-nav-feedback'}
-              data-nav-active={isCurrentActive('/feedback') ? 'true' : undefined}
-              onClick={() => handleNavClick('/feedback')}
-              title="Give Feedback"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
-                isCurrentActive('/feedback')
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
-                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-              }`}
-            >
-              <FluentFeedbackHubIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
-              <span className="truncate text-[13.5px]">Give Feedback</span>
-            </button>
-          </div>
+
 
           {/* XAML Controls */}
           <button
@@ -1646,22 +1585,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <AppTabIcon name="home" className="w-5 h-5 text-black dark:text-white" />
               </button>
 
-              {/* Productivity icons */}
-  {[
-    { route: '/mail', label: 'Mail', icon: MAIL_TAB_ICON_URL },
-    { route: '/calendar', label: 'Calendar', icon: CALENDAR_TAB_ICON_URL },
-  ].map((item) => (
-    <button
-      key={item.route}
-      type="button"
-      data-nav-active={currentRoute === item.route ? 'true' : undefined}
-      onClick={() => handleNavClick(item.route)}
-      title={item.label}
-      className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${currentRoute === item.route ? 'bg-black/5 dark:bg-white/[0.08] shadow-xs' : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'}`}
-    >
-      <img src={item.icon} alt="" className="size-5 object-contain" />
-    </button>
-  ))}
+
 
   {/* 2. Articles Icon */}
               <button
@@ -1679,21 +1603,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <AppTabIcon name="articles" className="w-5 h-5" />
               </button>
 
-              {/* 3. Updates Icon */}
-              <button
-                type="button"
-                id="sidebar-collapsed-updates"
-                data-nav-active={(currentRoute === '/updates' || currentRoute.startsWith('/updates')) ? 'true' : undefined}
-                onClick={() => handleNavClick('/updates')}
-                title="Updates"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  (currentRoute === '/updates' || currentRoute.startsWith('/updates'))
-                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
-                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <AppTabIcon name="updates" className="w-5 h-5" />
-              </button>
+
 
               {/* 4. Widgets Icon */}
               <button
@@ -1822,25 +1732,28 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 {getDownloadIndicator('/logos-fandom', true)}
               </button>
 
-              {/* Minecraft Wiki Icon */}
-              <button
-                type="button"
-                id="sidebar-collapsed-minecraft-wiki"
-                data-nav-active={(currentRoute === '/minecraft-wiki' || currentRoute === '/mc-wiki' || currentRoute === '/wiki') ? 'true' : undefined}
-                onClick={() => handleNavClick('/minecraft-wiki')}
-                title="Minecraft Wiki"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  (currentRoute === '/minecraft-wiki' || currentRoute === '/mc-wiki' || currentRoute === '/wiki')
-                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
-                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <FluentMinecraftWikiIcon className="w-5 h-5 text-black dark:text-white" />
-                {getDownloadIndicator('/minecraft-wiki', true)}
-              </button>
+
 
               {/* Divider: Apps */}
               <div className="w-6 h-[1px] bg-black/10 dark:bg-white/10 my-1" />
+
+              {/* Mail & Calendar Icons in Apps */}
+              {[
+                { route: '/mail', label: 'Mail', icon: MAIL_TAB_ICON_URL },
+                { route: '/calendar', label: 'Calendar', icon: CALENDAR_TAB_ICON_URL },
+              ].map((item) => (
+                <button
+                  key={item.route}
+                  type="button"
+                  id={`sidebar-collapsed-${item.label.toLowerCase()}`}
+                  data-nav-active={currentRoute === item.route ? 'true' : undefined}
+                  onClick={() => handleNavClick(item.route)}
+                  title={item.label}
+                  className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${currentRoute === item.route ? 'bg-black/5 dark:bg-white/[0.08] shadow-xs' : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'}`}
+                >
+                  <img src={item.icon} alt="" className="size-5 object-contain" />
+                </button>
+              ))}
 
               {/* 1. Copilot Icon */}
               <button
@@ -2120,23 +2033,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
               {/* Bottom Give Feedback & Settings Icons */}
               <div className="mt-auto pt-2 space-y-1 relative">
-                {/* Give Feedback Collapsed Button placed directly above Settings */}
-                <div>
-                  <button
-                    type="button"
-                    id="sidebar-collapsed-feedback"
-                    data-nav-active={isCurrentActive('/feedback') ? 'true' : undefined}
-                    onClick={() => handleNavClick('/feedback')}
-                    title="Give Feedback"
-                    className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                      isCurrentActive('/feedback')
-                        ? 'bg-black/5 dark:bg-white/[0.08] text-[#111827] dark:text-white shadow-xs'
-                        : 'text-[#4b5563] dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-[#111827] dark:hover:text-white'
-                    }`}
-                  >
-                    <FluentFeedbackHubIcon className="w-5 h-5 text-[#111827] dark:text-white" />
-                  </button>
-                </div>
+
 
                 {/* XAML Controls Icon */}
                 <button

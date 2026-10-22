@@ -615,16 +615,22 @@ export const TopBar: React.FC<TopBarProps> = ({
       {/* 2. Center Search Box with Flyout matching Microsoft Fluent Design and reference image */}
       <div 
         ref={searchContainerRef}
-        className="flex-1 flex items-center justify-center min-w-0 px-2 sm:px-4 z-40 md:absolute md:left-1/2 md:-translate-x-1/2 md:w-full md:max-w-[460px]"
+        className={`flex-1 flex items-center justify-center min-w-0 px-2 sm:px-4 z-40 md:absolute md:left-1/2 md:-translate-x-1/2 transition-[max-width,width] duration-300 ease-out ${
+          (settings.searchVisualExperimental || 'treatment-1') === 'treatment-5'
+            ? 'w-auto max-w-[92vw] sm:max-w-[560px] md:max-w-[640px]'
+            : 'md:w-full md:max-w-[460px]'
+        }`}
       >
-        <div className={`relative w-full max-w-[460px] min-w-0 mx-auto ${
+        <div className={`relative w-full min-w-0 mx-auto transition-[max-width,width] duration-300 ease-out ${
+          (settings.searchVisualExperimental || 'treatment-1') === 'treatment-5'
+            ? 'w-auto max-w-full flex justify-center'
+            : 'max-w-[460px]'
+        } ${
           (settings.searchVisualExperimental || 'treatment-1') === 'treatment-2'
             ? 'flex justify-end'
             : (settings.searchVisualExperimental || 'treatment-1') === 'treatment-3'
             ? 'flex justify-center'
             : (settings.searchVisualExperimental || 'treatment-1') === 'treatment-4'
-            ? 'flex justify-center'
-            : (settings.searchVisualExperimental || 'treatment-1') === 'treatment-5'
             ? 'flex justify-center'
             : ''
         }`}>
@@ -712,12 +718,12 @@ export const TopBar: React.FC<TopBarProps> = ({
               </span>
             </button>
           ) : (settings.searchVisualExperimental || 'treatment-1') === 'treatment-5' ? (
-            /* Treatment 5: Search highlights - borderless pill, today's real-time event placeholder, blue gradient when clicked */
+            /* Treatment 5: Search highlights - borderless pill, today's real-time event placeholder, adaptive width according to text length */
             <button
               id="topbar-search-highlights"
               type="button"
               onClick={() => setIsSearchFlyoutOpen((prev) => !prev)}
-              className={`group relative h-8.5 sm:h-9 max-w-full px-3.5 sm:px-4 rounded-full flex items-center gap-2 transition-all duration-200 cursor-pointer select-none font-medium text-xs sm:text-[13px] border-0 border-none !border-none ${
+              className={`group relative h-8.5 sm:h-9 w-auto max-w-full px-3.5 sm:px-4.5 rounded-full flex items-center gap-2 transition-[background-color,box-shadow,transform,width,max-width,padding] duration-300 ease-out cursor-pointer select-none font-medium text-xs sm:text-[13px] border-0 border-none !border-none ${
                 isSearchFlyoutOpen
                   ? 'bg-gradient-to-r from-[#005fb8] via-[#0078d4] to-[#4cc2ff] text-white shadow-[0_2px_14px_rgba(0,120,212,0.45)] scale-[1.02]'
                   : 'bg-black/5 dark:bg-[#282c31] hover:bg-black/10 dark:hover:bg-[#32363c] text-[#4b5563] dark:text-[#d1d5db]'
@@ -726,11 +732,9 @@ export const TopBar: React.FC<TopBarProps> = ({
               aria-label="Search highlights"
             >
               <div className="w-4 h-4 shrink-0 flex items-center justify-center">
-                {isSearchFlyoutOpen ? (
-                  <Search className="w-4 h-4 text-white shrink-0" />
-                ) : (
-                  <Sparkles className="w-3.5 h-3.5 text-[#0078d4] dark:text-[#4cc2ff] shrink-0 group-hover:rotate-12 transition-transform" />
-                )}
+                <Search className={`w-4 h-4 shrink-0 transition-colors ${
+                  isSearchFlyoutOpen ? 'text-white' : 'text-[#71717a] dark:text-[#a0a6b2] group-hover:text-black dark:group-hover:text-white'
+                }`} />
               </div>
               <AnimatePresence mode="wait">
                 <motion.span
@@ -739,7 +743,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -3 }}
                   transition={{ duration: 0.25 }}
-                  className="truncate max-w-[190px] sm:max-w-[280px] text-left text-xs sm:text-[13px]"
+                  className="truncate whitespace-nowrap max-w-[220px] sm:max-w-[360px] md:max-w-[480px] lg:max-w-[560px] text-left text-xs sm:text-[13px]"
                 >
                   {searchQuery.trim() || highlights[currentHighlightIndex] || 'Sự kiện hôm nay: Tin tức thời sự 24h'}
                 </motion.span>

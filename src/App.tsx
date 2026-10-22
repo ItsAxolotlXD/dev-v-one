@@ -7,7 +7,6 @@ import { SpotlightModal } from './components/SpotlightModal';
 import { CustomStreamModal } from './components/CustomStreamModal';
 import { WelcomeModal } from './components/WelcomeModal';
 import { UnderConstructionModal } from './components/UnderConstructionModal';
-import { UnsavedSettingsModal } from './components/UnsavedSettingsModal';
 import { HelpModal } from './components/HelpModal';
 import { NewsSummaryModal } from './components/NewsSummaryModal';
 import { FindWordsBar } from './components/FindWordsBar';
@@ -31,7 +30,6 @@ import { Settings } from './pages/Settings';
 import { ImmersiveSearch } from './pages/ImmersiveSearch';
 import { NotesApp } from './pages/NotesApp';
 import { Craftmine } from './pages/Craftmine';
-import { Updates } from './pages/Updates';
 import { TaskManager } from './pages/TaskManager';
 import { Widgets } from './pages/Widgets';
 import { CopilotPage } from './pages/CopilotPage';
@@ -50,9 +48,7 @@ import { Cookbook } from './pages/Cookbook';
 import { SwiftSocial } from './pages/SwiftSocial';
 import { FriendsApp } from './pages/FriendsApp';
 import { LogosFandom } from './pages/LogosFandom';
-import { MinecraftWiki } from './pages/MinecraftWiki';
 import { Calculator } from './pages/Calculator';
-import { SnippingTool } from './pages/SnippingTool';
 import { FeedbackHub } from './pages/FeedbackHub';
 import { MicrosoftStore } from './pages/MicrosoftStore';
 import { RecallApp } from './pages/RecallApp';
@@ -71,32 +67,7 @@ import { useSystemTasks } from './context/SystemTasksContext';
 
 export default function App() {
   const { isSystemCrashed, crashPhase, crashReason, restartSystem } = useSystemTasks();
-  const { settings, draftSettings, hasChanges, applyDraftSettings, discardDraftSettings } = useSettings();
-
-  // Tooltip & navigation block for unsaved settings
-  const [showUnsavedTooltip, setShowUnsavedTooltip] = useState(false);
-  const unsavedTooltipTimerRef = useRef<NodeJS.Timeout | null>(null);
-
-  const triggerUnsavedTooltip = useCallback(() => {
-    setShowUnsavedTooltip(true);
-    if (unsavedTooltipTimerRef.current) clearTimeout(unsavedTooltipTimerRef.current);
-    unsavedTooltipTimerRef.current = setTimeout(() => {
-      setShowUnsavedTooltip(false);
-    }, 4500);
-  }, []);
-
-  // When changes are saved or cleared, hide tooltip
-  useEffect(() => {
-    if (!hasChanges) {
-      setShowUnsavedTooltip(false);
-    }
-  }, [hasChanges]);
-
-  useEffect(() => {
-    return () => {
-      if (unsavedTooltipTimerRef.current) clearTimeout(unsavedTooltipTimerRef.current);
-    };
-  }, []);
+  const { settings } = useSettings();
 
   const [installedApps, setInstalledApps] = useState<string[]>(() => {
     try {
@@ -290,9 +261,6 @@ export default function App() {
   // Determine effective sidebar width for page adaptation
   const isEffectiveCollapsed = settings.autoHideSidebar || isSidebarCollapsed;
 
-  const [isUnsavedSettingsModalOpen, setIsUnsavedSettingsModalOpen] = useState(false);
-  const [pendingNavigation, setPendingNavigation] = useState<{ path: string; state?: any } | null>(null);
-
   // Perform actual navigation
   const executeNavigation = useCallback((path: string, state?: any) => {
     const requestedApp = getStoreAppForRoute(path);
@@ -380,41 +348,8 @@ export default function App() {
 
   // Navigation handler
   const navigate = useCallback((path: string, state?: any) => {
-    // If currently on settings and there are unsaved changes, prompt before leaving
-    if (isSettingsRoute && hasChanges) {
-      const isStillSettings = path === '/settings' || path.startsWith('/settings?') || path.startsWith('/settings#');
-      if (!isStillSettings) {
-        setPendingNavigation({ path, state });
-        setIsUnsavedSettingsModalOpen(true);
-        return;
-      }
-    }
-
     executeNavigation(path, state);
-  }, [currentRoute, hasChanges, executeNavigation]);
-
-  const handleSaveAndNavigate = () => {
-    applyDraftSettings();
-    setIsUnsavedSettingsModalOpen(false);
-    if (pendingNavigation) {
-      executeNavigation(pendingNavigation.path, pendingNavigation.state);
-      setPendingNavigation(null);
-    }
-  };
-
-  const handleDiscardAndNavigate = () => {
-    discardDraftSettings();
-    setIsUnsavedSettingsModalOpen(false);
-    if (pendingNavigation) {
-      executeNavigation(pendingNavigation.path, pendingNavigation.state);
-      setPendingNavigation(null);
-    }
-  };
-
-  const handleCancelNavigate = () => {
-    setIsUnsavedSettingsModalOpen(false);
-    setPendingNavigation(null);
-  };
+  }, [executeNavigation]);
 
   // Open search handler (respects navigation mode and immersive search experiment)
   const handleOpenSearch = useCallback(() => {
@@ -476,12 +411,6 @@ export default function App() {
   // Handle browser back / forward navigation
   useEffect(() => {
     const handlePopState = () => {
-      if (isSettingsRoute && hasChanges) {
-        window.history.pushState(null, '', '/settings');
-        setPendingNavigation({ path: window.location.pathname });
-        setIsUnsavedSettingsModalOpen(true);
-        return;
-      }
       const path = window.location.pathname;
       const requestedApp = getStoreAppForRoute(path);
       if (requestedApp && !installedApps.includes(requestedApp.id)) {
@@ -497,25 +426,11 @@ export default function App() {
         if (matched) setCurrentChannel(matched);
       }
       setCurrentRoute(path);
-
     };
 
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, [channels, currentRoute, hasChanges, triggerUnsavedTooltip, installedApps]);
-
-  // Handle page reload / unload when settings are unsaved
-  useEffect(() => {
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (isSettingsRoute && hasChanges) {
-        e.preventDefault();
-        e.returnValue = '';
-        return '';
-      }
-    };
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, [currentRoute, hasChanges]);
+  }, [channels, currentRoute, installedApps]);
 
   // Handle playing a custom single channel
   const handlePlayCustomChannel = (newChannel: Channel) => {
@@ -692,11 +607,6 @@ export default function App() {
       case '/fandom':
         return <LogosFandom />;
 
-      case '/minecraft-wiki':
-      case '/mc-wiki':
-      case '/wiki':
-        return <MinecraftWiki />;
-
       case '/vlc':
       case '/vlc-player':
       case '/media-player':
@@ -772,11 +682,6 @@ export default function App() {
       case '/calc':
         return <Calculator navigate={navigate} />;
 
-      case '/snipping-tool':
-      case '/snip':
-      case '/snipping':
-        return <SnippingTool navigate={navigate} />;
-
       case '/feedback-hub':
       case '/feedback':
         return <FeedbackHub navigate={navigate} />;
@@ -793,9 +698,6 @@ export default function App() {
 
       case '/recall':
         return <RecallApp navigate={navigate} />;
-
-      case '/updates':
-        return <Updates navigate={navigate} onOpenUpdate={() => setIsUpdating(true)} />;
 
       default:
         return (
@@ -1000,8 +902,6 @@ export default function App() {
             onOpenNotifications={() => setIsUnderConstructionOpen(true)}
             fontSize={articleFontSize}
             onChangeFontSize={handleFontSizeChange}
-            showUnsavedTooltip={showUnsavedTooltip}
-            onDismissUnsavedTooltip={() => setShowUnsavedTooltip(false)}
           />
         )}
 
@@ -1067,13 +967,7 @@ export default function App() {
         onSelectChannel={setCurrentChannel}
       />
 
-      {/* Unsaved Settings Confirmation Modal */}
-      <UnsavedSettingsModal
-        isOpen={isUnsavedSettingsModalOpen}
-        onSave={handleSaveAndNavigate}
-        onDiscard={handleDiscardAndNavigate}
-        onCancel={handleCancelNavigate}
-      />
+
 
       <CustomStreamModal
         isOpen={isCustomStreamModalOpen}

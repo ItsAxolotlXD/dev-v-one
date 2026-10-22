@@ -157,7 +157,7 @@ input[type="reset"],
 }
 
 /* ========================================================
-   TOÀN BỘ SEARCH BOX / INPUT BOX TRONG APP CÓ CORNER RADIUS 8PX
+   TOÀN BỘ SEARCH BOX / INPUT BOX DẠNG PILL (BO TRÒN GÓC 9999PX)
    ======================================================== */
 input[type="text"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
 input[type="search"],
@@ -177,7 +177,7 @@ input[type="number"],
 [class*="search-bar"],
 [class*="search-container"],
 [class*="search-input"],
-#topbar-search-box:not([data-flyout-open="true"]),
+#topbar-search-box,
 #sidebar-search-box,
 #channels-search-box,
 #settings-search-box,
@@ -186,11 +186,11 @@ input[type="number"],
 #copilot-search-box,
 #copilot-flyout-search-box,
 #spotlight-search-container {
-  border-radius: 8px !important;
+  border-radius: 9999px !important;
 }
 
 #topbar-search-box[data-flyout-open="true"] {
-  border-radius: 8px !important;
+  border-radius: 9999px !important;
 }
 
 /* ========================================================
@@ -3087,7 +3087,10 @@ button[class*="bg-[#4cc2ff]"]:active,
 
 /* WinUI 3 / Windows 11 Standard Toggle Switch Styling - No border/outline in any state */
 button[role="switch"],
-.toggle-switch-btn {
+.toggle-switch-btn,
+[id^="toggle-"],
+[class*="toggle-switch-btn"],
+[class*="toggle-switch-track"] {
   width: 44px !important;
   height: 24px !important;
   min-width: 44px !important;
