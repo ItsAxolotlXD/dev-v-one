@@ -209,7 +209,7 @@ app.get('/api/national-today', async (_req, res) => {
 
     const response = await fetch('https://nationaltoday.com/today/', {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
       }
     });
@@ -220,13 +220,38 @@ app.get('/api/national-today', async (_req, res) => {
 
     const html = await response.text();
     const items: Array<{ title: string; category?: string; url?: string }> = [];
-    const regex = /<h3 class="card-holiday-title">([^<]+)<\/h3>/g;
-    let match;
-    while ((match = regex.exec(html)) !== null && items.length < 20) {
-      const title = match[1].trim();
-      if (title && !items.some(i => i.title.toLowerCase() === title.toLowerCase())) {
-        items.push({ title });
+    
+    // Multiple regex patterns to handle variations in National Today markup
+    const regexPatterns = [
+      /<h3[^>]*class=["'][^"']*card-holiday-title[^"']*["'][^>]*>(?:<a[^>]*>)?([^<]+)(?:<\/a>)?<\/h3>/gi,
+      /<h3[^>]*class=["'][^"']*holiday-title[^"']*["'][^>]*>(?:<a[^>]*>)?([^<]+)(?:<\/a>)?<\/h3>/gi,
+      /<h2[^>]*class=["'][^"']*card-holiday-title[^"']*["'][^>]*>(?:<a[^>]*>)?([^<]+)(?:<\/a>)?<\/h2>/gi,
+      /<a[^>]*class=["'][^"']*card-holiday-title[^"']*["'][^>]*>([^<]+)<\/a>/gi,
+      /<h3 class="card-holiday-title">([^<]+)<\/h3>/gi
+    ];
+
+    const cleanTitle = (raw: string) => {
+      return raw
+        .replace(/&amp;/g, '&')
+        .replace(/&#038;/g, '&')
+        .replace(/&#8217;/g, "'")
+        .replace(/&#8216;/g, "'")
+        .replace(/&#8220;/g, '"')
+        .replace(/&#8221;/g, '"')
+        .replace(/&#8211;/g, '-')
+        .replace(/&nbsp;/g, ' ')
+        .trim();
+    };
+
+    for (const pattern of regexPatterns) {
+      let match;
+      while ((match = pattern.exec(html)) !== null && items.length < 30) {
+        const title = cleanTitle(match[1]);
+        if (title && title.length > 2 && !items.some(i => i.title.toLowerCase() === title.toLowerCase())) {
+          items.push({ title });
+        }
       }
+      if (items.length >= 10) break;
     }
 
     if (items.length > 0) {

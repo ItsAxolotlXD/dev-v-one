@@ -113,24 +113,6 @@ export const SEARCH_EXP_OPTIONS = [
   }
 ];
 
-export const SEARCH_ICON_TREATMENT_OPTIONS = [
-  {
-    value: 'default' as const,
-    label: 'Default',
-  },
-  {
-    value: 'flipped' as const,
-    label: 'Flipped',
-  },
-  {
-    value: 'sparkle' as const,
-    label: 'Sparkle',
-  },
-  {
-    value: 'globe' as const,
-    label: 'Globe',
-  }
-];
 
 export const SEARCH_VISUAL_OPTIONS = [
   {
@@ -204,22 +186,15 @@ export const Settings: React.FC<SettingsProps> = ({
   const [isSearchExpDropdownOpen, setIsSearchExpDropdownOpen] = useState(false);
   const searchExpDropdownRef = useRef<HTMLDivElement>(null);
 
-  // Search icon treatments dropdown state
-  const [isSearchIconTreatmentDropdownOpen, setIsSearchIconTreatmentDropdownOpen] = useState(false);
-  const searchIconTreatmentDropdownRef = useRef<HTMLDivElement>(null);
-
   // Search visual experimental dropdown state
   const [isSearchVisualDropdownOpen, setIsSearchVisualDropdownOpen] = useState(false);
   const searchVisualDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!isSearchExpDropdownOpen && !isSearchIconTreatmentDropdownOpen && !isSearchVisualDropdownOpen) return;
+    if (!isSearchExpDropdownOpen && !isSearchVisualDropdownOpen) return;
     const handleClickOutside = (e: MouseEvent) => {
       if (searchExpDropdownRef.current && !searchExpDropdownRef.current.contains(e.target as Node)) {
         setIsSearchExpDropdownOpen(false);
-      }
-      if (searchIconTreatmentDropdownRef.current && !searchIconTreatmentDropdownRef.current.contains(e.target as Node)) {
-        setIsSearchIconTreatmentDropdownOpen(false);
       }
       if (searchVisualDropdownRef.current && !searchVisualDropdownRef.current.contains(e.target as Node)) {
         setIsSearchVisualDropdownOpen(false);
@@ -227,7 +202,7 @@ export const Settings: React.FC<SettingsProps> = ({
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isSearchExpDropdownOpen, isSearchIconTreatmentDropdownOpen, isSearchVisualDropdownOpen]);
+  }, [isSearchExpDropdownOpen, isSearchVisualDropdownOpen]);
 
   const shouldAnimateMotion = !draftSettings.reduceAllMotion && draftSettings.animatePageTransitions;
 
@@ -365,25 +340,6 @@ export const Settings: React.FC<SettingsProps> = ({
             <h1 className="text-3xl font-bold text-[#111827] dark:text-white tracking-tight">
               Settings
             </h1>
-            {(hasChanges || isSaving) && (
-              <button
-                type="button"
-                id="btn-settings-save"
-                disabled={isSaving}
-                onClick={handleApplySettings}
-                className={`min-w-[80px] h-8 px-4 rounded-full text-xs sm:text-sm flex items-center justify-center shrink-0 tracking-tight text-center select-none shadow-none transition-all ${
-                  isSaving
-                    ? 'bg-black/5 dark:bg-white/10 text-[#111827] dark:text-white border border-black/10 dark:border-white/15 cursor-default'
-                    : 'bg-[#4cc2ff] hover:bg-[#6bd0ff] active:bg-[#3bb2ef] text-black font-medium border border-transparent cursor-pointer'
-                }`}
-              >
-                {isSaving ? (
-                  <SpinningRing size={16} strokeWidth={2.5} color="currentColor" />
-                ) : (
-                  <span>Save</span>
-                )}
-              </button>
-            )}
           </div>
 
           {/* Search Header - Styled and laid out exactly like TopBar search bar */}
@@ -394,14 +350,14 @@ export const Settings: React.FC<SettingsProps> = ({
                 setIsFocused(true);
                 inputRef.current?.focus();
               }}
-              className={`group relative w-full h-8 sm:h-8.5 ${
+              className={`group relative w-full h-8 sm:h-8.5 rounded-full ${
                 draftSettings.windowsAppSdkPreview
-                  ? '!rounded-[100px] !bg-[#424752] !border-0 !border-none !shadow-none'
-                  : 'rounded-[8px] bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10'
+                  ? '!bg-[#424752] !border-0 !border-none !shadow-none'
+                  : 'bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10'
               } flex items-center px-3.5 gap-2 transition-all cursor-text select-none ${
                 draftSettings.windowsAppSdkPreview
                   ? '!border-0 !border-none !ring-0 !outline-none'
-                  : 'focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]'
+                  : 'focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30'
               }`}
             >
               <FluentSearchIcon className="w-3.5 h-3.5 text-neutral-400 shrink-0 pointer-events-none" />
@@ -471,25 +427,6 @@ export const Settings: React.FC<SettingsProps> = ({
               <ChevronLeft className="w-4 h-4 stroke-[2.25]" />
               <span>Settings</span>
             </button>
-            {(hasChanges || isSaving) && (
-              <button
-                type="button"
-                id="btn-settings-subpage-save"
-                disabled={isSaving}
-                onClick={handleApplySettings}
-                className={`min-w-[80px] h-8 px-4 rounded-full text-xs sm:text-sm flex items-center justify-center shrink-0 tracking-tight text-center select-none shadow-none transition-all ${
-                  isSaving
-                    ? 'bg-black/5 dark:bg-white/10 text-[#111827] dark:text-white border border-black/10 dark:border-white/15 cursor-default'
-                    : 'bg-[#4cc2ff] hover:bg-[#6bd0ff] active:bg-[#3bb2ef] text-black font-medium border border-transparent cursor-pointer'
-                }`}
-              >
-                {isSaving ? (
-                  <SpinningRing size={16} strokeWidth={2.5} color="currentColor" />
-                ) : (
-                  <span>Save</span>
-                )}
-              </button>
-            )}
           </div>
           {activeCatObj && (
             <div className="flex items-center gap-3 pt-1">
@@ -2006,98 +1943,6 @@ export const Settings: React.FC<SettingsProps> = ({
                   </div>
                 </div>
 
-                <div className="divider-line h-[1px] bg-black/5 dark:bg-white/10 ml-4 mr-4" />
-
-                {/* Search icon treatments */}
-                <div 
-                  id="setting-experimental-search-icon-treatments"
-                  className={`px-4 py-3 sm:py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors relative ${
-                    isSearchIconTreatmentDropdownOpen ? 'z-50' : 'z-20'
-                  }`}
-                >
-                  <div className="min-w-0 flex-1 pr-2">
-                    <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
-                      <span>Search icon treatments</span>
-                      <span className="text-[10px] px-1.5 py-0.2 rounded font-bold uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
-                        Dropdown
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Dropdown Menu - always on-top */}
-                  <div className="relative shrink-0 z-[100]" ref={searchIconTreatmentDropdownRef}>
-                    <button
-                      id="btn-dropdown-search-icon-treatments"
-                      type="button"
-                      onClick={() => setIsSearchIconTreatmentDropdownOpen((prev) => !prev)}
-                      className="min-w-[240px] sm:min-w-[270px] h-9 px-3 rounded-[6px] bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 border border-black/10 dark:border-white/15 text-xs text-[#111827] dark:text-white flex items-center justify-between gap-2 transition-all cursor-pointer font-medium select-none shadow-2xs"
-                      aria-haspopup="listbox"
-                      aria-expanded={isSearchIconTreatmentDropdownOpen}
-                    >
-                      <div className="flex items-center gap-2.5 truncate">
-                        <div className="w-4 h-4 flex items-center justify-center shrink-0">
-                          <FluentSearchIcon 
-                            className="w-4 h-4 shrink-0 text-[#111827] dark:text-white" 
-                            treatment={draftSettings.searchIconTreatment || 'default'} 
-                          />
-                        </div>
-                        <span className="truncate text-left font-medium">
-                          {SEARCH_ICON_TREATMENT_OPTIONS.find((o) => o.value === (draftSettings.searchIconTreatment || 'default'))?.label || 'Default'}
-                        </span>
-                      </div>
-                      <ChevronDown
-                        className={`w-4 h-4 text-[#6B7280] dark:text-[#9CA3AF] transition-transform duration-200 shrink-0 ${
-                          isSearchIconTreatmentDropdownOpen ? 'rotate-180 text-[#0078d4] dark:text-[#4cc2ff]' : ''
-                        }`}
-                      />
-                    </button>
-
-                    <AnimatePresence>
-                      {isSearchIconTreatmentDropdownOpen && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 4, scale: 0.98 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: 4, scale: 0.98 }}
-                          transition={{ duration: 0.12 }}
-                          className="absolute right-0 top-full mt-1.5 z-[99999] w-72 sm:w-80 rounded-[8px] bg-white/98 dark:bg-[#25282e]/98 backdrop-blur-2xl border border-black/15 dark:border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.35)] p-1.5 space-y-1 select-none"
-                          style={{
-                            boxShadow: '0 20px 50px rgba(0,0,0,0.38), 0 4px 14px rgba(0,0,0,0.15)'
-                          }}
-                        >
-                          {SEARCH_ICON_TREATMENT_OPTIONS.map((opt) => {
-                            const isSelected = (draftSettings.searchIconTreatment || 'default') === opt.value;
-                            return (
-                              <button
-                                key={opt.value}
-                                type="button"
-                                id={`search-icon-treatment-opt-${opt.value}`}
-                                onClick={() => {
-                                  updateDraft('searchIconTreatment', opt.value);
-                                  setIsSearchIconTreatmentDropdownOpen(false);
-                                }}
-                                className={`w-full text-left p-2.5 rounded-[6px] flex items-center gap-2.5 transition-colors cursor-pointer ${
-                                  isSelected
-                                    ? 'bg-[#0078d4]/10 dark:bg-[#4cc2ff]/15 text-[#0078d4] dark:text-[#4cc2ff]'
-                                    : 'text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10'
-                                }`}
-                              >
-                                <div className="w-4 h-4 shrink-0 flex items-center justify-center">
-                                  {isSelected && <Check className="w-4 h-4 text-[#0078d4] dark:text-[#4cc2ff]" />}
-                                </div>
-                                <div className="w-5 h-5 shrink-0 flex items-center justify-center">
-                                  <FluentSearchIcon className="w-4 h-4 shrink-0 text-[#111827] dark:text-white" treatment={opt.value} />
-                                </div>
-                                <div className="min-w-0 flex-1 font-semibold text-xs leading-snug">
-                                  {opt.label}
-                                </div>
-                              </button>
-                            );
-                          })}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                </div>
 
                 <div className="divider-line h-[1px] bg-black/5 dark:bg-white/10 ml-4 mr-4" />
 

@@ -233,13 +233,12 @@ export const TopBar: React.FC<TopBarProps> = ({
     let isMounted = true;
     const fetchHighlights = async () => {
       try {
-        const res = await fetch('/api/vnexpress-news');
+        const res = await fetch('/api/national-today');
         if (res.ok) {
           const data = await res.json();
-          if (Array.isArray(data.articles) && data.articles.length > 0) {
-            const titles = data.articles
-              .slice(0, 10)
-              .map((a: any) => a.title?.trim())
+          if (Array.isArray(data.holidays) && data.holidays.length > 0) {
+            const titles = data.holidays
+              .map((h: any) => h.title?.trim())
               .filter(Boolean);
             if (isMounted && titles.length > 0) {
               setHighlights(titles);
@@ -722,15 +721,13 @@ export const TopBar: React.FC<TopBarProps> = ({
                   ? 'bg-gradient-to-r from-[#005fb8] via-[#0078d4] to-[#4cc2ff] text-white shadow-[0_2px_14px_rgba(0,120,212,0.45)] scale-[1.02]'
                   : 'bg-black/5 dark:bg-[#282c31] hover:bg-black/10 dark:hover:bg-[#32363c] text-[#4b5563] dark:text-[#d1d5db]'
               }`}
-              title={highlights[currentHighlightIndex] || 'Search highlights - Sự kiện hôm nay'}
+              title={highlights[currentHighlightIndex] || 'Search highlights - Events today'}
               aria-label="Search highlights"
             >
               <div className="w-4 h-4 shrink-0 flex items-center justify-center">
-                {isSearchFlyoutOpen ? (
-                  <Search className="w-4 h-4 text-white shrink-0" />
-                ) : (
-                  <Sparkles className="w-3.5 h-3.5 text-[#0078d4] dark:text-[#4cc2ff] shrink-0 group-hover:rotate-12 transition-transform" />
-                )}
+                <Search className={`w-4 h-4 shrink-0 transition-colors ${
+                  isSearchFlyoutOpen ? 'text-white' : 'text-[#71717a] dark:text-[#a0a6b2] group-hover:text-black dark:group-hover:text-white'
+                }`} />
               </div>
               <AnimatePresence mode="wait">
                 <motion.span
@@ -741,7 +738,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                   transition={{ duration: 0.25 }}
                   className="truncate max-w-[190px] sm:max-w-[280px] text-left text-xs sm:text-[13px]"
                 >
-                  {searchQuery.trim() || highlights[currentHighlightIndex] || 'Sự kiện hôm nay: Tin tức thời sự 24h'}
+                  {searchQuery.trim() || highlights[currentHighlightIndex] || 'Search highlights: Today'}
                 </motion.span>
               </AnimatePresence>
             </button>
@@ -757,17 +754,11 @@ export const TopBar: React.FC<TopBarProps> = ({
                 className={`fluent-search-box group relative w-full h-8.5 sm:h-9 ${
                   settings.windowsAppSdkPreview
                     ? '!h-[38px] !min-h-[38px] !rounded-[9999px] !bg-[#1f1f1f] !border-0 !border-none !border-b-0 !shadow-none'
-                    : settings.roundedSearchBox
-                      ? 'rounded-full bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10'
-                      : 'rounded-[8px] bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10'
+                    : 'rounded-full bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10'
                 } flex items-center px-2.5 gap-1.5 transition-all cursor-text select-none ${
                   settings.windowsAppSdkPreview
                     ? '!border-0 !border-none !ring-0 !outline-none'
-                    : `focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff] ${
-                        isSearchFlyoutOpen && !settings.roundedSearchBox
-                          ? 'border-b-2 border-b-[#005fb8] dark:border-b-[#4cc2ff]'
-                          : ''
-                      }`
+                    : 'focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30'
                 }`}
               >
                 {/* Left Search Icon (if Move search to the left is active OR WebView SDK is enabled) */}
