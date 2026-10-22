@@ -100,7 +100,7 @@ export const DEFAULT_SETTINGS: SystemSettings = {
   triangleExperiment: true,
   triangleExperimentVersion: 1,
   experimentalSearchExperience: 'left',
-  roundedSearchBox: true,
+  roundedSearchBox: false,
   searchIconTreatment: 'default',
   searchVisualExperimental: 'treatment-1',
   windowsAppSdkPreview: false,
@@ -353,13 +353,98 @@ function getDraftSnapshot(): SystemSettings {
   return draftSettingsStore;
 }
 
+export const updateDraftSetting = <K extends keyof SystemSettings>(key: K, value: SystemSettings[K]) => {
+  draftSettingsStore = { ...draftSettingsStore, [key]: value };
+
+  // WebView SDK uses the native left-aligned search layout by default.
+  if (key === 'windowsAppSdkPreview' && value === true) {
+    draftSettingsStore.experimentalSearchExperience = 'left';
+  }
+
+  // Khi bật light mode, opacity của spatial glass tự động nhảy lên 43%
+  if (key === 'theme') {
+    if (value === 'light') {
+      draftSettingsStore.spatialGlassOpacity = 43;
+    }
+  }
+
+  if (typeof document !== 'undefined') {
+    if (key === 'theme') {
+      if (value === 'light') {
+        document.documentElement.classList.add('light-mode');
+        document.documentElement.classList.remove('dark');
+        document.body?.classList.add('light-mode');
+      } else {
+        document.documentElement.classList.remove('light-mode');
+        document.documentElement.classList.add('dark');
+        document.body?.classList.remove('light-mode');
+      }
+    }
+
+    if (key === 'spatialGlassOpacity' || key === 'spatialGlassBlur' || key === 'spatialGlass' || key === 'theme') {
+      const isAct = draftSettingsStore.spatialGlass !== false;
+      const opacity = draftSettingsStore.spatialGlassOpacity ?? 20;
+      const blur = draftSettingsStore.spatialGlassBlur ?? 10;
+      const isDarkContent = isAct && opacity > 40;
+      const isUnder40 = isAct && opacity < 40;
+      document.documentElement.classList.toggle('spatial-glass-dark-content', isDarkContent);
+      document.documentElement.classList.toggle('spatial-glass-under-40', isUnder40);
+
+      if (!isAct) {
+        document.documentElement.style.setProperty('--spatial-glass-opacity', '0');
+        document.documentElement.style.setProperty('--spatial-glass-bg', 'rgba(24, 24, 27, 0.85)');
+        document.documentElement.style.setProperty('--spatial-glass-blur', '0px');
+      } else {
+        const opacityVal = opacity / 100;
+        const blurPx = Math.round((blur / 100) * 40);
+        document.documentElement.style.setProperty('--spatial-glass-opacity', String(opacityVal));
+        document.documentElement.style.setProperty('--spatial-glass-bg', `rgba(255, 255, 255, ${opacityVal})`);
+        document.documentElement.style.setProperty('--spatial-glass-blur', `${blurPx}px`);
+      }
+    }
+
+    if (key === 'roundedSearchBox') {
+      document.documentElement.classList.toggle('rounded-search-boxes', Boolean(value));
+      document.body?.classList.toggle('rounded-search-boxes', Boolean(value));
+    }
+
+    if (key === 'searchIconTreatment') {
+      document.documentElement.dataset.searchIconTreatment = String(value);
+    }
+
+    if (key === 'searchVisualExperimental') {
+      document.documentElement.dataset.searchVisualExperimental = String(value);
+    }
+
+    if (key === 'windowsAppSdkPreview') {
+      document.documentElement.classList.toggle('windows-app-sdk-preview', Boolean(value));
+      document.documentElement.classList.toggle('webview-sdk-preview', Boolean(value));
+      document.body?.classList.toggle('windows-app-sdk-preview', Boolean(value));
+      document.body?.classList.toggle('webview-sdk-preview', Boolean(value));
+    }
+  }
+  notifyDraftListeners();
+};
+
+export const discardDraftSettings = () => {
+  draftSettingsStore = { ...settingsStore };
+  applySystemSettings(settingsStore);
+  notifyDraftListeners();
+};
+
+export const applyDraftSettings = () => {
+  updateMultipleSettings(draftSettingsStore);
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('settings-applied-toast', { 
+      detail: { timestamp: Date.now() } 
+    }));
+  }
+};
+
 export const updateGlobalSetting = <K extends keyof SystemSettings>(key: K, value: SystemSettings[K]) => {
   let extraUpdates: Partial<SystemSettings> = {};
   if (key === 'theme' && value === 'light') {
     extraUpdates.spatialGlassOpacity = 43;
-  }
-  if (key === 'windowsAppSdkPreview' && value === true) {
-    extraUpdates.experimentalSearchExperience = 'left';
   }
   settingsStore = { ...settingsStore, [key]: value, ...extraUpdates, fontScaleVersion: 2, spatialGlassVersion: 3, nativeKeyboardVersion: 3 };
   draftSettingsStore = { ...settingsStore };
@@ -378,25 +463,6 @@ export const updateGlobalSetting = <K extends keyof SystemSettings>(key: K, valu
     }
   });
   notifyDraftListeners();
-};
-
-export const updateDraftSetting = <K extends keyof SystemSettings>(key: K, value: SystemSettings[K]) => {
-  updateGlobalSetting(key, value);
-};
-
-export const discardDraftSettings = () => {
-  draftSettingsStore = { ...settingsStore };
-  applySystemSettings(settingsStore);
-  notifyDraftListeners();
-};
-
-export const applyDraftSettings = () => {
-  updateMultipleSettings(draftSettingsStore);
-  if (typeof window !== 'undefined') {
-    window.dispatchEvent(new CustomEvent('settings-applied-toast', { 
-      detail: { timestamp: Date.now() } 
-    }));
-  }
 };
 
 export const updateMultipleSettings = (newSettings: Partial<SystemSettings>) => {

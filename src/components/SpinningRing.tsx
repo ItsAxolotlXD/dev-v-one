@@ -1,7 +1,5 @@
 import React from 'react';
 
-export const WINDOWS_8_LOADER_GIF = 'https://upload.wikimedia.org/wikipedia/commons/4/42/Windows-8-loader.gif?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original';
-
 interface SpinningRingProps {
   size?: number;
   strokeWidth?: number;
@@ -11,14 +9,21 @@ interface SpinningRingProps {
 }
 
 /**
- * Windows 8 loading spinning circle loader GIF.
- * Updated to official Windows 8 loader gif per request.
+ * Fluent Windows-style thick spinning progress ring.
+ * Features a circular track and an animated arc in #4cc2ff.
  */
 export const SpinningRing: React.FC<SpinningRingProps> = ({
   size = 48,
+  strokeWidth = 5,
   className = '',
+  color = '#4cc2ff',
   ariaLabel = 'Đang tải...'
 }) => {
+  const radius = 18;
+  const circumference = 2 * Math.PI * radius; // ~113.1
+  // Arc length is approximately 25-30% of the circumference for standard Fluent ProgressRing
+  const strokeDasharray = `${circumference * 0.3} ${circumference * 0.7}`;
+
   return (
     <div
       role="status"
@@ -26,20 +31,35 @@ export const SpinningRing: React.FC<SpinningRingProps> = ({
       className={`inline-flex items-center justify-center select-none pointer-events-none ${className}`}
       style={{ width: size, height: size }}
     >
-      <img
-        src={WINDOWS_8_LOADER_GIF}
-        alt="Loading..."
-        className="w-full h-full object-contain pointer-events-none select-none"
+      <svg
+        viewBox="0 0 44 44"
+        width={size}
+        height={size}
+        className={`fluent-spinning-ring ${className}`}
         style={{
           width: size,
           height: size,
-          maxWidth: '100%',
-          maxHeight: '100%',
-          display: 'block',
+          animation: 'fluent-progress-spin 1s linear infinite',
+          transformOrigin: 'center center',
+          display: 'block'
         }}
         aria-hidden="true"
-        loading="eager"
-      />
+      >
+        {/* Thick spinning arc without background */}
+        <circle
+          cx="22"
+          cy="22"
+          r={radius}
+          fill="none"
+          stroke={color}
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+          strokeDasharray={strokeDasharray}
+          style={{
+            transformOrigin: '22px 22px'
+          }}
+        />
+      </svg>
     </div>
   );
 };

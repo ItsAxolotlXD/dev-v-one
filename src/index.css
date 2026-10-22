@@ -124,7 +124,7 @@
 .copilot-style-input,
 [id*="search-box"],
 [id*="search-capsule"] {
-  border-radius: 9999px !important;
+  border-radius: 8px;
   transition: all 0.15s ease-in-out;
 }
 
@@ -157,7 +157,7 @@ input[type="reset"],
 }
 
 /* ========================================================
-   TOÀN BỘ SEARCH BOX / INPUT BOX TRONG APP CÓ CORNER RADIUS DẠNG PILL (9999PX)
+   TOÀN BỘ SEARCH BOX / INPUT BOX TRONG APP CÓ CORNER RADIUS 8PX
    ======================================================== */
 input[type="text"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
 input[type="search"],
@@ -177,23 +177,20 @@ input[type="number"],
 [class*="search-bar"],
 [class*="search-container"],
 [class*="search-input"],
-#topbar-search-box,
+#topbar-search-box:not([data-flyout-open="true"]),
 #sidebar-search-box,
 #channels-search-box,
 #settings-search-box,
-#news-search-box,
 #immersive-search-capsule,
 #floating-search-bar-pill,
 #copilot-search-box,
 #copilot-flyout-search-box,
-#spotlight-search-container,
-#find-words-bar,
-#find-words-bar > div {
-  border-radius: 9999px !important;
+#spotlight-search-container {
+  border-radius: 8px !important;
 }
 
 #topbar-search-box[data-flyout-open="true"] {
-  border-radius: 9999px !important;
+  border-radius: 8px !important;
 }
 
 /* ========================================================

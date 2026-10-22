@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowRight, Check, ChevronRight, Download, Search, Star, Store, X } from 'lucide-react';
+import { ArrowRight, Check, ChevronRight, Download, LoaderCircle, Search, Star, Store, X } from 'lucide-react';
 import { AppTabIcon, FluentCraftmineIcon, FluentPhotopeaIcon, STORE_ICON_URL } from '../components/FluentIcons';
-import { SpinningRing } from '../components/SpinningRing';
 import { STORE_APPS, type StoreApp } from '../data/storeApps';
 
 interface MicrosoftStoreProps {
@@ -40,7 +39,7 @@ const AppCard: React.FC<{ app: StoreApp; installed: boolean; installing: boolean
       <div className="mt-auto flex items-center justify-between gap-3 pt-4">
         <span className="text-[11px] text-white/45">{app.category}</span>
         <button type="button" onClick={installed ? onOpen : onInstall} disabled={!installed && blocked} aria-busy={installing} className="inline-flex h-9 min-w-[110px] items-center justify-center gap-2 rounded-lg bg-[#0878d1] px-3 text-xs font-semibold text-white transition hover:bg-[#1688e5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63c8ff] disabled:cursor-wait disabled:opacity-80">
-          {installed ? <><Check className="size-3.5" /> Open</> : installing ? <><SpinningRing size={14} /> {secondsRemaining}s</> : <><Download className="size-3.5" /> Install</>}
+          {installed ? <><Check className="size-3.5" /> Open</> : installing ? <><LoaderCircle className="size-3.5 animate-spin" /> {secondsRemaining}s</> : <><Download className="size-3.5" /> Install</>}
         </button>
       </div>
     </article>
@@ -81,7 +80,7 @@ function InstallAppDialog({ app, open, installing, secondsRemaining, onInstall, 
         <div className="mt-7 flex justify-end gap-3">
           <button type="button" onClick={onClose} disabled={installing} className="h-10 rounded-lg border border-white/20 px-4 text-sm text-white/75 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50">Not now</button>
           <button type="button" onClick={onInstall} disabled={installing} aria-busy={installing} className="inline-flex h-10 min-w-[140px] items-center justify-center gap-2 rounded-lg bg-[#1688e5] px-4 text-sm font-semibold text-white transition hover:bg-[#2998f1] disabled:cursor-wait disabled:opacity-90">
-            {installing ? <><SpinningRing size={16} /> Installing {secondsRemaining}s</> : <><Download className="size-4" /> Install app</>}
+            {installing ? <><LoaderCircle className="size-4 animate-spin" /> Installing {secondsRemaining}s</> : <><Download className="size-4" /> Install app</>}
           </button>
         </div>
       </div>
@@ -195,7 +194,7 @@ export const MicrosoftStore: React.FC<MicrosoftStoreProps> = ({ installedApps, o
                     {installedApps.includes(selectedApp.id) ? (
                       <button type="button" onClick={() => navigate(selectedApp.route)} className="inline-flex h-11 items-center gap-2 rounded-lg bg-[#66d2ff] px-8 text-sm font-semibold text-[#062235] transition hover:bg-[#8cddff]"><ArrowRight className="size-4" /> Open</button>
                     ) : (
-                      <button type="button" onClick={() => install(selectedApp)} disabled={Boolean(installingAppId)} aria-busy={installingAppId === selectedApp.id} className="inline-flex h-11 min-w-[132px] items-center justify-center gap-2 rounded-lg bg-[#66d2ff] px-6 text-sm font-semibold text-[#062235] transition hover:bg-[#8cddff] disabled:cursor-wait disabled:opacity-90">{installingAppId === selectedApp.id ? <><SpinningRing size={16} /> Installing {installSecondsRemaining}s</> : <><Download className="size-4" /> Install</>}</button>
+                      <button type="button" onClick={() => install(selectedApp)} disabled={Boolean(installingAppId)} aria-busy={installingAppId === selectedApp.id} className="inline-flex h-11 min-w-[132px] items-center justify-center gap-2 rounded-lg bg-[#66d2ff] px-6 text-sm font-semibold text-[#062235] transition hover:bg-[#8cddff] disabled:cursor-wait disabled:opacity-90">{installingAppId === selectedApp.id ? <><LoaderCircle className="size-4 animate-spin" /> Installing {installSecondsRemaining}s</> : <><Download className="size-4" /> Install</>}</button>
                     )}
                     {installedApps.includes(selectedApp.id) && <button type="button" onClick={() => { onUninstall(selectedApp.id); setNotice(`${selectedApp.name} was uninstalled.`); }} className="h-11 rounded-lg border border-white/25 px-5 text-sm text-white/85 transition hover:bg-white/10">Uninstall</button>}
                   </div>

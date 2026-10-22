@@ -380,8 +380,18 @@ export default function App() {
 
   // Navigation handler
   const navigate = useCallback((path: string, state?: any) => {
+    // If currently on settings and there are unsaved changes, prompt before leaving
+    if (isSettingsRoute && hasChanges) {
+      const isStillSettings = path === '/settings' || path.startsWith('/settings?') || path.startsWith('/settings#');
+      if (!isStillSettings) {
+        setPendingNavigation({ path, state });
+        setIsUnsavedSettingsModalOpen(true);
+        return;
+      }
+    }
+
     executeNavigation(path, state);
-  }, [executeNavigation]);
+  }, [currentRoute, hasChanges, executeNavigation]);
 
   const handleSaveAndNavigate = () => {
     applyDraftSettings();

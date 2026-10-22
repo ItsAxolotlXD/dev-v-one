@@ -138,14 +138,14 @@ export const News: React.FC<NewsProps> = ({ navigate, searchQuery, onSearchChang
         {/* Search matching Let's chat Copilot */}
         <div
           id="news-search-box"
-          className={`group relative w-full md:w-72 h-8 sm:h-8.5 rounded-full ${
+          className={`group relative w-full md:w-72 h-8 sm:h-8.5 ${
             settings.windowsAppSdkPreview
-              ? '!bg-[#363636] !border-0 !border-none !shadow-none'
-              : 'bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10'
+              ? '!rounded-[100px] !bg-[#363636] !border-0 !border-none !shadow-none'
+              : 'rounded-[5px] bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10'
           } flex items-center px-3 gap-2 transition-all shrink-0 ${
             settings.windowsAppSdkPreview
               ? '!border-0 !border-none !ring-0 !outline-none'
-              : 'focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30'
+              : 'focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]'
           }`}
         >
           <FluentSearchIcon className="w-3.5 h-3.5 text-[#71717a] dark:text-[#a1a1aa] shrink-0 pointer-events-none" />
