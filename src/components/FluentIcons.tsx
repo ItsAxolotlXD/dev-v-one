@@ -820,4 +820,26 @@ export const FluentTimelineIcon: React.FC<{ className?: string; style?: React.CS
   </svg>
 );
 
+export const FluentTilesIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    {/* Fluent Live Tiles Grid outline */}
+    <rect x="3" y="3" width="7" height="7" rx="1" fill="currentColor" />
+    <rect x="12" y="3" width="9" height="7" rx="1" fill="currentColor" />
+    <rect x="3" y="12" width="9" height="9" rx="1" fill="currentColor" />
+    <rect x="14" y="12" width="7" height="3.8" rx="1" fill="currentColor" />
+    <rect x="14" y="17.2" width="7" height="3.8" rx="1" fill="currentColor" />
+  </svg>
+);
+
+export const FluentTilesColorIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
+    <rect x="2.5" y="2.5" width="7.5" height="7.5" rx="1" fill="#0078D4" />
+    <rect x="12" y="2.5" width="9.5" height="7.5" rx="1" fill="#008A00" />
+    <rect x="2.5" y="12" width="9.5" height="9.5" rx="1" fill="#D83B01" />
+    <rect x="14" y="12" width="7.5" height="4" rx="1" fill="#603CBA" />
+    <rect x="14" y="17.5" width="7.5" height="4" rx="1" fill="#00A4EF" />
+  </svg>
+);
+
+
 

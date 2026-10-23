@@ -11,6 +11,7 @@ import {
   FluentSearchIcon, 
   FluentSettingsIcon,
   FluentWidgetsIcon,
+  FluentTilesIcon,
   APP_TAB_ICON_URLS,
   FLUENT_ICON_URLS 
 } from './FluentIcons';
@@ -57,6 +58,7 @@ const DOCK_TABS: TabItem[] = [
   { id: 'dock-tv', label: 'Watch', route: '/live-tv', image: APP_TAB_ICON_URLS.watch, icon: FluentLiveTvIcon },
   { id: 'dock-news', label: 'Articles', route: '/news', image: APP_TAB_ICON_URLS.articles, icon: FluentNewsIcon },
   { id: 'dock-widgets', label: 'Widgets', route: '/widgets', image: APP_TAB_ICON_URLS.widgets, icon: FluentWidgetsIcon },
+  { id: 'dock-tiles', label: 'Tiles', route: '/tiles', icon: FluentTilesIcon },
   { id: 'dock-settings', label: 'Settings', route: '/settings', image: APP_TAB_ICON_URLS.settings, icon: FluentSettingsIcon },
   { id: 'dock-search', label: 'Search', isAction: true, image: FLUENT_ICON_URLS.search, icon: FluentSearchIcon },
   { id: 'dock-more', label: 'More', isAction: true, image: MORE_ICON, icon: LayoutGrid },

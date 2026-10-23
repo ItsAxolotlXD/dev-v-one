@@ -7507,3 +7507,56 @@ a:hover .settings-spin-icon,
 .settings-spin-icon:hover {
   transform: rotate(360deg);
 }
+
+/* Windows Context Menu Slide Down Animation */
+@keyframes contextMenuSlideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scaleY(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+  }
+}
+
+.context-menu-slide-down {
+  transform-origin: top;
+  animation: contextMenuSlideDown 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Staggered Right-to-Left Slide-In Animation for Live Tiles */
+@keyframes tileSlideInFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.tile-slide-in-right {
+  animation: tileSlideInFromRight 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Ensure context menu items never zoom or scale on hover */
+#metro-global-context-menu button,
+#metro-global-context-menu button:hover,
+#metro-global-context-menu button:active,
+#metro-global-context-menu button:focus,
+#tile-custom-context-menu button,
+#tile-custom-context-menu button:hover,
+#tile-custom-context-menu button:active,
+#tile-custom-context-menu button:focus,
+.metro-context-menu-item,
+.metro-context-menu-item:hover,
+.metro-context-menu-item:active {
+  transform: none !important;
+  scale: 1 !important;
+  zoom: 1 !important;
+}
+
+
+

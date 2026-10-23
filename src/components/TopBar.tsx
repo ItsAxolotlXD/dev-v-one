@@ -100,6 +100,10 @@ export const getTabTitle = (route: string): string => {
       return 'Notes';
     case '/widgets':
       return 'Widgets';
+    case '/tiles':
+    case '/live-tiles':
+    case '/livetiles':
+      return 'Tiles';
     case '/task-manager':
       return 'Task Manager';
     case '/friends':

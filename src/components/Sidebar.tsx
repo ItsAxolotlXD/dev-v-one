@@ -63,7 +63,8 @@ import {
   FluentCalculatorIcon,
   FluentSnippingToolIcon,
   FluentFeedbackHubIcon,
-  FluentRecallIcon
+  FluentRecallIcon,
+  FluentTilesIcon
 } from './FluentIcons';
 
 import { useFavorites } from '../hooks/useFavorites';
@@ -460,6 +461,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
         icon: FluentWidgetsIcon,
       },
       {
+        id: 'tiles',
+        label: 'Tiles',
+        secondary: 'Live Tiles',
+        route: '/tiles',
+        icon: FluentTilesIcon,
+      },
+      {
         id: 'mail',
         label: 'Mail',
         secondary: 'Outlook Mail',
@@ -596,6 +604,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     if (route === '/notes' && (currentRoute === '/notes' || currentRoute === '/write' || currentRoute === '/present' || currentRoute === '/table')) return true;
     if (route === '/task-manager' && (currentRoute === '/task-manager' || currentRoute.startsWith('/task-manager'))) return true;
     if (route === '/widgets' && (currentRoute === '/widgets' || currentRoute.startsWith('/widgets'))) return true;
+    if ((route === '/tiles' || route === '/live-tiles' || route === '/livetiles') && (currentRoute === '/tiles' || currentRoute === '/live-tiles' || currentRoute === '/livetiles')) return true;
     if ((route === '/file-explorer' || route === '/files') && (currentRoute === '/files' || currentRoute === '/file-explorer' || currentRoute.startsWith('/file-explorer'))) return true;
     if ((route === '/ms-paint' || route === '/paint') && (currentRoute === '/paint' || currentRoute === '/ms-paint' || currentRoute.startsWith('/ms-paint'))) return true;
     if (route === '/photos' && (currentRoute === '/photos' || currentRoute.startsWith('/photos'))) return true;
@@ -1084,6 +1093,25 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </button>
         </div>
 
+        {/* 3b. Tiles */}
+        <div className="shrink-0">
+          <button
+            type="button"
+            id={isMobile ? 'mobile-nav-tiles' : 'sidebar-nav-tiles'}
+            data-nav-active={(currentRoute === '/tiles' || currentRoute === '/live-tiles' || currentRoute === '/livetiles') ? 'true' : undefined}
+            onClick={() => handleNavClick('/tiles')}
+            title="Tiles"
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              (currentRoute === '/tiles' || currentRoute === '/live-tiles' || currentRoute === '/livetiles')
+                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+            }`}
+          >
+            <FluentTilesIcon className="w-5 h-5 shrink-0 text-[#0078d4] dark:text-[#4cc2ff]" />
+            <span className="truncate text-[13.5px]">Tiles</span>
+          </button>
+        </div>
+
         {/* Divider */}
         <div className="my-1.5 mx-1 h-[1px] bg-black/10 dark:bg-white/10 shrink-0" />
 
@@ -1284,6 +1312,24 @@ export const Sidebar: React.FC<SidebarProps> = ({
           }`}
         >
           <AppTabIcon name="widgets" className="w-5 h-5 text-black dark:text-white" />
+        </button>
+
+        {/* Tiles Icon */}
+        <button
+          type="button"
+          id="sidebar-collapsed-tiles"
+          data-nav-active={(currentRoute === '/tiles' || currentRoute === '/live-tiles' || currentRoute === '/livetiles') ? 'true' : undefined}
+          onClick={() => handleNavClick('/tiles')}
+          onMouseEnter={(e) => handleTooltipEnter(e, 'Tiles')}
+          onMouseLeave={handleTooltipLeave}
+          aria-label="Tiles"
+          className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+            (currentRoute === '/tiles' || currentRoute === '/live-tiles' || currentRoute === '/livetiles')
+              ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+              : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+          }`}
+        >
+          <FluentTilesIcon className="w-5 h-5 text-[#0078d4] dark:text-[#4cc2ff]" />
         </button>
 
         {/* Divider */}

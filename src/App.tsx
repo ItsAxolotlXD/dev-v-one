@@ -19,6 +19,7 @@ import { NotesProvider } from './context/NotesContext';
 import { StickyNoteWidget } from './components/StickyNoteWidget';
 import { GlobalContextMenu } from './components/GlobalContextMenu';
 import { XAMLHome } from './pages/XAMLHome';
+import { LiveTilesHome } from './pages/LiveTilesHome';
 import { XAMLControls } from './pages/XAMLControls';
 import { LiveTV } from './pages/LiveTV';
 import { TestChannels } from './pages/TestChannels';
@@ -738,7 +739,27 @@ export default function App() {
       case '/recall':
         return <RecallApp navigate={navigate} />;
 
+      case '/tiles':
+      case '/live-tiles':
+      case '/livetiles':
+        return (
+          <LiveTilesHome
+            onSelectChannel={setCurrentChannel}
+            onNavigate={navigate}
+            channels={channels}
+          />
+        );
+
       default:
+        if (settings.liveTilesHome) {
+          return (
+            <LiveTilesHome
+              onSelectChannel={setCurrentChannel}
+              onNavigate={navigate}
+              channels={channels}
+            />
+          );
+        }
         return (
           <XAMLHome
             onSelectChannel={setCurrentChannel}
@@ -752,8 +773,10 @@ export default function App() {
   const renderContent = () => renderContentForRoute(currentRoute, navigate);
 
   const isOfficeRoute = currentRoute === '/notes' || currentRoute === '/write';
+  const isTilesRoute = currentRoute === '/tiles' || currentRoute === '/live-tiles' || currentRoute === '/livetiles';
   const isFullBleedRoute =
     isSparkOSRoute ||
+    isTilesRoute ||
     currentRoute === '/recall' ||
     currentRoute.startsWith('/recall') ||
     currentRoute === '/store' ||
@@ -861,7 +884,7 @@ export default function App() {
       />
 
       {/* Sidebar Navigation (Desktop + Mobile Drawer) */}
-      {!isSparkOSRoute && (settings.navigationMode === 'sidebar' || isMobileSidebarOpen || mobileDragOffset !== null) && (
+      {!isSparkOSRoute && !isTilesRoute && (settings.navigationMode === 'sidebar' || isMobileSidebarOpen || mobileDragOffset !== null) && (
         <Sidebar
           currentRoute={currentRoute}
           navigate={navigate}
@@ -900,17 +923,19 @@ export default function App() {
       <div className={`main-app-container flex-1 flex flex-col min-w-0 min-h-screen transition-[padding] duration-300 ease-in-out ${
         settings.windowsAppSdkPreview ? 'bg-[#141414]' : 'bg-[#f3f3f3] dark:bg-[#1b1f24]'
       } ${isSparkOSRoute ? '!h-full !min-h-0 !p-0 !bg-black !transition-none' : ''} ${
-        settings.navigationMode === 'topbar'
-          ? 'md:pl-0 md:pr-0 pb-10'
-          : !settings.dockToSidebar || settings.navigationMode !== 'sidebar'
-            ? 'md:pl-0 md:pr-0 pb-20'
-            : settings.sidebarPosition === 'right'
-              ? isEffectiveCollapsed
-                ? 'md:pr-[48px]'
-                : 'md:pr-[260px]'
-              : isEffectiveCollapsed
-                ? 'md:pl-[48px]'
-                : 'md:pl-[260px]'
+        isTilesRoute
+          ? 'md:pl-0 md:pr-0 pb-0'
+          : settings.navigationMode === 'topbar'
+            ? 'md:pl-0 md:pr-0 pb-10'
+            : !settings.dockToSidebar || settings.navigationMode !== 'sidebar'
+              ? 'md:pl-0 md:pr-0 pb-20'
+              : settings.sidebarPosition === 'right'
+                ? isEffectiveCollapsed
+                  ? 'md:pr-[48px]'
+                  : 'md:pr-[260px]'
+                : isEffectiveCollapsed
+                  ? 'md:pl-[48px]'
+                  : 'md:pl-[260px]'
       }`}>
         {/* TopBar Header */}
         {!isSparkOSRoute && !isOfficeRoute && currentRoute !== '/store' && (

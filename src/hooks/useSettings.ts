@@ -52,6 +52,7 @@ export interface SystemSettings {
   searchVisualExperimental: SearchVisualExperimental;
   windowsAppSdkPreview: boolean;
   sidebarSmartLayout: boolean;
+  liveTilesHome: boolean;
   pageLoading: boolean;
   loadPagesSequentially: boolean;
   customKeybinds: CustomKeybinds;
@@ -106,6 +107,7 @@ export const DEFAULT_SETTINGS: SystemSettings = {
   searchVisualExperimental: 'treatment-1',
   windowsAppSdkPreview: false,
   sidebarSmartLayout: true,
+  liveTilesHome: false,
   pageLoading: true,
   loadPagesSequentially: false,
   customKeybinds: DEFAULT_KEYBINDS,
@@ -202,6 +204,7 @@ export const getStoredSettings = (): SystemSettings => {
           ? parsed.windowsAppSdkPreview 
           : (typeof parsed.webviewSdkPreview === 'boolean' ? parsed.webviewSdkPreview : false),
         sidebarSmartLayout: typeof parsed.sidebarSmartLayout === 'boolean' ? parsed.sidebarSmartLayout : true,
+        liveTilesHome: typeof parsed.liveTilesHome === 'boolean' ? parsed.liveTilesHome : false,
         pageLoading: typeof parsed.pageLoading === 'boolean' ? parsed.pageLoading : true,
         loadPagesSequentially: typeof parsed.loadPagesSequentially === 'boolean' ? parsed.loadPagesSequentially : false,
         fontScale,
@@ -292,6 +295,13 @@ export const applySystemSettings = (settings: SystemSettings) => {
   } else {
     document.documentElement.classList.remove('windows-app-sdk-preview', 'webview-sdk-preview');
     document.body?.classList.remove('windows-app-sdk-preview', 'webview-sdk-preview');
+  }
+
+  // Live Tiles Home insider flag
+  if (settings.liveTilesHome) {
+    document.documentElement.classList.add('live-tiles-home-active');
+  } else {
+    document.documentElement.classList.remove('live-tiles-home-active');
   }
 
   // Apply font scale
@@ -424,6 +434,10 @@ export const updateDraftSetting = <K extends keyof SystemSettings>(key: K, value
       document.documentElement.classList.toggle('webview-sdk-preview', Boolean(value));
       document.body?.classList.toggle('windows-app-sdk-preview', Boolean(value));
       document.body?.classList.toggle('webview-sdk-preview', Boolean(value));
+    }
+
+    if (key === 'liveTilesHome') {
+      document.documentElement.classList.toggle('live-tiles-home-active', Boolean(value));
     }
   }
   notifyDraftListeners();

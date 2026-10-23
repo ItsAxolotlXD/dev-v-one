@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { ChevronRight, ChevronDown, Folder, Newspaper, Radio, ChevronLeft } from 'lucide-react';
 import { AppTabIcon } from '../components/FluentIcons';
 import { Channel } from '../types';
+import { useSettings } from '../hooks/useSettings';
 
 interface XAMLHomeProps {
   channels: Channel[];
@@ -54,11 +55,13 @@ const quickAccess = [
   { label: 'Articles', route: '/news', icon: 'articles' as const },
   { label: 'Widgets', route: '/widgets', icon: 'widgets' as const },
   { label: 'Store', route: '/store', icon: 'store' as const },
+  { label: 'Live Tiles', route: '/live-tiles', icon: 'sparkos' as const },
   { label: 'SparkOS', route: '/sparkos', icon: 'sparkos' as const },
   { label: 'Settings', route: '/settings', icon: 'settings' as const },
 ];
 
 export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, onNavigate }) => {
+  const { updateSetting } = useSettings();
   const [expanded, setExpanded] = useState({ quickAccess: true, favorites: true, recent: false, liveChannels: true });
 
   // Real-time VnExpress News State
@@ -121,6 +124,34 @@ export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, o
   return (
     <section className="min-h-[calc(100vh-3.5rem)] w-full bg-black px-1 pb-10 text-[#e8e8e8] font-sans">
       <div className="mx-auto w-full max-w-5xl px-2 sm:px-4 pt-3 space-y-4">
+        {/* Live Tiles Home Insider Flag Banner */}
+        <div className="w-full rounded-xl bg-gradient-to-r from-[#0078d4]/20 via-[#0050ef]/10 to-transparent border border-[#0078d4]/30 p-3 sm:p-3.5 flex items-center justify-between gap-3 text-xs">
+          <div className="flex items-center gap-2.5">
+            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#0078d4] text-white uppercase tracking-wider">
+              Insider Flag
+            </span>
+            <span className="text-neutral-200 font-medium">
+              Trải nghiệm giao diện <strong className="text-white">Live Tiles Home</strong> phong cách Windows 8 & Windows 10
+            </span>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={() => updateSetting('liveTilesHome', true)}
+              className="px-3 py-1 bg-[#0078d4] hover:bg-[#0067b8] text-white font-semibold rounded text-xs transition-colors cursor-pointer"
+            >
+              Bật Live Tiles
+            </button>
+            <button
+              type="button"
+              onClick={() => onNavigate('/settings')}
+              className="text-neutral-400 hover:text-white px-1.5 py-1 text-xs underline cursor-pointer"
+            >
+              Cài đặt
+            </button>
+          </div>
+        </div>
+
         {/* Real-Time VnExpress News Summary Block (5s auto-rotate) */}
         <div className="w-full rounded-2xl bg-[#141416] border border-white/10 p-4 sm:p-5 shadow-2xl overflow-hidden relative backdrop-blur-md">
           {/* Top Bar inside News Block */}
