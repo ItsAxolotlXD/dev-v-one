@@ -213,11 +213,14 @@ export default function App() {
     });
   };
 
-  // Edge swipe gesture: vuốt từ cạnh trái sang để mở sidebar
+  const [mobileDragOffset, setMobileDragOffset] = useState<number | null>(null);
+
+  // Edge swipe gesture: vuốt từ cạnh trái sang để mở sidebar, follow ngón tay theo thời gian thực
   useEffect(() => {
     let startX = 0;
     let startY = 0;
-    let isTrackingEdgeSwipe = false;
+    let isTracking = false;
+    let isHorizontalGesture: boolean | null = null;
 
     const handleTouchStart = (e: TouchEvent) => {
       if (e.touches.length !== 1) return;
@@ -226,35 +229,71 @@ export default function App() {
       if (touch.clientX <= 45) {
         startX = touch.clientX;
         startY = touch.clientY;
-        isTrackingEdgeSwipe = true;
+        isTracking = true;
+        isHorizontalGesture = null;
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isTracking || e.touches.length !== 1) return;
+      const touch = e.touches[0];
+      const deltaX = touch.clientX - startX;
+      const deltaY = touch.clientY - startY;
+
+      if (isHorizontalGesture === null) {
+        if (Math.abs(deltaX) > 8 || Math.abs(deltaY) > 8) {
+          isHorizontalGesture = Math.abs(deltaX) > Math.abs(deltaY);
+        }
+      }
+
+      if (isHorizontalGesture && deltaX > 0) {
+        if (e.cancelable) e.preventDefault();
+        const drawerWidth = Math.min(285, window.innerWidth * 0.85);
+        const clampedDragX = Math.min(drawerWidth, Math.max(0, deltaX));
+        setMobileDragOffset(clampedDragX);
       }
     };
 
     const handleTouchEnd = (e: TouchEvent) => {
-      if (!isTrackingEdgeSwipe) return;
-      isTrackingEdgeSwipe = false;
+      if (!isTracking) return;
+      isTracking = false;
       const touch = e.changedTouches[0];
       const deltaX = touch.clientX - startX;
-      const deltaY = touch.clientY - startY;
+      const drawerWidth = Math.min(285, window.innerWidth * 0.85);
 
-      // Swiped right with at least 40px, predominantly horizontal
-      if (deltaX > 40 && Math.abs(deltaX) > Math.abs(deltaY) * 1.1) {
-        setIsMobileSidebarOpen(true);
-        if (isSidebarCollapsed) {
-          setIsSidebarCollapsed(false);
-          try {
-            localStorage.setItem('waves_sidebar_collapsed', 'false');
-          } catch {}
+      if (isHorizontalGesture && deltaX > 0) {
+        if (deltaX > drawerWidth * 0.35 || deltaX > 75) {
+          setIsMobileSidebarOpen(true);
+          if (isSidebarCollapsed) {
+            setIsSidebarCollapsed(false);
+            try {
+              localStorage.setItem('waves_sidebar_collapsed', 'false');
+            } catch {}
+          }
+        } else {
+          setIsMobileSidebarOpen(false);
         }
       }
+      setMobileDragOffset(null);
+      isHorizontalGesture = null;
+    };
+
+    const handleTouchCancel = () => {
+      isTracking = false;
+      isHorizontalGesture = null;
+      setMobileDragOffset(null);
     };
 
     window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
     window.addEventListener('touchend', handleTouchEnd, { passive: true });
+    window.addEventListener('touchcancel', handleTouchCancel, { passive: true });
 
     return () => {
       window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleTouchEnd);
+      window.removeEventListener('touchcancel', handleTouchCancel);
     };
   }, [isSidebarCollapsed]);
 
@@ -822,7 +861,7 @@ export default function App() {
       />
 
       {/* Sidebar Navigation (Desktop + Mobile Drawer) */}
-      {!isSparkOSRoute && (settings.navigationMode === 'sidebar' || isMobileSidebarOpen) && (
+      {!isSparkOSRoute && (settings.navigationMode === 'sidebar' || isMobileSidebarOpen || mobileDragOffset !== null) && (
         <Sidebar
           currentRoute={currentRoute}
           navigate={navigate}
@@ -832,6 +871,7 @@ export default function App() {
           isCollapsed={isSidebarCollapsed}
           onToggleCollapse={toggleSidebarCollapse}
           isMobileOpen={isMobileSidebarOpen}
+          mobileDragOffset={mobileDragOffset}
           onCloseMobile={() => setIsMobileSidebarOpen(false)}
           channels={channels}
           currentChannel={currentChannel}

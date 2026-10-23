@@ -214,6 +214,7 @@ interface SidebarProps {
   onToggleCollapse?: () => void;
   isMobileOpen?: boolean;
   onCloseMobile?: () => void;
+  mobileDragOffset?: number | null;
   channels?: Channel[];
   currentChannel?: Channel;
   onOpenHelp?: () => void;
@@ -241,6 +242,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onToggleCollapse,
   isMobileOpen = false,
   onCloseMobile,
+  mobileDragOffset = null,
   channels = [],
   currentChannel,
   onOpenHelp = () => {},
@@ -307,27 +309,39 @@ export const Sidebar: React.FC<SidebarProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isToolsFlyoutOpen]);
 
-  // Touch swipe to close mobile drawer
+  // Touch swipe to close mobile drawer with real-time finger-following
   const drawerTouchStartX = useRef<number | null>(null);
   const drawerTouchStartY = useRef<number | null>(null);
+  const [drawerCloseOffset, setDrawerCloseOffset] = useState<number | null>(null);
 
   const handleDrawerTouchStart = (e: React.TouchEvent) => {
     if (e.touches.length === 1) {
       drawerTouchStartX.current = e.touches[0].clientX;
       drawerTouchStartY.current = e.touches[0].clientY;
+      setDrawerCloseOffset(null);
+    }
+  };
+
+  const handleDrawerTouchMove = (e: React.TouchEvent) => {
+    if (drawerTouchStartX.current === null) return;
+    const deltaX = e.touches[0].clientX - drawerTouchStartX.current;
+    if (deltaX < 0) {
+      // Swiping left to close
+      setDrawerCloseOffset(deltaX);
     }
   };
 
   const handleDrawerTouchEnd = (e: React.TouchEvent) => {
-    if (drawerTouchStartX.current === null || drawerTouchStartY.current === null) return;
+    if (drawerTouchStartX.current === null) return;
     const deltaX = e.changedTouches[0].clientX - drawerTouchStartX.current;
-    const deltaY = e.changedTouches[0].clientY - drawerTouchStartY.current;
+    const drawerWidth = Math.min(285, typeof window !== 'undefined' ? window.innerWidth * 0.85 : 285);
 
-    if (deltaX < -35 && Math.abs(deltaX) > Math.abs(deltaY) * 1.1) {
+    if (deltaX < -drawerWidth * 0.3 || deltaX < -60) {
       onCloseMobile?.();
     }
     drawerTouchStartX.current = null;
     drawerTouchStartY.current = null;
+    setDrawerCloseOffset(null);
   };
 
   const favoriteChannels = useMemo(() => {
@@ -336,6 +350,25 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const shouldAnimateSidebar = !settings.reduceAllMotion && settings.animateSidebar;
   const effectiveCollapsed = settings.autoHideSidebar ? !isHovered : isCollapsed;
+
+  const [activeTooltip, setActiveTooltip] = useState<{ label: string; y: number; x: number } | null>(null);
+
+  const handleTooltipEnter = (e: React.MouseEvent<HTMLElement>, label: string, force = false) => {
+    if (!effectiveCollapsed && !force) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const y = Math.round(rect.top + rect.height / 2);
+    const isRight = settings.sidebarPosition === 'right';
+    const x = Math.round(isRight ? rect.left - 8 : rect.right + 8);
+    setActiveTooltip({ label, y, x });
+  };
+
+  const handleTooltipLeave = () => {
+    setActiveTooltip(null);
+  };
+
+  useEffect(() => {
+    setActiveTooltip(null);
+  }, [effectiveCollapsed]);
 
   const handleNavClick = (route: string, state?: any) => {
     navigate(route, state);
@@ -794,7 +827,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
             type="button"
             id={isMobile ? 'btn-mobile-sidebar-back' : 'btn-desktop-sidebar-back'}
             onClick={handleGoBack}
-            title="Quay lại (Back)"
+            onMouseEnter={(e) => handleTooltipEnter(e, 'Quay lại', true)}
+            onMouseLeave={handleTooltipLeave}
             aria-label="Quay lại"
             className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-[6px] flex items-center justify-center text-black dark:text-white hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 cursor-pointer transition-colors shrink-0"
           >
@@ -806,7 +840,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
             type="button"
             id={isMobile ? 'btn-mobile-sidebar-toggle' : 'btn-desktop-sidebar-toggle'}
             onClick={isMobile ? onCloseMobile : onToggleCollapse}
-            title={isMobile ? 'Close menu' : 'Collapse menu'}
+            onMouseEnter={(e) => handleTooltipEnter(e, isMobile ? 'Đóng menu' : 'Thu gọn menu', true)}
+            onMouseLeave={handleTooltipLeave}
+            aria-label={isMobile ? 'Close menu' : 'Collapse menu'}
             className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-[6px] flex items-center justify-center text-black dark:text-white hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 cursor-pointer transition-colors shrink-0"
           >
             {isMobile ? <X className="w-4.5 h-4.5 stroke-[1.75] text-black dark:text-white" /> : <Menu className="w-4.5 h-4.5 stroke-[1.75] text-black dark:text-white" />}
@@ -1340,6 +1376,72 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
           </div>
 
+          {/* 11. Clock */}
+          <div className="w-full shrink-0">
+            <button
+              type="button"
+              id={isMobile ? 'mobile-nav-clock' : 'sidebar-nav-clock'}
+              data-nav-active={(currentRoute === '/clock' || currentRoute.startsWith('/clock') || currentRoute === '/alarm' || currentRoute === '/timer' || currentRoute === '/stopwatch') ? 'true' : undefined}
+              onClick={() => handleNavClick('/clock')}
+              title="Clock - Đặt báo thức & Bấm giờ"
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                (currentRoute === '/clock' || currentRoute.startsWith('/clock') || currentRoute === '/alarm' || currentRoute === '/timer' || currentRoute === '/stopwatch')
+                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-3.5 truncate">
+                <FluentClockIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <span className="truncate text-[13.5px]">Clock</span>
+              </div>
+              {getDownloadIndicator('/clock', isCollapsed)}
+            </button>
+          </div>
+
+          {/* 12. VLC Media Player */}
+          <div className="w-full shrink-0">
+            <button
+              type="button"
+              id={isMobile ? 'mobile-nav-vlc' : 'sidebar-nav-vlc'}
+              data-nav-active={(currentRoute === '/vlc' || currentRoute.startsWith('/vlc') || currentRoute === '/media-player') ? 'true' : undefined}
+              onClick={() => handleNavClick('/vlc')}
+              title="VLC Media Player"
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                (currentRoute === '/vlc' || currentRoute.startsWith('/vlc') || currentRoute === '/media-player')
+                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-3.5 truncate">
+                <FluentVlcIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <span className="truncate text-[13.5px]">VLC Media Player</span>
+              </div>
+              {getDownloadIndicator('/vlc', isCollapsed)}
+            </button>
+          </div>
+
+          {/* 13. Cookbook */}
+          <div className="w-full shrink-0">
+            <button
+              type="button"
+              id={isMobile ? 'mobile-nav-cookbook' : 'sidebar-nav-cookbook'}
+              data-nav-active={(currentRoute === '/cookbook' || currentRoute.startsWith('/cookbook')) ? 'true' : undefined}
+              onClick={() => handleNavClick('/cookbook')}
+              title="Cookbook - Ẩm thực"
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                (currentRoute === '/cookbook' || currentRoute.startsWith('/cookbook'))
+                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-3.5 truncate">
+                <FluentCookbookIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <span className="truncate text-[13.5px]">Cookbook</span>
+              </div>
+              {getDownloadIndicator('/cookbook', isCollapsed)}
+            </button>
+          </div>
+
 
 
           {/* Divider & Category Heading: System */}
@@ -1509,11 +1611,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {settings.dockToSidebar && (
         <motion.aside
           id="waves-desktop-sidebar"
+          data-collapsed={effectiveCollapsed ? 'true' : undefined}
           initial={false}
           animate={{ width: effectiveCollapsed ? 48 : 260 }}
           transition={shouldAnimateSidebar ? { type: 'spring', stiffness: 420, damping: 24, mass: 0.72 } : { duration: 0 }}
           onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
+          onMouseLeave={() => {
+            setIsHovered(false);
+            setActiveTooltip(null);
+          }}
           className={`hidden md:flex flex-col h-screen ${
             settings.windowsAppSdkPreview
               ? '!bg-[#141414] border-r border-[#202020]'
@@ -1531,518 +1637,594 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {!effectiveCollapsed ? (
             renderSidebarBody(false)
           ) : (
-            /* Collapsed Windows 10 Sidebar Icon Bar */
+            /* Collapsed Windows 10/11 Sidebar Icon Bar */
             <div 
-              ref={collapsedNavRef}
               key="sidebar-nav-collapsed"
-              className={`sidebar-items-slide-up flex flex-col h-full select-none items-center py-2.5 ${
-                settings.windowsAppSdkPreview ? 'space-y-[2px]' : 'space-y-1'
-              } relative`}
+              className="flex flex-col h-full select-none items-center py-2 relative overflow-hidden w-full"
             >
-              <MorphingVerticalIndicator
-                containerRef={collapsedNavRef}
-                currentRoute={currentRoute}
-                dependencyKey={`${navItems.length}-${currentRoute}`}
-                isWebViewSdk={settings.windowsAppSdkPreview}
-              />
-
-              {/* Back Button with Left Arrow */}
-              <button 
-                id="btn-sidebar-collapsed-back"
-                type="button"
-                onClick={handleGoBack} 
-                className="w-9 h-9 rounded-[6px] flex items-center justify-center text-black dark:text-white/90 hover:bg-black/5 dark:hover:bg-white/10 hover:text-black dark:hover:text-white cursor-pointer transition-colors"
-                title="Quay lại (Back)"
-                aria-label="Quay lại"
-              >
-                <ArrowLeft className="w-5 h-5 stroke-[1.75] text-black dark:text-white" />
-              </button>
-
-              {/* Hamburger Button to Expand */}
-              <button 
-                id="btn-sidebar-expand-toggle"
-                type="button"
-                onClick={onToggleCollapse} 
-                className="w-9 h-9 rounded-[6px] flex items-center justify-center text-black dark:text-white/90 hover:bg-black/5 dark:hover:bg-white/10 hover:text-black dark:hover:text-white mb-1.5 cursor-pointer transition-colors"
-                title="Expand menu"
-              >
-                <Menu className="w-5 h-5 stroke-[1.75] text-black dark:text-white" />
-              </button>
-
-              {/* XAML Home Icon */}
-              <button
-                type="button"
-                id="sidebar-collapsed-xaml-home"
-                data-nav-active={(currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home') ? 'true' : undefined}
-                onClick={() => handleNavClick('/')}
-                title="XAML Home"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  (currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home')
-                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
-                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <AppTabIcon name="home" className="w-5 h-5 text-black dark:text-white" />
-              </button>
-
-
-
-  {/* 2. Articles Icon */}
-              <button
-                type="button"
-                id="sidebar-collapsed-articles"
-                data-nav-active={(currentRoute === '/news' || currentRoute.startsWith('/article') || currentRoute.startsWith('/news/')) ? 'true' : undefined}
-                onClick={() => handleNavClick('/news')}
-                title="Articles"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  (currentRoute === '/news' || currentRoute.startsWith('/article') || currentRoute.startsWith('/news/'))
-                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
-                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <AppTabIcon name="articles" className="w-5 h-5" />
-              </button>
-
-
-
-              {/* 4. Widgets Icon */}
-              <button
-                type="button"
-                id="sidebar-collapsed-widgets"
-                data-nav-active={(currentRoute === '/widgets' || currentRoute.startsWith('/widgets')) ? 'true' : undefined}
-                onClick={() => handleNavClick('/widgets')}
-                title="Widgets"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  (currentRoute === '/widgets' || currentRoute.startsWith('/widgets'))
-                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
-                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <AppTabIcon name="widgets" className="w-5 h-5 text-black dark:text-white" />
-              </button>
-
-              <button
-                type="button"
-                id="sidebar-collapsed-microsoft-store"
-                data-nav-active={currentRoute === '/store' ? 'true' : undefined}
-                onClick={() => handleNavClick('/store')}
-                title="Store"
-                aria-label="Store"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${currentRoute === '/store' ? 'bg-black/5 dark:bg-white/[0.08] shadow-xs' : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'}`}
-              >
-                <img src={STORE_ICON_URL} alt="" className="size-5 object-contain" />
-              </button>
-
-              <button
-                type="button"
-                id="sidebar-collapsed-sparkos"
-                data-nav-active={currentRoute === '/sparkos' ? 'true' : undefined}
-                onClick={() => handleNavClick('/sparkos')}
-                title="SparkOS"
-                aria-label="SparkOS"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${currentRoute === '/sparkos' ? 'bg-black/5 dark:bg-white/[0.08] shadow-xs' : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'}`}
-              >
-                <Monitor aria-hidden="true" className="size-5 text-[#1684e8]" />
-              </button>
-
-              <button
-                type="button"
-                id="sidebar-collapsed-recall"
-                data-nav-active={(currentRoute === '/recall' || currentRoute.startsWith('/recall')) ? 'true' : undefined}
-                onClick={() => handleNavClick('/recall')}
-                title="Recall (preview)"
-                aria-label="Recall"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  (currentRoute === '/recall' || currentRoute.startsWith('/recall'))
-                    ? 'bg-black/5 dark:bg-white/[0.08] shadow-xs'
-                    : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'
-                }`}
-              >
-                <FluentRecallIcon className="w-5 h-5" />
-              </button>
-
-              {/* Divider: Social */}
-              <div className="w-6 h-[1px] bg-black/10 dark:bg-white/10 my-1" />
-
-              {/* Swift Bank Icon */}
-              <button
-                type="button"
-                id="sidebar-collapsed-swift-bank"
-                data-nav-active={(currentRoute === '/swift-bank' || currentRoute.startsWith('/swift-bank') || currentRoute === '/bank') ? 'true' : undefined}
-                onClick={() => handleNavClick('/swift-bank')}
-                title="Swift Bank - Ngân hàng số"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  (currentRoute === '/swift-bank' || currentRoute.startsWith('/swift-bank') || currentRoute === '/bank')
-                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
-                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <AppTabIcon name="bank" className="w-5 h-5" />
-                {getDownloadIndicator('/swift-bank', true)}
-              </button>
-
-              {/* Swift Social Icon */}
-              <button
-                type="button"
-                id="sidebar-collapsed-swift-social"
-                data-nav-active={(currentRoute === '/swift' || currentRoute.startsWith('/swift') || currentRoute === '/swift-social') ? 'true' : undefined}
-                onClick={() => handleNavClick('/swift')}
-                title="Swift Social"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  (currentRoute === '/swift' || currentRoute.startsWith('/swift') || currentRoute === '/swift-social')
-                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
-                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <AppTabIcon name="social" className="w-5 h-5" />
-                {getDownloadIndicator('/swift', true)}
-              </button>
-
-              {/* Friends Icon */}
-              <button
-                type="button"
-                id="sidebar-collapsed-friends"
-                data-nav-active={(currentRoute === '/friends' || currentRoute.startsWith('/friends')) ? 'true' : undefined}
-                onClick={() => handleNavClick('/friends')}
-                title="People - 100 Người dùng"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  (currentRoute === '/friends' || currentRoute.startsWith('/friends'))
-                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
-                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <AppTabIcon name="people" className="w-5 h-5 text-black dark:text-white" />
-                {getDownloadIndicator('/friends', true)}
-              </button>
-
-              {/* Logos Fandom Icon */}
-              <button
-                type="button"
-                id="sidebar-collapsed-logos-fandom"
-                data-nav-active={(currentRoute === '/logos-fandom' || currentRoute === '/logos-wiki' || currentRoute === '/fandom') ? 'true' : undefined}
-                onClick={() => handleNavClick('/logos-fandom')}
-                title="Logos Fandom"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  (currentRoute === '/logos-fandom' || currentRoute === '/logos-wiki' || currentRoute === '/fandom')
-                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
-                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <FluentLogosFandomIcon className="w-5 h-5 text-black dark:text-white" />
-                {getDownloadIndicator('/logos-fandom', true)}
-              </button>
-
-
-
-              {/* Divider: Apps */}
-              <div className="w-6 h-[1px] bg-black/10 dark:bg-white/10 my-1" />
-
-              {/* Mail & Calendar Icons in Apps */}
-              {[
-                { route: '/mail', label: 'Mail', icon: MAIL_TAB_ICON_URL },
-                { route: '/calendar', label: 'Calendar', icon: CALENDAR_TAB_ICON_URL },
-              ].map((item) => (
-                <button
-                  key={item.route}
+              {/* Pinned Top Navigation Controls */}
+              <div className="shrink-0 flex flex-col items-center space-y-1 pb-1 w-full">
+                {/* Back Button with Left Arrow */}
+                <button 
+                  id="btn-sidebar-collapsed-back"
                   type="button"
-                  id={`sidebar-collapsed-${item.label.toLowerCase()}`}
-                  data-nav-active={currentRoute === item.route ? 'true' : undefined}
-                  onClick={() => handleNavClick(item.route)}
-                  title={item.label}
-                  className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${currentRoute === item.route ? 'bg-black/5 dark:bg-white/[0.08] shadow-xs' : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'}`}
+                  onClick={handleGoBack} 
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'Quay lại')}
+                  onMouseLeave={handleTooltipLeave}
+                  className="w-9 h-9 shrink-0 rounded-[6px] flex items-center justify-center text-black dark:text-white/90 hover:bg-black/5 dark:hover:bg-white/10 hover:text-black dark:hover:text-white cursor-pointer transition-colors"
+                  aria-label="Quay lại"
                 >
-                  <img src={item.icon} alt="" className="size-5 object-contain" />
+                  <ArrowLeft className="w-5 h-5 stroke-[1.75] text-black dark:text-white" />
                 </button>
-              ))}
 
-              {/* 1. Copilot Icon */}
-              <button
-                type="button"
-                id="sidebar-collapsed-copilot"
-                data-nav-active={(currentRoute === '/copilot' || currentRoute.startsWith('/copilot')) ? 'true' : undefined}
-                onClick={() => handleNavClick('/copilot')}
-                title="Copilot"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  (currentRoute === '/copilot' || currentRoute.startsWith('/copilot'))
-                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
-                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-                }`}
+                {/* Hamburger Button to Expand */}
+                <button 
+                  id="btn-sidebar-expand-toggle"
+                  type="button"
+                  onClick={onToggleCollapse} 
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'Mở rộng menu')}
+                  onMouseLeave={handleTooltipLeave}
+                  className="w-9 h-9 shrink-0 rounded-[6px] flex items-center justify-center text-black dark:text-white/90 hover:bg-black/5 dark:hover:bg-white/10 hover:text-black dark:hover:text-white cursor-pointer transition-colors"
+                  aria-label="Expand menu"
+                >
+                  <Menu className="w-5 h-5 stroke-[1.75] text-black dark:text-white" />
+                </button>
+              </div>
+
+              {/* Scrollable Middle Navigation Items List (Items maintain uniform spacing, do not cram, fully scrollable) */}
+              <div 
+                ref={collapsedNavRef}
+                onScroll={handleTooltipLeave}
+                className={`sidebar-items-slide-up sidebar-app-scroller flex-1 w-full min-h-0 overflow-y-auto overflow-x-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden flex flex-col items-center py-1 ${
+                  settings.windowsAppSdkPreview ? 'space-y-[2px]' : 'space-y-1'
+                } relative`}
               >
-                <img
-                  src={COPILOT_ICON_SRC}
-                  alt="Copilot"
-                  referrerPolicy="no-referrer"
-                  className="w-5 h-5 object-contain"
+                <MorphingVerticalIndicator
+                  containerRef={collapsedNavRef}
+                  currentRoute={currentRoute}
+                  dependencyKey={`${navItems.length}-${currentRoute}`}
+                  isWebViewSdk={settings.windowsAppSdkPreview}
                 />
-              </button>
 
-              {/* 2. Microsoft Edge Icon */}
-              <button
-                type="button"
-                id="sidebar-collapsed-edge"
-                data-nav-active={(currentRoute === '/edge' || currentRoute === '/browser' || currentRoute.startsWith('/edge')) ? 'true' : undefined}
-                onClick={() => handleNavClick('/edge')}
-                title="Microsoft Edge"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  (currentRoute === '/edge' || currentRoute === '/browser' || currentRoute.startsWith('/edge'))
-                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
-                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <AppTabIcon name="edge" className="w-5 h-5 text-black dark:text-white" />
-                {getDownloadIndicator('/edge', true)}
-              </button>
+                {/* XAML Home Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-xaml-home"
+                  data-nav-active={(currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home') ? 'true' : undefined}
+                  onClick={() => handleNavClick('/')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'XAML Home')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="XAML Home"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    (currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home')
+                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                  }`}
+                >
+                  <AppTabIcon name="home" className="w-5 h-5 text-black dark:text-white" />
+                </button>
 
-              {/* 3. File Explorer Icon */}
-              <button
-                type="button"
-                id="sidebar-collapsed-file-explorer"
-                data-nav-active={(currentRoute === '/file-explorer' || currentRoute === '/files' || currentRoute.startsWith('/file-explorer')) ? 'true' : undefined}
-                onClick={() => handleNavClick('/file-explorer')}
-                title="File Explorer"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  (currentRoute === '/file-explorer' || currentRoute === '/files' || currentRoute.startsWith('/file-explorer'))
-                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
-                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <AppTabIcon name="fileExplorer" className="w-5 h-5 text-black dark:text-white" />
-              </button>
+                {/* 2. Articles Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-articles"
+                  data-nav-active={(currentRoute === '/news' || currentRoute.startsWith('/article') || currentRoute.startsWith('/news/')) ? 'true' : undefined}
+                  onClick={() => handleNavClick('/news')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'Articles')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="Articles"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    (currentRoute === '/news' || currentRoute.startsWith('/article') || currentRoute.startsWith('/news/'))
+                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                  }`}
+                >
+                  <AppTabIcon name="articles" className="w-5 h-5" />
+                </button>
 
-              {/* 4. Watch Icon */}
-              <button
-                type="button"
-                id="sidebar-collapsed-watch"
-                data-nav-active={(currentRoute === '/live-tv' || currentRoute.startsWith('/live-tv')) ? 'true' : undefined}
-                onClick={() => handleNavClick('/live-tv')}
-                title="Watch"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  (currentRoute === '/live-tv' || currentRoute.startsWith('/live-tv'))
-                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
-                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <AppTabIcon name="watch" className="w-5 h-5 text-black dark:text-white" />
-                {getDownloadIndicator('/live-tv', true)}
-              </button>
+                {/* 4. Widgets Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-widgets"
+                  data-nav-active={(currentRoute === '/widgets' || currentRoute.startsWith('/widgets')) ? 'true' : undefined}
+                  onClick={() => handleNavClick('/widgets')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'Widgets')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="Widgets"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    (currentRoute === '/widgets' || currentRoute.startsWith('/widgets'))
+                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                  }`}
+                >
+                  <AppTabIcon name="widgets" className="w-5 h-5 text-black dark:text-white" />
+                </button>
 
-              {/* 5. Notes Icon */}
-              <button
-                type="button"
-                id="sidebar-collapsed-notes"
-                data-nav-active={(currentRoute === '/notes' || currentRoute === '/write' || currentRoute === '/present' || currentRoute === '/table') ? 'true' : undefined}
-                onClick={() => handleNavClick('/notes')}
-                title="Notes"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  (currentRoute === '/notes' || currentRoute === '/write' || currentRoute === '/present' || currentRoute === '/table')
-                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
-                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <AppTabIcon name="notes" className="w-5 h-5 text-black dark:text-white" />
-                {getDownloadIndicator('/notes', true)}
-              </button>
+                {/* Microsoft Store Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-microsoft-store"
+                  data-nav-active={currentRoute === '/store' ? 'true' : undefined}
+                  onClick={() => handleNavClick('/store')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'Store')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="Store"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${currentRoute === '/store' ? 'bg-black/5 dark:bg-white/[0.08] shadow-xs' : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'}`}
+                >
+                  <img src={STORE_ICON_URL} alt="" className="size-5 object-contain" />
+                </button>
 
-              {/* 6. Gallery Icon */}
-              <button
-                type="button"
-                id="sidebar-collapsed-photos"
-                data-nav-active={(currentRoute === '/photos' || currentRoute === '/gallery' || currentRoute.startsWith('/photos') || currentRoute.startsWith('/gallery')) ? 'true' : undefined}
-                onClick={() => handleNavClick('/photos')}
-                title="Gallery"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  (currentRoute === '/photos' || currentRoute === '/gallery' || currentRoute.startsWith('/photos') || currentRoute.startsWith('/gallery'))
-                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
-                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <AppTabIcon name="gallery" className="w-5 h-5 text-black dark:text-white" />
-                {getDownloadIndicator('/gallery', true)}
-              </button>
+                {/* SparkOS Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-sparkos"
+                  data-nav-active={currentRoute === '/sparkos' ? 'true' : undefined}
+                  onClick={() => handleNavClick('/sparkos')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'SparkOS')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="SparkOS"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${currentRoute === '/sparkos' ? 'bg-black/5 dark:bg-white/[0.08] shadow-xs' : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'}`}
+                >
+                  <Monitor aria-hidden="true" className="size-5 text-[#1684e8]" />
+                </button>
 
-              {/* 7. Camera Icon */}
-              <button
-                type="button"
-                id="sidebar-collapsed-camera"
-                data-nav-active={(currentRoute === '/camera' || currentRoute.startsWith('/camera')) ? 'true' : undefined}
-                onClick={() => handleNavClick('/camera')}
-                title="Camera"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  (currentRoute === '/camera' || currentRoute.startsWith('/camera'))
-                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
-                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <AppTabIcon name="camera" className="w-5 h-5 text-black dark:text-white" />
-                {getDownloadIndicator('/camera', true)}
-              </button>
+                {/* Recall Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-recall"
+                  data-nav-active={(currentRoute === '/recall' || currentRoute.startsWith('/recall')) ? 'true' : undefined}
+                  onClick={() => handleNavClick('/recall')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'Recall (preview)')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="Recall"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    (currentRoute === '/recall' || currentRoute.startsWith('/recall'))
+                      ? 'bg-black/5 dark:bg-white/[0.08] shadow-xs'
+                      : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'
+                  }`}
+                >
+                  <FluentRecallIcon className="w-5 h-5" />
+                </button>
 
-              {/* 8. Paint Icon */}
-              <button
-                type="button"
-                id="sidebar-collapsed-ms-paint"
-                data-nav-active={(currentRoute === '/ms-paint' || currentRoute === '/paint' || currentRoute.startsWith('/ms-paint')) ? 'true' : undefined}
-                onClick={() => handleNavClick('/ms-paint')}
-                title="Paint"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  (currentRoute === '/ms-paint' || currentRoute === '/paint' || currentRoute.startsWith('/ms-paint'))
-                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
-                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <AppTabIcon name="paint" className="w-5 h-5 text-black dark:text-white" />
-                {getDownloadIndicator('/paint', true)}
-              </button>
+                {/* Divider: Social */}
+                <div className="w-6 h-[1px] bg-black/10 dark:bg-white/10 my-1 shrink-0" />
 
-              {/* Clock Icon */}
+                {/* Swift Bank Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-swift-bank"
+                  data-nav-active={(currentRoute === '/swift-bank' || currentRoute.startsWith('/swift-bank') || currentRoute === '/bank') ? 'true' : undefined}
+                  onClick={() => handleNavClick('/swift-bank')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'Swift Bank - Ngân hàng số')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="Swift Bank"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    (currentRoute === '/swift-bank' || currentRoute.startsWith('/swift-bank') || currentRoute === '/bank')
+                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                  }`}
+                >
+                  <AppTabIcon name="bank" className="w-5 h-5" />
+                  {getDownloadIndicator('/swift-bank', true)}
+                </button>
 
-              {/* 11. Clock Icon */}
-              <button
-                type="button"
-                id="sidebar-collapsed-clock"
-                data-nav-active={(currentRoute === '/clock' || currentRoute.startsWith('/clock') || currentRoute === '/alarm' || currentRoute === '/timer' || currentRoute === '/stopwatch') ? 'true' : undefined}
-                onClick={() => handleNavClick('/clock')}
-                title="Clock - Đặt báo thức & Bấm giờ"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  (currentRoute === '/clock' || currentRoute.startsWith('/clock') || currentRoute === '/alarm' || currentRoute === '/timer' || currentRoute === '/stopwatch')
-                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
-                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <FluentClockIcon className="w-5 h-5 text-black dark:text-white" />
-              </button>
+                {/* Swift Social Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-swift-social"
+                  data-nav-active={(currentRoute === '/swift' || currentRoute.startsWith('/swift') || currentRoute === '/swift-social') ? 'true' : undefined}
+                  onClick={() => handleNavClick('/swift')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'Swift Social')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="Swift Social"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    (currentRoute === '/swift' || currentRoute.startsWith('/swift') || currentRoute === '/swift-social')
+                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                  }`}
+                >
+                  <AppTabIcon name="social" className="w-5 h-5" />
+                  {getDownloadIndicator('/swift', true)}
+                </button>
 
-              {/* 12. VLC Media Player Icon */}
-              <button
-                type="button"
-                id="sidebar-collapsed-vlc"
-                data-nav-active={(currentRoute === '/vlc' || currentRoute.startsWith('/vlc') || currentRoute === '/media-player') ? 'true' : undefined}
-                onClick={() => handleNavClick('/vlc')}
-                title="VLC Media Player"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  (currentRoute === '/vlc' || currentRoute.startsWith('/vlc') || currentRoute === '/media-player')
-                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
-                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <FluentVlcIcon className="w-5 h-5 text-black dark:text-white" />
-              </button>
+                {/* Friends Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-friends"
+                  data-nav-active={(currentRoute === '/friends' || currentRoute.startsWith('/friends')) ? 'true' : undefined}
+                  onClick={() => handleNavClick('/friends')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'People - 100 Người dùng')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="People"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    (currentRoute === '/friends' || currentRoute.startsWith('/friends'))
+                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                  }`}
+                >
+                  <AppTabIcon name="people" className="w-5 h-5 text-black dark:text-white" />
+                  {getDownloadIndicator('/friends', true)}
+                </button>
 
-              {/* 13. Schedule Icon */}
-              <button
-                type="button"
-                id="sidebar-collapsed-schedule"
-                data-nav-active={(currentRoute === '/schedule' || currentRoute.startsWith('/schedule') || currentRoute === '/epg') ? 'true' : undefined}
-                onClick={() => handleNavClick('/schedule')}
-                title="Lịch phát sóng"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  (currentRoute === '/schedule' || currentRoute.startsWith('/schedule') || currentRoute === '/epg')
-                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
-                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <FluentScheduleIcon className="w-5 h-5 text-black dark:text-white" />
-              </button>
+                {/* Logos Fandom Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-logos-fandom"
+                  data-nav-active={(currentRoute === '/logos-fandom' || currentRoute === '/logos-wiki' || currentRoute === '/fandom') ? 'true' : undefined}
+                  onClick={() => handleNavClick('/logos-fandom')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'Logos Fandom')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="Logos Fandom"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    (currentRoute === '/logos-fandom' || currentRoute === '/logos-wiki' || currentRoute === '/fandom')
+                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                  }`}
+                >
+                  <FluentLogosFandomIcon className="w-5 h-5 text-black dark:text-white" />
+                  {getDownloadIndicator('/logos-fandom', true)}
+                </button>
 
-              {/* 14. Cookbook Icon */}
-              <button
-                type="button"
-                id="sidebar-collapsed-cookbook"
-                data-nav-active={(currentRoute === '/cookbook' || currentRoute.startsWith('/cookbook')) ? 'true' : undefined}
-                onClick={() => handleNavClick('/cookbook')}
-                title="Cookbook - Ẩm th��c"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  (currentRoute === '/cookbook' || currentRoute.startsWith('/cookbook'))
-                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
-                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <FluentCookbookIcon className="w-5 h-5 text-black dark:text-white" />
-              </button>
+                {/* Divider: Apps */}
+                <div className="w-6 h-[1px] bg-black/10 dark:bg-white/10 my-1 shrink-0" />
 
-              {/* Cookbook Icon */}
+                {/* Mail & Calendar Icons in Apps */}
+                {[
+                  { route: '/mail', label: 'Mail', icon: MAIL_TAB_ICON_URL },
+                  { route: '/calendar', label: 'Calendar', icon: CALENDAR_TAB_ICON_URL },
+                ].map((item) => (
+                  <button
+                    key={item.route}
+                    type="button"
+                    id={`sidebar-collapsed-${item.label.toLowerCase()}`}
+                    data-nav-active={currentRoute === item.route ? 'true' : undefined}
+                    onClick={() => handleNavClick(item.route)}
+                    onMouseEnter={(e) => handleTooltipEnter(e, item.label)}
+                    onMouseLeave={handleTooltipLeave}
+                    aria-label={item.label}
+                    className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${currentRoute === item.route ? 'bg-black/5 dark:bg-white/[0.08] shadow-xs' : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'}`}
+                  >
+                    <img src={item.icon} alt="" className="size-5 object-contain" />
+                  </button>
+                ))}
 
-              {/* Divider: System */}
-              <div className="w-6 h-[1px] bg-black/10 dark:bg-white/10 my-1" />
+                {/* Copilot Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-copilot"
+                  data-nav-active={(currentRoute === '/copilot' || currentRoute.startsWith('/copilot')) ? 'true' : undefined}
+                  onClick={() => handleNavClick('/copilot')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'Copilot')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="Copilot"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    (currentRoute === '/copilot' || currentRoute.startsWith('/copilot'))
+                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                  }`}
+                >
+                  <img
+                    src={COPILOT_ICON_SRC}
+                    alt="Copilot"
+                    referrerPolicy="no-referrer"
+                    className="w-5 h-5 object-contain"
+                  />
+                </button>
 
-              {/* Task Manager Icon */}
-              <button
-                type="button"
-                id="sidebar-collapsed-taskmanager"
-                data-nav-active={(currentRoute === '/task-manager' || currentRoute.startsWith('/task-manager')) ? 'true' : undefined}
-                onClick={() => handleNavClick('/task-manager')}
-                title="Task Manager"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  (currentRoute === '/task-manager' || currentRoute.startsWith('/task-manager'))
-                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
-                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <AppTabIcon name="taskManager" className="w-5 h-5 text-black dark:text-white" />
-              </button>
+                {/* Microsoft Edge Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-edge"
+                  data-nav-active={(currentRoute === '/edge' || currentRoute === '/browser' || currentRoute.startsWith('/edge')) ? 'true' : undefined}
+                  onClick={() => handleNavClick('/edge')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'Microsoft Edge')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="Microsoft Edge"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    (currentRoute === '/edge' || currentRoute === '/browser' || currentRoute.startsWith('/edge'))
+                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                  }`}
+                >
+                  <AppTabIcon name="edge" className="w-5 h-5 text-black dark:text-white" />
+                  {getDownloadIndicator('/edge', true)}
+                </button>
 
-              {/* Divider: LAC's project */}
-              <div className="w-6 h-[1px] bg-black/10 dark:bg-white/10 my-1" />
+                {/* File Explorer Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-file-explorer"
+                  data-nav-active={(currentRoute === '/file-explorer' || currentRoute === '/files' || currentRoute.startsWith('/file-explorer')) ? 'true' : undefined}
+                  onClick={() => handleNavClick('/file-explorer')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'File Explorer')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="File Explorer"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    (currentRoute === '/file-explorer' || currentRoute === '/files' || currentRoute.startsWith('/file-explorer'))
+                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                  }`}
+                >
+                  <AppTabIcon name="fileExplorer" className="w-5 h-5 text-black dark:text-white" />
+                </button>
 
-              {/* 6. Craftmine Icon */}
-              <button
-                type="button"
-                id="sidebar-collapsed-craftmine"
-                data-nav-active={currentRoute === '/craftmine' ? 'true' : undefined}
-                onClick={() => handleNavClick('/craftmine')}
-                title="Craftmine"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  currentRoute === '/craftmine'
-                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
-                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <FluentCraftmineIcon className="w-5 h-5 text-black dark:text-white" />
-                {getDownloadIndicator('/craftmine', true)}
-              </button>
+                {/* Watch Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-watch"
+                  data-nav-active={(currentRoute === '/live-tv' || currentRoute.startsWith('/live-tv')) ? 'true' : undefined}
+                  onClick={() => handleNavClick('/live-tv')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'Watch')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="Watch"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    (currentRoute === '/live-tv' || currentRoute.startsWith('/live-tv'))
+                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                  }`}
+                >
+                  <AppTabIcon name="watch" className="w-5 h-5 text-black dark:text-white" />
+                  {getDownloadIndicator('/live-tv', true)}
+                </button>
 
-              {/* Photopea Icon */}
-              <button
-                type="button"
-                id="sidebar-collapsed-photopea"
-                data-nav-active={(currentRoute === '/photopea' || currentRoute === '/photoshop') ? 'true' : undefined}
-                onClick={() => handleNavClick('/photopea')}
-                title="Photopea"
-                className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                  (currentRoute === '/photopea' || currentRoute === '/photoshop')
-                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
-                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <FluentPhotopeaIcon className="w-5 h-5 text-black dark:text-white" />
-                {getDownloadIndicator('/photopea', true)}
-              </button>
+                {/* Notes Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-notes"
+                  data-nav-active={(currentRoute === '/notes' || currentRoute === '/write' || currentRoute === '/present' || currentRoute === '/table') ? 'true' : undefined}
+                  onClick={() => handleNavClick('/notes')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'Notes')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="Notes"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    (currentRoute === '/notes' || currentRoute === '/write' || currentRoute === '/present' || currentRoute === '/table')
+                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                  }`}
+                >
+                  <AppTabIcon name="notes" className="w-5 h-5 text-black dark:text-white" />
+                  {getDownloadIndicator('/notes', true)}
+                </button>
 
-              {/* 7. Discord Icon */}
-              <button
-                type="button"
-                id="sidebar-collapsed-discord"
-                onClick={() => window.open('https://discord.gg/wcdjaDDayK', '_blank', 'noopener,noreferrer')}
-                title="Discord"
-                className="sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white"
-              >
-                <svg className="w-5 h-5 fill-current text-black dark:text-white" viewBox="0 0 24 24">
-                  <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.893.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.078.078 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
-                </svg>
-              </button>
+                {/* Gallery Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-photos"
+                  data-nav-active={(currentRoute === '/photos' || currentRoute === '/gallery' || currentRoute.startsWith('/photos') || currentRoute.startsWith('/gallery')) ? 'true' : undefined}
+                  onClick={() => handleNavClick('/photos')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'Gallery')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="Gallery"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    (currentRoute === '/photos' || currentRoute === '/gallery' || currentRoute.startsWith('/photos') || currentRoute.startsWith('/gallery'))
+                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                  }`}
+                >
+                  <AppTabIcon name="gallery" className="w-5 h-5 text-black dark:text-white" />
+                  {getDownloadIndicator('/gallery', true)}
+                </button>
 
-              {/* Bottom Give Feedback & Settings Icons */}
-              <div className="mt-auto pt-2 space-y-1 relative">
+                {/* Camera Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-camera"
+                  data-nav-active={(currentRoute === '/camera' || currentRoute.startsWith('/camera')) ? 'true' : undefined}
+                  onClick={() => handleNavClick('/camera')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'Camera')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="Camera"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    (currentRoute === '/camera' || currentRoute.startsWith('/camera'))
+                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                  }`}
+                >
+                  <AppTabIcon name="camera" className="w-5 h-5 text-black dark:text-white" />
+                  {getDownloadIndicator('/camera', true)}
+                </button>
 
+                {/* Paint Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-ms-paint"
+                  data-nav-active={(currentRoute === '/ms-paint' || currentRoute === '/paint' || currentRoute.startsWith('/ms-paint')) ? 'true' : undefined}
+                  onClick={() => handleNavClick('/ms-paint')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'Paint')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="Paint"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    (currentRoute === '/ms-paint' || currentRoute === '/paint' || currentRoute.startsWith('/ms-paint'))
+                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                  }`}
+                >
+                  <AppTabIcon name="paint" className="w-5 h-5 text-black dark:text-white" />
+                  {getDownloadIndicator('/paint', true)}
+                </button>
 
+                {/* Clock Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-clock"
+                  data-nav-active={(currentRoute === '/clock' || currentRoute.startsWith('/clock') || currentRoute === '/alarm' || currentRoute === '/timer' || currentRoute === '/stopwatch') ? 'true' : undefined}
+                  onClick={() => handleNavClick('/clock')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'Clock')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="Clock"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    (currentRoute === '/clock' || currentRoute.startsWith('/clock') || currentRoute === '/alarm' || currentRoute === '/timer' || currentRoute === '/stopwatch')
+                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                  }`}
+                >
+                  <FluentClockIcon className="w-5 h-5 text-black dark:text-white" />
+                </button>
+
+                {/* VLC Media Player Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-vlc"
+                  data-nav-active={(currentRoute === '/vlc' || currentRoute.startsWith('/vlc') || currentRoute === '/media-player') ? 'true' : undefined}
+                  onClick={() => handleNavClick('/vlc')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'VLC Media Player')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="VLC Media Player"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    (currentRoute === '/vlc' || currentRoute.startsWith('/vlc') || currentRoute === '/media-player')
+                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                  }`}
+                >
+                  <FluentVlcIcon className="w-5 h-5 text-black dark:text-white" />
+                </button>
+
+                {/* Schedule Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-schedule"
+                  data-nav-active={(currentRoute === '/schedule' || currentRoute.startsWith('/schedule') || currentRoute === '/epg') ? 'true' : undefined}
+                  onClick={() => handleNavClick('/schedule')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'Lịch phát sóng')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="Lịch phát sóng"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    (currentRoute === '/schedule' || currentRoute.startsWith('/schedule') || currentRoute === '/epg')
+                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                  }`}
+                >
+                  <FluentScheduleIcon className="w-5 h-5 text-black dark:text-white" />
+                </button>
+
+                {/* Cookbook Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-cookbook"
+                  data-nav-active={(currentRoute === '/cookbook' || currentRoute.startsWith('/cookbook')) ? 'true' : undefined}
+                  onClick={() => handleNavClick('/cookbook')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'Cookbook - Ẩm thực')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="Cookbook"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    (currentRoute === '/cookbook' || currentRoute.startsWith('/cookbook'))
+                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                  }`}
+                >
+                  <FluentCookbookIcon className="w-5 h-5 text-black dark:text-white" />
+                </button>
+
+                {/* Divider: System */}
+                <div className="w-6 h-[1px] bg-black/10 dark:bg-white/10 my-1 shrink-0" />
+
+                {/* Task Manager Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-taskmanager"
+                  data-nav-active={(currentRoute === '/task-manager' || currentRoute.startsWith('/task-manager')) ? 'true' : undefined}
+                  onClick={() => handleNavClick('/task-manager')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'Task Manager')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="Task Manager"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    (currentRoute === '/task-manager' || currentRoute.startsWith('/task-manager'))
+                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                  }`}
+                >
+                  <AppTabIcon name="taskManager" className="w-5 h-5 text-black dark:text-white" />
+                </button>
+
+                {/* Divider: LAC's project */}
+                <div className="w-6 h-[1px] bg-black/10 dark:bg-white/10 my-1 shrink-0" />
+
+                {/* Craftmine Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-craftmine"
+                  data-nav-active={currentRoute === '/craftmine' ? 'true' : undefined}
+                  onClick={() => handleNavClick('/craftmine')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'Craftmine')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="Craftmine"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    currentRoute === '/craftmine'
+                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                  }`}
+                >
+                  <FluentCraftmineIcon className="w-5 h-5 text-black dark:text-white" />
+                  {getDownloadIndicator('/craftmine', true)}
+                </button>
+
+                {/* Photopea Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-photopea"
+                  data-nav-active={(currentRoute === '/photopea' || currentRoute === '/photoshop') ? 'true' : undefined}
+                  onClick={() => handleNavClick('/photopea')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'Photopea')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="Photopea"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    (currentRoute === '/photopea' || currentRoute === '/photoshop')
+                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                  }`}
+                >
+                  <FluentPhotopeaIcon className="w-5 h-5 text-black dark:text-white" />
+                  {getDownloadIndicator('/photopea', true)}
+                </button>
+
+                {/* Discord Icon */}
+                <button
+                  type="button"
+                  id="sidebar-collapsed-discord"
+                  onClick={() => window.open('https://discord.gg/wcdjaDDayK', '_blank', 'noopener,noreferrer')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'Discord')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="Discord"
+                  className="sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white"
+                >
+                  <svg className="w-5 h-5 fill-current text-black dark:text-white" viewBox="0 0 24 24">
+                    <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.893.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.078.078 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                  </svg>
+                </button>
+
+                {/* Insider Flags if developerMode is on */}
+                {settings.developerMode && (
+                  <button
+                    type="button"
+                    id="sidebar-collapsed-test"
+                    data-nav-active={currentRoute === '/test' ? 'true' : undefined}
+                    onClick={() => handleNavClick('/test')}
+                    onMouseEnter={(e) => handleTooltipEnter(e, 'Insider Flags (Lab)')}
+                    onMouseLeave={handleTooltipLeave}
+                    aria-label="Insider Flags (Lab)"
+                    className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                      currentRoute === '/test'
+                        ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                        : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                    }`}
+                  >
+                    <FlaskConical className="w-5 h-5 text-black dark:text-white" />
+                  </button>
+                )}
+              </div>
+
+              {/* Bottom Pinned Controls: XAML Controls & Settings */}
+              <div className="shrink-0 pt-1.5 pb-1 mt-auto flex flex-col items-center space-y-1 w-full border-t border-black/5 dark:border-white/5">
                 {/* XAML Controls Icon */}
                 <button
                   type="button"
                   id="sidebar-collapsed-xaml-controls"
                   data-nav-active={isCurrentActive('/xaml-controls') ? 'true' : undefined}
                   onClick={() => handleNavClick('/xaml-controls')}
-                  title="XAML Controls"
-                  className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'XAML Controls')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="XAML Controls"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
                     isCurrentActive('/xaml-controls')
                       ? 'bg-black/5 dark:bg-white/[0.08] text-[#111827] dark:text-white shadow-xs'
                       : 'text-[#4b5563] dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-[#111827] dark:hover:text-white'
@@ -2057,8 +2239,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   id="sidebar-collapsed-settings"
                   data-nav-active={isCurrentActive('/settings') ? 'true' : undefined}
                   onClick={() => handleNavClick('/settings')}
-                  title="Settings"
-                  className={`sidebar-nav-item w-10 h-[38px] rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'Settings')}
+                  onMouseLeave={handleTooltipLeave}
+                  aria-label="Settings"
+                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
                     isCurrentActive('/settings')
                       ? 'bg-black/5 dark:bg-white/[0.08] text-[#111827] dark:text-white shadow-xs'
                       : 'text-[#4b5563] dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-[#111827] dark:hover:text-white'
@@ -2079,48 +2263,60 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </motion.aside>
       )}
 
-      {/* 2. Mobile Drawer Navigation with Smooth Animation */}
+      {/* 2. Mobile Drawer Navigation with Real-Time Finger Following */}
       <AnimatePresence>
-        {isMobileOpen && (
+        {(isMobileOpen || mobileDragOffset !== null) && (
           <div 
             className="fixed inset-0 z-50 md:hidden flex"
             role="dialog"
             aria-modal="true"
           >
-            {/* Backdrop with smooth fade */}
+            {/* Backdrop with real-time finger tracking & smooth release */}
             <motion.div 
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              animate={{ 
+                opacity: mobileDragOffset !== null 
+                  ? Math.min(1, Math.max(0, mobileDragOffset / (typeof window !== 'undefined' ? Math.min(285, window.innerWidth * 0.85) : 285)))
+                  : drawerCloseOffset !== null 
+                    ? Math.max(0, ((typeof window !== 'undefined' ? Math.min(285, window.innerWidth * 0.85) : 285) + drawerCloseOffset) / (typeof window !== 'undefined' ? Math.min(285, window.innerWidth * 0.85) : 285))
+                    : 1 
+              }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.28, ease: 'easeOut' }}
+              transition={(mobileDragOffset !== null || drawerCloseOffset !== null) ? { duration: 0 } : { duration: 0.25, ease: 'easeOut' }}
               onClick={onCloseMobile}
-              className="fixed inset-0 bg-black/60 backdrop-blur-xs cursor-pointer"
+              className="fixed inset-0 bg-black/60 cursor-pointer"
               aria-hidden="true"
             />
 
-            {/* Slide-out Sidebar Drawer with smooth spring transition */}
+            {/* Slide-out Sidebar Drawer following finger in real-time */}
             <motion.div 
               id="waves-mobile-sidebar"
-              initial={{ x: '-100%', opacity: 0.8 }}
-              animate={{ x: 0, opacity: 1 }}
+              initial={mobileDragOffset !== null ? false : { x: '-100%', opacity: 0.8 }}
+              animate={{ 
+                x: mobileDragOffset !== null 
+                  ? mobileDragOffset - Math.min(285, typeof window !== 'undefined' ? window.innerWidth * 0.85 : 285)
+                  : drawerCloseOffset !== null 
+                    ? Math.min(0, drawerCloseOffset)
+                    : 0,
+                opacity: 1 
+              }}
               exit={{ x: '-100%', opacity: 0.8 }}
-              transition={{ 
+              transition={(mobileDragOffset !== null || drawerCloseOffset !== null) ? { duration: 0 } : { 
                 type: 'spring', 
                 damping: 26, 
                 stiffness: 290, 
                 mass: 0.8 
               }}
               onTouchStart={handleDrawerTouchStart}
+              onTouchMove={handleDrawerTouchMove}
               onTouchEnd={handleDrawerTouchEnd}
               className={`relative w-[285px] max-w-[85vw] h-full ${
                 settings.windowsAppSdkPreview
                   ? '!bg-[#141414] border-r border-[#202020]'
-                  : 'bg-[#f3f3f3]/90 dark:bg-[#1b1f24]/90 border-r border-[#e5e5e5] dark:border-[#333333]'
-              } text-[#111827] dark:text-white shadow-none flex flex-col z-10 backdrop-blur-2xl`}
+                  : 'bg-[#f3f3f3] dark:bg-[#1b1f24] border-r border-[#e5e5e5] dark:border-[#333333]'
+              } text-[#111827] dark:text-white shadow-none flex flex-col z-10`}
               style={{
                 backgroundColor: settings.windowsAppSdkPreview ? '#141414' : undefined,
-                backdropFilter: settings.windowsAppSdkPreview ? 'none' : 'blur(24px)',
-                WebkitBackdropFilter: settings.windowsAppSdkPreview ? 'none' : 'blur(24px)',
                 boxShadow: 'none',
               }}
             >
@@ -2136,7 +2332,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
         onClose={() => setIsDiscordModalOpen(false)}
       />
 
-
+      {/* Sidebar Tooltip (No animation, solid dark gray background, gray border, no blur, no opacity, square corners) */}
+      {activeTooltip && (
+        <div
+          key="sidebar-solid-tooltip"
+          style={{
+            top: activeTooltip.y,
+            ...(settings.sidebarPosition === 'right'
+              ? { right: `${Math.max(0, window.innerWidth - activeTooltip.x)}px` }
+              : { left: `${activeTooltip.x}px` }),
+            transition: 'none',
+            animation: 'none',
+          }}
+          className="fixed z-50 -translate-y-1/2 rounded-none bg-[#242424] border border-[#444444] text-white text-[12px] font-normal px-2.5 py-1 pointer-events-none select-none shadow-md tracking-wide whitespace-nowrap"
+        >
+          {activeTooltip.label}
+        </div>
+      )}
     </>
   );
 };

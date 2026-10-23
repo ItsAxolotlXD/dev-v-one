@@ -444,6 +444,15 @@ html.webview-sdk-preview #waves-mobile-sidebar {
   box-shadow: none !important;
 }
 
+html.windows-app-sdk-preview #waves-desktop-sidebar.w-\[48px\],
+html.webview-sdk-preview #waves-desktop-sidebar.w-\[48px\],
+html.windows-app-sdk-preview #waves-desktop-sidebar[data-collapsed="true"],
+html.webview-sdk-preview #waves-desktop-sidebar[data-collapsed="true"] {
+  width: 48px !important;
+  min-width: 48px !important;
+  max-width: 48px !important;
+}
+
 html.windows-app-sdk-preview #waves-desktop-sidebar > div,
 html.webview-sdk-preview #waves-desktop-sidebar > div,
 html.windows-app-sdk-preview #waves-mobile-sidebar > div,
