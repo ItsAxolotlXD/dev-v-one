@@ -614,26 +614,33 @@ export const LiveTilesHome: React.FC<LiveTilesHomeProps> = ({
   // Filter groups
   const groups = useMemo(() => {
     const set = new Set<string>();
-    tiles.forEach((t) => {
-      if (t.groupName) set.add(t.groupName);
-    });
     return Array.from(set);
   }, [tiles]);
 
-  // Click on a tile
-  const handleTileClick = (tile: LiveTileItem) => {
-    if (tile.category === 'channel' && tile.data?.channelId) {
-      const found = channels.find((c) => c.id === tile.data?.channelId || c.slug === tile.data?.channelSlug);
-      if (found) {
-        onSelectChannel(found);
-      }
-      onNavigate(tile.route || `/live-tv?channel=${tile.data.channelSlug || tile.data.channelId}`);
-      return;
-    }
+  // Active Tile Flip Animation on Click to Open
+  const [flippingTileId, setFlippingTileId] = useState<string | null>(null);
 
-    if (tile.route) {
-      onNavigate(tile.route);
-    }
+  // Click on a tile with 3D Flip Launch Animation
+  const handleTileClick = (tile: LiveTileItem) => {
+    if (flippingTileId) return;
+    setFlippingTileId(tile.id);
+
+    setTimeout(() => {
+      if (tile.category === 'channel' && tile.data?.channelId) {
+        const found = channels.find((c) => c.id === tile.data?.channelId || c.slug === tile.data?.channelSlug);
+        if (found) {
+          onSelectChannel(found);
+        }
+        onNavigate(tile.route || `/live-tv?channel=${tile.data.channelSlug || tile.data.channelId}`);
+        setFlippingTileId(null);
+        return;
+      }
+
+      if (tile.route) {
+        onNavigate(tile.route);
+      }
+      setFlippingTileId(null);
+    }, 380);
   };
 
   // Change tile size

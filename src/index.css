@@ -7558,5 +7558,34 @@ a:hover .settings-spin-icon,
   zoom: 1 !important;
 }
 
+/* Metro Tile Open Flip Transition Animation */
+@keyframes tileOpenFlip {
+  0% {
+    transform: perspective(900px) rotateY(0deg) scale(1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    filter: brightness(1);
+  }
+  50% {
+    transform: perspective(900px) rotateY(-90deg) scale(0.92);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+    filter: brightness(1.22);
+  }
+  100% {
+    transform: perspective(900px) rotateY(-180deg) scale(1.05);
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.6);
+    filter: brightness(1.35);
+    opacity: 0.15;
+  }
+}
+
+.tile-flip-transition {
+  animation: tileOpenFlip 0.38s cubic-bezier(0.2, 0.8, 0.25, 1) forwards !important;
+  transform-style: preserve-3d !important;
+  pointer-events: none !important;
+  z-index: 50 !important;
+  will-change: transform, opacity, filter !important;
+}
+
+
 
 
