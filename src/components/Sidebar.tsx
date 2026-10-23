@@ -78,6 +78,8 @@ import { getStoreAppForRoute } from '../data/storeApps';
 const LOGO_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-7bX9C6ZMjpXAbn0eXLI2Wk6ZhwUwk0.png';
 const COPILOT_ICON_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-7bX9C6ZMjpXAbn0eXLI2Wk6ZhwUwk0.png';
 const XAML_ICON_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-kj8VATj48xgpu6hRIVOSoJomQMTGnR.png';
+const ONEDRIVE_FOLDER_ICON_URL = 'https://thumb.wikimedia.org/wikipedia/commons/thumb/5/59/OneDrive_Folder_Icon.svg/3840px-OneDrive_Folder_Icon.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail';
+
 
 interface MorphingIndicatorProps {
   containerRef: React.RefObject<HTMLDivElement | null>;
@@ -291,6 +293,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const [isDiscordModalOpen, setIsDiscordModalOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isToolsFlyoutOpen, setIsToolsFlyoutOpen] = useState(false);
+  const [openFolders, setOpenFolders] = useState<Record<string, boolean>>({});
+
+  const toggleFolder = (folderId: string) => {
+    setOpenFolders((prev) => ({
+      ...prev,
+      [folderId]: !prev[folderId],
+    }));
+  };
 
   const toggleToolsFlyout = () => {
     setIsToolsFlyoutOpen((prev) => !prev);
@@ -605,6 +615,217 @@ export const Sidebar: React.FC<SidebarProps> = ({
     return false;
   };
 
+  const smartFolders = useMemo(() => {
+    return [
+      {
+        id: 'productivity',
+        name: 'Productivity',
+        items: [
+          {
+            id: 'edge',
+            label: 'Edge',
+            route: '/edge',
+            renderIcon: () => <AppTabIcon name="edge" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            isActive: (r: string) => r === '/edge' || r === '/browser' || r.startsWith('/edge'),
+            hasDownloadIndicator: true,
+          },
+          {
+            id: 'mail',
+            label: 'Mail',
+            route: '/mail',
+            renderIcon: () => <img src={MAIL_TAB_ICON_URL} alt="Mail" className="size-5 shrink-0 object-contain" />,
+            isActive: (r: string) => r === '/mail',
+            hasDownloadIndicator: true,
+          },
+          {
+            id: 'calendar',
+            label: 'Calendar',
+            route: '/calendar',
+            renderIcon: () => <img src={CALENDAR_TAB_ICON_URL} alt="Calendar" className="size-5 shrink-0 object-contain" />,
+            isActive: (r: string) => r === '/calendar',
+            hasDownloadIndicator: true,
+          },
+          {
+            id: 'file-explorer',
+            label: 'File Explorer',
+            route: '/file-explorer',
+            renderIcon: () => <AppTabIcon name="fileExplorer" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            isActive: (r: string) => r === '/file-explorer' || r === '/files' || r.startsWith('/file-explorer'),
+          },
+          {
+            id: 'notes',
+            label: 'Notes',
+            route: '/notes',
+            renderIcon: () => <AppTabIcon name="notes" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            isActive: (r: string) => r === '/notes' || r === '/write' || r === '/present' || r === '/table',
+            hasDownloadIndicator: true,
+          },
+          {
+            id: 'calculator',
+            label: 'Calculator',
+            route: '/calculator',
+            renderIcon: () => <AppTabIcon name="calculator" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            isActive: (r: string) => r === '/calculator' || r === '/calc',
+            hasDownloadIndicator: true,
+          },
+          {
+            id: 'clock',
+            label: 'Clock',
+            route: '/clock',
+            renderIcon: () => <FluentClockIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            isActive: (r: string) => r === '/clock' || r.startsWith('/clock') || r === '/alarm' || r === '/timer' || r === '/stopwatch',
+            hasDownloadIndicator: true,
+          },
+        ],
+      },
+      {
+        id: 'entertainment',
+        name: 'Entertainment',
+        items: [
+          {
+            id: 'store',
+            label: 'Store',
+            route: '/store',
+            renderIcon: () => <img src={STORE_ICON_URL} alt="" className="size-5 shrink-0 object-contain" />,
+            isActive: (r: string) => r === '/store',
+          },
+          {
+            id: 'watch',
+            label: 'Watch',
+            route: '/live-tv',
+            renderIcon: () => <AppTabIcon name="watch" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            isActive: (r: string) => r === '/live-tv' || r.startsWith('/live-tv'),
+            hasDownloadIndicator: true,
+          },
+          {
+            id: 'photos',
+            label: 'Gallery',
+            route: '/photos',
+            renderIcon: () => <AppTabIcon name="gallery" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            isActive: (r: string) => r === '/photos' || r === '/gallery' || r.startsWith('/photos') || r.startsWith('/gallery'),
+            hasDownloadIndicator: true,
+          },
+          {
+            id: 'camera',
+            label: 'Camera',
+            route: '/camera',
+            renderIcon: () => <AppTabIcon name="camera" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            isActive: (r: string) => r === '/camera' || r.startsWith('/camera'),
+            hasDownloadIndicator: true,
+          },
+          {
+            id: 'ms-paint',
+            label: 'Paint',
+            route: '/ms-paint',
+            renderIcon: () => <AppTabIcon name="paint" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            isActive: (r: string) => r === '/ms-paint' || r === '/paint' || r.startsWith('/ms-paint'),
+            hasDownloadIndicator: true,
+          },
+          {
+            id: 'ink-canvas',
+            label: 'Ink Canvas',
+            route: '/ink-space',
+            renderIcon: () => <AppTabIcon name="inkCanvas" className="w-5 h-5 shrink-0" />,
+            isActive: (r: string) => r === '/ink-space' || r === '/inkspace' || r === '/ink-canvas' || r === '/inkcanvas',
+            hasDownloadIndicator: true,
+          },
+          {
+            id: 'vlc',
+            label: 'VLC',
+            route: '/vlc',
+            renderIcon: () => <FluentVlcIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            isActive: (r: string) => r === '/vlc' || r.startsWith('/vlc') || r === '/media-player',
+            hasDownloadIndicator: true,
+          },
+          {
+            id: 'cookbook',
+            label: 'Cookbook',
+            route: '/cookbook',
+            renderIcon: () => <FluentCookbookIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            isActive: (r: string) => r === '/cookbook' || r.startsWith('/cookbook') || r === '/recipes',
+            hasDownloadIndicator: true,
+          },
+        ],
+      },
+      {
+        id: 'social',
+        name: 'Social',
+        items: [
+          {
+            id: 'swift-social',
+            label: 'Spark Social',
+            route: '/swift',
+            renderIcon: () => <AppTabIcon name="social" className="w-5 h-5 shrink-0" />,
+            isActive: (r: string) => r === '/swift' || r.startsWith('/swift') || r === '/swift-social',
+            hasDownloadIndicator: true,
+          },
+          {
+            id: 'swift-bank',
+            label: 'Spark Bank',
+            route: '/swift-bank',
+            renderIcon: () => <AppTabIcon name="bank" className="w-5 h-5 shrink-0" />,
+            isActive: (r: string) => r === '/swift-bank' || r.startsWith('/swift-bank') || r === '/bank',
+            hasDownloadIndicator: true,
+          },
+          {
+            id: 'logos-fandom',
+            label: 'Fandom',
+            route: '/logos-fandom',
+            renderIcon: () => <FluentLogosFandomIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            isActive: (r: string) => r === '/logos-fandom' || r === '/logos-wiki' || r === '/fandom',
+            hasDownloadIndicator: true,
+          },
+          {
+            id: 'friends',
+            label: 'People',
+            route: '/friends',
+            renderIcon: () => <AppTabIcon name="people" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            isActive: (r: string) => r === '/friends' || r.startsWith('/friends'),
+            hasDownloadIndicator: true,
+          },
+        ],
+      },
+      {
+        id: 'system',
+        name: 'System',
+        items: [
+          {
+            id: 'task-manager',
+            label: 'Task Manager',
+            route: '/task-manager',
+            renderIcon: () => <AppTabIcon name="taskManager" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            isActive: (r: string) => r === '/task-manager' || r.startsWith('/task-manager'),
+          },
+          {
+            id: 'feedback-hub',
+            label: 'Feedback Hub',
+            route: '/feedback-hub',
+            renderIcon: () => <AppTabIcon name="feedback" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            isActive: (r: string) => r === '/feedback-hub' || r === '/feedback',
+          },
+          {
+            id: 'xaml-controls',
+            label: 'XAML Controls',
+            route: '/xaml-controls',
+            renderIcon: () => <img src={XAML_ICON_SRC} alt="" className="size-5 shrink-0 object-contain" />,
+            isActive: (r: string) => r === '/xaml-controls' || r.startsWith('/xaml-controls'),
+          },
+          ...(settings.developerMode
+            ? [
+                {
+                  id: 'test',
+                  label: 'Insider Flags',
+                  route: '/test',
+                  renderIcon: () => <FlaskConical className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+                  isActive: (r: string) => r === '/test',
+                },
+              ]
+            : []),
+        ],
+      },
+    ];
+  }, [settings.developerMode]);
+
   // Render Flyout Menu matching user screenshot
   const renderToolsFlyout = (isCollapsedMode = false) => {
     return (
@@ -802,6 +1023,394 @@ export const Sidebar: React.FC<SidebarProps> = ({
     );
   };
 
+  // Smart Sidebar Navigation (Expanded & Mobile Drawer)
+  const renderSmartSidebarNav = (isMobile: boolean) => {
+    return (
+      <>
+        {/* 1. Home */}
+        <div className="shrink-0">
+          <button
+            type="button"
+            id={isMobile ? 'mobile-nav-xaml-home' : 'sidebar-nav-xaml-home'}
+            data-nav-active={(currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home') ? 'true' : undefined}
+            onClick={() => handleNavClick('/')}
+            title="Home"
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              (currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home')
+                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+            }`}
+          >
+            <AppTabIcon name="home" className="w-5 h-5 shrink-0 text-black dark:text-white" />
+            <span className="truncate text-[13.5px]">Home</span>
+          </button>
+        </div>
+
+        {/* 2. Articles */}
+        <div className="shrink-0">
+          <button
+            type="button"
+            id={isMobile ? 'mobile-nav-articles' : 'sidebar-nav-articles'}
+            data-nav-active={(currentRoute === '/news' || currentRoute.startsWith('/article') || currentRoute.startsWith('/news/')) ? 'true' : undefined}
+            onClick={() => handleNavClick('/news')}
+            title="Articles"
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              (currentRoute === '/news' || currentRoute.startsWith('/article') || currentRoute.startsWith('/news/'))
+                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+            }`}
+          >
+            <AppTabIcon name="articles" className="w-5 h-5 shrink-0" />
+            <span className="truncate text-[13.5px]">Articles</span>
+          </button>
+        </div>
+
+        {/* 3. Widgets */}
+        <div className="shrink-0">
+          <button
+            type="button"
+            id={isMobile ? 'mobile-nav-widgets' : 'sidebar-nav-widgets'}
+            data-nav-active={(currentRoute === '/widgets' || currentRoute.startsWith('/widgets')) ? 'true' : undefined}
+            onClick={() => handleNavClick('/widgets')}
+            title="Widgets"
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              (currentRoute === '/widgets' || currentRoute.startsWith('/widgets'))
+                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+            }`}
+          >
+            <AppTabIcon name="widgets" className="w-5 h-5 shrink-0 text-black dark:text-white" />
+            <span className="truncate text-[13.5px]">Widgets</span>
+          </button>
+        </div>
+
+        {/* Divider */}
+        <div className="my-1.5 mx-1 h-[1px] bg-black/10 dark:bg-white/10 shrink-0" />
+
+        {/* 4. Copilot */}
+        <div className="shrink-0">
+          <button
+            type="button"
+            id={isMobile ? 'mobile-nav-copilot' : 'sidebar-nav-copilot'}
+            data-nav-active={(currentRoute === '/copilot' || currentRoute.startsWith('/copilot')) ? 'true' : undefined}
+            onClick={() => handleNavClick('/copilot')}
+            title="Copilot"
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              (currentRoute === '/copilot' || currentRoute.startsWith('/copilot'))
+                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+            }`}
+          >
+            <img
+              src={COPILOT_ICON_SRC}
+              alt="Copilot"
+              referrerPolicy="no-referrer"
+              className="w-5 h-5 shrink-0 object-contain"
+            />
+            <span className="truncate text-[13.5px]">Copilot</span>
+          </button>
+        </div>
+
+        {/* 5. Recall */}
+        <div className="shrink-0">
+          <button
+            type="button"
+            id={isMobile ? 'mobile-nav-recall' : 'sidebar-nav-recall'}
+            data-nav-active={(currentRoute === '/recall' || currentRoute.startsWith('/recall')) ? 'true' : undefined}
+            onClick={() => handleNavClick('/recall')}
+            title="Recall"
+            aria-label="Recall"
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              (currentRoute === '/recall' || currentRoute.startsWith('/recall'))
+                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+            }`}
+          >
+            <FluentRecallIcon className="w-5 h-5 shrink-0" />
+            <span className="truncate text-[13.5px]">Recall</span>
+          </button>
+        </div>
+
+        {/* 6. SparkOS */}
+        <div className="shrink-0">
+          <button
+            type="button"
+            id={isMobile ? 'mobile-nav-sparkos' : 'sidebar-nav-sparkos'}
+            data-nav-active={currentRoute === '/sparkos' ? 'true' : undefined}
+            onClick={() => handleNavClick('/sparkos')}
+            title="SparkOS"
+            aria-label="SparkOS"
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              currentRoute === '/sparkos'
+                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+            }`}
+          >
+            <Monitor aria-hidden="true" className="size-5 shrink-0 text-[#1684e8]" />
+            <span className="truncate text-[13.5px]">SparkOS</span>
+          </button>
+        </div>
+
+        {/* Divider */}
+        <div className="my-1.5 mx-1 h-[1px] bg-black/10 dark:bg-white/10 shrink-0" />
+
+        {/* Folders (collapsed by default) */}
+        {smartFolders.map((folder) => {
+          const isOpen = !!openFolders[folder.id];
+          const hasActiveChild = folder.items.some((it) => it.isActive(currentRoute));
+
+          return (
+            <div key={folder.id} className="w-full shrink-0 flex flex-col">
+              <button
+                type="button"
+                id={isMobile ? `mobile-nav-folder-${folder.id}` : `sidebar-nav-folder-${folder.id}`}
+                onClick={() => toggleFolder(folder.id)}
+                title={folder.name}
+                className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                  isOpen || hasActiveChild
+                    ? 'bg-black/5 dark:bg-white/[0.06] text-black dark:text-white font-medium'
+                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                }`}
+              >
+                <div className="flex items-center gap-3.5 truncate">
+                  <img
+                    src={ONEDRIVE_FOLDER_ICON_URL}
+                    alt=""
+                    aria-hidden="true"
+                    className="w-5 h-5 shrink-0 object-contain drop-shadow-xs"
+                  />
+                  <span className="truncate text-[13.5px]">{folder.name}</span>
+                </div>
+                <div className="flex items-center gap-1.5 shrink-0 text-neutral-500 dark:text-neutral-400">
+                  {!isOpen && hasActiveChild && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#0078d4] dark:bg-[#4cc2ff]" />
+                  )}
+                  {isOpen ? (
+                    <ChevronDown className="w-3.5 h-3.5" />
+                  ) : (
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  )}
+                </div>
+              </button>
+
+              {isOpen && (
+                <div className="pl-3.5 flex flex-col gap-0.5 py-0.5 border-l border-black/10 dark:border-white/10 ml-5 my-0.5">
+                  {folder.items.map((item) => {
+                    const active = item.isActive(currentRoute);
+                    return (
+                      <button
+                        key={item.route}
+                        type="button"
+                        id={isMobile ? `mobile-nav-${item.id}` : `sidebar-nav-${item.id}`}
+                        data-nav-active={active ? 'true' : undefined}
+                        onClick={() => handleNavClick(item.route)}
+                        title={item.label}
+                        className={`sidebar-nav-item w-full h-[36px] flex items-center justify-between px-2.5 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                          active
+                            ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                            : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3 truncate">
+                          {item.renderIcon(false)}
+                          <span className="truncate text-[13px]">{item.label}</span>
+                        </div>
+                        {item.hasDownloadIndicator && getDownloadIndicator(item.route, false)}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </>
+    );
+  };
+
+  // Smart Sidebar Navigation (Collapsed Rail)
+  const renderSmartCollapsedNav = () => {
+    return (
+      <>
+        {/* Home Icon */}
+        <button
+          type="button"
+          id="sidebar-collapsed-xaml-home"
+          data-nav-active={(currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home') ? 'true' : undefined}
+          onClick={() => handleNavClick('/')}
+          onMouseEnter={(e) => handleTooltipEnter(e, 'Home')}
+          onMouseLeave={handleTooltipLeave}
+          aria-label="Home"
+          className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+            (currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home')
+              ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+              : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+          }`}
+        >
+          <AppTabIcon name="home" className="w-5 h-5 text-black dark:text-white" />
+        </button>
+
+        {/* Articles Icon */}
+        <button
+          type="button"
+          id="sidebar-collapsed-articles"
+          data-nav-active={(currentRoute === '/news' || currentRoute.startsWith('/article') || currentRoute.startsWith('/news/')) ? 'true' : undefined}
+          onClick={() => handleNavClick('/news')}
+          onMouseEnter={(e) => handleTooltipEnter(e, 'Articles')}
+          onMouseLeave={handleTooltipLeave}
+          aria-label="Articles"
+          className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+            (currentRoute === '/news' || currentRoute.startsWith('/article') || currentRoute.startsWith('/news/'))
+              ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+              : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+          }`}
+        >
+          <AppTabIcon name="articles" className="w-5 h-5" />
+        </button>
+
+        {/* Widgets Icon */}
+        <button
+          type="button"
+          id="sidebar-collapsed-widgets"
+          data-nav-active={(currentRoute === '/widgets' || currentRoute.startsWith('/widgets')) ? 'true' : undefined}
+          onClick={() => handleNavClick('/widgets')}
+          onMouseEnter={(e) => handleTooltipEnter(e, 'Widgets')}
+          onMouseLeave={handleTooltipLeave}
+          aria-label="Widgets"
+          className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+            (currentRoute === '/widgets' || currentRoute.startsWith('/widgets'))
+              ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+              : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+          }`}
+        >
+          <AppTabIcon name="widgets" className="w-5 h-5 text-black dark:text-white" />
+        </button>
+
+        {/* Divider */}
+        <div className="w-6 h-[1px] bg-black/10 dark:bg-white/10 my-1 shrink-0" />
+
+        {/* Copilot Icon */}
+        <button
+          type="button"
+          id="sidebar-collapsed-copilot"
+          data-nav-active={(currentRoute === '/copilot' || currentRoute.startsWith('/copilot')) ? 'true' : undefined}
+          onClick={() => handleNavClick('/copilot')}
+          onMouseEnter={(e) => handleTooltipEnter(e, 'Copilot')}
+          onMouseLeave={handleTooltipLeave}
+          aria-label="Copilot"
+          className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+            (currentRoute === '/copilot' || currentRoute.startsWith('/copilot'))
+              ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+              : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+          }`}
+        >
+          <img
+            src={COPILOT_ICON_SRC}
+            alt="Copilot"
+            referrerPolicy="no-referrer"
+            className="w-5 h-5 object-contain"
+          />
+        </button>
+
+        {/* Recall Icon */}
+        <button
+          type="button"
+          id="sidebar-collapsed-recall"
+          data-nav-active={(currentRoute === '/recall' || currentRoute.startsWith('/recall')) ? 'true' : undefined}
+          onClick={() => handleNavClick('/recall')}
+          onMouseEnter={(e) => handleTooltipEnter(e, 'Recall')}
+          onMouseLeave={handleTooltipLeave}
+          aria-label="Recall"
+          className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+            (currentRoute === '/recall' || currentRoute.startsWith('/recall'))
+              ? 'bg-black/5 dark:bg-white/[0.08] shadow-xs'
+              : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'
+          }`}
+        >
+          <FluentRecallIcon className="w-5 h-5" />
+        </button>
+
+        {/* SparkOS Icon */}
+        <button
+          type="button"
+          id="sidebar-collapsed-sparkos"
+          data-nav-active={currentRoute === '/sparkos' ? 'true' : undefined}
+          onClick={() => handleNavClick('/sparkos')}
+          onMouseEnter={(e) => handleTooltipEnter(e, 'SparkOS')}
+          onMouseLeave={handleTooltipLeave}
+          aria-label="SparkOS"
+          className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+            currentRoute === '/sparkos'
+              ? 'bg-black/5 dark:bg-white/[0.08] shadow-xs'
+              : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'
+          }`}
+        >
+          <Monitor aria-hidden="true" className="size-5 text-[#1684e8]" />
+        </button>
+
+        {/* Divider */}
+        <div className="w-6 h-[1px] bg-black/10 dark:bg-white/10 my-1 shrink-0" />
+
+        {/* Folders in collapsed rail */}
+        {smartFolders.map((folder) => {
+          const isOpen = !!openFolders[folder.id];
+          const hasActiveChild = folder.items.some((it) => it.isActive(currentRoute));
+
+          return (
+            <div key={folder.id} className="w-full flex flex-col items-center shrink-0">
+              <button
+                type="button"
+                id={`sidebar-collapsed-folder-${folder.id}`}
+                onClick={() => toggleFolder(folder.id)}
+                onMouseEnter={(e) => handleTooltipEnter(e, folder.name)}
+                onMouseLeave={handleTooltipLeave}
+                aria-label={folder.name}
+                className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  isOpen || hasActiveChild
+                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                    : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                }`}
+              >
+                <img src={ONEDRIVE_FOLDER_ICON_URL} alt="" className="w-5 h-5 object-contain" />
+                {!isOpen && hasActiveChild && (
+                  <span className="absolute bottom-1 right-1 w-1.5 h-1.5 rounded-full bg-[#0078d4] dark:bg-[#4cc2ff]" />
+                )}
+              </button>
+
+              {isOpen && (
+                <div className="w-full flex flex-col items-center py-1 space-y-1 bg-black/[0.03] dark:bg-white/[0.03] rounded-[6px] my-0.5">
+                  {folder.items.map((item) => {
+                    const active = item.isActive(currentRoute);
+                    return (
+                      <button
+                        key={item.route}
+                        type="button"
+                        id={`sidebar-collapsed-${item.id}`}
+                        data-nav-active={active ? 'true' : undefined}
+                        onClick={() => handleNavClick(item.route)}
+                        onMouseEnter={(e) => handleTooltipEnter(e, item.label)}
+                        onMouseLeave={handleTooltipLeave}
+                        aria-label={item.label}
+                        className={`sidebar-nav-item w-10 h-[36px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                          active
+                            ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                            : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+                        }`}
+                      >
+                        {item.renderIcon(true)}
+                        {item.hasDownloadIndicator && getDownloadIndicator(item.route, true)}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </>
+    );
+  };
+
 
 
   // Render Full Windows 10 Settings Style Sidebar Content
@@ -876,11 +1485,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <MorphingVerticalIndicator
             containerRef={containerRef}
             currentRoute={currentRoute}
-            dependencyKey={`${navItems.length}-${isLiveTvExpanded}-${currentRoute}`}
+            dependencyKey={`${navItems.length}-${isLiveTvExpanded}-${currentRoute}-${settings.sidebarSmartLayout}-${JSON.stringify(openFolders)}`}
             isWebViewSdk={settings.windowsAppSdkPreview}
           />
 
-          {/* XAML Home */}
+          {settings.sidebarSmartLayout ? (
+            renderSmartSidebarNav(isMobile)
+          ) : (
+            <>
+              {/* XAML Home */}
           <div className="shrink-0">
             <button
               type="button"
@@ -1560,29 +2173,37 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <span className="truncate text-[13.5px]">Discord</span>
             </button>
           </div>
+            </>
+          )}
         </div>
 
         {/* Bottom Section: Sign In (placed directly above Settings) & Settings */}
         <div className="px-2.5 py-2 shrink-0 mt-auto space-y-1 relative signin-flyout-container">
           {/* Sign In item placed directly ABOVE Settings tab */}
 
+          {/* XAML Controls - only in legacy mode (in smart layout it is in System folder) */}
+          {!settings.sidebarSmartLayout && (
+            <button
+              type="button"
+              id={isMobile ? 'mobile-nav-xaml-controls' : 'sidebar-nav-xaml-controls'}
+              data-nav-active={isCurrentActive('/xaml-controls') ? 'true' : undefined}
+              onClick={() => handleNavClick('/xaml-controls')}
+              title="XAML Controls"
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                isCurrentActive('/xaml-controls')
+                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+              }`}
+            >
+              <img src={XAML_ICON_SRC} alt="" aria-hidden="true" className="size-5 shrink-0 object-contain" />
+              <span className="truncate text-[13.5px]">XAML Controls</span>
+            </button>
+          )}
 
-          {/* XAML Controls */}
-          <button
-            type="button"
-            id={isMobile ? 'mobile-nav-xaml-controls' : 'sidebar-nav-xaml-controls'}
-            data-nav-active={isCurrentActive('/xaml-controls') ? 'true' : undefined}
-            onClick={() => handleNavClick('/xaml-controls')}
-            title="XAML Controls"
-            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
-              isCurrentActive('/xaml-controls')
-                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
-                : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-            }`}
-          >
-            <img src={XAML_ICON_SRC} alt="" aria-hidden="true" className="size-5 shrink-0 object-contain" />
-            <span className="truncate text-[13.5px]">XAML Controls</span>
-          </button>
+          {/* Divider above Settings in smart layout */}
+          {settings.sidebarSmartLayout && (
+            <div className="my-1 mx-1 h-[1px] bg-black/10 dark:bg-white/10 shrink-0" />
+          )}
 
           {/* Bottom Settings Tab Item */}
           <button
@@ -1682,11 +2303,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <MorphingVerticalIndicator
                   containerRef={collapsedNavRef}
                   currentRoute={currentRoute}
-                  dependencyKey={`${navItems.length}-${currentRoute}`}
+                  dependencyKey={`${navItems.length}-${currentRoute}-${settings.sidebarSmartLayout}-${JSON.stringify(openFolders)}`}
                   isWebViewSdk={settings.windowsAppSdkPreview}
                 />
 
-                {/* XAML Home Icon */}
+                {settings.sidebarSmartLayout ? (
+                  renderSmartCollapsedNav()
+                ) : (
+                  <>
+                    {/* XAML Home Icon */}
                 <button
                   type="button"
                   id="sidebar-collapsed-xaml-home"
@@ -2211,27 +2836,31 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     <FlaskConical className="w-5 h-5 text-black dark:text-white" />
                   </button>
                 )}
+                  </>
+                )}
               </div>
 
               {/* Bottom Pinned Controls: XAML Controls & Settings */}
               <div className="shrink-0 pt-1.5 pb-1 mt-auto flex flex-col items-center space-y-1 w-full border-t border-black/5 dark:border-white/5">
-                {/* XAML Controls Icon */}
-                <button
-                  type="button"
-                  id="sidebar-collapsed-xaml-controls"
-                  data-nav-active={isCurrentActive('/xaml-controls') ? 'true' : undefined}
-                  onClick={() => handleNavClick('/xaml-controls')}
-                  onMouseEnter={(e) => handleTooltipEnter(e, 'XAML Controls')}
-                  onMouseLeave={handleTooltipLeave}
-                  aria-label="XAML Controls"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
-                    isCurrentActive('/xaml-controls')
-                      ? 'bg-black/5 dark:bg-white/[0.08] text-[#111827] dark:text-white shadow-xs'
-                      : 'text-[#4b5563] dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-[#111827] dark:hover:text-white'
-                  }`}
-                >
-                  <img src={XAML_ICON_SRC} alt="" aria-hidden="true" className="size-5 object-contain" />
-                </button>
+                {/* XAML Controls Icon only in legacy mode (in smart layout it is in System folder) */}
+                {!settings.sidebarSmartLayout && (
+                  <button
+                    type="button"
+                    id="sidebar-collapsed-xaml-controls"
+                    data-nav-active={isCurrentActive('/xaml-controls') ? 'true' : undefined}
+                    onClick={() => handleNavClick('/xaml-controls')}
+                    onMouseEnter={(e) => handleTooltipEnter(e, 'XAML Controls')}
+                    onMouseLeave={handleTooltipLeave}
+                    aria-label="XAML Controls"
+                    className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                      isCurrentActive('/xaml-controls')
+                        ? 'bg-black/5 dark:bg-white/[0.08] text-[#111827] dark:text-white shadow-xs'
+                        : 'text-[#4b5563] dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-[#111827] dark:hover:text-white'
+                    }`}
+                  >
+                    <img src={XAML_ICON_SRC} alt="" aria-hidden="true" className="size-5 object-contain" />
+                  </button>
+                )}
 
                 {/* Bottom Settings Icon */}
                 <button

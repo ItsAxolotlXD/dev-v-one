@@ -5,7 +5,7 @@ import { keyboardSound } from '../utils/keyboardSound';
 import { logRecallActivity } from '../services/recallService';
 
 export type SearchIconTreatment = 'default' | 'flipped' | 'sparkle' | 'globe';
-export type SearchVisualExperimental = 'treatment-1' | 'treatment-2' | 'treatment-3' | 'treatment-4' | 'treatment-5';
+export type SearchVisualExperimental = 'treatment-1' | 'treatment-2' | 'treatment-3' | 'treatment-4' | 'treatment-5' | 'treatment-6';
 
 export interface SystemSettings {
   theme: 'dark' | 'light';
@@ -51,6 +51,7 @@ export interface SystemSettings {
   searchIconTreatment: SearchIconTreatment;
   searchVisualExperimental: SearchVisualExperimental;
   windowsAppSdkPreview: boolean;
+  sidebarSmartLayout: boolean;
   pageLoading: boolean;
   loadPagesSequentially: boolean;
   customKeybinds: CustomKeybinds;
@@ -104,6 +105,7 @@ export const DEFAULT_SETTINGS: SystemSettings = {
   searchIconTreatment: 'default',
   searchVisualExperimental: 'treatment-1',
   windowsAppSdkPreview: false,
+  sidebarSmartLayout: true,
   pageLoading: true,
   loadPagesSequentially: false,
   customKeybinds: DEFAULT_KEYBINDS,
@@ -195,10 +197,11 @@ export const getStoredSettings = (): SystemSettings => {
         experimentalSearchExperience: parsed.experimentalSearchExperience || 'left',
         roundedSearchBox: typeof parsed.roundedSearchBox === 'boolean' ? parsed.roundedSearchBox : false,
         searchIconTreatment: (['default', 'flipped', 'sparkle', 'globe'].includes(parsed.searchIconTreatment) ? parsed.searchIconTreatment : 'default') as SearchIconTreatment,
-        searchVisualExperimental: (['treatment-1', 'treatment-2', 'treatment-3', 'treatment-4', 'treatment-5'].includes(parsed.searchVisualExperimental) ? parsed.searchVisualExperimental : 'treatment-1') as SearchVisualExperimental,
+        searchVisualExperimental: (['treatment-1', 'treatment-2', 'treatment-3', 'treatment-4', 'treatment-5', 'treatment-6'].includes(parsed.searchVisualExperimental) ? parsed.searchVisualExperimental : 'treatment-1') as SearchVisualExperimental,
         windowsAppSdkPreview: typeof parsed.windowsAppSdkPreview === 'boolean' 
           ? parsed.windowsAppSdkPreview 
           : (typeof parsed.webviewSdkPreview === 'boolean' ? parsed.webviewSdkPreview : false),
+        sidebarSmartLayout: typeof parsed.sidebarSmartLayout === 'boolean' ? parsed.sidebarSmartLayout : true,
         pageLoading: typeof parsed.pageLoading === 'boolean' ? parsed.pageLoading : true,
         loadPagesSequentially: typeof parsed.loadPagesSequentially === 'boolean' ? parsed.loadPagesSequentially : false,
         fontScale,

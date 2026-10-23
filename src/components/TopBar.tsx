@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Menu, History, X, Mic, MicOff, Search, Sparkles } from 'lucide-react';
+import { Menu, History, X, Mic, MicOff, Search, Sparkles, MapPin, Check } from 'lucide-react';
 import { 
   FluentHomeIcon, 
   FluentLiveTvIcon, 
@@ -33,6 +33,50 @@ const DEFAULT_HISTORY_ITEMS = [
   'watch live tv',
   'vtv1 hd thoi su 19h'
 ];
+
+export interface InsightLocation {
+  name: string;
+  lat: number;
+  lon: number;
+  country?: string;
+}
+
+export const DEFAULT_INSIGHT_LOCATION: InsightLocation = {
+  name: 'Hà Nội',
+  lat: 21.0285,
+  lon: 105.8542,
+  country: 'Việt Nam',
+};
+
+export const POPULAR_LOCATIONS: InsightLocation[] = [
+  { name: 'Hà Nội', lat: 21.0285, lon: 105.8542, country: 'Việt Nam' },
+  { name: 'TP. Hồ Chí Minh', lat: 10.8231, lon: 106.6297, country: 'Việt Nam' },
+  { name: 'Đà Nẵng', lat: 16.0544, lon: 108.2022, country: 'Việt Nam' },
+  { name: 'Hải Phòng', lat: 20.8449, lon: 106.6881, country: 'Việt Nam' },
+  { name: 'Cần Thơ', lat: 10.0452, lon: 105.7469, country: 'Việt Nam' },
+  { name: 'Nha Trang', lat: 12.2388, lon: 109.1967, country: 'Việt Nam' },
+  { name: 'Huế', lat: 16.4637, lon: 107.5909, country: 'Việt Nam' },
+  { name: 'Đà Lạt', lat: 11.9404, lon: 108.4583, country: 'Việt Nam' },
+  { name: 'Tokyo', lat: 35.6762, lon: 139.6503, country: 'Nhật Bản' },
+  { name: 'Seoul', lat: 37.5665, lon: 126.9780, country: 'Hàn Quốc' },
+  { name: 'Singapore', lat: 1.3521, lon: 103.8198, country: 'Singapore' },
+  { name: 'London', lat: 51.5074, lon: -0.1278, country: 'Anh' },
+  { name: 'Paris', lat: 48.8566, lon: 2.3522, country: 'Pháp' },
+  { name: 'New York', lat: 40.7128, lon: -74.0060, country: 'Hoa Kỳ' },
+];
+
+export const getWeatherConditionDesc = (code: number): string => {
+  if (code === 0) return 'Trời quang';
+  if (code === 1 || code === 2) return 'Ít mây';
+  if (code === 3) return 'Nhiều mây';
+  if (code === 45 || code === 48) return 'Sương mù';
+  if (code >= 51 && code <= 55) return 'Mưa phùn';
+  if (code >= 61 && code <= 65) return 'Có mưa';
+  if (code >= 71 && code <= 77) return 'Tuyết rơi';
+  if (code >= 80 && code <= 82) return 'Mưa rào';
+  if (code >= 95 && code <= 99) return 'Dông sét';
+  return 'Thời tiết tốt';
+};
 
 export const getTabTitle = (route: string): string => {
   const path = route.toLowerCase().split('?')[0].replace(/\/$/, '') || '/';
@@ -267,6 +311,130 @@ export const TopBar: React.FC<TopBarProps> = ({
     }, 7000);
     return () => clearInterval(timer);
   }, [highlights.length]);
+
+  // Treatment 6: Search Insights (Live Weather & Location Picker)
+  const [insightLocation, setInsightLocation] = useState<InsightLocation>(() => {
+    try {
+      const saved = localStorage.getItem('waves_search_insight_location');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return DEFAULT_INSIGHT_LOCATION;
+  });
+
+  const [insightWeather, setInsightWeather] = useState<{
+    temperature: number;
+    weathercode: number;
+  } | null>(null);
+  const [isWeatherLoading, setIsWeatherLoading] = useState(false);
+  const [isLocationPickerOpen, setIsLocationPickerOpen] = useState(false);
+  const [locationSearchQuery, setLocationSearchQuery] = useState('');
+  const [customLocationResults, setCustomLocationResults] = useState<InsightLocation[]>([]);
+  const [isSearchingLocation, setIsSearchingLocation] = useState(false);
+  const locationPickerRef = useRef<HTMLDivElement>(null);
+
+  // Close location picker when clicking outside
+  useEffect(() => {
+    if (!isLocationPickerOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (locationPickerRef.current && !locationPickerRef.current.contains(e.target as Node)) {
+        setIsLocationPickerOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isLocationPickerOpen]);
+
+  // Fetch live weather with real-time updates every 60s
+  useEffect(() => {
+    let isMounted = true;
+    const fetchWeather = async () => {
+      try {
+        setIsWeatherLoading(true);
+        const res = await fetch(
+          `https://api.open-meteo.com/v1/forecast?latitude=${insightLocation.lat}&longitude=${insightLocation.lon}&current_weather=true`
+        );
+        if (!res.ok) throw new Error('Weather fetch failed');
+        const data = await res.json();
+        if (isMounted && data.current_weather) {
+          setInsightWeather({
+            temperature: data.current_weather.temperature,
+            weathercode: data.current_weather.weathercode,
+          });
+        }
+      } catch (e) {
+        console.warn('Insight weather fetch error:', e);
+      } finally {
+        if (isMounted) setIsWeatherLoading(false);
+      }
+    };
+
+    fetchWeather();
+    const interval = setInterval(fetchWeather, 60000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, [insightLocation.lat, insightLocation.lon]);
+
+  // Search custom city for location picker
+  useEffect(() => {
+    if (!locationSearchQuery.trim()) {
+      setCustomLocationResults([]);
+      setIsSearchingLocation(false);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setIsSearchingLocation(true);
+      try {
+        const res = await fetch(
+          `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
+            locationSearchQuery.trim()
+          )}&count=6&language=vi`
+        );
+        if (res.ok) {
+          const data = await res.json();
+          if (data.results && Array.isArray(data.results)) {
+            setCustomLocationResults(
+              data.results.map((r: any) => ({
+                name: r.name,
+                lat: r.latitude,
+                lon: r.longitude,
+                country: r.country || r.admin1 || '',
+              }))
+            );
+          } else {
+            setCustomLocationResults([]);
+          }
+        }
+      } catch (err) {
+        console.warn(err);
+      } finally {
+        setIsSearchingLocation(false);
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [locationSearchQuery]);
+
+  const handleSelectLocation = (loc: InsightLocation) => {
+    setInsightLocation(loc);
+    try {
+      localStorage.setItem('waves_search_insight_location', JSON.stringify(loc));
+    } catch (e) {}
+    setIsLocationPickerOpen(false);
+    setLocationSearchQuery('');
+  };
+
+  const getSearchInsightsPlaceholder = () => {
+    if (insightWeather !== null) {
+      return `${insightLocation.name}: ${Math.round(insightWeather.temperature)}°C • ${getWeatherConditionDesc(insightWeather.weathercode)}`;
+    }
+    if (isWeatherLoading) {
+      return `${insightLocation.name}: Đang cập nhật thời tiết...`;
+    }
+    return `${insightLocation.name}: 28°C • Search insights`;
+  };
 
   // Speech Recognition for Copilot Voice Input
   const [isListening, setIsListening] = useState(false);
@@ -749,6 +917,198 @@ export const TopBar: React.FC<TopBarProps> = ({
                 </motion.span>
               </AnimatePresence>
             </button>
+          ) : (settings.searchVisualExperimental || 'treatment-1') === 'treatment-6' ? (
+            /* Treatment 6: Search insights - Real-time temperature placeholder with map icon to change location */
+            <form onSubmit={handleSearchSubmit} className="w-full relative">
+              <div
+                id="topbar-search-box"
+                onClick={() => {
+                  setIsSearchFlyoutOpen(true);
+                }}
+                data-flyout-open={isSearchFlyoutOpen ? "true" : "false"}
+                className={`fluent-search-box group relative w-full h-8.5 sm:h-9 ${
+                  settings.windowsAppSdkPreview
+                    ? '!h-[38px] !min-h-[38px] !rounded-[9999px] !bg-[#1f1f1f] !border-0 !border-none !border-b-0 !shadow-none'
+                    : settings.roundedSearchBox
+                      ? 'rounded-full bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10'
+                      : 'rounded-[8px] bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10'
+                } flex items-center px-2.5 gap-1.5 transition-all cursor-text select-none ${
+                  settings.windowsAppSdkPreview
+                    ? '!border-0 !border-none !ring-0 !outline-none'
+                    : `focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff] ${
+                        isSearchFlyoutOpen && !settings.roundedSearchBox
+                          ? 'border-b-2 border-b-[#005fb8] dark:border-b-[#4cc2ff]'
+                          : ''
+                      }`
+                }`}
+              >
+                {/* Left Search Icon */}
+                <button
+                  type="submit"
+                  title="Search"
+                  className="text-[#a7a7a7] hover:text-white p-1 transition-colors cursor-pointer flex items-center justify-center shrink-0 -ml-0.5 mr-0"
+                >
+                  {searchQuery.trim() ? (
+                    <SpinningRing size={14} strokeWidth={3.5} color="#4cc2ff" />
+                  ) : (
+                    <Search className="size-[20px] shrink-0" strokeWidth={1.7} />
+                  )}
+                </button>
+
+                {/* Input with real-time temperature placeholder */}
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setIsSearchFlyoutOpen(true);
+                  }}
+                  onClick={() => {
+                    setIsSearchFlyoutOpen(true);
+                  }}
+                  onFocus={() => {
+                    setIsSearchFlyoutOpen(true);
+                  }}
+                  placeholder={getSearchInsightsPlaceholder()}
+                  title={getSearchInsightsPlaceholder()}
+                  className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#0078d4] dark:placeholder-[#4cc2ff] font-medium outline-none border-none py-1 pr-14 no-fluent-line"
+                />
+
+                {/* Right Action Icons: Map Icon to change location & Clear button */}
+                <div className="absolute right-2 flex items-center gap-1 z-10">
+                  {/* Map Pin icon button on search box */}
+                  <button
+                    id="topbar-search-map-location-btn"
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsLocationPickerOpen((prev) => !prev);
+                    }}
+                    title={`Vị trí: ${insightLocation.name} (Bấm để thay đổi location)`}
+                    aria-label="Thay đổi vị trí"
+                    className={`p-1.5 rounded-[4px] transition-colors cursor-pointer flex items-center justify-center ${
+                      isLocationPickerOpen
+                        ? 'bg-[#0078d4]/15 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]'
+                        : 'text-[#0078d4] dark:text-[#4cc2ff] hover:bg-black/5 dark:hover:bg-white/10'
+                    }`}
+                  >
+                    <MapPin className="w-4 h-4 shrink-0" />
+                  </button>
+
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSearchQuery('');
+                        setIsSearchFlyoutOpen(false);
+                      }}
+                      title="Clear search"
+                      className="text-[#71717a] dark:text-neutral-300 hover:text-[#111827] dark:hover:text-white p-1 transition-colors cursor-pointer rounded-full hover:bg-black/5 dark:hover:bg-white/10"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Location Picker Popover */}
+              <AnimatePresence>
+                {isLocationPickerOpen && (
+                  <motion.div
+                    ref={locationPickerRef}
+                    initial={{ opacity: 0, y: 6, scale: 0.97 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 6, scale: 0.97 }}
+                    transition={{ duration: 0.15, ease: 'easeOut' }}
+                    className="absolute right-0 top-full mt-2 w-[310px] max-w-[92vw] rounded-[10px] bg-white/98 dark:bg-[#202328]/98 backdrop-blur-2xl border border-black/10 dark:border-white/15 shadow-[0_16px_40px_rgba(0,0,0,0.35)] p-3 z-50 select-none text-[#111827] dark:text-white"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <div className="flex items-center justify-between pb-2 mb-2 border-b border-black/10 dark:border-white/10">
+                      <div className="flex items-center gap-1.5 font-semibold text-xs text-[#111827] dark:text-white">
+                        <MapPin className="w-3.5 h-3.5 text-[#0078d4] dark:text-[#4cc2ff]" />
+                        <span>Thay đổi vị trí (Location)</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setIsLocationPickerOpen(false)}
+                        className="p-1 rounded hover:bg-black/5 dark:hover:bg-white/10 text-neutral-500 hover:text-neutral-800 dark:hover:text-white cursor-pointer"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+
+                    {/* Search custom city */}
+                    <div className="relative mb-2.5">
+                      <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-neutral-400" />
+                      <input
+                        type="text"
+                        value={locationSearchQuery}
+                        onChange={(e) => setLocationSearchQuery(e.target.value)}
+                        placeholder="Tìm kiếm thành phố..."
+                        className="w-full h-8 pl-8 pr-3 text-xs rounded-[6px] bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/15 text-[#111827] dark:text-white placeholder-neutral-400 focus:outline-none focus:ring-1 focus:ring-[#0078d4] dark:focus:ring-[#4cc2ff]"
+                      />
+                    </div>
+
+                    {/* Current location weather preview */}
+                    <div className="mb-2 p-2 rounded-[6px] bg-[#0078d4]/10 dark:bg-[#4cc2ff]/15 flex items-center justify-between text-xs">
+                      <div className="flex items-center gap-1.5 truncate">
+                        <span className="font-semibold text-[#0078d4] dark:text-[#4cc2ff] truncate">
+                          {insightLocation.name}
+                        </span>
+                        <span className="text-[11px] text-neutral-500 dark:text-neutral-400">• Hiện tại</span>
+                      </div>
+                      <span className="font-bold text-[#0078d4] dark:text-[#4cc2ff] shrink-0">
+                        {insightWeather ? `${Math.round(insightWeather.temperature)}°C • ${getWeatherConditionDesc(insightWeather.weathercode)}` : (isWeatherLoading ? 'Đang cập nhật...' : '...')}
+                      </span>
+                    </div>
+
+                    {/* Popular / Searched Locations */}
+                    <div className="max-h-[190px] overflow-y-auto space-y-0.5 pr-1 text-xs">
+                      {isSearchingLocation ? (
+                        <div className="py-4 text-center text-xs text-neutral-400">Đang tìm thành phố...</div>
+                      ) : locationSearchQuery.trim() && customLocationResults.length > 0 ? (
+                        customLocationResults.map((loc, idx) => (
+                          <button
+                            key={`${loc.name}-${loc.lat}-${idx}`}
+                            type="button"
+                            onClick={() => handleSelectLocation(loc)}
+                            className={`w-full text-left px-2.5 py-1.5 rounded-[6px] flex items-center justify-between hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer ${
+                              insightLocation.name === loc.name ? 'bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff] font-medium' : ''
+                            }`}
+                          >
+                            <div className="truncate">
+                              <span className="font-medium">{loc.name}</span>
+                              {loc.country && <span className="text-[11px] text-neutral-400 ml-1.5">({loc.country})</span>}
+                            </div>
+                            {insightLocation.name === loc.name && <Check className="w-3.5 h-3.5 text-[#0078d4] dark:text-[#4cc2ff] shrink-0" />}
+                          </button>
+                        ))
+                      ) : (
+                        POPULAR_LOCATIONS.map((loc) => {
+                          const isSelected = insightLocation.name === loc.name;
+                          return (
+                            <button
+                              key={loc.name}
+                              type="button"
+                              onClick={() => handleSelectLocation(loc)}
+                              className={`w-full text-left px-2.5 py-1.5 rounded-[6px] flex items-center justify-between hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer ${
+                                isSelected ? 'bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff] font-medium' : ''
+                              }`}
+                            >
+                              <div className="truncate">
+                                <span className="font-medium">{loc.name}</span>
+                                <span className="text-[11px] text-neutral-400 ml-1.5">({loc.country})</span>
+                              </div>
+                              {isSelected && <Check className="w-3.5 h-3.5 text-[#0078d4] dark:text-[#4cc2ff] shrink-0" />}
+                            </button>
+                          );
+                        })
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </form>
           ) : (
             /* Treatment 1: Search box (default) */
             <form onSubmit={handleSearchSubmit} className="w-full">
