@@ -510,8 +510,16 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
             </div>
           </div>
         ) : (
-          <div className="max-h-[min(70vh,560px)] overflow-y-auto bg-white px-4 pb-5 pt-3 text-[#1f2937]" style={{ animation: 'none', transform: 'none' }}>
-            <div className="mb-3 flex items-center gap-2 border-b border-[#d8d8d8] pb-2">
+<div className="max-h-[min(70vh,560px)] overflow-y-auto bg-white px-4 pb-5 pt-3 text-[#1f2937]" style={{ animation: 'none', transform: 'none' }}>
+  <button
+    type="button"
+    onClick={() => { navigate('/search'); onClose(); }}
+    className="mb-3 flex w-full items-center justify-between rounded-md border border-[#d8d8d8] px-3 py-2 text-left text-[12px] font-medium text-[#333] transition-colors hover:bg-[#f0f0f0] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff2bbd]"
+  >
+    <span className="flex items-center gap-2"><Search className="h-4 w-4 text-[#ff2bbd]" />Open search page</span>
+    <ExternalLink className="h-3.5 w-3.5 text-[#777]" />
+  </button>
+  <div className="mb-3 flex items-center gap-2 border-b border-[#d8d8d8] pb-2">
               <FluentSearchIcon className="h-4 w-4 text-[#666]" />
               <span className="text-[13px] text-[#666]">Find Microsoft 365 apps</span>
               <X className="ml-auto h-4 w-4 text-[#777]" />

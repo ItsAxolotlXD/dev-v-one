@@ -7781,9 +7781,9 @@ html body [data-testid="topbar"] {
 
 html body #waves-desktop-sidebar,
 html body #waves-mobile-sidebar,
-html body aside.sidebar,
-html body [data-testid="sidebar"] {
-  background: var(--reference-sidebar-bg) !important;
+html body #waves-desktop-sidebar > div,
+html body #waves-mobile-sidebar > div {
+  background: var(--reference-topbar-bg) !important;
 }
 
 html body main.main-tab-page,
