@@ -13,6 +13,7 @@ import { FindWordsBar } from './components/FindWordsBar';
 import { AddStreamModal } from './components/AddStreamModal';
 import { TextToSpeechPlayer } from './components/TextToSpeechPlayer';
 import { SplashScreen } from './components/SplashScreen';
+import { TabSplashScreen } from './components/TabSplashScreen';
 import { NativeKeyboard } from './components/NativeKeyboard';
 import { NativeKeyboardProvider } from './context/NativeKeyboardContext';
 import { NotesProvider } from './context/NotesContext';
@@ -94,7 +95,12 @@ export default function App() {
     }
   }, []);
   const [routeState, setRouteState] = useState<any>(null);
+  const [isTabSplashVisible, setIsTabSplashVisible] = useState(true);
   const isSettingsRoute = currentRoute === '/settings';
+
+  useEffect(() => {
+    setIsTabSplashVisible(true);
+  }, [currentRoute, routeState?.storeAppId]);
   const previousRouteRef = useRef<string>('/');
   // Tab-specific search state for Floating Search Bar
   const [tabSearchQueries, setTabSearchQueries] = useState<Record<string, string>>({});
@@ -979,7 +985,7 @@ export default function App() {
         )}
 
         {/* Dynamic Page Content with smooth slide-up transition - Bo cong 10px góc trên trái */}
-        <main className={`main-tab-page flex-1 w-full mx-auto rounded-tl-[10px] rounded-tr-none rounded-br-none rounded-bl-none overflow-hidden ${
+        <main className={`relative main-tab-page flex-1 w-full mx-auto rounded-tl-[10px] rounded-tr-none rounded-br-none rounded-bl-none overflow-hidden ${
           settings.windowsAppSdkPreview
             ? '!bg-[#141414] text-white'
             : (currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home' || isFullBleedRoute || currentRoute === '/craftmine' || currentRoute === '/photopea' || currentRoute === '/logos-fandom' || currentRoute === '/logos-wiki' || currentRoute === '/minecraft-wiki' || currentRoute === '/mc-wiki' || currentRoute === '/vlc' || currentRoute.startsWith('/vlc') || currentRoute === '/media-player' || currentRoute === '/schedule' || currentRoute.startsWith('/schedule') || currentRoute === '/cookbook' || currentRoute === '/swift' || currentRoute === '/friends' || currentRoute === '/edge' || currentRoute === '/browser' || currentRoute === '/camera' || currentRoute === '/photos' || currentRoute === '/gallery' || currentRoute === '/paint' || currentRoute === '/ms-paint' || currentRoute === '/file-explorer' || currentRoute === '/files' || currentRoute === '/copilot' || currentRoute === '/direct-cut' || currentRoute === '/video-editor' || currentRoute === '/edit' || currentRoute === '/swift-bank' || currentRoute === '/bank' || currentRoute === '/swiftbank' || currentRoute === '/clock' || currentRoute === '/alarm' || currentRoute === '/timer' || currentRoute === '/stopwatch' || currentRoute === '/world-clock' || currentRoute === '/calculator' || currentRoute === '/calc' || currentRoute === '/snipping-tool' || currentRoute === '/snip' || currentRoute === '/snipping' || currentRoute === '/feedback-hub' || currentRoute === '/feedback')
@@ -996,6 +1002,15 @@ export default function App() {
           >
             {renderContent()}
           </div>
+          {isTabSplashVisible && (
+            <TabSplashScreen
+              key={`tab-splash-${currentRoute}-${routeState?.storeAppId ?? ''}`}
+              route={currentRoute}
+              label={currentRoute === '/search' ? 'Find and search' : 'Loading'}
+              duration={2000}
+              onFinish={() => setIsTabSplashVisible(false)}
+            />
+          )}
         </main>
 
       </div>

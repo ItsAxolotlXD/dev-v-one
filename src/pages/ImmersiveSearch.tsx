@@ -303,7 +303,8 @@ export const ImmersiveSearch: React.FC<ImmersiveSearchProps> = ({
   return (
     <div 
       id="immersive-search-page"
-      className="dark w-full min-h-[calc(100vh-80px)] bg-[#101216] text-[#111827] dark:text-white px-3 sm:px-6 md:px-10 py-4 sm:py-6 select-none"
+      data-search-page
+      className="tab-page-slide-up immersive-search-page dark w-full min-h-[calc(100vh-80px)] bg-transparent text-[#111827] dark:text-white px-3 sm:px-6 md:px-10 py-4 sm:py-6 select-none"
     >
       <div className="max-w-6xl mx-auto space-y-7 sm:space-y-9">
         {/* Top Search Bar Row */}
@@ -323,7 +324,7 @@ export const ImmersiveSearch: React.FC<ImmersiveSearchProps> = ({
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Let's chat or use /search"
+              placeholder="Find and search"
               className="w-full bg-transparent text-xs sm:text-[13.5px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#9ca3af] outline-none border-none py-1 pr-10 no-fluent-line"
             />
             {query && (
@@ -544,7 +545,7 @@ export const ImmersiveSearch: React.FC<ImmersiveSearchProps> = ({
                                     </span>
                                   ) : isUpcoming ? (
                                     <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#4cc2ff]/20 text-[#4cc2ff] border border-[#4cc2ff]/30">
-                                      SẮP PHÁT
+                                      SẮP PH��T
                                     </span>
                                   ) : (
                                     <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-black/5 dark:bg-white/10 text-[#6B7280] dark:text-[#9CA3AF]">
