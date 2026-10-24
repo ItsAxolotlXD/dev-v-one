@@ -19,7 +19,13 @@ import {
   Tv2,
   Video
 } from 'lucide-react';
-import { FluentSearchIcon } from '../components/FluentIcons';
+import { AppTabIcon, AppTabIconName, FluentSearchIcon } from '../components/FluentIcons';
+
+const Fluent3DIcon: React.FC<{ name: AppTabIconName }> = ({ name }) => (
+  <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-white/25 via-white/5 to-black/20 shadow-[inset_0_1px_1px_rgba(255,255,255,.35),0_5px_12px_rgba(0,0,0,.2)]">
+    <AppTabIcon name={name} className="size-7 drop-shadow-[0_3px_3px_rgba(0,0,0,.35)]" />
+  </span>
+);
 import { motion, AnimatePresence } from 'motion/react';
 import { CHANNELS_DATA } from '../data/channels';
 import { NEWS_DATA } from '../data/news';
@@ -50,33 +56,35 @@ interface PopularSearchItem {
 }
 
 const RECENT_APP_ITEMS = [
-  { label: 'Home', meta: 'Tab', icon: LayoutGrid, route: '/' },
-  { label: 'Windows Search settings', meta: 'Settings', icon: Settings, route: '/settings' },
-  { label: 'XAML Home', meta: 'App', icon: FileText, route: '/xaml-home' },
-  { label: 'Recall', meta: 'App', icon: StickyNote, route: '/recall' },
-  { label: 'File Explorer', meta: 'Files', icon: Folder, route: '/file-explorer' },
-  { label: 'Photos', meta: 'Images', icon: ImageIcon, route: '/photos' },
-  { label: 'Video', meta: 'Media', icon: Video, route: '/vlc' },
-  { label: 'Notes', meta: 'App', icon: StickyNote, route: '/notes' },
+  { label: 'Home', meta: 'Tab', icon: () => <Fluent3DIcon name="home" />, route: '/' },
+  { label: 'Windows Search settings', meta: 'Settings', icon: () => <Fluent3DIcon name="settings" />, route: '/settings' },
+  { label: 'XAML Home', meta: 'App', icon: () => <Fluent3DIcon name="articles" />, route: '/xaml-home' },
+  { label: 'Recall', meta: 'App', icon: () => <Fluent3DIcon name="recall" />, route: '/recall' },
+  { label: 'File Explorer', meta: 'Files', icon: () => <Fluent3DIcon name="fileExplorer" />, route: '/file-explorer' },
+  { label: 'Photos', meta: 'Images', icon: () => <Fluent3DIcon name="gallery" />, route: '/photos' },
+  { label: 'Video', meta: 'Media', icon: () => <Fluent3DIcon name="watch" />, route: '/vlc' },
+  { label: 'Notes', meta: 'App', icon: () => <Fluent3DIcon name="notes" />, route: '/notes' },
 ];
+
+const RECOMMENDED_SEARCHES = ['Settings', 'XAML', 'Recall', 'Files', 'Notes', 'Video', 'Images'];
 
 const HIGHLIGHT_GROUPS = [
   {
     title: 'Apps and tabs for you',
     items: [
-      { title: 'Explore', subtitle: 'Search everything in the app', icon: FluentSearchIcon, route: '/search' },
-      { title: 'Recall', subtitle: 'Find recent activity', icon: StickyNote, route: '/recall' },
-      { title: 'Files', subtitle: 'Browse your workspace', icon: Folder, route: '/file-explorer' },
-      { title: 'Notes', subtitle: 'Open saved notes', icon: FileText, route: '/notes' },
+      { title: 'Explore', subtitle: 'Search everything in the app', icon: () => <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-white/25 via-white/5 to-black/20 shadow-[inset_0_1px_1px_rgba(255,255,255,.35),0_5px_12px_rgba(0,0,0,.2)]"><FluentSearchIcon className="size-6 text-white drop-shadow-[0_3px_3px_rgba(0,0,0,.35)]" /></span>, route: '/search' },
+      { title: 'Recall', subtitle: 'Find recent activity', icon: () => <Fluent3DIcon name="recall" />, route: '/recall' },
+      { title: 'Files', subtitle: 'Browse your workspace', icon: () => <Fluent3DIcon name="fileExplorer" />, route: '/file-explorer' },
+      { title: 'Notes', subtitle: 'Open saved notes', icon: () => <Fluent3DIcon name="notes" />, route: '/notes' },
     ],
   },
   {
     title: 'Media for you',
     items: [
-      { title: 'Live TV', subtitle: 'Channels and schedule', icon: Tv2, route: '/live-tv' },
-      { title: 'Photos', subtitle: 'Your image library', icon: ImageIcon, route: '/photos' },
-      { title: 'Video', subtitle: 'Continue watching', icon: Video, route: '/vlc' },
-      { title: 'Settings', subtitle: 'Personalize the app', icon: Settings, route: '/settings' },
+      { title: 'Live TV', subtitle: 'Channels and schedule', icon: () => <Fluent3DIcon name="watch" />, route: '/live-tv' },
+      { title: 'Photos', subtitle: 'Your image library', icon: () => <Fluent3DIcon name="gallery" />, route: '/photos' },
+      { title: 'Video', subtitle: 'Continue watching', icon: () => <Fluent3DIcon name="watch" />, route: '/vlc' },
+      { title: 'Settings', subtitle: 'Personalize the app', icon: () => <Fluent3DIcon name="settings" />, route: '/settings' },
     ],
   },
 ];
@@ -355,7 +363,7 @@ export const ImmersiveSearch: React.FC<ImmersiveSearchProps> = ({
             onClick={() => {
               inputRef.current?.focus();
             }}
-            className="group relative w-full max-w-md sm:max-w-lg h-9 sm:h-9.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-4 gap-2.5 rounded-[8px] transition-all cursor-text select-none focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]"
+            className="group relative w-full max-w-md sm:max-w-lg h-10 sm:h-11 bg-white/[0.06] dark:bg-white/[0.06] border border-white/10 flex items-center px-4 gap-2.5 rounded-xl shadow-[0_8px_24px_rgba(0,0,0,.14)] transition-all cursor-text select-none focus-within:ring-1 focus-within:ring-[#62c8ff]/35 focus-within:border-[#62c8ff]/60"
           >
             <FluentSearchIcon className="w-4 h-4 text-[#71717a] dark:text-[#a1a1aa] shrink-0 pointer-events-none" />
             <input
@@ -675,6 +683,14 @@ export const ImmersiveSearch: React.FC<ImmersiveSearchProps> = ({
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xs font-bold text-white">Recent</h3>
                 <span className="text-[10px] text-white/45">{RECENT_APP_ITEMS.length}</span>
+              </div>
+              <div className="mb-5">
+                <h3 className="mb-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/45">Recommended searches</h3>
+                <div className="flex flex-wrap gap-1.5">
+                  {RECOMMENDED_SEARCHES.map((term) => (
+                    <button key={term} type="button" onClick={() => { setQuery(term); inputRef.current?.focus(); }} className="rounded-full border border-white/10 bg-white/[0.06] px-2.5 py-1 text-[10px] text-white/75 transition-colors hover:border-[#62c8ff]/50 hover:bg-[#62c8ff]/15 hover:text-white">{term}</button>
+                  ))}
+                </div>
               </div>
               <div className="flex flex-col gap-1">
                 {RECENT_APP_ITEMS.map((item) => {
