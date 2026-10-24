@@ -1008,7 +1008,7 @@ export default function App() {
         } ${isSparkOSRoute || currentRoute === '/xaml-home' ? '!h-full !min-h-0 !p-0 !max-w-none !bg-black' : ''}`}>
           <div
             key={`tab-loaded-${currentRoute}-${routeState?.storeAppId ?? ''}`}
-            className={`${currentRoute === '/xaml-home' ? 'tab-page-slide-up' : ''} w-full h-full rounded-tl-[10px] rounded-tr-none rounded-br-none rounded-bl-none overflow-hidden`}
+            className="tab-page-slide-up w-full h-full rounded-tl-[10px] rounded-tr-none rounded-br-none rounded-bl-none overflow-hidden"
           >
             {!isTabSplashVisible && renderContent()}
           </div>

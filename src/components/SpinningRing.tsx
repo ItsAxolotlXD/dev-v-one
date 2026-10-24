@@ -32,15 +32,12 @@ export const SpinningRing: React.FC<SpinningRingProps> = ({
         className={`inline-flex items-center justify-center select-none pointer-events-none ${className}`}
         style={{ width: size, height: size }}
       >
-        <span className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
-          <img
-            src={LEGACY_PROGRESS_GIF}
-            alt=""
-            className="h-full w-full object-contain"
-            style={{ filter: 'hue-rotate(275deg) saturate(2.8) brightness(1.15)' }}
-          />
-          <span aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-full bg-[#ff2bbd]/35 mix-blend-screen" />
-        </span>
+        <img
+          src={LEGACY_PROGRESS_GIF}
+          alt=""
+          className="h-full w-full object-contain"
+          style={{ filter: 'hue-rotate(275deg) saturate(2.8) brightness(1.15)' }}
+        />
       </div>
     );
   }
