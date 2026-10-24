@@ -101,6 +101,16 @@ export default function App() {
   useEffect(() => {
     setIsTabSplashVisible(true);
   }, [currentRoute, routeState?.storeAppId]);
+
+  useEffect(() => {
+    document.documentElement.style.overflow = isTabSplashVisible ? 'hidden' : '';
+    document.body.style.overflow = isTabSplashVisible ? 'hidden' : '';
+    return () => {
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+    };
+  }, [isTabSplashVisible]);
+
   const previousRouteRef = useRef<string>('/');
   // Tab-specific search state for Floating Search Bar
   const [tabSearchQueries, setTabSearchQueries] = useState<Record<string, string>>({});

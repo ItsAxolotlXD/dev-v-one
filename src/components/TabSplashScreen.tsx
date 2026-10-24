@@ -42,10 +42,10 @@ export const TabSplashScreen: React.FC<TabSplashScreenProps> = ({
   const Icon = getRouteIcon(route);
 
   return (
-    <div className="absolute inset-0 z-20 flex items-center justify-center bg-transparent text-white" aria-label={`${label} loading`}>
-      <div className="flex flex-col items-center gap-7 text-center">
-        <Icon className="h-16 w-16 text-[#ff2bbd]" strokeWidth={1.6} aria-hidden="true" />
-        <SpinningRing size={52} strokeWidth={4} color="#ff2bbd" />
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-transparent text-white pointer-events-auto" aria-label={`${label} loading`}>
+      <div className="flex flex-col items-center gap-5 text-center">
+        <Icon className="h-12 w-12 text-[#ff2bbd]" strokeWidth={1.6} aria-hidden="true" />
+        <SpinningRing size={42} strokeWidth={3.5} color="#ff2bbd" />
         <span className="text-sm font-medium tracking-wide text-white/70">{label}</span>
       </div>
     </div>
