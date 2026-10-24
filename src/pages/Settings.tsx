@@ -94,7 +94,7 @@ const SETTINGS_GROUP_2: SettingsCategoryItem[] = [
     subtitle: 'Preview features and diagnostic flags',
     icon: FlaskConical,
     badgeColor: 'bg-gradient-to-b from-[#8E8E93] to-[#636366]',
-    keywords: ['insider flags', 'insider', 'flags', 'experimental', 'lab', 'live tiles home', 'live tiles', 'tiles', 'windows 8', 'windows 10', 'sidebar smart layout arrangement', 'sidebar smart layout', 'smart layout', 'webview sdk', 'webview sdk test preview', 'windows app sdk', 'windows app sdk test preview', 'xám tối', 'native keyboard', 'immersive search', 'triangle', 'loader', 'experimental search', 'search icon'],
+    keywords: ['insider flags', 'insider', 'flags', 'experimental', 'lab', 'control bar', 'controlbar', 'thanh dieu khien', 'live tiles home', 'live tiles', 'tiles', 'windows 8', 'windows 10', 'sidebar smart layout arrangement', 'sidebar smart layout', 'smart layout', 'webview sdk', 'webview sdk test preview', 'windows app sdk', 'windows app sdk test preview', 'xám tối', 'native keyboard', 'immersive search', 'triangle', 'loader', 'experimental search', 'search icon'],
   },
 ];
 
@@ -2135,6 +2135,41 @@ export const Settings: React.FC<SettingsProps> = ({
                     onClick={(e) => {
                       e.stopPropagation();
                       updateDraft('liveTilesHome', !draftSettings.liveTilesHome);
+                    }}
+                    className="toggle-switch-btn focus:outline-none shrink-0"
+                  >
+                    <span className="toggle-switch-thumb" />
+                  </button>
+                </div>
+
+                <div className="divider-line h-[1px] bg-black/5 dark:bg-white/10 ml-4 mr-4" />
+
+                {/* Control bar */}
+                <div 
+                  id="setting-experimental-control-bar"
+                  onClick={() => updateDraft('controlBar', !draftSettings.controlBar)}
+                  className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                >
+                  <div className="min-w-0 flex-1 pr-2">
+                    <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
+                      <span>Control bar</span>
+                      <span className="text-[10px] px-1.5 py-0.2 rounded font-bold uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
+                        Insider Flag
+                      </span>
+                    </div>
+                    <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5">
+                      Hiển thị thanh điều khiển nổi dọc bên phải màn hình trên mọi thẻ (trừ tab Live Tiles), với các controls tác vụ ngữ cảnh vận hành riêng biệt theo từng tab (ví dụ: Thư viện ảnh có nút thêm ảnh +, xoá ảnh, yêu thích, mật độ lưới; Live TV có đổi tỷ lệ, âm lượng, lịch phát sóng...)
+                    </div>
+                  </div>
+
+                  <button
+                    id="toggle-control-bar"
+                    type="button"
+                    role="switch"
+                    aria-checked={draftSettings.controlBar}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      updateDraft('controlBar', !draftSettings.controlBar);
                     }}
                     className="toggle-switch-btn focus:outline-none shrink-0"
                   >

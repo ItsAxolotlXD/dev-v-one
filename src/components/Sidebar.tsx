@@ -1598,6 +1598,25 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
           </div>
 
+          {/* Tiles */}
+          <div className="shrink-0">
+            <button
+              type="button"
+              id={isMobile ? 'mobile-nav-tiles' : 'sidebar-nav-tiles'}
+              data-nav-active={(currentRoute === '/tiles' || currentRoute === '/live-tiles' || currentRoute === '/livetiles') ? 'true' : undefined}
+              onClick={() => handleNavClick('/tiles')}
+              title="Tiles"
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                (currentRoute === '/tiles' || currentRoute === '/live-tiles' || currentRoute === '/livetiles')
+                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+              }`}
+            >
+              <FluentTilesIcon className="w-5 h-5 shrink-0 text-[#0078d4] dark:text-[#4cc2ff]" />
+              <span className="truncate text-[13.5px]">Tiles</span>
+            </button>
+          </div>
+
           <div className="shrink-0">
             <button
               type="button"

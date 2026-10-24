@@ -4,6 +4,8 @@ import {
   FluentHomeIcon, 
   FluentLiveTvIcon, 
   FluentNewsIcon, 
+  FluentWidgetsIcon,
+  FluentTilesIcon,
   FluentMicOutlineIcon,
   FluentMicOffOutlineIcon,
   FLUENT_ICON_URLS 
@@ -562,6 +564,7 @@ export const TopBar: React.FC<TopBarProps> = ({
       { id: 'page-notes', title: 'Notes', keywords: 'ghi chú soạn thảo notes office', type: 'page', onSelect: () => navigate('/notes') },
       { id: 'page-taskmanager', title: 'Task Manager', keywords: 'task manager quản lý tác vụ processes system performance', type: 'page', onSelect: () => navigate('/task-manager') },
       { id: 'page-widgets', title: 'Widgets', keywords: 'widgets tiện ích bảng tiện ích weather thời tiết lịch vnexpress tin tức', type: 'page', onSelect: () => navigate('/widgets') },
+      { id: 'page-tiles', title: 'Tiles', keywords: 'tiles live tiles màn hình start metro ô ghim', type: 'page', onSelect: () => navigate('/tiles') },
       { id: 'page-mail', title: 'Mail', keywords: 'mail email hộp thư điện tử outlook fluent mail', type: 'page', onSelect: () => navigate('/mail') },
       { id: 'page-calendar', title: 'Calendar', keywords: 'calendar lịch lịch vạn niên sự kiện fluent calendar', type: 'page', onSelect: () => navigate('/calendar') },
       { id: 'page-ink-canvas', title: 'Ink Canvas', keywords: 'ink canvas vẽ infinite canvas bảng vẽ bút vẽ ink space', type: 'page', onSelect: () => navigate('/ink-space') },
@@ -777,6 +780,46 @@ export const TopBar: React.FC<TopBarProps> = ({
               <span>Articles</span>
 
               {(currentRoute === '/news' || currentRoute.startsWith('/article')) && (
+                <span className="absolute bottom-0 left-2 right-2 h-[2px] bg-[#4cc2ff] rounded-t-full pointer-events-none" />
+              )}
+            </button>
+
+            {/* Widgets */}
+            <button
+              id="btn-topbar-nav-widgets"
+              type="button"
+              onClick={() => navigate('/widgets')}
+              className={`group relative flex items-center gap-2 px-3 h-8.5 rounded-[4px] text-xs sm:text-[13px] font-normal transition-colors cursor-default whitespace-nowrap outline-none select-none ${
+                currentRoute === '/widgets' || currentRoute.startsWith('/widgets')
+                  ? 'bg-black/5 dark:bg-white/10 text-[#111827] dark:text-white font-medium'
+                  : 'text-[#4b5563] dark:text-[#d1d5db] hover:bg-black/5 dark:hover:bg-white/[0.06] hover:text-[#111827] dark:hover:text-white'
+              }`}
+              title="Widgets"
+            >
+              <FluentWidgetsIcon className="w-4 h-4 shrink-0 text-[#111827] dark:text-white" />
+              <span>Widgets</span>
+
+              {(currentRoute === '/widgets' || currentRoute.startsWith('/widgets')) && (
+                <span className="absolute bottom-0 left-2 right-2 h-[2px] bg-[#4cc2ff] rounded-t-full pointer-events-none" />
+              )}
+            </button>
+
+            {/* Tiles */}
+            <button
+              id="btn-topbar-nav-tiles"
+              type="button"
+              onClick={() => navigate('/tiles')}
+              className={`group relative flex items-center gap-2 px-3 h-8.5 rounded-[4px] text-xs sm:text-[13px] font-normal transition-colors cursor-default whitespace-nowrap outline-none select-none ${
+                currentRoute === '/tiles' || currentRoute === '/live-tiles' || currentRoute === '/livetiles'
+                  ? 'bg-black/5 dark:bg-white/10 text-[#111827] dark:text-white font-medium'
+                  : 'text-[#4b5563] dark:text-[#d1d5db] hover:bg-black/5 dark:hover:bg-white/[0.06] hover:text-[#111827] dark:hover:text-white'
+              }`}
+              title="Tiles"
+            >
+              <FluentTilesIcon className="w-4 h-4 shrink-0 text-[#0078d4] dark:text-[#4cc2ff]" />
+              <span>Tiles</span>
+
+              {(currentRoute === '/tiles' || currentRoute === '/live-tiles' || currentRoute === '/livetiles') && (
                 <span className="absolute bottom-0 left-2 right-2 h-[2px] bg-[#4cc2ff] rounded-t-full pointer-events-none" />
               )}
             </button>

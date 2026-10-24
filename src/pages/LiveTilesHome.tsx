@@ -614,6 +614,17 @@ export const LiveTilesHome: React.FC<LiveTilesHomeProps> = ({
   // Filter groups
   const groups = useMemo(() => {
     const set = new Set<string>();
+    tiles.forEach((t) => {
+      if (t.groupName) {
+        set.add(t.groupName);
+      }
+    });
+    if (tiles.some((t) => !t.groupName)) {
+      set.add('Chung');
+    }
+    if (set.size === 0) {
+      set.add('Ứng dụng & Tiện ích');
+    }
     return Array.from(set);
   }, [tiles]);
 
@@ -1066,7 +1077,7 @@ export const LiveTilesHome: React.FC<LiveTilesHomeProps> = ({
   };
 
   return (
-    <div className="w-full h-screen bg-[#f9f9f9] dark:bg-[#1a1c20] text-black dark:text-white select-none flex flex-col font-sans transition-colors relative overflow-hidden">
+    <div className="w-full h-full min-h-[calc(100vh-64px)] bg-[#f9f9f9] dark:bg-[#1a1c20] text-black dark:text-white select-none flex flex-col font-sans transition-colors relative overflow-hidden">
       {/* Compact Top-Right Controls (Start & LIVE TILES PANORAMA header removed) */}
       <div className="absolute top-4 right-8 z-40 flex items-center gap-2">
         {/* Horizontal Pan Controls */}
@@ -1142,7 +1153,7 @@ export const LiveTilesHome: React.FC<LiveTilesHomeProps> = ({
           }}
         >
           {groups.map((groupName) => {
-            const groupTiles = tiles.filter((t) => t.groupName === groupName);
+            const groupTiles = tiles.filter((t) => (t.groupName || 'Chung') === groupName);
             if (groupTiles.length === 0) return null;
 
             return (

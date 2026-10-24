@@ -53,6 +53,7 @@ export interface SystemSettings {
   windowsAppSdkPreview: boolean;
   sidebarSmartLayout: boolean;
   liveTilesHome: boolean;
+  controlBar: boolean;
   pageLoading: boolean;
   loadPagesSequentially: boolean;
   customKeybinds: CustomKeybinds;
@@ -108,6 +109,7 @@ export const DEFAULT_SETTINGS: SystemSettings = {
   windowsAppSdkPreview: false,
   sidebarSmartLayout: true,
   liveTilesHome: false,
+  controlBar: false,
   pageLoading: true,
   loadPagesSequentially: false,
   customKeybinds: DEFAULT_KEYBINDS,
@@ -205,6 +207,7 @@ export const getStoredSettings = (): SystemSettings => {
           : (typeof parsed.webviewSdkPreview === 'boolean' ? parsed.webviewSdkPreview : false),
         sidebarSmartLayout: typeof parsed.sidebarSmartLayout === 'boolean' ? parsed.sidebarSmartLayout : true,
         liveTilesHome: typeof parsed.liveTilesHome === 'boolean' ? parsed.liveTilesHome : false,
+        controlBar: typeof parsed.controlBar === 'boolean' ? parsed.controlBar : false,
         pageLoading: typeof parsed.pageLoading === 'boolean' ? parsed.pageLoading : true,
         loadPagesSequentially: typeof parsed.loadPagesSequentially === 'boolean' ? parsed.loadPagesSequentially : false,
         fontScale,
@@ -302,6 +305,13 @@ export const applySystemSettings = (settings: SystemSettings) => {
     document.documentElement.classList.add('live-tiles-home-active');
   } else {
     document.documentElement.classList.remove('live-tiles-home-active');
+  }
+
+  // Control Bar insider flag
+  if (settings.controlBar) {
+    document.documentElement.classList.add('control-bar-active');
+  } else {
+    document.documentElement.classList.remove('control-bar-active');
   }
 
   // Apply font scale

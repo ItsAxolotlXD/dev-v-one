@@ -502,6 +502,47 @@ export const PhotosApp: React.FC<PhotosAppProps> = ({ navigate }) => {
     }
   };
 
+  // Listen for Control Bar events (Gallery + to import, delete, etc.)
+  useEffect(() => {
+    const handleControlBar = (e: CustomEvent) => {
+      const action = e.detail?.action;
+      if (action === 'gallery-import') {
+        fileInputRef.current?.click();
+      } else if (action === 'gallery-delete') {
+        if (viewingMedia) {
+          handleDeleteMedia(viewingMedia.id);
+        } else if (selectedItemIds.size > 0) {
+          handleBatchDelete();
+        } else {
+          setIsSelectMode(prev => {
+            const next = !prev;
+            showToast(next ? 'Chế độ chọn ảnh để xoá/quản lý' : 'Đã thoát chế độ chọn');
+            return next;
+          });
+        }
+      } else if (action === 'gallery-favorites') {
+        setCurrentTab(prev => prev === 'favorites' ? 'all' : 'favorites');
+        showToast(currentTab === 'favorites' ? 'Tất cả ảnh & video' : 'Mục yêu thích');
+      } else if (action === 'gallery-density') {
+        setGalleryDensity(prev => {
+          const next = prev === 'compact' ? 'medium' : prev === 'medium' ? 'large' : 'compact';
+          showToast(`Chế độ hiển thị: ${next === 'compact' ? 'Nhỏ gọn' : next === 'large' ? 'Kích thước lớn' : 'Tiêu chuẩn'}`);
+          return next;
+        });
+      } else if (action === 'gallery-search') {
+        const searchInput = document.querySelector('input[placeholder*="Tìm"]') as HTMLInputElement;
+        if (searchInput) {
+          searchInput.focus();
+        } else {
+          showToast('Tìm kiếm ảnh & album');
+        }
+      }
+    };
+
+    window.addEventListener('vone:controlbar-action', handleControlBar as EventListener);
+    return () => window.removeEventListener('vone:controlbar-action', handleControlBar as EventListener);
+  }, [viewingMedia, selectedItemIds, currentTab, galleryDensity]);
+
   // Download media
   const handleDownload = (item: MediaItem, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();

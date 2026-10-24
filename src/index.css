@@ -7586,6 +7586,161 @@ a:hover .settings-spin-icon,
   will-change: transform, opacity, filter !important;
 }
 
+/* ========================================================
+   CONTROL BAR (INSIDER FLAG):
+   - Render blur 10% (10px)
+   - Nền trắng trong suốt
+   - Text và icon màu đen với opacity 20%
+   - Toàn bộ nút trên control bar dạng pill, nút đơn thì dạng circle
+   ======================================================== */
+#sparkos-control-bar,
+.control-bar-scope {
+  --cb-white-bg: rgba(255, 255, 255, 0.78);
+  --cb-white-hover: rgba(255, 255, 255, 0.96);
+  --cb-white-10: rgba(255, 255, 255, 0.10);
+  --cb-white-25: rgba(255, 255, 255, 0.25);
+  --cb-text-white: #ffffff;
+  --cb-blur: 2px;
+}
+
+/* Control Bar Capsule (Dạng pill, nền trắng 10% opacity, blur 2px - giảm độ blur 10%) */
+#sparkos-control-bar .control-bar-capsule {
+  border-radius: 9999px !important;
+  background: rgba(255, 255, 255, 0.10) !important;
+  backdrop-filter: blur(2px) !important;
+  -webkit-backdrop-filter: blur(2px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.20) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Standalone circular buttons (Nút Search, thu gọn < >) */
+#sparkos-control-bar .control-bar-standalone-circle {
+  border-radius: 9999px !important;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  min-height: 40px !important;
+  aspect-ratio: 1 / 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(255, 255, 255, 0.10) !important;
+  backdrop-filter: blur(2px) !important;
+  -webkit-backdrop-filter: blur(2px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.20) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+  transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+#sparkos-control-bar .control-bar-standalone-circle:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+  transform: scale(1.06) !important;
+}
+
+/* Các nút đơn icon bên trong capsule: BỎ NỀN (transparent), không viền, không shadow trừ khi hover/selected */
+#sparkos-control-bar .control-bar-circle-btn {
+  border-radius: 9999px !important;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  min-height: 40px !important;
+  aspect-ratio: 1 / 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid transparent !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+  transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Phóng to kích thước icon trên control bar */
+#sparkos-control-bar .control-bar-circle-btn svg,
+#sparkos-control-bar .control-bar-standalone-circle svg {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+/* Nền và highlight chỉ xuất hiện khi hover hoặc được chọn (selected) */
+#sparkos-control-bar .control-bar-circle-btn:hover {
+  background: rgba(255, 255, 255, 0.22) !important;
+  border-radius: 9999px !important;
+  border: 1px solid rgba(255, 255, 255, 0.30) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+  transform: scale(1.06) !important;
+}
+
+#sparkos-control-bar .control-bar-circle-btn.selected,
+#sparkos-control-bar .control-bar-circle-btn:active,
+#sparkos-control-bar .control-bar-circle-btn.active {
+  background: rgba(255, 255, 255, 0.28) !important;
+  border-radius: 9999px !important;
+  border: 1px solid rgba(255, 255, 255, 0.40) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.20) !important;
+  transform: scale(0.95) !important;
+}
+
+/* Đổi toàn bộ icon và text thành màu trắng */
+#sparkos-control-bar,
+#sparkos-control-bar *,
+#sparkos-control-bar svg,
+#sparkos-control-bar .control-bar-circle-btn svg,
+#sparkos-control-bar .control-bar-standalone-circle svg,
+#sparkos-control-bar-handle svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+  transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Menu thêm tuỳ chọn: có opacity (10%) và blur (2px) giống control bar */
+#sparkos-control-bar .control-bar-more-menu {
+  border-radius: 20px !important;
+  background: rgba(255, 255, 255, 0.10) !important;
+  backdrop-filter: blur(2px) !important;
+  -webkit-backdrop-filter: blur(2px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.20) !important;
+  color: #ffffff !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.40) !important;
+}
+
+/* Tooltip và Toast dạng pill */
+#sparkos-control-bar .control-bar-pill-btn {
+  border-radius: 9999px !important;
+  background: rgba(20, 24, 30, 0.75) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.30) !important;
+  transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+#sparkos-control-bar .control-bar-pill-btn svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Edge Handle thu gọn dạng pill */
+#sparkos-control-bar-handle {
+  border-radius: 9999px 0 0 9999px !important;
+  background: rgba(255, 255, 255, 0.10) !important;
+  backdrop-filter: blur(2px) !important;
+  -webkit-backdrop-filter: blur(2px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.20) !important;
+  border-right: none !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.20) !important;
+}
+
+#sparkos-control-bar-handle:hover {
+  background: rgba(255, 255, 255, 0.22) !important;
+  color: #ffffff !important;
+}
+
 
 
 

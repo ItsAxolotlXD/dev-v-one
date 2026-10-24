@@ -17,6 +17,7 @@ import { NativeKeyboard } from './components/NativeKeyboard';
 import { NativeKeyboardProvider } from './context/NativeKeyboardContext';
 import { NotesProvider } from './context/NotesContext';
 import { StickyNoteWidget } from './components/StickyNoteWidget';
+import { ControlBar } from './components/ControlBar';
 import { GlobalContextMenu } from './components/GlobalContextMenu';
 import { XAMLHome } from './pages/XAMLHome';
 import { LiveTilesHome } from './pages/LiveTilesHome';
@@ -520,6 +521,15 @@ export default function App() {
       case '/':
       case '/home':
       case '/xaml-home':
+        if (settings.liveTilesHome) {
+          return (
+            <LiveTilesHome
+              onSelectChannel={setCurrentChannel}
+              onNavigate={navigate}
+              channels={channels}
+            />
+          );
+        }
         return (
           <XAMLHome
             onSelectChannel={setCurrentChannel}
@@ -884,7 +894,7 @@ export default function App() {
       />
 
       {/* Sidebar Navigation (Desktop + Mobile Drawer) */}
-      {!isSparkOSRoute && !isTilesRoute && (settings.navigationMode === 'sidebar' || isMobileSidebarOpen || mobileDragOffset !== null) && (
+      {!isSparkOSRoute && (settings.navigationMode === 'sidebar' || isMobileSidebarOpen || mobileDragOffset !== null) && (
         <Sidebar
           currentRoute={currentRoute}
           navigate={navigate}
@@ -923,22 +933,20 @@ export default function App() {
       <div className={`main-app-container flex-1 flex flex-col min-w-0 min-h-screen transition-[padding] duration-300 ease-in-out ${
         settings.windowsAppSdkPreview ? 'bg-[#141414]' : 'bg-[#f3f3f3] dark:bg-[#1b1f24]'
       } ${isSparkOSRoute ? '!h-full !min-h-0 !p-0 !bg-black !transition-none' : ''} ${
-        isTilesRoute
-          ? 'md:pl-0 md:pr-0 pb-0'
-          : settings.navigationMode === 'topbar'
-            ? 'md:pl-0 md:pr-0 pb-10'
-            : !settings.dockToSidebar || settings.navigationMode !== 'sidebar'
-              ? 'md:pl-0 md:pr-0 pb-20'
-              : settings.sidebarPosition === 'right'
-                ? isEffectiveCollapsed
-                  ? 'md:pr-[48px]'
-                  : 'md:pr-[260px]'
-                : isEffectiveCollapsed
-                  ? 'md:pl-[48px]'
-                  : 'md:pl-[260px]'
+        settings.navigationMode === 'topbar'
+          ? 'md:pl-0 md:pr-0 pb-10'
+          : !settings.dockToSidebar || settings.navigationMode !== 'sidebar'
+            ? 'md:pl-0 md:pr-0 pb-20'
+            : settings.sidebarPosition === 'right'
+              ? isEffectiveCollapsed
+                ? 'md:pr-[48px]'
+                : 'md:pr-[260px]'
+              : isEffectiveCollapsed
+                ? 'md:pl-[48px]'
+                : 'md:pl-[260px]'
       }`}>
-        {/* TopBar Header */}
-        {!isSparkOSRoute && !isOfficeRoute && currentRoute !== '/store' && (
+        {/* TopBar Header - Hidden when Control Bar insider flag is enabled */}
+        {!isSparkOSRoute && !isOfficeRoute && currentRoute !== '/store' && !settings.controlBar && (
           <TopBar
             currentRoute={currentRoute}
             navigate={navigate}
@@ -1088,6 +1096,28 @@ export default function App() {
 
       {/* Floating Movable Sticky Note Widget */}
       <StickyNoteWidget onNavigateNotes={() => navigate('/notes')} />
+
+      {/* Floating Right-Edge Contextual Control Bar (Insider Flag) */}
+      <ControlBar
+        currentRoute={currentRoute}
+        navigate={navigate}
+        currentChannel={currentChannel}
+        onOpenAddStream={() => setIsAddStreamOpen(true)}
+        onOpenSummarize={(art) => {
+          if (art) setSummarizeArticle(art);
+          setIsNewsSummaryOpen(true);
+        }}
+        onOpenTextToSpeech={(art) => {
+          if (art) setTtsArticle(art);
+          setIsTtsOpen(true);
+        }}
+        onOpenFindWords={() => setIsFindWordsOpen(true)}
+        onOpenSpotlight={() => setIsSpotlightOpen(true)}
+        onOpenHelp={() => setIsHelpModalOpen(true)}
+        onToggleStickyNote={() => {
+          window.dispatchEvent(new CustomEvent('vone:toggle-sticky-note'));
+        }}
+      />
 
       {/* App Native Virtual Keyboard for Touch Devices */}
       <NativeKeyboard />
