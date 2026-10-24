@@ -2319,7 +2319,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           data-collapsed={effectiveCollapsed ? 'true' : undefined}
           initial={false}
           animate={{ width: effectiveCollapsed ? 48 : 260 }}
-          transition={shouldAnimateSidebar ? { type: 'spring', stiffness: 420, damping: 24, mass: 0.72 } : { duration: 0 }}
+          transition={shouldAnimateSidebar ? { duration: 0.2, ease: [0.16, 1, 0.3, 1] } : { duration: 0 }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => {
             setIsHovered(false);
@@ -3015,10 +3015,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }}
               exit={{ x: '-100%', opacity: 0.8 }}
               transition={(mobileDragOffset !== null || drawerCloseOffset !== null) ? { duration: 0 } : { 
-                type: 'spring', 
-                damping: 26, 
-                stiffness: 290, 
-                mass: 0.8 
+                duration: 0.22, 
+                ease: [0.16, 1, 0.3, 1] 
               }}
               onTouchStart={handleDrawerTouchStart}
               onTouchMove={handleDrawerTouchMove}

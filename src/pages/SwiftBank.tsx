@@ -1485,7 +1485,7 @@ export const SwiftBank: React.FC<SwiftBankProps> = ({ navigate }) => {
 
       {/* 4. SMART OTP VERIFICATION MODAL */}
       {isVerifyingOtp && (
-        <div className="fixed inset-0 z-[99999] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[99999] bg-black/80 flex items-center justify-center p-4">
           <div className="w-full max-w-sm bg-[#161d2d] border border-white/20 rounded-2xl shadow-2xl p-6 text-white space-y-4 animate-in fade-in zoom-in-95 duration-200">
             <div className="text-center">
               <div className="w-12 h-12 rounded-full bg-sky-500/20 text-sky-400 flex items-center justify-center mx-auto mb-2">
@@ -1540,7 +1540,7 @@ export const SwiftBank: React.FC<SwiftBankProps> = ({ navigate }) => {
 
       {/* 5. TRANSACTION RECEIPT MODAL */}
       {lastReceipt && (
-        <div className="fixed inset-0 z-[99999] bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[99999] bg-black/85 flex items-center justify-center p-4">
           <div className="w-full max-w-sm bg-white text-slate-900 rounded-3xl shadow-2xl p-6 space-y-4 animate-in fade-in zoom-in-95 duration-200 border-4 border-emerald-500/30">
             {/* Header Success Check */}
             <div className="text-center">

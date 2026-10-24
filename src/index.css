@@ -869,17 +869,6 @@ html.dark #home-about-community-card,
 html.dark #about-disclaimer-card,
 html.dark #about-community-card,
 html.dark #home-farewell-announcement,
-html.dark .fluent-modal-dialog,
-html.dark .spatial-glass-modal,
-html.dark #welcome-modal-dialog,
-html.dark #discord-welcome-dialog,
-html.dark #under-construction-modal-dialog,
-html.dark #developer-mode-modal-dialog,
-html.dark #custom-stream-dialog,
-html.dark #help-modal-dialog,
-html.dark #news-summary-dialog,
-html.dark #add-stream-dialog,
-html.dark #unsaved-settings-modal-dialog,
 html.dark #spotlight-popup-card,
 html.dark #vplay-tools-dropdown-card,
 html:not(.light-mode) .channel-card,
@@ -902,17 +891,6 @@ html:not(.light-mode) #home-about-community-card,
 html:not(.light-mode) #about-disclaimer-card,
 html:not(.light-mode) #about-community-card,
 html:not(.light-mode) #home-farewell-announcement,
-html:not(.light-mode) .fluent-modal-dialog,
-html:not(.light-mode) .spatial-glass-modal,
-html:not(.light-mode) #welcome-modal-dialog,
-html:not(.light-mode) #discord-welcome-dialog,
-html:not(.light-mode) #under-construction-modal-dialog,
-html:not(.light-mode) #developer-mode-modal-dialog,
-html:not(.light-mode) #custom-stream-dialog,
-html:not(.light-mode) #help-modal-dialog,
-html:not(.light-mode) #news-summary-dialog,
-html:not(.light-mode) #add-stream-dialog,
-html:not(.light-mode) #unsaved-settings-modal-dialog,
 html:not(.light-mode) #spotlight-popup-card,
 html:not(.light-mode) #vplay-tools-dropdown-card {
   background-color: #38383d !important;
@@ -4456,21 +4434,25 @@ html.light-mode .bg-\[\#1E1E22\].text-\[\#A1A1AA\] {
 #help-modal-dialog,
 #news-summary-dialog,
 #add-stream-dialog,
+#unsaved-settings-modal-dialog,
+#example-content-dialog,
 .fluent-modal-dialog,
 .spatial-glass-modal {
   position: relative !important;
   box-sizing: border-box !important;
-  background-color: #38383d !important;
+  background-color: #0078d4 !important;
   color: #FFFFFF !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  border-radius: 12px !important;
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.20) !important;
+  border-radius: 0px !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65) !important;
   overflow: hidden !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
+  width: 100% !important;
+  max-width: 580px !important;
 }
 
-/* Modal Backdrops with softened dark blur */
+/* Modal Backdrops with NO blur */
 #welcome-modal-backdrop,
 #discord-welcome-backdrop,
 #under-construction-modal-backdrop,
@@ -4479,13 +4461,32 @@ html.light-mode .bg-\[\#1E1E22\].text-\[\#A1A1AA\] {
 #help-modal-backdrop,
 #news-summary-backdrop,
 #spotlight-modal-backdrop,
-#add-stream-backdrop {
-  background-color: rgba(0, 0, 0, 0.45) !important;
+#add-stream-backdrop,
+#unsaved-settings-modal-backdrop,
+#example-content-dialog-backdrop,
+[id$="-modal-backdrop"],
+[id$="-dialog-backdrop"] {
+  background-color: rgba(0, 0, 0, 0.60) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
 
-/* Light Mode Modal Dialog Overrides with Fluent Design (White card, subtle border) */
+/* Ensure modal dialogs are strictly ALWAYS ON TOP of all headers, sidebars, dock and widgets */
+.z-9999,
+[class*="z-9999"],
+#welcome-modal-container,
+#help-modal-container,
+#custom-stream-container,
+#add-stream-container,
+#under-construction-modal-container,
+#developer-mode-modal-container,
+#unsaved-settings-modal-container,
+#example-content-dialog-backdrop,
+.fluent-modal-dialog-portal {
+  z-index: 99999999 !important;
+}
+
+/* Light Mode Modal Dialog Overrides to keep identical Windows 10 blue styling */
 html.light-mode #discord-welcome-dialog,
 html.light-mode #welcome-modal-dialog,
 html.light-mode #under-construction-modal-dialog,
@@ -4493,26 +4494,62 @@ html.light-mode #developer-mode-modal-dialog,
 html.light-mode #custom-stream-dialog,
 html.light-mode #help-modal-dialog,
 html.light-mode #news-summary-dialog,
-html.light-mode #spotlight-popup-card,
 html.light-mode #add-stream-dialog,
+html.light-mode #unsaved-settings-modal-dialog,
+html.light-mode #example-content-dialog,
 html.light-mode .fluent-modal-dialog,
 html.light-mode .spatial-glass-modal {
-  background-color: #FFFFFF !important;
-  color: #1F1F1F !important;
-  border: 1px solid rgba(0, 0, 0, 0.08) !important;
-  border-radius: 12px !important;
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.06) !important;
+  background-color: #0078d4 !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.20) !important;
+  border-radius: 0px !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.50) !important;
+  width: 100% !important;
+  max-width: 580px !important;
 }
 
-/* Fluent Design ContentDialog Footer */
+/* Windows 10 Blue Dialog ContentDialog Footer - Compact Height */
 .fluent-modal-footer {
-  background-color: #272727 !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background-color: #0078d4 !important;
+  border-top: none !important;
+  padding: 8px 24px 14px 24px !important;
 }
 
 html.light-mode .fluent-modal-footer {
-  background-color: #F3F3F3 !important;
-  border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+  background-color: #0078d4 !important;
+  border-top: none !important;
+  padding: 8px 24px 14px 24px !important;
+}
+
+.fluent-modal-footer button,
+.fluent-modal-dialog .fluent-btn-primary,
+.fluent-modal-dialog .fluent-btn-secondary,
+.fluent-modal-dialog button[class*="fluent-btn"],
+[role="dialog"] .fluent-modal-footer button,
+[role="dialog"] .fluent-btn-primary,
+[role="dialog"] .fluent-btn-secondary {
+  border: 2px solid #FFFFFF !important;
+  border-radius: 0px !important;
+  background-color: transparent !important;
+  color: #FFFFFF !important;
+  font-weight: 500 !important;
+  font-size: 13px !important;
+  min-width: 82px !important;
+  height: 32px !important;
+  padding: 2px 16px !important;
+  box-shadow: none !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+.fluent-modal-footer button:hover,
+.fluent-modal-dialog .fluent-btn-primary:hover,
+.fluent-modal-dialog .fluent-btn-secondary:hover,
+.fluent-modal-dialog button[class*="fluent-btn"]:hover,
+[role="dialog"] .fluent-modal-footer button:hover,
+[role="dialog"] .fluent-btn-primary:hover,
+[role="dialog"] .fluent-btn-secondary:hover {
+  background-color: #FFFFFF !important;
+  color: #0078d4 !important;
 }
 
 /* Fluent Primary Button (Accent Blue #4cc2ff - Windows 11) */
@@ -7812,3 +7849,73 @@ html body main.main-tab-page > div,
 html body .main-tab-content-container {
   background: var(--reference-tab-bg) !important;
 }
+
+/* ========================================================
+   WINDOWS 10 UWP BLUE CONTENT DIALOG (.fluent-modal-dialog)
+   - Font: Segoe UI Semilight (font-weight: 350) across all dialog text
+   - Action buttons: height 28px, 2px solid white border all around
+   - Fix: prevent bottom border clipping via box-sizing and padding-bottom
+   ======================================================== */
+.fluent-modal-dialog,
+.fluent-modal-dialog *,
+#example-content-dialog,
+#example-content-dialog * {
+  font-family: "Segoe UI Variable Text", "Segoe UI Variable Display", "Segoe UI Semilight", "Segoe UI", system-ui, -apple-system, sans-serif !important;
+  font-weight: 350 !important;
+}
+
+.fluent-modal-footer {
+  box-sizing: border-box !important;
+  padding-bottom: 16px !important;
+  overflow: visible !important;
+}
+
+.fluent-modal-dialog .fluent-modal-footer button,
+.fluent-modal-dialog button.fluent-btn-primary,
+.fluent-modal-dialog button.fluent-btn-secondary,
+#example-content-dialog .fluent-modal-footer button,
+#example-content-dialog button {
+  box-sizing: border-box !important;
+  height: 28px !important;
+  min-height: 28px !important;
+  max-height: 28px !important;
+  line-height: 1 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 2px solid #FFFFFF !important;
+  border-top: 2px solid #FFFFFF !important;
+  border-bottom: 2px solid #FFFFFF !important;
+  border-left: 2px solid #FFFFFF !important;
+  border-right: 2px solid #FFFFFF !important;
+  border-radius: 0 !important;
+  background-color: transparent !important;
+  color: #FFFFFF !important;
+  padding: 0 16px !important;
+  font-weight: 350 !important;
+  font-size: 12px !important;
+  outline: none !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+.fluent-modal-dialog .fluent-modal-footer button:hover,
+.fluent-modal-dialog button.fluent-btn-primary:hover,
+.fluent-modal-dialog button.fluent-btn-secondary:hover,
+#example-content-dialog .fluent-modal-footer button:hover,
+#example-content-dialog button:hover {
+  background-color: #FFFFFF !important;
+  color: #0078d4 !important;
+  border-color: #FFFFFF !important;
+}
+
+.fluent-modal-dialog .fluent-modal-footer button:active,
+.fluent-modal-dialog button.fluent-btn-primary:active,
+.fluent-modal-dialog button.fluent-btn-secondary:active,
+#example-content-dialog .fluent-modal-footer button:active,
+#example-content-dialog button:active {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  color: #0078d4 !important;
+  border-color: #FFFFFF !important;
+}
+

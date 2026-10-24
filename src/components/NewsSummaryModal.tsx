@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Copy, CheckCircle2, FileText } from 'lucide-react';
+import { Copy, CheckCircle2, FileText } from 'lucide-react';
 import { NewsArticle } from '../types';
 import { exportArticleToDocx } from '../utils/docxExport';
 import { useSettings } from '../hooks/useSettings';
@@ -23,14 +23,14 @@ export const NewsSummaryModal: React.FC<NewsSummaryModalProps> = ({
   const [exporting, setExporting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 10-second loading simulation when summarize news is opened
+  // 3-second summary generation
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (isOpen) {
       setIsLoading(true);
       timer = setTimeout(() => {
         setIsLoading(false);
-      }, 3000);
+      }, 1500);
     } else {
       setIsLoading(true);
     }
@@ -78,106 +78,95 @@ export const NewsSummaryModal: React.FC<NewsSummaryModalProps> = ({
           id="news-summary-modal-container"
           className="fixed inset-0 z-9999 flex items-center justify-center p-4 sm:p-6 select-none"
         >
-          {/* 1. Backdrop / Lớp nền mờ */}
+          {/* Backdrop with zero blur */}
           <motion.div
             id="news-summary-backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.25, ease: 'easeOut' }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/50 backdrop-blur-xs"
+            className="fixed inset-0 bg-black/60"
           />
 
-          {/* 2. Dialog Modal Box - Fluent Design ContentDialog */}
+          {/* Windows 10 Blue Dialog Box */}
           <motion.div
             id="news-summary-dialog"
-            initial={{ opacity: 0, scale: 1.05 }}
+            initial={{ opacity: 0, scale: 0.98 }}
             animate={{ 
               opacity: 1, 
               scale: 1,
               transition: {
-                duration: 0.24,
+                duration: 0.2,
                 ease: [0.16, 1, 0.3, 1]
               }
             }}
             exit={{ 
               opacity: 0, 
-              scale: 1.04,
+              scale: 0.98,
               transition: {
-                duration: 0.18,
-                ease: [0.16, 1, 0.3, 1]
+                duration: 0.15,
+                ease: 'easeOut'
               }
             }}
-            className="fluent-modal-dialog relative z-10 w-full max-w-[500px] bg-white dark:bg-[#38383d] rounded-[10px] overflow-hidden shadow-[0_24px_48px_rgba(0,0,0,0.22),0_2px_6px_rgba(0,0,0,0.08)] dark:shadow-[0_24px_48px_rgba(0,0,0,0.7),0_2px_6px_rgba(255,255,255,0.04)] border border-black/[0.08] dark:border-white/[0.08] text-[#111827] dark:text-[#F3F4F6]"
+            className="fluent-modal-dialog relative z-10 w-full max-w-[520px] bg-[#0078d4] text-white rounded-none shadow-[0_24px_60px_rgba(0,0,0,0.65)] border border-[#005a9e] overflow-hidden"
           >
+            {/* Top thin caption */}
+            <div className="px-6 py-2.5 bg-[#0063b1] text-xs font-normal text-white/90 select-none">
+              Articles & News
+            </div>
+
             {/* Header & Body Area */}
-            <div className="p-6 pb-4">
-              <h2 className="text-[19px] sm:text-[20px] font-semibold text-[#111827] dark:text-[#FFFFFF] tracking-tight leading-snug font-sans">
+            <div className="p-6 pt-5 pb-4">
+              <h2 className="text-2xl sm:text-[26px] font-normal text-white tracking-tight leading-snug">
                 Article Summary
               </h2>
 
               {/* Loading State */}
               {isLoading ? (
-                <div className="py-10 px-4 flex flex-col items-center justify-center text-center space-y-4 my-2">
+                <div className="py-8 px-4 flex flex-col items-center justify-center text-center space-y-3 my-2">
                   <div className="flex items-center justify-center py-2">
-                    <SpinningRing size={52} strokeWidth={5} color="#4cc2ff" />
+                    <SpinningRing size={48} strokeWidth={4} color="#ffffff" />
                   </div>
-
                   <div className="space-y-1">
-                    <h3 className="text-base font-semibold text-[#111827] dark:text-[#FFFFFF]">
+                    <h3 className="text-base font-normal text-white">
                       Processing article...
                     </h3>
-                    <p className="text-xs text-[#666666] dark:text-[#AAAAAA] max-w-[300px]">
+                    <p className="text-xs text-white/80 max-w-[300px]">
                       Extracting key insights and highlights
                     </p>
                   </div>
-
-                  {/* 10-second progress indicator */}
-                  <div className="w-48 h-1.5 bg-black/[0.08] dark:bg-white/[0.1] rounded-full overflow-hidden mt-2 relative">
-                    <motion.div
-                      initial={{ width: '0%' }}
-                      animate={{ width: '100%' }}
-                      transition={{ duration: 10, ease: 'linear' }}
-                      className="h-full bg-[#4cc2ff] rounded-full"
-                    />
-                  </div>
                 </div>
               ) : (
-                <motion.div 
-                  initial={shouldAnimate ? { opacity: 0, y: 6 } : { opacity: 1, y: 0 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="mt-3 space-y-3.5 max-h-[55vh] overflow-y-auto pr-1"
-                >
+                <div className="mt-3 space-y-3 max-h-[55vh] overflow-y-auto pr-1">
                   <div>
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-[#4cc2ff]">
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-white/80">
                       {article.category}
                     </span>
-                    <h3 className="text-base font-semibold text-[#111827] dark:text-[#FFFFFF] mt-0.5 leading-snug">
+                    <h3 className="text-base font-normal text-white mt-0.5 leading-snug">
                       {article.title}
                     </h3>
                   </div>
 
                   {/* Core takeaway */}
-                  <div className="p-3.5 rounded-lg bg-[#F9F9F9] dark:bg-[#2B2B2B] border border-black/[0.06] dark:border-white/[0.08] border-l-4 border-l-[#4cc2ff]">
-                    <p className="text-[13px] font-normal text-[#111827] dark:text-[#E0E0E0] leading-relaxed">
+                  <div className="p-3 bg-black/15 border border-white/20">
+                    <p className="text-[13px] font-normal text-white/95 leading-relaxed">
                       "{leadText}"
                     </p>
                   </div>
 
                   {/* Bullet points */}
                   <div>
-                    <h4 className="text-xs font-semibold text-[#666666] dark:text-[#AAAAAA] mb-2 uppercase tracking-wide">
+                    <h4 className="text-xs font-semibold text-white/80 mb-2 uppercase tracking-wide">
                       Key Highlights:
                     </h4>
                     <div className="space-y-1.5">
                       {bulletPoints.map((bp, idx) => (
                         <div
                           key={idx}
-                          className="p-2.5 rounded-md bg-[#F9F9F9] dark:bg-[#2B2B2B] border border-black/[0.06] dark:border-white/[0.08] text-[13px] text-[#333333] dark:text-[#DDDDDD] flex items-start gap-2.5"
+                          className="p-2.5 bg-black/15 border border-white/15 text-[13px] text-white flex items-start gap-2.5"
                         >
-                          <span className="w-4.5 h-4.5 rounded-full bg-[#4cc2ff]/15 text-[#4cc2ff] text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                          <span className="w-5 h-5 rounded-none bg-white/20 text-white text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5">
                             {idx + 1}
                           </span>
                           <p className="leading-relaxed font-normal">{bp}</p>
@@ -187,49 +176,46 @@ export const NewsSummaryModal: React.FC<NewsSummaryModalProps> = ({
                   </div>
 
                   {article.summary?.conclusion && (
-                    <div className="p-3 rounded-md bg-[#F9F9F9] dark:bg-[#2B2B2B] border border-black/[0.06] dark:border-white/[0.08] text-[13px] text-[#333333] dark:text-[#DDDDDD] leading-relaxed font-normal">
+                    <div className="p-3 bg-black/15 border border-white/15 text-[13px] text-white/95 leading-relaxed font-normal">
                       {article.summary.conclusion}
                     </div>
                   )}
 
-                  <div className="flex items-center justify-between text-[11px] text-[#777777] dark:text-[#999999] pt-2 border-t border-black/[0.06] dark:border-white/[0.08]">
-                    <span>Category: <strong className="text-[#111827] dark:text-[#FFFFFF]">{article.category}</strong></span>
+                  <div className="flex items-center justify-between text-[11px] text-white/70 pt-2 border-t border-white/15">
+                    <span>Category: <strong className="text-white">{article.category}</strong></span>
                     <span>Published: {article.publishedAt}</span>
                   </div>
-                </motion.div>
+                </div>
               )}
             </div>
 
-            {/* Subtle Divider */}
-            <div className="h-[1px] w-full bg-[#E5E5E5] dark:bg-[#2F2F2F]" />
-
             {/* Bottom Actions Footer */}
-            <div className="fluent-modal-footer bg-[#F3F3F3] dark:bg-[#1C1C1C] px-6 py-3 flex items-center justify-start gap-2.5">
+            <div className="fluent-modal-footer bg-[#0078d4] px-6 py-4 pt-2 flex items-center justify-end gap-3">
               {!isLoading && (
                 <>
                   <button
                     type="button"
                     onClick={handleCopySummary}
-                    className="fluent-btn-primary px-4 h-8 rounded-[5px] bg-[#4cc2ff] hover:bg-[#6bd0ff] active:bg-[#3bb2ef] text-white dark:text-black font-semibold shadow-[0_1px_2px_rgba(0,0,0,0.1)] transition-colors border border-black/20 flex items-center justify-center cursor-default gap-1.5 text-[12.5px]"
+                    className="fluent-btn-primary min-w-[85px] px-6 py-1.5 border-2 border-white bg-transparent hover:bg-white hover:text-[#0078d4] active:bg-white/90 text-white text-sm font-medium rounded-none transition-colors cursor-pointer text-center flex items-center justify-center gap-1.5"
                   >
-                    {copied ? <CheckCircle2 className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-                    <span className="font-semibold">{copied ? 'Copied' : 'Copy'}</span>
+                    {copied ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copied ? 'Copied' : 'Copy'}</span>
                   </button>
                   <button
                     type="button"
                     onClick={handleExportDocx}
                     disabled={exporting}
-                    className="fluent-btn-secondary px-4 h-8 rounded-[5px] bg-white dark:bg-[#2C2C2C] hover:bg-[#F9F9F9] dark:hover:bg-[#343434] active:bg-[#EEEEEE] dark:active:bg-[#222222] text-[#111827] dark:text-[#FFFFFF] border border-[#d1d1d1] dark:border-[#3E3E3E] text-[12.5px] font-normal shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-colors flex items-center justify-center cursor-default gap-1.5"
+                    className="fluent-btn-secondary min-w-[85px] px-6 py-1.5 border-2 border-white bg-transparent hover:bg-white hover:text-[#0078d4] active:bg-white/90 text-white text-sm font-medium rounded-none transition-colors cursor-pointer text-center flex items-center justify-center gap-1.5"
                   >
-                    <FileText className="w-3 h-3" />
-                    <span>{exporting ? 'Exporting...' : 'Export Word'}</span>
+                    <FileText className="w-3.5 h-3.5" />
+                    <span>{exporting ? 'Exporting...' : 'Export'}</span>
                   </button>
                 </>
               )}
               <button
                 type="button"
                 onClick={onClose}
-                className="fluent-btn-secondary px-4 h-8 rounded-[5px] bg-white dark:bg-[#2C2C2C] hover:bg-[#F9F9F9] dark:hover:bg-[#343434] active:bg-[#EEEEEE] dark:active:bg-[#222222] text-[#111827] dark:text-[#FFFFFF] border border-[#d1d1d1] dark:border-[#3E3E3E] text-[12.5px] font-normal shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-colors flex items-center justify-center cursor-default"
+                className="fluent-btn-secondary min-w-[85px] px-6 py-1.5 border-2 border-white bg-transparent hover:bg-white hover:text-[#0078d4] active:bg-white/90 text-white text-sm font-medium rounded-none transition-colors cursor-pointer text-center"
               >
                 Close
               </button>

@@ -726,7 +726,7 @@ export const FeedbackHub: React.FC<FeedbackHubProps> = ({ navigate }) => {
 
       {/* Detail Modal Dialog */}
       {selectedFeedback && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
           <div className="w-full max-w-xl bg-white dark:bg-[#23272d] border border-black/10 dark:border-white/10 rounded-2xl p-6 shadow-2xl animate-fade-in space-y-4">
             <div className="flex items-start justify-between gap-3 pb-3 border-b border-black/10 dark:border-white/10">
               <div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Play, Upload, Radio, FileText, CheckCircle2, AlertCircle, Copy } from 'lucide-react';
+import { Play, Upload, CheckCircle2 } from 'lucide-react';
 import { parseM3UPlaylist, SAMPLE_M3U_TEMPLATE } from '../utils/m3uParser';
 import { Channel } from '../types';
 import { useSettings } from '../hooks/useSettings';
@@ -19,7 +19,6 @@ export const CustomStreamModal: React.FC<CustomStreamModalProps> = ({
   onImportPlaylist
 }) => {
   const { settings } = useSettings();
-  const shouldAnimate = !settings.reduceAllMotion && settings.animateModals;
   const [activeTab, setActiveTab] = useState<'single' | 'playlist'>('single');
   const [streamUrl, setStreamUrl] = useState('');
   const [channelName, setChannelName] = useState('Custom Live Stream');
@@ -105,57 +104,62 @@ export const CustomStreamModal: React.FC<CustomStreamModalProps> = ({
           id="custom-stream-modal-container"
           className="fixed inset-0 z-9999 flex items-center justify-center p-4 sm:p-6 select-none"
         >
-          {/* 1. Backdrop / Lớp nền mờ */}
+          {/* Backdrop without blur */}
           <motion.div 
             id="custom-stream-backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-xs"
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+            className="fixed inset-0 bg-black/60"
             onClick={onClose}
           />
 
-          {/* 2. Dialog Modal Box - Fluent Design ContentDialog */}
+          {/* Windows 10 Blue Dialog Box */}
           <motion.div 
             id="custom-stream-dialog"
-            initial={{ opacity: 0, scale: 1.05 }}
+            initial={{ opacity: 0, scale: 0.98 }}
             animate={{ 
               opacity: 1, 
               scale: 1,
               transition: {
-                duration: 0.24,
+                duration: 0.2,
                 ease: [0.16, 1, 0.3, 1]
               }
             }}
             exit={{ 
               opacity: 0, 
-              scale: 1.04,
+              scale: 0.98,
               transition: {
-                duration: 0.18,
-                ease: [0.16, 1, 0.3, 1]
+                duration: 0.15,
+                ease: 'easeOut'
               }
             }}
-            className="fluent-modal-dialog relative z-10 w-full max-w-[500px] bg-white dark:bg-[#202020] rounded-[10px] overflow-hidden shadow-[0_24px_48px_rgba(0,0,0,0.22),0_2px_6px_rgba(0,0,0,0.08)] dark:shadow-[0_24px_48px_rgba(0,0,0,0.7),0_2px_6px_rgba(255,255,255,0.04)] border border-black/[0.08] dark:border-white/[0.08] text-[#111827] dark:text-[#F3F4F6]"
+            className="fluent-modal-dialog relative z-10 w-full max-w-[500px] bg-[#0078d4] text-white rounded-none shadow-[0_24px_60px_rgba(0,0,0,0.65)] border border-[#005a9e] overflow-hidden"
           >
+            {/* Top thin caption */}
+            <div className="px-6 py-2.5 bg-[#0063b1] text-xs font-normal text-white/90 select-none">
+              Stream Settings
+            </div>
+
             {/* Header Area */}
-            <div className="p-6 pb-3">
-              <h2 className="text-[19px] sm:text-[20px] font-semibold text-[#111827] dark:text-[#FFFFFF] tracking-tight leading-snug font-sans">
+            <div className="p-6 pt-5 pb-3">
+              <h2 className="text-2xl sm:text-[26px] font-normal text-white tracking-tight leading-snug">
                 Configure M3U8 Stream & Playlist
               </h2>
-              <p className="text-[13.5px] sm:text-[14px] text-[#4b5563] dark:text-[#a1a1aa] leading-normal mt-1.5 font-normal">
+              <p className="text-[13.5px] sm:text-sm text-white/90 leading-normal mt-1.5 font-normal">
                 Paste a direct HLS stream URL or import an external .m3u playlist
               </p>
 
-              {/* Fluent Tab Bar */}
-              <div className="flex p-1 mt-4 rounded-md bg-[#F4F4F4] dark:bg-[#2B2B2B] border border-black/[0.06] dark:border-white/[0.08]">
+              {/* Segmented Tab Bar */}
+              <div className="flex p-1 mt-3 bg-black/15 border border-white/20">
                 <button
                   type="button"
                   onClick={() => setActiveTab('single')}
-                  className={`flex-1 py-1.5 rounded-[4px] text-xs font-medium transition-all cursor-default ${
+                  className={`flex-1 py-1.5 rounded-none text-xs font-medium transition-all cursor-pointer ${
                     activeTab === 'single'
-                      ? 'bg-white dark:bg-[#383838] text-[#111827] dark:text-[#FFFFFF] shadow-sm font-semibold'
-                      : 'text-[#666666] dark:text-[#AAAAAA] hover:text-[#111827] dark:hover:text-[#FFFFFF]'
+                      ? 'bg-white text-[#0078d4] font-semibold'
+                      : 'text-white/80 hover:text-white'
                   }`}
                 >
                   Direct Stream (.m3u8)
@@ -163,10 +167,10 @@ export const CustomStreamModal: React.FC<CustomStreamModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setActiveTab('playlist')}
-                  className={`flex-1 py-1.5 rounded-[4px] text-xs font-medium transition-all cursor-default ${
+                  className={`flex-1 py-1.5 rounded-none text-xs font-medium transition-all cursor-pointer ${
                     activeTab === 'playlist'
-                      ? 'bg-white dark:bg-[#383838] text-[#111827] dark:text-[#FFFFFF] shadow-sm font-semibold'
-                      : 'text-[#666666] dark:text-[#AAAAAA] hover:text-[#111827] dark:hover:text-[#FFFFFF]'
+                      ? 'bg-white text-[#0078d4] font-semibold'
+                      : 'text-white/80 hover:text-white'
                   }`}
                 >
                   Import Playlist (.m3u)
@@ -179,7 +183,7 @@ export const CustomStreamModal: React.FC<CustomStreamModalProps> = ({
               {activeTab === 'single' ? (
                 <form id="form-single-stream" onSubmit={handlePlaySingle} className="space-y-3.5">
                   <div>
-                    <label className="block text-[13px] font-medium text-[#333333] dark:text-[#DDDDDD] mb-1">
+                    <label className="block text-[13px] font-medium text-white/95 mb-1">
                       Channel / Stream Title
                     </label>
                     <input
@@ -187,13 +191,13 @@ export const CustomStreamModal: React.FC<CustomStreamModalProps> = ({
                       value={channelName}
                       onChange={(e) => setChannelName(e.target.value)}
                       placeholder="e.g., Live Sports Feed"
-                      className="w-full px-3 py-2 rounded-[4px] bg-[#F9F9F9] dark:bg-[#2B2B2B] border border-black/[0.12] dark:border-white/[0.12] border-b-2 border-b-[#888888] dark:border-b-[#777777] text-[#111827] dark:text-[#FFFFFF] placeholder:text-[#888888] text-sm focus:outline-none focus:border-b-[#4cc2ff] focus:border-b-2 transition-all"
+                      className="w-full px-3 py-2 rounded-none bg-black/20 border-2 border-white/60 text-white placeholder:text-white/40 text-sm focus:outline-none focus:border-white transition-all"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[13px] font-medium text-[#333333] dark:text-[#DDDDDD] mb-1">
-                      HLS Stream URL (.m3u8) <span className="text-[#4cc2ff]">*</span>
+                    <label className="block text-[13px] font-medium text-white/95 mb-1">
+                      HLS Stream URL (.m3u8) *
                     </label>
                     <input
                       type="url"
@@ -201,13 +205,13 @@ export const CustomStreamModal: React.FC<CustomStreamModalProps> = ({
                       value={streamUrl}
                       onChange={(e) => setStreamUrl(e.target.value)}
                       placeholder="https://example.com/live/channel.m3u8"
-                      className="w-full px-3 py-2 rounded-[4px] bg-[#F9F9F9] dark:bg-[#2B2B2B] border border-black/[0.12] dark:border-white/[0.12] border-b-2 border-b-[#888888] dark:border-b-[#777777] text-[#111827] dark:text-[#FFFFFF] placeholder:text-[#888888] text-sm font-mono focus:outline-none focus:border-b-[#4cc2ff] focus:border-b-2 transition-all"
+                      className="w-full px-3 py-2 rounded-none bg-black/20 border-2 border-white/60 text-white placeholder:text-white/40 text-sm font-mono focus:outline-none focus:border-white transition-all"
                     />
                   </div>
 
                   {/* Sample test streams buttons */}
                   <div>
-                    <span className="text-[11px] font-medium text-[#666666] dark:text-[#AAAAAA] block mb-1.5">
+                    <span className="text-[11px] font-medium text-white/80 block mb-1.5">
                       Sample test streams:
                     </span>
                     <div className="flex flex-wrap gap-2">
@@ -217,7 +221,7 @@ export const CustomStreamModal: React.FC<CustomStreamModalProps> = ({
                           setStreamUrl('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8');
                           setChannelName('Mux HLS Test Multi-Rate');
                         }}
-                        className="px-2.5 py-1 rounded-[4px] bg-[#F4F4F4] dark:bg-[#2B2B2B] text-[11px] text-[#333333] dark:text-[#DDDDDD] hover:bg-[#EAEAEA] dark:hover:bg-[#383838] border border-black/[0.08] dark:border-white/[0.1] cursor-default"
+                        className="px-2.5 py-1 rounded-none bg-black/15 text-[11px] text-white hover:bg-white/20 border border-white/30 cursor-pointer"
                       >
                         Mux HLS HD
                       </button>
@@ -227,7 +231,7 @@ export const CustomStreamModal: React.FC<CustomStreamModalProps> = ({
                           setStreamUrl('https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8');
                           setChannelName('Akamai Live Master HLS');
                         }}
-                        className="px-2.5 py-1 rounded-[4px] bg-[#F4F4F4] dark:bg-[#2B2B2B] text-[11px] text-[#333333] dark:text-[#DDDDDD] hover:bg-[#EAEAEA] dark:hover:bg-[#383838] border border-black/[0.08] dark:border-white/[0.1] cursor-default"
+                        className="px-2.5 py-1 rounded-none bg-black/15 text-[11px] text-white hover:bg-white/20 border border-white/30 cursor-pointer"
                       >
                         Akamai Live HD
                       </button>
@@ -238,13 +242,13 @@ export const CustomStreamModal: React.FC<CustomStreamModalProps> = ({
                 <div className="space-y-3">
                   <div>
                     <div className="flex items-center justify-between mb-1">
-                      <label className="text-[13px] font-medium text-[#333333] dark:text-[#DDDDDD]">
+                      <label className="text-[13px] font-medium text-white/95">
                         Paste #EXTM3U Playlist Content
                       </label>
                       <button
                         type="button"
                         onClick={handleLoadSample}
-                        className="text-[11px] text-[#4cc2ff] hover:underline cursor-default font-medium"
+                        className="text-[11px] text-white/90 underline hover:text-white cursor-pointer font-medium"
                       >
                         Load sample playlist
                       </button>
@@ -254,13 +258,13 @@ export const CustomStreamModal: React.FC<CustomStreamModalProps> = ({
                       value={playlistText}
                       onChange={(e) => setPlaylistText(e.target.value)}
                       placeholder={`#EXTM3U\n#EXTINF:-1 tvg-id="vtv1" tvg-name="VTV1 HD" group-title="VTV", VTV1 HD\nhttps://example.com/vtv1.m3u8`}
-                      className="w-full p-2.5 rounded-[4px] bg-[#F9F9F9] dark:bg-[#2B2B2B] border border-black/[0.12] dark:border-white/[0.12] border-b-2 border-b-[#888888] dark:border-b-[#777777] text-[#111827] dark:text-[#FFFFFF] placeholder:text-[#888888] text-xs font-mono focus:outline-none focus:border-b-[#4cc2ff] focus:border-b-2 resize-none"
+                      className="w-full p-2.5 rounded-none bg-black/20 border-2 border-white/60 text-white placeholder:text-white/40 text-xs font-mono focus:outline-none focus:border-white resize-none"
                     />
                   </div>
 
                   {parseStatus && (
-                    <div className="p-2.5 rounded-md bg-[#F4F4F4] dark:bg-[#2B2B2B] border border-black/[0.08] dark:border-white/[0.08] text-xs flex items-center gap-2 text-[#111827] dark:text-[#FFFFFF]">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <div className="p-2.5 bg-black/20 border border-white/20 text-xs flex items-center gap-2 text-white">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-300 shrink-0" />
                       <span>{parseStatus}</span>
                     </div>
                   )}
@@ -268,34 +272,31 @@ export const CustomStreamModal: React.FC<CustomStreamModalProps> = ({
               )}
             </div>
 
-            {/* Subtle Divider */}
-            <div className="h-[1px] w-full bg-[#E5E5E5] dark:bg-[#2F2F2F]" />
-
             {/* Bottom Actions Footer */}
-            <div className="fluent-modal-footer bg-[#F3F3F3] dark:bg-[#1C1C1C] px-6 py-3 flex items-center justify-start gap-2.5">
+            <div className="fluent-modal-footer bg-[#0078d4] px-6 py-4 pt-2 flex items-center justify-end gap-3">
               {activeTab === 'single' ? (
                 <button
                   type="submit"
                   form="form-single-stream"
-                  className="fluent-btn-primary px-4 h-8 rounded-[5px] bg-[#4cc2ff] hover:bg-[#6bd0ff] active:bg-[#3bb2ef] text-white dark:text-black font-semibold shadow-[0_1px_2px_rgba(0,0,0,0.1)] transition-colors border border-black/20 flex items-center justify-center cursor-default gap-1.5 text-[12.5px]"
+                  className="fluent-btn-primary min-w-[90px] px-6 py-1.5 border-2 border-white bg-transparent hover:bg-white hover:text-[#0078d4] active:bg-white/90 text-white text-sm font-medium rounded-none transition-colors cursor-pointer text-center flex items-center justify-center gap-1.5"
                 >
-                  <Play className="w-3 h-3 fill-current" />
-                  <span className="font-semibold">Play Stream</span>
+                  <Play className="w-3.5 h-3.5 fill-current" />
+                  <span>Play</span>
                 </button>
               ) : (
                 <button
                   type="button"
                   onClick={handleImportM3U}
-                  className="fluent-btn-primary px-4 h-8 rounded-[5px] bg-[#4cc2ff] hover:bg-[#6bd0ff] active:bg-[#3bb2ef] text-white dark:text-black font-semibold shadow-[0_1px_2px_rgba(0,0,0,0.1)] transition-colors border border-black/20 flex items-center justify-center cursor-default gap-1.5 text-[12.5px]"
+                  className="fluent-btn-primary min-w-[90px] px-6 py-1.5 border-2 border-white bg-transparent hover:bg-white hover:text-[#0078d4] active:bg-white/90 text-white text-sm font-medium rounded-none transition-colors cursor-pointer text-center flex items-center justify-center gap-1.5"
                 >
-                  <Upload className="w-3 h-3" />
-                  <span className="font-semibold">Import Playlist</span>
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>Import</span>
                 </button>
               )}
               <button
                 type="button"
                 onClick={onClose}
-                className="fluent-btn-secondary px-4 h-8 rounded-[5px] bg-white dark:bg-[#2C2C2C] hover:bg-[#F9F9F9] dark:hover:bg-[#343434] active:bg-[#EEEEEE] dark:active:bg-[#222222] text-[#111827] dark:text-[#FFFFFF] border border-[#d1d1d1] dark:border-[#3E3E3E] text-[12.5px] font-normal shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-colors flex items-center justify-center cursor-default"
+                className="fluent-btn-secondary min-w-[85px] px-6 py-1.5 border-2 border-white bg-transparent hover:bg-white hover:text-[#0078d4] active:bg-white/90 text-white text-sm font-medium rounded-none transition-colors cursor-pointer text-center"
               >
                 Close
               </button>

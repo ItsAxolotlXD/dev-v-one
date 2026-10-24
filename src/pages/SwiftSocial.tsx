@@ -788,7 +788,7 @@ export const SwiftSocial: React.FC = () => {
 
       {/* Story Fullscreen Preview Modal */}
       {selectedStory && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4">
           <div className="relative w-full max-w-sm aspect-9/16 bg-neutral-900 rounded-3xl overflow-hidden shadow-2xl flex flex-col justify-between p-4 animate-scale-in">
             <img
               src={selectedStory.storyImage}

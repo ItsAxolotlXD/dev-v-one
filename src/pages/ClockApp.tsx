@@ -749,43 +749,48 @@ export const ClockApp: React.FC<ClockAppProps> = ({ navigate }) => {
 
       {/* 4. MODAL: TẠO BÁO THỨC MỚI */}
       {isNewAlarmModalOpen && (
-        <div className="fixed inset-0 z-[99999] bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-sm bg-[#161a22] border border-white/20 rounded-2xl shadow-2xl p-6 text-white space-y-4 animate-in fade-in zoom-in-95 duration-200">
-            <div className="flex items-center justify-between pb-2 border-b border-white/10">
-              <h3 className="font-bold text-base">Thêm Báo Thức Mới</h3>
+        <div className="fixed inset-0 z-[99999] bg-black/60 flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-[#0078d4] border border-[#005a9e] rounded-none shadow-[0_24px_60px_rgba(0,0,0,0.65)] text-white overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            <div className="px-6 py-2.5 bg-[#0063b1] text-xs font-normal text-white/90 select-none flex items-center justify-between">
+              <span>Alarms & Clock</span>
               <button
                 type="button"
                 onClick={() => setIsNewAlarmModalOpen(false)}
-                className="text-neutral-400 hover:text-white"
+                className="text-white/80 hover:text-white"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="space-y-3 text-xs">
+            <div className="p-6 pt-5 pb-5 space-y-3.5 text-xs">
               <div>
-                <label className="text-neutral-400 block mb-1">Giờ báo thức (HH:mm):</label>
+                <h3 className="text-2xl font-normal text-white tracking-tight leading-snug">Thêm Báo Thức Mới</h3>
+                <p className="text-sm text-white/90 mt-1">Cài đặt giờ reo và chu kỳ lặp lại</p>
+              </div>
+
+              <div>
+                <label className="text-white/90 block mb-1">Giờ báo thức (HH:mm):</label>
                 <input
                   type="time"
                   value={newAlarmTime}
                   onChange={(e) => setNewAlarmTime(e.target.value)}
-                  className="w-full bg-[#1e2530] border border-white/10 rounded-xl px-3 py-2 text-xl font-bold font-mono text-center text-white outline-none focus:border-sky-500"
+                  className="w-full bg-black/20 border-2 border-white/60 rounded-none px-3 py-2 text-xl font-bold font-mono text-center text-white outline-none focus:border-white"
                 />
               </div>
 
               <div>
-                <label className="text-neutral-400 block mb-1">Tên báo thức:</label>
+                <label className="text-white/90 block mb-1">Tên báo thức:</label>
                 <input
                   type="text"
                   value={newAlarmLabel}
                   onChange={(e) => setNewAlarmLabel(e.target.value)}
-                  className="w-full bg-[#1e2530] border border-white/10 rounded-xl px-3 py-2 text-white outline-none focus:border-sky-500"
+                  className="w-full bg-black/20 border-2 border-white/60 rounded-none px-3 py-2 text-white outline-none focus:border-white"
                 />
               </div>
 
               <div>
-                <label className="text-neutral-400 block mb-1.5">Lặp lại các ngày:</label>
-                <div className="flex gap-1 justify-between">
+                <label className="text-white/90 block mb-1.5">Lặp lại các ngày:</label>
+                <div className="flex gap-1.5 justify-between">
                   {['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'].map((d) => {
                     const isSelected = newAlarmDays.includes(d);
                     return (
@@ -797,8 +802,8 @@ export const ClockApp: React.FC<ClockAppProps> = ({ navigate }) => {
                             isSelected ? prev.filter((item) => item !== d) : [...prev, d]
                           );
                         }}
-                        className={`w-8 h-8 rounded-lg font-bold text-xs transition-colors ${
-                          isSelected ? 'bg-[#0078d4] text-white' : 'bg-white/5 text-neutral-400 hover:text-white'
+                        className={`flex-1 py-1.5 font-bold text-xs transition-colors cursor-pointer border-2 ${
+                          isSelected ? 'bg-white text-[#0078d4] border-white' : 'bg-transparent text-white border-white/60 hover:border-white'
                         }`}
                       >
                         {d}
@@ -809,14 +814,7 @@ export const ClockApp: React.FC<ClockAppProps> = ({ navigate }) => {
               </div>
             </div>
 
-            <div className="flex gap-2 pt-2 border-t border-white/10">
-              <button
-                type="button"
-                onClick={() => setIsNewAlarmModalOpen(false)}
-                className="flex-1 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-semibold text-neutral-300"
-              >
-                Hủy bỏ
-              </button>
+            <div className="bg-[#0078d4] px-6 py-4 pt-2 flex items-center justify-end gap-3">
               <button
                 type="button"
                 onClick={() => {
@@ -832,9 +830,16 @@ export const ClockApp: React.FC<ClockAppProps> = ({ navigate }) => {
                   setIsNewAlarmModalOpen(false);
                   showToast(`Đã đặt báo thức lúc ${newAlarmTime}`);
                 }}
-                className="flex-1 py-2 rounded-xl bg-[#0078d4] hover:bg-[#106ebe] text-xs font-bold text-white shadow-md cursor-pointer"
+                className="min-w-[90px] px-6 py-1.5 border-2 border-white bg-transparent hover:bg-white hover:text-[#0078d4] active:bg-white/90 text-white text-sm font-medium rounded-none transition-colors cursor-pointer text-center"
               >
-                Lưu Báo Thức
+                Lưu
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsNewAlarmModalOpen(false)}
+                className="min-w-[85px] px-6 py-1.5 border-2 border-white bg-transparent hover:bg-white hover:text-[#0078d4] active:bg-white/90 text-white text-sm font-medium rounded-none transition-colors cursor-pointer text-center"
+              >
+                Hủy bỏ
               </button>
             </div>
           </div>
@@ -843,56 +848,73 @@ export const ClockApp: React.FC<ClockAppProps> = ({ navigate }) => {
 
       {/* 5. MODAL: THÊM THÀNH PHỐ MÚI GIỜ */}
       {isAddCityModalOpen && (
-        <div className="fixed inset-0 z-[99999] bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-sm bg-[#161a22] border border-white/20 rounded-2xl shadow-2xl p-6 text-white space-y-4 animate-in fade-in zoom-in-95 duration-200">
-            <div className="flex items-center justify-between pb-2 border-b border-white/10">
-              <h3 className="font-bold text-base">Thêm Thành Phố Múi Giờ</h3>
+        <div className="fixed inset-0 z-[99999] bg-black/60 flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-[#0078d4] border border-[#005a9e] rounded-none shadow-[0_24px_60px_rgba(0,0,0,0.65)] text-white overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            <div className="px-6 py-2.5 bg-[#0063b1] text-xs font-normal text-white/90 select-none flex items-center justify-between">
+              <span>World Clock</span>
               <button
                 type="button"
                 onClick={() => setIsAddCityModalOpen(false)}
-                className="text-neutral-400 hover:text-white"
+                className="text-white/80 hover:text-white"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="group relative flex items-center gap-2 h-8.5 bg-black/5 dark:bg-[#1e2530] border border-black/10 dark:border-white/10 rounded-[8px] px-3 text-xs transition-all focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]">
-              <FluentSearchIcon className="w-3.5 h-3.5 text-neutral-400 shrink-0 pointer-events-none" />
-              <input
-                type="text"
-                placeholder="Tìm Thành Phố Hoặc Dùng /search..."
-                value={citySearchQuery}
-                onChange={(e) => setCitySearchQuery(e.target.value)}
-                className="bg-transparent border-none outline-none w-full text-white placeholder-neutral-400 no-fluent-line"
-              />
+            <div className="p-6 pt-5 pb-5 space-y-3">
+              <div>
+                <h3 className="text-2xl font-normal text-white tracking-tight leading-snug">Thêm Thành Phố Múi Giờ</h3>
+                <p className="text-sm text-white/90 mt-1">Tìm kiếm và ghim các múi giờ quốc tế</p>
+              </div>
+
+              <div className="group relative flex items-center gap-2 h-9 bg-black/20 border-2 border-white/60 rounded-none px-3 text-xs transition-all focus-within:border-white">
+                <FluentSearchIcon className="w-3.5 h-3.5 text-white/70 shrink-0 pointer-events-none" />
+                <input
+                  type="text"
+                  placeholder="Tìm thành phố..."
+                  value={citySearchQuery}
+                  onChange={(e) => setCitySearchQuery(e.target.value)}
+                  className="bg-transparent border-none outline-none w-full text-white placeholder-white/40"
+                />
+              </div>
+
+              <div className="max-h-60 overflow-y-auto divide-y divide-white/10 text-xs">
+                {availableCities.length === 0 ? (
+                  <div className="py-6 text-center text-white/70">
+                    Không còn thành phố nào phù hợp
+                  </div>
+                ) : (
+                  availableCities.map((c) => (
+                    <div
+                      key={c.id}
+                      onClick={() => {
+                        setWorldCities((prev) => [...prev, c]);
+                        setIsAddCityModalOpen(false);
+                        showToast(`Đã thêm ${c.city} vào Đồng hồ thế giới`);
+                      }}
+                      className="py-2.5 px-2 flex items-center justify-between hover:bg-white/10 cursor-pointer transition-colors"
+                    >
+                      <div>
+                        <div className="font-bold text-white">{c.city}</div>
+                        <div className="text-[10px] text-white/80">{c.country}</div>
+                      </div>
+                      <span className="font-mono text-white text-[11px] font-bold">
+                        {c.offsetHours >= 0 ? `+${c.offsetHours}` : c.offsetHours}h
+                      </span>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
 
-            <div className="max-h-60 overflow-y-auto divide-y divide-white/5 text-xs">
-              {availableCities.length === 0 ? (
-                <div className="py-6 text-center text-neutral-500">
-                  Không còn thành phố nào phù hợp
-                </div>
-              ) : (
-                availableCities.map((c) => (
-                  <div
-                    key={c.id}
-                    onClick={() => {
-                      setWorldCities((prev) => [...prev, c]);
-                      setIsAddCityModalOpen(false);
-                      showToast(`Đã thêm ${c.city} vào Đồng hồ thế giới`);
-                    }}
-                    className="py-2.5 px-2 flex items-center justify-between hover:bg-white/5 rounded-lg cursor-pointer transition-colors"
-                  >
-                    <div>
-                      <div className="font-bold text-white">{c.city}</div>
-                      <div className="text-[10px] text-neutral-400">{c.country}</div>
-                    </div>
-                    <span className="font-mono text-sky-400 text-[11px]">
-                      {c.offsetHours >= 0 ? `+${c.offsetHours}` : c.offsetHours}h
-                    </span>
-                  </div>
-                ))
-              )}
+            <div className="bg-[#0078d4] px-6 py-4 pt-2 flex items-center justify-end">
+              <button
+                type="button"
+                onClick={() => setIsAddCityModalOpen(false)}
+                className="min-w-[85px] px-6 py-1.5 border-2 border-white bg-transparent hover:bg-white hover:text-[#0078d4] active:bg-white/90 text-white text-sm font-medium rounded-none transition-colors cursor-pointer text-center"
+              >
+                Đóng
+              </button>
             </div>
           </div>
         </div>
@@ -900,28 +922,28 @@ export const ClockApp: React.FC<ClockAppProps> = ({ navigate }) => {
 
       {/* 6. MODAL: CHUÔNG BÁO THỨC ĐANG REO */}
       {ringingAlarm && (
-        <div className="fixed inset-0 z-[999999] bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="w-full max-w-sm bg-gradient-to-b from-[#1e2530] to-[#12151b] border-2 border-sky-400 rounded-3xl p-8 text-center space-y-6 shadow-2xl animate-bounce-short">
-            <div className="w-20 h-20 rounded-full bg-sky-500/20 text-sky-400 flex items-center justify-center mx-auto animate-pulse">
-              <AlarmClock className="w-10 h-10" />
+        <div className="fixed inset-0 z-[999999] bg-black/60 flex items-center justify-center p-4">
+          <div className="w-full max-w-sm bg-[#0078d4] border border-[#005a9e] rounded-none shadow-[0_24px_60px_rgba(0,0,0,0.65)] text-white p-6 text-center space-y-5 animate-in fade-in zoom-in-95">
+            <div className="w-16 h-16 rounded-none border-2 border-white flex items-center justify-center mx-auto text-white">
+              <AlarmClock className="w-8 h-8" />
             </div>
 
             <div>
-              <div className="text-4xl font-black font-mono text-white tracking-tight">
+              <div className="text-4xl font-normal font-mono text-white tracking-tight">
                 {ringingAlarm.time}
               </div>
-              <h3 className="text-base font-bold text-white mt-2">{ringingAlarm.label}</h3>
-              <p className="text-xs text-neutral-400 mt-1">Đến giờ theo lịch báo thức của bạn!</p>
+              <h3 className="text-lg font-normal text-white mt-2">{ringingAlarm.label}</h3>
+              <p className="text-xs text-white/90 mt-1">Đến giờ theo lịch báo thức của bạn!</p>
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex gap-3 justify-center">
               <button
                 type="button"
                 onClick={() => {
                   setRingingAlarm(null);
                   showToast('Đã hoãn báo thức 5 phút');
                 }}
-                className="flex-1 py-3 rounded-xl bg-white/10 hover:bg-white/15 text-xs font-semibold text-neutral-300"
+                className="flex-1 py-1.5 border-2 border-white bg-transparent hover:bg-white hover:text-[#0078d4] text-white text-sm font-medium rounded-none transition-colors cursor-pointer text-center"
               >
                 Hoãn 5 phút
               </button>
@@ -931,7 +953,7 @@ export const ClockApp: React.FC<ClockAppProps> = ({ navigate }) => {
                   setRingingAlarm(null);
                   showToast('Đã tắt chuông báo thức');
                 }}
-                className="flex-1 py-3 rounded-xl bg-red-600 hover:bg-red-500 font-bold text-xs text-white shadow-lg"
+                className="flex-1 py-1.5 border-2 border-white bg-white text-[#0078d4] hover:bg-white/90 text-sm font-bold rounded-none transition-colors cursor-pointer text-center shadow-lg"
               >
                 Tắt Báo Thức
               </button>

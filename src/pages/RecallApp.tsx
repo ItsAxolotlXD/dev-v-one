@@ -825,29 +825,33 @@ export const RecallApp: React.FC<RecallAppProps> = ({ navigate }) => {
 
       {/* Confirmation Modal: Clear History */}
       {isConfirmClearOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#2c2c2c] rounded-[12px] p-6 max-w-sm w-full shadow-2xl border border-black/10 dark:border-white/10 text-center animate-in fade-in zoom-in-95">
-            <Trash2 className="w-10 h-10 text-red-500 mx-auto mb-3" />
-            <h3 className="text-base font-semibold text-neutral-900 dark:text-white">
-              Clear Recall History?
-            </h3>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-2">
-              This will remove all snapshot logs and timeline memory from this device. This cannot be undone.
-            </p>
-            <div className="flex items-center justify-end gap-2 mt-6">
-              <button
-                type="button"
-                onClick={() => setIsConfirmClearOpen(false)}
-                className="px-3 py-1.5 rounded-[6px] text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:bg-black/5 dark:hover:bg-white/10 cursor-pointer"
-              >
-                Cancel
-              </button>
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+          <div className="bg-[#0078d4] text-white rounded-none p-0 max-w-md w-full shadow-[0_24px_60px_rgba(0,0,0,0.65)] border border-[#005a9e] animate-in fade-in zoom-in-95 overflow-hidden">
+            <div className="px-6 py-2.5 bg-[#0063b1] text-xs font-normal text-white/90 select-none">
+              Recall History
+            </div>
+            <div className="p-6 pt-5 pb-4 space-y-2 text-left">
+              <h3 className="text-2xl font-normal text-white tracking-tight leading-snug">
+                Clear Recall History?
+              </h3>
+              <p className="text-sm text-white/95 mt-2 leading-relaxed font-normal">
+                This will remove all snapshot logs and timeline memory from this device. This cannot be undone.
+              </p>
+            </div>
+            <div className="bg-[#0078d4] px-6 py-4 pt-2 flex items-center justify-end gap-3">
               <button
                 type="button"
                 onClick={handleClear}
-                className="px-3.5 py-1.5 rounded-[6px] text-xs font-medium bg-red-600 hover:bg-red-700 text-white shadow-xs cursor-pointer"
+                className="min-w-[85px] px-6 py-1.5 border-2 border-white bg-transparent hover:bg-white hover:text-[#0078d4] active:bg-white/90 text-white text-sm font-medium rounded-none transition-colors cursor-pointer text-center"
               >
-                Clear History
+                Yes
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsConfirmClearOpen(false)}
+                className="min-w-[85px] px-6 py-1.5 border-2 border-white bg-transparent hover:bg-white hover:text-[#0078d4] active:bg-white/90 text-white text-sm font-medium rounded-none transition-colors cursor-pointer text-center"
+              >
+                No
               </button>
             </div>
           </div>

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Bell, X } from 'lucide-react';
 import { useSettings } from '../hooks/useSettings';
 
 interface UnderConstructionModalProps {
@@ -19,7 +18,6 @@ export const UnderConstructionModal: React.FC<UnderConstructionModalProps> = ({
   buttonText = 'Understood',
 }) => {
   const { settings } = useSettings();
-  const shouldAnimate = !settings.reduceAllMotion && settings.animateModals;
 
   // Listen for Escape key to close
   useEffect(() => {
@@ -39,68 +37,79 @@ export const UnderConstructionModal: React.FC<UnderConstructionModalProps> = ({
           id="under-construction-modal-container"
           className="fixed inset-0 z-9999 flex items-center justify-center p-4 sm:p-6 select-none"
         >
-          {/* 1. Backdrop / Lớp nền mờ */}
+          {/* 1. Backdrop without background blur */}
           <motion.div
             id="under-construction-modal-backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.25, ease: 'easeOut' }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/50 backdrop-blur-xs"
+            className="fixed inset-0 bg-black/60"
           />
 
-          {/* 2. Dialog Modal Box - Fluent Design ContentDialog */}
+          {/* 2. Dialog Modal Box - Windows 10 Solid Blue Dialog Style */}
           <motion.div
             id="under-construction-modal-dialog"
-            initial={{ opacity: 0, scale: 1.05 }}
+            initial={{ opacity: 0, scale: 0.98 }}
             animate={{ 
               opacity: 1, 
               scale: 1,
               transition: {
-                duration: 0.24,
+                duration: 0.2,
                 ease: [0.16, 1, 0.3, 1]
               }
             }}
             exit={{ 
               opacity: 0, 
-              scale: 1.04,
+              scale: 0.98,
               transition: {
-                duration: 0.18,
-                ease: [0.16, 1, 0.3, 1]
+                duration: 0.15,
+                ease: 'easeOut'
               }
             }}
-            className="fluent-modal-dialog relative z-10 w-full max-w-[460px] bg-white dark:bg-[#38383d] rounded-[10px] overflow-hidden shadow-[0_24px_48px_rgba(0,0,0,0.22),0_2px_6px_rgba(0,0,0,0.08)] dark:shadow-[0_24px_48px_rgba(0,0,0,0.7),0_2px_6px_rgba(255,255,255,0.04)] border border-black/[0.08] dark:border-white/[0.08] text-[#111827] dark:text-[#F3F4F6]"
+            className="fluent-modal-dialog relative z-10 w-full max-w-[580px] bg-[#0078d4] text-white rounded-none shadow-[0_24px_60px_rgba(0,0,0,0.65)] border border-[#005a9e] overflow-hidden"
           >
+            {/* Top thin caption bar */}
+            <div className="pl-3.5 pr-4 py-1.5 bg-[#0063b1] text-xs font-[350] text-white/90 select-none">
+              Sparkle System Notice
+            </div>
+
             {/* Header & Body Content Area */}
-            <div className="p-6 pb-5">
+            <div className="px-6 py-3.5 space-y-1.5 font-[350]">
               <h2
                 id="under-construction-modal-title"
-                className="text-[19px] sm:text-[20px] font-semibold text-[#111827] dark:text-[#FFFFFF] tracking-tight leading-snug font-sans"
+                style={{ fontWeight: 350 }}
+                className="text-xl sm:text-[22px] font-[350] text-white tracking-tight leading-snug"
               >
                 {title}
               </h2>
 
               <p
                 id="under-construction-modal-description"
-                className="text-[13.5px] sm:text-[14px] text-[#4b5563] dark:text-[#a1a1aa] leading-relaxed mt-2.5 font-normal"
+                style={{ fontWeight: 350 }}
+                className="text-xs sm:text-[13px] text-white/95 leading-relaxed font-[350]"
               >
                 {description}
               </p>
             </div>
 
-            {/* Subtle Divider */}
-            <div className="h-[1px] w-full bg-[#E5E5E5] dark:bg-[#2F2F2F]" />
-
             {/* Bottom Actions Footer */}
-            <div className="fluent-modal-footer bg-[#F3F3F3] dark:bg-[#1C1C1C] px-6 py-3 flex items-center justify-end">
+            <div className="fluent-modal-footer bg-[#0078d4] px-6 py-2 pb-4 flex items-center justify-end gap-2.5">
               <button
                 type="button"
                 id="btn-under-construction-close"
                 onClick={onClose}
-                className="fluent-btn-primary px-4 h-8 rounded-[5px] bg-[#0078d4] dark:bg-[#4cc2ff] hover:bg-[#106ebe] dark:hover:bg-[#6bd0ff] active:bg-[#005a9e] dark:active:bg-[#3bb2ef] text-white dark:text-black font-semibold shadow-[0_1px_2px_rgba(0,0,0,0.1)] transition-colors border border-black/20 flex items-center justify-center cursor-pointer text-[12.5px]"
+                style={{
+                  border: '2px solid #FFFFFF',
+                  borderBottom: '2px solid #FFFFFF',
+                  boxSizing: 'border-box',
+                  fontWeight: 350,
+                  height: '28px',
+                }}
+                className="fluent-btn-primary min-w-[80px] h-[28px] px-4 py-0 border-2 border-white bg-transparent hover:bg-white hover:text-[#0078d4] active:bg-white/90 text-white text-xs font-[350] rounded-none transition-colors cursor-pointer text-center inline-flex items-center justify-center"
               >
-                <span className="font-semibold">{buttonText}</span>
+                {buttonText}
               </button>
             </div>
           </motion.div>

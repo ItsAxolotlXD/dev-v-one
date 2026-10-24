@@ -89,6 +89,21 @@ export const ControlBar: React.FC<ControlBarProps> = ({
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
   const [activeButtonId, setActiveButtonId] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [clockTime, setClockTime] = useState<string>(() => {
+    const d = new Date();
+    return `${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
+  });
+
+  // Master clock ticker for control bar (h:mm style, integer font)
+  useEffect(() => {
+    const updateTime = () => {
+      const d = new Date();
+      setClockTime(`${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`);
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Close more menu when changing route
   useEffect(() => {
@@ -906,7 +921,68 @@ export const ControlBar: React.FC<ControlBarProps> = ({
         aria-label="Tab Control Bar"
         className="fixed right-3 sm:right-4 top-1/2 -translate-y-1/2 z-40 flex flex-col items-center gap-2 select-none pointer-events-auto transition-all animate-in fade-in slide-in-from-right-4 duration-200"
       >
-        {/* 1. Top Circular Search Button (Nút Search thay cho nút status phía trên nút thu gọn/go back) */}
+        {/* 1. White Clock in h:mm style, integer font (placed above go back button) */}
+        <div
+          title={`Thời gian: ${clockTime}`}
+          className="control-bar-standalone-clock flex items-center justify-center shadow-md shadow-black/10 select-none px-2.5 py-1 text-white"
+          style={{ 
+            borderRadius: '9999px',
+            background: 'rgba(255, 255, 255, 0.10)', 
+            backdropFilter: 'blur(2px)', 
+            WebkitBackdropFilter: 'blur(2px)',
+            border: '1px solid rgba(255, 255, 255, 0.20)',
+            color: '#ffffff'
+          }}
+        >
+          <span 
+            className="text-[12px] font-bold text-white tracking-wider tabular-nums font-mono select-none"
+            style={{ fontVariantNumeric: 'tabular-nums' }}
+          >
+            {clockTime}
+          </span>
+        </div>
+
+        {/* 2. Collapse / Go back Toggle Circular Button with icon flipped (ChevronLeft) */}
+        <button
+          type="button"
+          onClick={toggleCollapsed}
+          title="Thu gọn thanh điều khiển"
+          className="control-bar-standalone-circle aspect-square flex items-center justify-center shadow-md shadow-black/10 transition-transform active:scale-95 group relative"
+          style={{ 
+            borderRadius: '9999px',
+            width: 40,
+            height: 40,
+            minWidth: 40,
+            minHeight: 40,
+            aspectRatio: '1 / 1',
+            background: 'rgba(255, 255, 255, 0.10)', 
+            backdropFilter: 'blur(2px)', 
+            WebkitBackdropFilter: 'blur(2px)',
+            border: '1px solid rgba(255, 255, 255, 0.20)',
+            color: '#ffffff'
+          }}
+        >
+          <ChevronLeft 
+            style={{ color: '#ffffff', stroke: '#ffffff' }}
+            className="w-5 h-5 transition-transform group-hover:-translate-x-0.5" 
+          />
+          {/* Tooltip to the left (Dạng pill) */}
+          <span 
+            className="control-bar-pill-btn pointer-events-none absolute right-full mr-3 top-1/2 -translate-y-1/2 px-3.5 py-1.5 rounded-full text-[11px] font-medium whitespace-nowrap shadow-xl opacity-0 group-hover:opacity-100 transition-opacity z-50 text-white"
+            style={{ 
+              borderRadius: '9999px',
+              background: 'rgba(20, 24, 30, 0.75)', 
+              backdropFilter: 'blur(4px)', 
+              WebkitBackdropFilter: 'blur(4px)',
+              border: '1px solid rgba(255, 255, 255, 0.20)',
+              color: '#ffffff'
+            }}
+          >
+            Thu gọn
+          </span>
+        </button>
+
+        {/* 3. Circular Search Button (Moved to below Go back button) */}
         <button
           type="button"
           onClick={() => {
@@ -952,49 +1028,9 @@ export const ControlBar: React.FC<ControlBarProps> = ({
           </span>
         </button>
 
-        {/* 2. Collapse Toggle Circular Button (< / >) (Nút đơn dạng circle) */}
-        <button
-          type="button"
-          onClick={toggleCollapsed}
-          title="Thu gọn thanh điều khiển"
-          className="control-bar-standalone-circle aspect-square flex items-center justify-center shadow-md shadow-black/10 transition-transform active:scale-95 group relative"
-          style={{ 
-            borderRadius: '9999px',
-            width: 40,
-            height: 40,
-            minWidth: 40,
-            minHeight: 40,
-            aspectRatio: '1 / 1',
-            background: 'rgba(255, 255, 255, 0.10)', 
-            backdropFilter: 'blur(2px)', 
-            WebkitBackdropFilter: 'blur(2px)',
-            border: '1px solid rgba(255, 255, 255, 0.20)',
-            color: '#ffffff'
-          }}
-        >
-          <ChevronRight 
-            style={{ color: '#ffffff', stroke: '#ffffff' }}
-            className="w-5 h-5 transition-transform group-hover:translate-x-0.5" 
-          />
-          {/* Tooltip to the left (Dạng pill) */}
-          <span 
-            className="control-bar-pill-btn pointer-events-none absolute right-full mr-3 top-1/2 -translate-y-1/2 px-3.5 py-1.5 rounded-full text-[11px] font-medium whitespace-nowrap shadow-xl opacity-0 group-hover:opacity-100 transition-opacity z-50 text-white"
-            style={{ 
-              borderRadius: '9999px',
-              background: 'rgba(20, 24, 30, 0.75)', 
-              backdropFilter: 'blur(4px)', 
-              WebkitBackdropFilter: 'blur(4px)',
-              border: '1px solid rgba(255, 255, 255, 0.20)',
-              color: '#ffffff'
-            }}
-          >
-            Thu gọn
-          </span>
-        </button>
-
-        {/* 3. Upper Capsule (Dạng pill): Primary Action (Share/Export) & More (...) - các nút đơn bên trong dạng circle */}
+        {/* 4. Upper Capsule: More Options (...) with flyout menu (Nút chia sẻ trang đã được xóa) */}
         <div 
-          className="control-bar-capsule relative w-12 py-2 px-1 rounded-full shadow-lg shadow-black/10 flex flex-col items-center gap-2"
+          className="control-bar-capsule relative w-12 py-1.5 px-1 rounded-full shadow-lg shadow-black/10 flex flex-col items-center gap-1"
           style={{ 
             borderRadius: '9999px',
             background: 'rgba(255, 255, 255, 0.10)', 
@@ -1003,44 +1039,6 @@ export const ControlBar: React.FC<ControlBarProps> = ({
             border: '1px solid rgba(255, 255, 255, 0.20)'
           }}
         >
-          {/* Top Primary Button (Nút đơn dạng circle, mặc định bỏ nền) */}
-          <button
-            type="button"
-            onClick={upperAction.onClick}
-            title={upperAction.label}
-            className="control-bar-circle-btn relative group rounded-full aspect-square flex items-center justify-center transition-all active:scale-90"
-            style={{ 
-              borderRadius: '9999px',
-              width: 40,
-              height: 40,
-              minWidth: 40,
-              minHeight: 40,
-              aspectRatio: '1 / 1',
-              background: 'transparent', 
-              border: '1px solid transparent',
-              color: '#ffffff'
-            }}
-          >
-            <upperAction.icon 
-              style={{ color: '#ffffff', stroke: '#ffffff' }}
-              className="w-5 h-5 transition-colors" 
-            />
-            {/* Tooltip to the left (Dạng pill) */}
-            <span 
-              className="control-bar-pill-btn pointer-events-none absolute right-full mr-3 top-1/2 -translate-y-1/2 px-3.5 py-1.5 rounded-full text-[11px] font-medium whitespace-nowrap shadow-xl opacity-0 group-hover:opacity-100 transition-opacity z-50 text-white"
-              style={{ 
-                borderRadius: '9999px',
-                background: 'rgba(20, 24, 30, 0.75)', 
-                backdropFilter: 'blur(4px)', 
-                WebkitBackdropFilter: 'blur(4px)',
-                border: '1px solid rgba(255, 255, 255, 0.20)',
-                color: '#ffffff'
-              }}
-            >
-              {upperAction.label}
-            </span>
-          </button>
-
           {/* More Options Button (...) (Nút đơn dạng circle, mặc định bỏ nền) */}
           <button
             type="button"

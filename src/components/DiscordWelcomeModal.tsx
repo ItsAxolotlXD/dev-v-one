@@ -20,78 +20,80 @@ export const DiscordWelcomeModal: React.FC<DiscordWelcomeModalProps> = ({
       {isOpen && (
         <div
           id="discord-welcome-container"
-          className="fixed inset-0 z-9999 flex items-center justify-center p-4 sm:p-6"
+          className="fixed inset-0 z-9999 flex items-center justify-center p-4 sm:p-6 select-none"
         >
-          {/* 1. Backdrop / Lớp nền mờ */}
+          {/* Backdrop with zero blur */}
           <motion.div
             id="discord-welcome-backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.25, ease: 'easeOut' }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/50 backdrop-blur-xs"
+            className="fixed inset-0 bg-black/60"
           />
 
-          {/* 2. Dialog Modal Box - Fluent Design ContentDialog */}
+          {/* Windows 10 Blue Dialog Box */}
           <motion.div
             id="discord-welcome-dialog"
-            initial={{ opacity: 0, scale: 1.05 }}
+            initial={{ opacity: 0, scale: 0.98 }}
             animate={{ 
               opacity: 1, 
               scale: 1,
               transition: {
-                duration: 0.24,
+                duration: 0.2,
                 ease: [0.16, 1, 0.3, 1]
               }
             }}
             exit={{ 
               opacity: 0, 
-              scale: 1.04,
+              scale: 0.98,
               transition: {
-                duration: 0.18,
-                ease: [0.16, 1, 0.3, 1]
+                duration: 0.15,
+                ease: 'easeOut'
               }
             }}
-            className="fluent-modal-dialog relative z-10 w-full max-w-[460px] bg-white dark:bg-[#38383d] rounded-[10px] overflow-hidden shadow-[0_24px_48px_rgba(0,0,0,0.22),0_2px_6px_rgba(0,0,0,0.08)] dark:shadow-[0_24px_48px_rgba(0,0,0,0.7),0_2px_6px_rgba(255,255,255,0.04)] select-none border border-black/[0.08] dark:border-white/[0.08] text-[#111827] dark:text-[#F3F4F6]"
+            className="fluent-modal-dialog relative z-10 w-full max-w-[480px] bg-[#0078d4] text-white rounded-none shadow-[0_24px_60px_rgba(0,0,0,0.65)] border border-[#005a9e] overflow-hidden"
           >
-            {/* Header & Body Content Area */}
-            <div className="p-6 pb-5">
+            {/* Top thin caption */}
+            <div className="px-6 py-2.5 bg-[#0063b1] text-xs font-normal text-white/90 select-none">
+              Community Connection
+            </div>
+
+            {/* Header & Body Content */}
+            <div className="p-6 pt-5 pb-5 space-y-2">
               <h2
                 id="discord-welcome-title"
-                className="text-[19px] sm:text-[20px] font-semibold text-[#111827] dark:text-[#FFFFFF] tracking-tight leading-snug font-sans"
+                className="text-2xl sm:text-[26px] font-normal text-white tracking-tight leading-snug"
               >
-                Welcome to Sparkle (Dev) Community
+                Join Sparkle Community?
               </h2>
 
               <p
                 id="discord-welcome-subtitle"
-                className="text-[13.5px] sm:text-[14px] text-[#4b5563] dark:text-[#a1a1aa] leading-relaxed mt-2.5 font-normal"
+                className="text-[13.5px] sm:text-sm text-white/95 leading-relaxed font-normal"
               >
-                Join our Discord server to connect with broadcasting enthusiasts, share media recordings, and preserve iconic moments of Vietnamese television.
+                Connect with broadcasting enthusiasts, share media recordings, and preserve iconic moments of Vietnamese television on Discord.
               </p>
             </div>
 
-            {/* Subtle Divider */}
-            <div className="h-[1px] w-full bg-[#E5E5E5] dark:bg-[#2F2F2F]" />
-
-            {/* Bottom Actions Footer */}
-            <div className="fluent-modal-footer bg-[#F3F3F3] dark:bg-[#1C1C1C] px-6 py-3 flex items-center justify-end gap-2.5">
-              <button
-                type="button"
-                id="btn-discord-close"
-                onClick={onClose}
-                className="fluent-btn-secondary px-4 h-8 rounded-[5px] bg-white dark:bg-[#2C2C2C] hover:bg-[#F9F9F9] dark:hover:bg-[#343434] active:bg-[#EEEEEE] dark:active:bg-[#222222] text-[#111827] dark:text-[#FFFFFF] border border-[#d1d1d1] dark:border-[#3E3E3E] text-[12.5px] font-normal shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-colors flex items-center justify-center cursor-pointer"
-              >
-                Not Now
-              </button>
+            {/* Actions Footer */}
+            <div className="fluent-modal-footer bg-[#0078d4] px-6 py-4 pt-2 flex items-center justify-end gap-3">
               <button
                 type="button"
                 id="btn-discord-join"
                 onClick={handleJoin}
-                className="fluent-btn-primary px-4 h-8 rounded-[5px] bg-[#5865F2] hover:bg-[#4752C4] active:bg-[#3C45A5] text-white text-[12.5px] font-semibold shadow-[0_1px_2px_rgba(0,0,0,0.1)] transition-colors border border-[#4752C4] flex items-center justify-center cursor-pointer"
+                className="fluent-btn-primary min-w-[85px] px-6 py-1.5 border-2 border-white bg-transparent hover:bg-white hover:text-[#0078d4] active:bg-white/90 text-white text-sm font-medium rounded-none transition-colors cursor-pointer text-center"
               >
-                Join Discord
+                Join
+              </button>
+              <button
+                type="button"
+                id="btn-discord-close"
+                onClick={onClose}
+                className="fluent-btn-secondary min-w-[85px] px-6 py-1.5 border-2 border-white bg-transparent hover:bg-white hover:text-[#0078d4] active:bg-white/90 text-white text-sm font-medium rounded-none transition-colors cursor-pointer text-center"
+              >
+                Not Now
               </button>
             </div>
           </motion.div>

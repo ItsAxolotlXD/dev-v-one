@@ -304,7 +304,7 @@ export const SnippingTool: React.FC<SnippingToolProps> = ({ navigate }) => {
 
       {/* Countdown overlay */}
       {countdown !== null && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <div className="w-24 h-24 rounded-full bg-black/80 border-2 border-[#0078d4] flex items-center justify-center text-4xl font-bold text-white font-mono animate-ping">
             {countdown}
           </div>
@@ -317,7 +317,7 @@ export const SnippingTool: React.FC<SnippingToolProps> = ({ navigate }) => {
           onMouseDown={handleOverlayMouseDown}
           onMouseMove={handleOverlayMouseMove}
           onMouseUp={handleOverlayMouseUp}
-          className="fixed inset-0 z-50 cursor-crosshair bg-black/40 backdrop-blur-[2px] select-none"
+          className="fixed inset-0 z-50 cursor-crosshair bg-black/40 select-none"
         >
           {/* Top Instruction Capsule */}
           <div className="absolute top-6 left-1/2 -translate-x-1/2 px-5 py-2 rounded-full bg-black/80 border border-white/20 text-white text-xs font-semibold flex items-center gap-2 shadow-2xl">
@@ -572,7 +572,7 @@ export const SnippingTool: React.FC<SnippingToolProps> = ({ navigate }) => {
 
       {/* OCR Modal */}
       {isOcrOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
           <div className="w-full max-w-lg bg-white dark:bg-[#23272d] border border-black/10 dark:border-white/10 rounded-2xl p-6 shadow-2xl animate-fade-in">
             <div className="flex items-center justify-between pb-3 border-b border-black/10 dark:border-white/10 mb-4">
               <div className="flex items-center gap-2">
