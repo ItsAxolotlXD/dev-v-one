@@ -1010,7 +1010,7 @@ export default function App() {
             key={`tab-loaded-${currentRoute}-${routeState?.storeAppId ?? ''}`}
             className={`${currentRoute === '/xaml-home' ? 'tab-page-slide-up' : ''} w-full h-full rounded-tl-[10px] rounded-tr-none rounded-br-none rounded-bl-none overflow-hidden`}
           >
-            {renderContent()}
+            {!isTabSplashVisible && renderContent()}
           </div>
           {isTabSplashVisible && (
             <TabSplashScreen

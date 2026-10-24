@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { createPortal } from 'react-dom';
 import { LayoutGrid, type LucideIcon } from 'lucide-react';
 import {
   FluentArticlesIcon,
@@ -57,14 +56,13 @@ export const TabSplashScreen: React.FC<TabSplashScreenProps> = ({
 
   const Icon = getRouteIcon(route);
 
-  return createPortal(
-    <div className="fixed inset-0 z-[9999] flex min-h-screen min-w-full items-center justify-center bg-transparent text-white pointer-events-auto" aria-label={`${label} loading`}>
+  return (
+    <div className="absolute inset-0 z-50 flex items-center justify-center bg-inherit text-white pointer-events-auto" aria-label={`${label} loading`}>
       <div className="flex flex-col items-center gap-5 text-center">
         <Icon className="size-12 shrink-0" aria-hidden="true" />
         <SpinningRing size={42} strokeWidth={3.5} color="#ff2bbd" />
         <span className="text-sm font-medium tracking-wide text-white/70">{label}</span>
       </div>
-    </div>,
-    document.body,
+    </div>
   );
 };

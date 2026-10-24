@@ -56,6 +56,7 @@ export interface SystemSettings {
   controlBar: boolean;
   pageLoading: boolean;
   loadPagesSequentially: boolean;
+  legacyProgressDots: boolean;
   customKeybinds: CustomKeybinds;
 }
 
@@ -112,6 +113,7 @@ export const DEFAULT_SETTINGS: SystemSettings = {
   controlBar: false,
   pageLoading: true,
   loadPagesSequentially: false,
+  legacyProgressDots: false,
   customKeybinds: DEFAULT_KEYBINDS,
 };
 
