@@ -13,6 +13,7 @@ import { FindWordsBar } from './components/FindWordsBar';
 import { AddStreamModal } from './components/AddStreamModal';
 import { TextToSpeechPlayer } from './components/TextToSpeechPlayer';
 import { SplashScreen } from './components/SplashScreen';
+import { TabSplashScreen } from './components/TabSplashScreen';
 import { NativeKeyboard } from './components/NativeKeyboard';
 import { NativeKeyboardProvider } from './context/NativeKeyboardContext';
 import { NotesProvider } from './context/NotesContext';
@@ -983,16 +984,8 @@ export default function App() {
           />
         )}
 
-        {isTabSplashVisible && (
-          <SplashScreen
-            duration={2000}
-            isClosable={false}
-            onFinish={() => setIsTabSplashVisible(false)}
-          />
-        )}
-
         {/* Dynamic Page Content with smooth slide-up transition - Bo cong 10px góc trên trái */}
-        <main className={`${isTabSplashVisible ? 'opacity-0 pointer-events-none' : 'opacity-100'} transition-opacity duration-200 main-tab-page flex-1 w-full mx-auto rounded-tl-[10px] rounded-tr-none rounded-br-none rounded-bl-none overflow-hidden ${
+        <main className={`relative main-tab-page flex-1 w-full mx-auto rounded-tl-[10px] rounded-tr-none rounded-br-none rounded-bl-none overflow-hidden ${
           settings.windowsAppSdkPreview
             ? '!bg-[#141414] text-white'
             : (currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home' || isFullBleedRoute || currentRoute === '/craftmine' || currentRoute === '/photopea' || currentRoute === '/logos-fandom' || currentRoute === '/logos-wiki' || currentRoute === '/minecraft-wiki' || currentRoute === '/mc-wiki' || currentRoute === '/vlc' || currentRoute.startsWith('/vlc') || currentRoute === '/media-player' || currentRoute === '/schedule' || currentRoute.startsWith('/schedule') || currentRoute === '/cookbook' || currentRoute === '/swift' || currentRoute === '/friends' || currentRoute === '/edge' || currentRoute === '/browser' || currentRoute === '/camera' || currentRoute === '/photos' || currentRoute === '/gallery' || currentRoute === '/paint' || currentRoute === '/ms-paint' || currentRoute === '/file-explorer' || currentRoute === '/files' || currentRoute === '/copilot' || currentRoute === '/direct-cut' || currentRoute === '/video-editor' || currentRoute === '/edit' || currentRoute === '/swift-bank' || currentRoute === '/bank' || currentRoute === '/swiftbank' || currentRoute === '/clock' || currentRoute === '/alarm' || currentRoute === '/timer' || currentRoute === '/stopwatch' || currentRoute === '/world-clock' || currentRoute === '/calculator' || currentRoute === '/calc' || currentRoute === '/snipping-tool' || currentRoute === '/snip' || currentRoute === '/snipping' || currentRoute === '/feedback-hub' || currentRoute === '/feedback')
@@ -1009,6 +1002,12 @@ export default function App() {
           >
             {renderContent()}
           </div>
+          {isTabSplashVisible && (
+            <TabSplashScreen
+              label={currentRoute === '/search' ? 'Find and search' : 'Loading'}
+              onFinish={() => setIsTabSplashVisible(false)}
+            />
+          )}
         </main>
 
       </div>

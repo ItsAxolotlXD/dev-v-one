@@ -5854,6 +5854,11 @@ input[type="range"] {
   animation: app-page-slide-up 360ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+.main-tab-page [data-search-page],
+.main-tab-page .immersive-search-page {
+  animation: app-page-slide-up 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .main-tab-page > div,
   .tab-page-slide-up,
