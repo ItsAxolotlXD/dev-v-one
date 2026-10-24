@@ -7743,9 +7743,9 @@ a:hover .settings-spin-icon,
 
 /* Reference surface palette: preserve the existing layout while matching the supplied dark UI background colors. */
 :root {
-  --reference-sidebar-bg: #1d1c2a;
-  --reference-topbar-bg: #1d1c2a;
-  --reference-tab-bg: linear-gradient(112deg, #34303f 0%, #3d3038 58%, #4a3039 100%);
+  --reference-sidebar-bg: #1f1e2c;
+  --reference-topbar-bg: #1f1e2c;
+  --reference-tab-bg: linear-gradient(112deg, #373443 0%, #40343d 55%, #4b3039 100%);
 }
 
 body {
@@ -7771,6 +7771,18 @@ html body {
 
 html body #waves-desktop-sidebar,
 html body #waves-mobile-sidebar,
-html body .topbar-header {
+html body .topbar-header,
+html body > #root > header,
+html body > #root > div > header {
+  background: var(--reference-topbar-bg) !important;
+}
+
+html body #waves-desktop-sidebar,
+html body #waves-mobile-sidebar {
   background: var(--reference-sidebar-bg) !important;
+}
+
+html body main.main-tab-page,
+html body main.main-tab-page > div {
+  background: var(--reference-tab-bg) !important;
 }
