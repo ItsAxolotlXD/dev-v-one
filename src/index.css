@@ -25,10 +25,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,600;1,700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400;1,700&display=swap');
 @layer base {
   :root {
-    --primary-red: #4cc2ff;
-    --solid-red: #4cc2ff;
-    --accent-red: #6bd0ff;
-    --dark-red: #3bb2ef;
+    --primary-red: #ff2bbd;
+    --solid-red: #ff2bbd;
+    --accent-red: #ff72d0;
+    --dark-red: #d91b9f;
     --dark-bg: #0f0712;
     --sidebar-bg: #250F1A;
     --card-bg: #280e32;
@@ -36,20 +36,20 @@
     --spatial-glass-opacity: 0.20;
     --spatial-glass-bg: rgba(255, 255, 255, var(--spatial-glass-opacity, 0.20));
     --spatial-glass-blur: 4px;
-    --fluent-accent: #4cc2ff;
-    --fluent-accent-hover: #6bd0ff;
-    --fluent-accent-active: #3bb2ef;
+    --fluent-accent: #ff2bbd;
+    --fluent-accent-hover: #ff72d0;
+    --fluent-accent-active: #d91b9f;
     --fluent-accent-text: #000000;
   }
 
   html.light-mode {
-    --primary-red: #005fb8;
-    --solid-red: #005fb8;
-    --accent-red: #0067c0;
-    --dark-red: #00458b;
-    --fluent-accent: #005fb8;
-    --fluent-accent-hover: #0067c0;
-    --fluent-accent-active: #0051a2;
+    --primary-red: #d91b9f;
+    --solid-red: #d91b9f;
+    --accent-red: #ff2bbd;
+    --dark-red: #a9147c;
+    --fluent-accent: #d91b9f;
+    --fluent-accent-hover: #ff2bbd;
+    --fluent-accent-active: #a9147c;
     --fluent-accent-text: #ffffff;
   }
 
@@ -7773,16 +7773,21 @@ html body #waves-desktop-sidebar,
 html body #waves-mobile-sidebar,
 html body .topbar-header,
 html body > #root > header,
-html body > #root > div > header {
+html body > #root > div > header,
+html body header[class*="top"],
+html body [data-testid="topbar"] {
   background: var(--reference-topbar-bg) !important;
 }
 
 html body #waves-desktop-sidebar,
-html body #waves-mobile-sidebar {
+html body #waves-mobile-sidebar,
+html body aside.sidebar,
+html body [data-testid="sidebar"] {
   background: var(--reference-sidebar-bg) !important;
 }
 
 html body main.main-tab-page,
-html body main.main-tab-page > div {
+html body main.main-tab-page > div,
+html body .main-tab-content-container {
   background: var(--reference-tab-bg) !important;
 }
