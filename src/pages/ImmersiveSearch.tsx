@@ -304,7 +304,7 @@ export const ImmersiveSearch: React.FC<ImmersiveSearchProps> = ({
     <div 
       id="immersive-search-page"
       data-search-page
-      className="immersive-search-page dark w-full min-h-[calc(100vh-80px)] bg-transparent text-[#111827] dark:text-white px-3 sm:px-6 md:px-10 py-4 sm:py-6 select-none"
+      className="tab-page-slide-up immersive-search-page dark w-full min-h-[calc(100vh-80px)] bg-transparent text-[#111827] dark:text-white px-3 sm:px-6 md:px-10 py-4 sm:py-6 select-none"
     >
       <div className="max-w-6xl mx-auto space-y-7 sm:space-y-9">
         {/* Top Search Bar Row */}
@@ -545,7 +545,7 @@ export const ImmersiveSearch: React.FC<ImmersiveSearchProps> = ({
                                     </span>
                                   ) : isUpcoming ? (
                                     <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#4cc2ff]/20 text-[#4cc2ff] border border-[#4cc2ff]/30">
-                                      SẮP PHÁT
+                                      SẮP PH��T
                                     </span>
                                   ) : (
                                     <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-black/5 dark:bg-white/10 text-[#6B7280] dark:text-[#9CA3AF]">

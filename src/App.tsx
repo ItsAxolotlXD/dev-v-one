@@ -100,7 +100,7 @@ export default function App() {
 
   useEffect(() => {
     setIsTabSplashVisible(true);
-  }, [currentRoute]);
+  }, [currentRoute, routeState?.storeAppId]);
   const previousRouteRef = useRef<string>('/');
   // Tab-specific search state for Floating Search Bar
   const [tabSearchQueries, setTabSearchQueries] = useState<Record<string, string>>({});
@@ -1004,7 +1004,10 @@ export default function App() {
           </div>
           {isTabSplashVisible && (
             <TabSplashScreen
+              key={`tab-splash-${currentRoute}-${routeState?.storeAppId ?? ''}`}
+              route={currentRoute}
               label={currentRoute === '/search' ? 'Find and search' : 'Loading'}
+              duration={2000}
               onFinish={() => setIsTabSplashVisible(false)}
             />
           )}
