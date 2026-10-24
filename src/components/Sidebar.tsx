@@ -1036,26 +1036,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const renderSmartSidebarNav = (isMobile: boolean) => {
     return (
       <>
-        {/* 1. Explore */}
-        <div className="shrink-0">
-          <button
-            type="button"
-            id={isMobile ? 'mobile-nav-explore' : 'sidebar-nav-explore'}
-            data-nav-active={currentRoute === '/search' ? 'true' : undefined}
-            onClick={() => handleNavClick('/search')}
-            title="Explore"
-            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
-              currentRoute === '/search'
-                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
-                : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-            }`}
-          >
-            <FluentSearchIcon className="w-5 h-5 shrink-0 text-[#ff2bbd]" />
-            <span className="truncate text-[13.5px]">Explore</span>
-          </button>
-        </div>
-
-        {/* 2. Home */}
+  {/* 1. Home */}
         <div className="shrink-0">
           <button
             type="button"
@@ -1074,7 +1055,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </button>
         </div>
 
-        {/* 2. Articles */}
+        {/* 2. Explore */}
+        <div className="shrink-0">
+          <button
+            type="button"
+            id={isMobile ? 'mobile-nav-explore' : 'sidebar-nav-explore'}
+            data-nav-active={currentRoute === '/search' ? 'true' : undefined}
+            onClick={() => handleNavClick('/search')}
+            title="Explore"
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              currentRoute === '/search'
+                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
+            }`}
+          >
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/xperimental%20Search-cubydYtGKKbceg3nPadzTnHo4NZZ6f.png" alt="" className="w-5 h-5 shrink-0 object-contain" />
+            <span className="truncate text-[13.5px]">Explore</span>
+          </button>
+        </div>
+
+        {/* 3. Articles */}
         <div className="shrink-0">
           <button
             type="button"

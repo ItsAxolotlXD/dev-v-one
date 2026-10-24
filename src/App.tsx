@@ -101,6 +101,16 @@ export default function App() {
   useEffect(() => {
     setIsTabSplashVisible(true);
   }, [currentRoute, routeState?.storeAppId]);
+
+  useEffect(() => {
+    document.documentElement.style.overflow = isTabSplashVisible ? 'hidden' : '';
+    document.body.style.overflow = isTabSplashVisible ? 'hidden' : '';
+    return () => {
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+    };
+  }, [isTabSplashVisible]);
+
   const previousRouteRef = useRef<string>('/');
   // Tab-specific search state for Floating Search Bar
   const [tabSearchQueries, setTabSearchQueries] = useState<Record<string, string>>({});
@@ -998,9 +1008,9 @@ export default function App() {
         } ${isSparkOSRoute || currentRoute === '/xaml-home' ? '!h-full !min-h-0 !p-0 !max-w-none !bg-black' : ''}`}>
           <div
             key={`tab-loaded-${currentRoute}-${routeState?.storeAppId ?? ''}`}
-            className={`${currentRoute === '/xaml-home' ? 'tab-page-slide-up' : ''} w-full h-full rounded-tl-[10px] rounded-tr-none rounded-br-none rounded-bl-none overflow-hidden`}
+            className="tab-page-slide-up w-full h-full rounded-tl-[10px] rounded-tr-none rounded-br-none rounded-bl-none overflow-hidden"
           >
-            {renderContent()}
+            {!isTabSplashVisible && renderContent()}
           </div>
           {isTabSplashVisible && (
             <TabSplashScreen

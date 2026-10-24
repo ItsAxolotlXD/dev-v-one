@@ -9,9 +9,23 @@ import {
   ChevronRight,
   Clock,
   Sparkles,
-  Calendar
+  Calendar,
+  FileText,
+  Folder,
+  Image as ImageIcon,
+  LayoutGrid,
+  Settings,
+  StickyNote,
+  Tv2,
+  Video
 } from 'lucide-react';
-import { FluentSearchIcon } from '../components/FluentIcons';
+import { AppTabIcon, AppTabIconName, FluentSearchIcon } from '../components/FluentIcons';
+
+const Fluent3DIcon: React.FC<{ name: AppTabIconName }> = ({ name }) => (
+  <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-white/25 via-white/5 to-black/20 shadow-[inset_0_1px_1px_rgba(255,255,255,.35),0_5px_12px_rgba(0,0,0,.2)]">
+    <AppTabIcon name={name} className="size-7 drop-shadow-[0_3px_3px_rgba(0,0,0,.35)]" />
+  </span>
+);
 import { motion, AnimatePresence } from 'motion/react';
 import { CHANNELS_DATA } from '../data/channels';
 import { NEWS_DATA } from '../data/news';
@@ -40,6 +54,40 @@ interface PopularSearchItem {
   textColor: string;
   icon: React.ReactNode;
 }
+
+const RECENT_APP_ITEMS = [
+  { label: 'Home', meta: 'Tab', icon: () => <Fluent3DIcon name="home" />, route: '/' },
+  { label: 'Windows Search settings', meta: 'Settings', icon: () => <Fluent3DIcon name="settings" />, route: '/settings' },
+  { label: 'XAML Home', meta: 'App', icon: () => <Fluent3DIcon name="articles" />, route: '/xaml-home' },
+  { label: 'Recall', meta: 'App', icon: () => <Fluent3DIcon name="recall" />, route: '/recall' },
+  { label: 'File Explorer', meta: 'Files', icon: () => <Fluent3DIcon name="fileExplorer" />, route: '/file-explorer' },
+  { label: 'Photos', meta: 'Images', icon: () => <Fluent3DIcon name="gallery" />, route: '/photos' },
+  { label: 'Video', meta: 'Media', icon: () => <Fluent3DIcon name="watch" />, route: '/vlc' },
+  { label: 'Notes', meta: 'App', icon: () => <Fluent3DIcon name="notes" />, route: '/notes' },
+];
+
+const RECOMMENDED_SEARCHES = ['Settings', 'XAML', 'Recall', 'Files', 'Notes', 'Video', 'Images'];
+
+const HIGHLIGHT_GROUPS = [
+  {
+    title: 'Apps and tabs for you',
+    items: [
+      { title: 'Explore', subtitle: 'Search everything in the app', icon: () => <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-white/25 via-white/5 to-black/20 shadow-[inset_0_1px_1px_rgba(255,255,255,.35),0_5px_12px_rgba(0,0,0,.2)]"><FluentSearchIcon className="size-6 text-white drop-shadow-[0_3px_3px_rgba(0,0,0,.35)]" /></span>, route: '/search' },
+      { title: 'Recall', subtitle: 'Find recent activity', icon: () => <Fluent3DIcon name="recall" />, route: '/recall' },
+      { title: 'Files', subtitle: 'Browse your workspace', icon: () => <Fluent3DIcon name="fileExplorer" />, route: '/file-explorer' },
+      { title: 'Notes', subtitle: 'Open saved notes', icon: () => <Fluent3DIcon name="notes" />, route: '/notes' },
+    ],
+  },
+  {
+    title: 'Media for you',
+    items: [
+      { title: 'Live TV', subtitle: 'Channels and schedule', icon: () => <Fluent3DIcon name="watch" />, route: '/live-tv' },
+      { title: 'Photos', subtitle: 'Your image library', icon: () => <Fluent3DIcon name="gallery" />, route: '/photos' },
+      { title: 'Video', subtitle: 'Continue watching', icon: () => <Fluent3DIcon name="watch" />, route: '/vlc' },
+      { title: 'Settings', subtitle: 'Personalize the app', icon: () => <Fluent3DIcon name="settings" />, route: '/settings' },
+    ],
+  },
+];
 
 const POPULAR_SEARCH_ITEMS: PopularSearchItem[] = [
   {
@@ -315,7 +363,7 @@ export const ImmersiveSearch: React.FC<ImmersiveSearchProps> = ({
             onClick={() => {
               inputRef.current?.focus();
             }}
-            className="group relative w-full max-w-md sm:max-w-lg h-9 sm:h-9.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 flex items-center px-4 gap-2.5 rounded-[8px] transition-all cursor-text select-none focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]"
+            className="group relative w-full max-w-md sm:max-w-lg h-10 sm:h-11 bg-white/[0.06] dark:bg-white/[0.06] border border-white/10 flex items-center px-4 gap-2.5 rounded-xl shadow-[0_8px_24px_rgba(0,0,0,.14)] transition-all cursor-text select-none focus-within:ring-1 focus-within:ring-[#62c8ff]/35 focus-within:border-[#62c8ff]/60"
           >
             <FluentSearchIcon className="w-4 h-4 text-[#71717a] dark:text-[#a1a1aa] shrink-0 pointer-events-none" />
             <input
@@ -630,58 +678,76 @@ export const ImmersiveSearch: React.FC<ImmersiveSearchProps> = ({
             )}
           </div>
         ) : (
-          /* Default Immersive View with circular popular searches */
-          <div className="space-y-4 pt-1">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm sm:text-base font-bold font-square text-[#111827] dark:text-white tracking-wide flex items-center gap-2.5">
-                <CategoryIcon className="w-6.5 h-6.5 sm:w-7 sm:h-7 shrink-0" />
-                <span>Trending Searches</span>
-              </h3>
-              <span className="text-xs text-[#8A798C]">Click to search quickly</span>
-            </div>
-
-            {/* Circular Badges Grid (hình tròn giống chuyên trang đề xuất) */}
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-6 gap-4 sm:gap-6 pt-2">
-              {POPULAR_SEARCH_ITEMS.map((item) => (
-                <div
-                  key={item.id}
-                  onClick={() => {
-                    setQuery(item.searchTerm);
-                    inputRef.current?.focus();
-                  }}
-                  className="group flex flex-col items-center text-center cursor-pointer transition-all"
-                >
-                  {/* Circle Orb */}
-                  <div 
-                    className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full flex flex-col items-center justify-center p-2 text-center shadow-lg group-hover:scale-108 group-hover:shadow-[0_0_22px_rgba(230,0,90,0.45)] transition-all duration-300 overflow-hidden border-2 cursor-pointer"
-                    style={{
-                      background: item.circleBg,
-                      borderColor: item.borderColor,
-                    }}
-                  >
-                    {/* Glossy overlay sheen */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-black/35 pointer-events-none rounded-full" />
-                    
-                    <div className="z-10 mb-1 transform group-hover:scale-110 transition-transform duration-300">
-                      {item.icon}
-                    </div>
-
-                    {item.subText && (
-                      <span 
-                        className="text-[8px] sm:text-[9px] font-extrabold tracking-wider uppercase drop-shadow-sm z-10 px-1 line-clamp-1"
-                        style={{ color: item.textColor }}
-                      >
-                        {item.subText}
-                      </span>
-                    )}
-                  </div>
-
-                  <span className="mt-2.5 text-xs font-semibold text-[#D4CAD6] group-hover:text-white transition-colors line-clamp-2 max-w-[105px] leading-tight">
-                    {item.title}
-                  </span>
+          <div className="grid grid-cols-1 lg:grid-cols-[205px_minmax(0,1fr)] gap-6 pt-1">
+            <aside className="rounded-2xl bg-[#172a63]/80 border border-white/10 p-4 lg:min-h-[470px]">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xs font-bold text-white">Recent</h3>
+                <span className="text-[10px] text-white/45">{RECENT_APP_ITEMS.length}</span>
+              </div>
+              <div className="mb-5">
+                <h3 className="mb-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/45">Recommended searches</h3>
+                <div className="flex flex-wrap gap-1.5">
+                  {RECOMMENDED_SEARCHES.map((term) => (
+                    <button key={term} type="button" onClick={() => { setQuery(term); inputRef.current?.focus(); }} className="rounded-full border border-white/10 bg-white/[0.06] px-2.5 py-1 text-[10px] text-white/75 transition-colors hover:border-[#62c8ff]/50 hover:bg-[#62c8ff]/15 hover:text-white">{term}</button>
+                  ))}
                 </div>
+              </div>
+              <div className="flex flex-col gap-1">
+                {RECENT_APP_ITEMS.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={item.label}
+                      type="button"
+                      onClick={() => navigate(item.route)}
+                      className="group flex items-center gap-2.5 rounded-lg px-2 py-2 text-left hover:bg-white/10 transition-colors"
+                    >
+                      <Icon className="size-4 shrink-0 text-[#b8d9ff]" />
+                      <span className="min-w-0 flex-1 truncate text-[11px] text-white/85">{item.label}</span>
+                      <span className="text-[9px] text-white/35 opacity-0 group-hover:opacity-100">{item.meta}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </aside>
+
+            <main className="min-w-0 space-y-5">
+              <div className="flex items-center justify-between px-1 text-[11px] text-white/70">
+                <span>Today</span>
+                <span>Pluto Day <span className="text-white/35">•</span> App highlights</span>
+              </div>
+              <section className="relative min-h-[190px] overflow-hidden rounded-xl border border-white/10 bg-[#0b1024] p-5 shadow-2xl">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-TD1E6WaFTKkQooEhR3t44ZsbO0uFPd.png" alt="Pluto Day space highlight" className="absolute inset-0 size-full object-cover opacity-65" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#090d20] via-[#090d20]/65 to-transparent" />
+                <div className="relative flex min-h-[160px] flex-col items-start justify-end">
+                  <span className="mb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#c7d9ff]">Pluto Day</span>
+                  <h2 className="text-2xl font-bold tracking-tight text-white">Explore your app universe</h2>
+                  <p className="mt-1 max-w-md text-xs text-white/65">Discover tabs, settings, files, notes, media and everything you have opened recently.</p>
+                  <button type="button" onClick={() => setQuery('')} className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-[11px] font-semibold text-[#172a63] hover:bg-white transition-colors">Explore now <ChevronRight className="size-3.5" /></button>
+                </div>
+              </section>
+
+              {HIGHLIGHT_GROUPS.map((group) => (
+                <section key={group.title} className="rounded-xl border border-white/10 bg-[#1b2d65]/75 p-3.5">
+                  <div className="mb-3 flex items-center justify-between">
+                    <h3 className="text-xs font-bold text-white">{group.title}</h3>
+                    <button type="button" className="text-[10px] font-semibold text-[#71c7ff] hover:text-white">See more</button>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                    {group.items.map((item) => {
+                      const Icon = item.icon;
+                      return (
+                        <button key={item.title} type="button" onClick={() => navigate(item.route)} className="group rounded-lg bg-[#263a78]/80 p-3 text-left hover:bg-[#34519b] transition-colors">
+                          <Icon className="size-5 text-[#b8d9ff] group-hover:text-white" />
+                          <span className="mt-4 block truncate text-xs font-semibold text-white">{item.title}</span>
+                          <span className="mt-1 block truncate text-[10px] text-white/55">{item.subtitle}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </section>
               ))}
-            </div>
+            </main>
           </div>
         )}
       </div>

@@ -921,7 +921,7 @@ export const TopBar: React.FC<TopBarProps> = ({
               className={`group relative h-8.5 sm:h-9 px-4 rounded-full flex items-center gap-2 transition-all duration-200 cursor-pointer select-none font-medium text-xs sm:text-[13px] border-0 border-none !border-none ${
                 isSearchFlyoutOpen
                   ? 'bg-gradient-to-r from-[#005fb8] via-[#0078d4] to-[#4cc2ff] text-white shadow-[0_2px_14px_rgba(0,120,212,0.45)] scale-[1.02]'
-                  : 'bg-black/5 dark:bg-[#282c31] hover:bg-black/10 dark:hover:bg-[#32363c] text-[#4b5563] dark:text-[#d1d5db]'
+                  : 'bg-white/[0.06] hover:bg-white/[0.1] border border-white/10 shadow-[0_8px_24px_rgba(0,0,0,.14)] text-[#d1d5db]'
               }`}
               title="Search"
               aria-label="Search"
@@ -942,7 +942,7 @@ export const TopBar: React.FC<TopBarProps> = ({
               className={`group relative h-8.5 sm:h-9 w-auto max-w-full px-3.5 sm:px-4.5 rounded-full flex items-center gap-2 transition-[background-color,box-shadow,transform,width,max-width,padding] duration-300 ease-out cursor-pointer select-none font-medium text-xs sm:text-[13px] border-0 border-none !border-none ${
                 isSearchFlyoutOpen
                   ? 'bg-gradient-to-r from-[#005fb8] via-[#0078d4] to-[#4cc2ff] text-white shadow-[0_2px_14px_rgba(0,120,212,0.45)] scale-[1.02]'
-                  : 'bg-black/5 dark:bg-[#282c31] hover:bg-black/10 dark:hover:bg-[#32363c] text-[#4b5563] dark:text-[#d1d5db]'
+                  : 'bg-white/[0.06] hover:bg-white/[0.1] border border-white/10 shadow-[0_8px_24px_rgba(0,0,0,.14)] text-[#d1d5db]'
               }`}
               title={highlights[currentHighlightIndex] || 'Search highlights - Sự kiện hôm nay'}
               aria-label="Search highlights"
@@ -978,8 +978,8 @@ export const TopBar: React.FC<TopBarProps> = ({
                   settings.windowsAppSdkPreview
                     ? '!h-[38px] !min-h-[38px] !rounded-[9999px] !bg-[#1f1f1f] !border-0 !border-none !border-b-0 !shadow-none'
                     : settings.roundedSearchBox
-                      ? 'rounded-full bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10'
-                      : 'rounded-[8px] bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10'
+                      ? 'rounded-xl bg-white/[0.06] border border-white/10 shadow-[0_8px_24px_rgba(0,0,0,.14)]'
+                      : 'rounded-xl bg-white/[0.06] border border-white/10 shadow-[0_8px_24px_rgba(0,0,0,.14)]'
                 } flex items-center px-2.5 gap-1.5 transition-all cursor-text select-none ${
                   settings.windowsAppSdkPreview
                     ? '!border-0 !border-none !ring-0 !outline-none'
@@ -1170,8 +1170,8 @@ export const TopBar: React.FC<TopBarProps> = ({
                   settings.windowsAppSdkPreview
                     ? '!h-[38px] !min-h-[38px] !rounded-[9999px] !bg-[#1f1f1f] !border-0 !border-none !border-b-0 !shadow-none'
                     : settings.roundedSearchBox
-                      ? 'rounded-full bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10'
-                      : 'rounded-[8px] bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10'
+                      ? 'rounded-xl bg-white/[0.06] border border-white/10 shadow-[0_8px_24px_rgba(0,0,0,.14)]'
+                      : 'rounded-xl bg-white/[0.06] border border-white/10 shadow-[0_8px_24px_rgba(0,0,0,.14)]'
                 } flex items-center px-2.5 gap-1.5 transition-all cursor-text select-none ${
                   settings.windowsAppSdkPreview
                     ? '!border-0 !border-none !ring-0 !outline-none'
