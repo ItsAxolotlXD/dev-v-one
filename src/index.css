@@ -7741,6 +7741,36 @@ a:hover .settings-spin-icon,
   color: #ffffff !important;
 }
 
+/* Reference surface palette: preserve the existing layout while matching the supplied dark UI background colors. */
+:root {
+  --reference-sidebar-bg: #1d1c2a;
+  --reference-topbar-bg: #1d1c2a;
+  --reference-tab-bg: linear-gradient(112deg, #34303f 0%, #3d3038 58%, #4a3039 100%);
+}
 
+body {
+  background: var(--reference-sidebar-bg) !important;
+}
 
+#waves-desktop-sidebar,
+#waves-mobile-sidebar,
+.sidebar,
+.topbar-header,
+header {
+  background: var(--reference-sidebar-bg) !important;
+}
 
+.main-tab-page,
+.main-tab-content-container {
+  background: var(--reference-tab-bg) !important;
+}
+
+html body {
+  background: var(--reference-sidebar-bg) !important;
+}
+
+html body #waves-desktop-sidebar,
+html body #waves-mobile-sidebar,
+html body .topbar-header {
+  background: var(--reference-sidebar-bg) !important;
+}
