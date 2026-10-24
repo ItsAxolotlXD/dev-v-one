@@ -243,7 +243,7 @@ export const Widgets: React.FC<WidgetsProps> = ({ navigate }) => {
               type="text"
               value={webQuery}
               onChange={(e) => setWebQuery(e.target.value)}
-              placeholder="Let's chat or use /search"
+              placeholder="Find and search"
               className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#9ca3af] outline-none border-none py-1 no-fluent-line"
             />
             {isLoadingNews && (

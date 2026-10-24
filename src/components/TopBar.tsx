@@ -179,6 +179,7 @@ export const getTabTitle = (route: string): string => {
 };
 
 const getSearchPlaceholder = (path: string) => {
+  if (path === '/search') return 'Find and search';
   if (path === '/' || path === '/home') return 'Search Home';
   if (path === '/recall' || path.startsWith('/recall')) return 'Search your history';
   if (path === '/news' || path.startsWith('/article') || path.startsWith('/news/')) return 'Search news articles';

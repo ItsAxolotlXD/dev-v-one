@@ -551,7 +551,7 @@ export const CopilotPage: React.FC<CopilotPageProps> = ({ navigate, embedded = f
                 ? 'Copilot Runtime Engine đã bị dừng trong Task Manager'
                 : isListening
                 ? 'Đang nghe... Hãy nói yêu cầu của bạn'
-                : "Let's chat or use /search"
+                : "Find and search"
             }
             className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#9ca3af] outline-none border-none py-1 pr-16 no-fluent-line"
           />
