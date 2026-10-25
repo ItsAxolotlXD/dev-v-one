@@ -1077,7 +1077,7 @@ export const LiveTilesHome: React.FC<LiveTilesHomeProps> = ({
   };
 
   return (
-    <div className="w-full h-full min-h-[calc(100vh-64px)] bg-[#f9f9f9] dark:bg-[#1a1c20] text-black dark:text-white select-none flex flex-col font-sans transition-colors relative overflow-hidden">
+    <div className="w-full h-full min-h-[calc(100vh-64px)] bg-transparent text-black dark:text-white select-none flex flex-col font-sans transition-colors relative overflow-hidden">
       {/* Compact Top-Right Controls (Start & LIVE TILES PANORAMA header removed) */}
       <div className="absolute top-4 right-8 z-40 flex items-center gap-2">
         {/* Horizontal Pan Controls */}
@@ -1277,7 +1277,7 @@ export const LiveTilesHome: React.FC<LiveTilesHomeProps> = ({
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-2xl bg-white dark:bg-[#202020] text-black dark:text-white rounded-none border border-black/20 dark:border-white/20 shadow-2xl flex flex-col max-h-[85vh] overflow-hidden"
+            className="fluent-modal-dialog w-full max-w-2xl bg-white dark:bg-black text-black dark:text-white rounded-none border border-[#0078d4] shadow-2xl flex flex-col max-h-[85vh] overflow-hidden"
           >
             {/* Modal Header */}
             <div className="p-4 border-b border-black/10 dark:border-white/10 flex items-center justify-between">

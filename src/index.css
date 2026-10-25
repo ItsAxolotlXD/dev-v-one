@@ -4426,10 +4426,12 @@ html.light-mode .bg-\[\#1E1E22\].text-\[\#A1A1AA\] {
    Modal Popup Dialogs - Microsoft Fluent Design (Windows 10 UWP ContentDialog)
    Matches native Windows 10 UWP ContentDialog aesthetic (IMG_0568.jpeg):
    - Sharp 90-degree corners (border-radius: 0)
-   - No window caption bar chrome or close button
-   - Pure clean white background in light mode (#FFFFFF), dark slate in dark mode (#2b2b2b)
-   - Subtle soft drop shadow and 1px border
-   - Flat gray rectangular action buttons (no thick borders)
+   - Ultra-thin magenta accent outline (#e3008c) around modal dialog
+   - Pure black background in dark mode (#000000)
+   - Pure clean white background in light mode (#FFFFFF)
+   - Light font for dialog titles (Segoe UI Light / font-weight: 300)
+   - Slightly larger sharp-corner checkboxes (18px x 18px, rounded-none)
+   - Flat gray rectangular action buttons (height: 32px, no missing bottom border)
    ========================================================================== */
 #welcome-modal-dialog,
 #discord-welcome-dialog,
@@ -4440,16 +4442,18 @@ html.light-mode .bg-\[\#1E1E22\].text-\[\#A1A1AA\] {
 #news-summary-dialog,
 #add-stream-dialog,
 #unsaved-settings-modal-dialog,
+#new-folder-dialog,
 #example-content-dialog,
 .fluent-modal-dialog,
 .spatial-glass-modal {
   position: relative !important;
   box-sizing: border-box !important;
-  background-color: #2b2b2b !important;
+  background-color: #000000 !important;
   color: #FFFFFF !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid #e3008c !important;
+  outline: none !important;
   border-radius: 0px !important;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.50) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65) !important;
   overflow: hidden !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
@@ -4468,6 +4472,7 @@ html.light-mode .bg-\[\#1E1E22\].text-\[\#A1A1AA\] {
 #spotlight-modal-backdrop,
 #add-stream-backdrop,
 #unsaved-settings-modal-backdrop,
+#new-folder-backdrop,
 #example-content-dialog-backdrop,
 [id$="-modal-backdrop"],
 [id$="-dialog-backdrop"] {
@@ -4486,12 +4491,13 @@ html.light-mode .bg-\[\#1E1E22\].text-\[\#A1A1AA\] {
 #under-construction-modal-container,
 #developer-mode-modal-container,
 #unsaved-settings-modal-container,
+#new-folder-dialog-container,
 #example-content-dialog-backdrop,
 .fluent-modal-dialog-portal {
   z-index: 99999999 !important;
 }
 
-/* Light Mode Modal Dialog Styling - Pure Clean White Windows 10 ContentDialog (IMG_0568.jpeg) */
+/* Light Mode Modal Dialog Styling - Pure Clean White with thin magenta outline */
 html.light-mode #discord-welcome-dialog,
 html.light-mode #welcome-modal-dialog,
 html.light-mode #under-construction-modal-dialog,
@@ -4501,21 +4507,54 @@ html.light-mode #help-modal-dialog,
 html.light-mode #news-summary-dialog,
 html.light-mode #add-stream-dialog,
 html.light-mode #unsaved-settings-modal-dialog,
+html.light-mode #new-folder-dialog,
 html.light-mode #example-content-dialog,
 html.light-mode .fluent-modal-dialog,
 html.light-mode .spatial-glass-modal {
   background-color: #FFFFFF !important;
   color: #1a1a1a !important;
-  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  border: 1px solid #e3008c !important;
+  outline: none !important;
   border-radius: 0px !important;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.30) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25) !important;
   width: 100% !important;
   max-width: 540px !important;
 }
 
-/* Windows 10 ContentDialog Footer - Seamless flat padding */
+/* Modal Title Font: Segoe UI Light (font-weight: 300) */
+.fluent-modal-dialog h2,
+.fluent-modal-dialog h3,
+#example-content-dialog h2,
+#example-content-dialog h3,
+#new-folder-dialog h2,
+#new-folder-dialog h3,
+[id$="-modal-title"],
+[id$="-dialog-title"] {
+  font-family: "Segoe UI Light", "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif !important;
+  font-weight: 300 !important;
+  font-size: 20px !important;
+  line-height: 1.3 !important;
+  letter-spacing: -0.01em !important;
+}
+
+/* Checkboxes in Dialogs: Slightly larger (~18px) and sharp 90-degree corners with magenta accent */
+.fluent-modal-dialog input[type="checkbox"],
+#example-content-dialog input[type="checkbox"],
+[role="dialog"] input[type="checkbox"],
+[id$="-modal-dialog"] input[type="checkbox"],
+[id$="-dialog"] input[type="checkbox"] {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  min-height: 18px !important;
+  border-radius: 0px !important;
+  accent-color: #e3008c !important;
+  cursor: pointer !important;
+}
+
+/* Windows 10 ContentDialog Footer - Seamless flat padding & pure black in dark mode */
 .fluent-modal-footer {
-  background-color: #2b2b2b !important;
+  background-color: #000000 !important;
   border-top: none !important;
   padding: 16px 24px 24px 24px !important;
   display: flex !important;
@@ -4531,7 +4570,7 @@ html.light-mode .fluent-modal-footer {
   padding: 16px 24px 24px 24px !important;
 }
 
-/* ContentDialog Flat Buttons (Dark Mode) */
+/* ContentDialog Flat Buttons (Dark Mode) with Fluent Reveal Highlight Effect */
 .fluent-modal-footer button,
 .fluent-modal-dialog .fluent-btn-primary,
 .fluent-modal-dialog .fluent-btn-secondary,
@@ -4539,7 +4578,8 @@ html.light-mode .fluent-modal-footer {
 [role="dialog"] .fluent-modal-footer button,
 [role="dialog"] .fluent-btn-primary,
 [role="dialog"] .fluent-btn-secondary {
-  border: 1px solid transparent !important;
+  position: relative !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
   border-radius: 0px !important;
   background-color: #383838 !important;
   color: #FFFFFF !important;
@@ -4558,7 +4598,66 @@ html.light-mode .fluent-modal-footer {
   align-items: center !important;
   justify-content: center !important;
   box-sizing: border-box !important;
-  transition: background-color 0.1s ease, color 0.1s ease !important;
+  overflow: hidden !important;
+  isolation: isolate;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.1s ease !important;
+}
+
+.fluent-modal-footer button > *,
+.fluent-modal-dialog .fluent-btn-primary > *,
+.fluent-modal-dialog .fluent-btn-secondary > *,
+[role="dialog"] .fluent-modal-footer button > * {
+  position: relative;
+  z-index: 3;
+}
+
+/* 1. Reveal Border Highlight: Illuminates the border facing the cursor when nearby */
+.fluent-modal-footer button::before,
+.fluent-modal-dialog .fluent-btn-primary::before,
+.fluent-modal-dialog .fluent-btn-secondary::before,
+.fluent-modal-dialog button[class*="fluent-btn"]::before,
+[role="dialog"] .fluent-modal-footer button::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(
+    110px circle at var(--reveal-x, -999px) var(--reveal-y, -999px),
+    rgba(255, 255, 255, 0.75),
+    rgba(255, 255, 255, 0.25) 35%,
+    rgba(255, 255, 255, 0.05) 60%,
+    transparent 80%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: var(--reveal-border-opacity, 0);
+  transition: opacity 0.15s ease-out;
+  z-index: 1;
+}
+
+/* 2. Reveal Surface Highlight: Illuminates the button face under the cursor when hovering */
+.fluent-modal-footer button::after,
+.fluent-modal-dialog .fluent-btn-primary::after,
+.fluent-modal-dialog .fluent-btn-secondary::after,
+.fluent-modal-dialog button[class*="fluent-btn"]::after,
+[role="dialog"] .fluent-modal-footer button::after {
+  content: "";
+  position: absolute;
+  inset: 0px;
+  border-radius: inherit;
+  background: radial-gradient(
+    90px circle at var(--reveal-x, -999px) var(--reveal-y, -999px),
+    rgba(255, 255, 255, 0.22),
+    rgba(255, 255, 255, 0.06) 50%,
+    transparent 80%
+  );
+  pointer-events: none;
+  opacity: var(--reveal-surface-opacity, 0);
+  transition: opacity 0.12s ease-out;
+  z-index: 2;
 }
 
 .fluent-modal-footer button:hover,
@@ -4570,7 +4669,6 @@ html.light-mode .fluent-modal-footer {
 [role="dialog"] .fluent-btn-secondary:hover {
   background-color: #454545 !important;
   color: #FFFFFF !important;
-  border-color: transparent !important;
 }
 
 .fluent-modal-footer button:active,
@@ -4582,10 +4680,9 @@ html.light-mode .fluent-modal-footer {
 [role="dialog"] .fluent-btn-secondary:active {
   background-color: #262626 !important;
   color: #FFFFFF !important;
-  border-color: transparent !important;
 }
 
-/* ContentDialog Flat Buttons (Light Mode) */
+/* ContentDialog Flat Buttons (Light Mode) with Reveal Highlight Effect */
 html.light-mode .fluent-modal-footer button,
 html.light-mode .fluent-modal-dialog .fluent-btn-primary,
 html.light-mode .fluent-modal-dialog .fluent-btn-secondary,
@@ -4593,7 +4690,8 @@ html.light-mode .fluent-modal-dialog button[class*="fluent-btn"],
 html.light-mode [role="dialog"] .fluent-modal-footer button,
 html.light-mode [role="dialog"] .fluent-btn-primary,
 html.light-mode [role="dialog"] .fluent-btn-secondary {
-  border: 1px solid transparent !important;
+  position: relative !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
   border-radius: 0px !important;
   background-color: #cccccc !important;
   color: #000000 !important;
@@ -4612,7 +4710,56 @@ html.light-mode [role="dialog"] .fluent-btn-secondary {
   align-items: center !important;
   justify-content: center !important;
   box-sizing: border-box !important;
-  transition: background-color 0.1s ease, color 0.1s ease !important;
+  overflow: hidden !important;
+  isolation: isolate;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.1s ease !important;
+}
+
+html.light-mode .fluent-modal-footer button::before,
+html.light-mode .fluent-modal-dialog .fluent-btn-primary::before,
+html.light-mode .fluent-modal-dialog .fluent-btn-secondary::before,
+html.light-mode .fluent-modal-dialog button[class*="fluent-btn"]::before,
+html.light-mode [role="dialog"] .fluent-modal-footer button::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(
+    110px circle at var(--reveal-x, -999px) var(--reveal-y, -999px),
+    rgba(0, 0, 0, 0.45),
+    rgba(0, 0, 0, 0.15) 35%,
+    rgba(0, 0, 0, 0.04) 60%,
+    transparent 80%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: var(--reveal-border-opacity, 0);
+  transition: opacity 0.15s ease-out;
+  z-index: 1;
+}
+
+html.light-mode .fluent-modal-footer button::after,
+html.light-mode .fluent-modal-dialog .fluent-btn-primary::after,
+html.light-mode .fluent-modal-dialog .fluent-btn-secondary::after,
+html.light-mode .fluent-modal-dialog button[class*="fluent-btn"]::after,
+html.light-mode [role="dialog"] .fluent-modal-footer button::after {
+  content: "";
+  position: absolute;
+  inset: 0px;
+  border-radius: inherit;
+  background: radial-gradient(
+    90px circle at var(--reveal-x, -999px) var(--reveal-y, -999px),
+    rgba(0, 0, 0, 0.10),
+    rgba(0, 0, 0, 0.03) 50%,
+    transparent 80%
+  );
+  pointer-events: none;
+  opacity: var(--reveal-surface-opacity, 0);
+  transition: opacity 0.12s ease-out;
+  z-index: 2;
 }
 
 html.light-mode .fluent-modal-footer button:hover,
@@ -4624,7 +4771,6 @@ html.light-mode [role="dialog"] .fluent-btn-primary:hover,
 html.light-mode [role="dialog"] .fluent-btn-secondary:hover {
   background-color: #d6d6d6 !important;
   color: #000000 !important;
-  border-color: transparent !important;
 }
 
 html.light-mode .fluent-modal-footer button:active,
@@ -4636,7 +4782,6 @@ html.light-mode [role="dialog"] .fluent-btn-primary:active,
 html.light-mode [role="dialog"] .fluent-btn-secondary:active {
   background-color: #b8b8b8 !important;
   color: #000000 !important;
-  border-color: transparent !important;
 }
 
 /* Fluent Primary Button (Accent Blue #4cc2ff - Windows 11) */
@@ -7886,11 +8031,39 @@ a:hover .settings-spin-icon,
   color: #ffffff !important;
 }
 
-/* Reference surface palette: preserve the existing layout while matching the supplied dark UI background colors. */
+/* Reference surface palette: Windows 10 UWP Acrylic & Dark Sidebar (image_30531aa4.png) */
 :root {
-  --reference-sidebar-bg: #1f1e2c;
-  --reference-topbar-bg: #1f1e2c;
+  --reference-sidebar-bg: #181a20;
+  --reference-topbar-bg: #181a20;
   --reference-tab-bg: linear-gradient(112deg, #373443 0%, #40343d 55%, #4b3039 100%);
+}
+
+/* ========================================================
+   WINDOWS 10 UWP NAVIGATIONVIEW SIDEBAR (image_30531aa4.png)
+   - Pill lengthened (28px height, 3.5px width)
+   - Pill square corners (border-radius: 0)
+   - Sidebar nav items with square corners (border-radius: 0)
+   ======================================================== */
+.sidebar-nav-item,
+button.sidebar-nav-item,
+#waves-desktop-sidebar button,
+#waves-mobile-sidebar button,
+#waves-desktop-sidebar .sidebar-nav-item,
+#waves-mobile-sidebar .sidebar-nav-item {
+  border-radius: 0px !important;
+}
+
+.sidebar-static-indicator,
+[class*="sidebar-static-indicator"] {
+  border-radius: 0px !important;
+  width: 3.5px !important;
+  height: 28px !important;
+  background-color: #0078d7 !important;
+}
+
+html:not(.light-mode) .sidebar-static-indicator,
+html:not(.light-mode) [class*="sidebar-static-indicator"] {
+  background-color: #4cc2ff !important;
 }
 
 body {
@@ -7940,13 +8113,36 @@ html body .main-tab-content-container {
 /* ========================================================
    WINDOWS 10 UWP CONTENT DIALOG (.fluent-modal-dialog)
    Matches native Windows 10 UWP ContentDialog (IMG_0568.jpeg):
-   - Font: Segoe UI Semilight (font-weight: 350-400) for title and body
+   - Font: Segoe UI Light (font-weight: 300) for title
    - Action buttons: height 32px, flat gray, sharp 90-degree corners, no thick borders
+   - Ultra-thin magenta accent outline: 1px solid #e3008c
    - Light mode: #FFFFFF background, #cccccc buttons with black text
-   - Dark mode: #2b2b2b background, #383838 buttons with white text
+   - Dark mode: #000000 pure black background, #383838 buttons with white text
    ======================================================== */
 .fluent-modal-dialog,
+#new-folder-dialog,
+#example-content-dialog {
+  background-color: #000000 !important;
+  border: 1px solid #e3008c !important;
+  outline: none !important;
+  border-radius: 0px !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65) !important;
+}
+
+html.light-mode .fluent-modal-dialog,
+html.light-mode #new-folder-dialog,
+html.light-mode #example-content-dialog {
+  background-color: #FFFFFF !important;
+  border: 1px solid #e3008c !important;
+  outline: none !important;
+  border-radius: 0px !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25) !important;
+}
+
+.fluent-modal-dialog,
 .fluent-modal-dialog *,
+#new-folder-dialog,
+#new-folder-dialog *,
 #example-content-dialog,
 #example-content-dialog * {
   font-family: "Segoe UI Variable Text", "Segoe UI Variable Display", "Segoe UI Semilight", "Segoe UI", system-ui, -apple-system, sans-serif !important;
@@ -7956,9 +8152,12 @@ html body .main-tab-content-container {
 .fluent-modal-dialog h3,
 #example-content-dialog h2,
 #example-content-dialog h3,
+#new-folder-dialog h2,
+#new-folder-dialog h3,
 [id$="-modal-title"],
 [id$="-dialog-title"] {
-  font-weight: 350 !important;
+  font-family: "Segoe UI Light", "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif !important;
+  font-weight: 300 !important;
   font-size: 20px !important;
   line-height: 1.3 !important;
   letter-spacing: -0.01em !important;

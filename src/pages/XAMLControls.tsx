@@ -367,13 +367,13 @@ export const XAMLControls: React.FC = () => {
                   maxWidth: '520px',
                   overflow: 'hidden',
                 }}
-                className="fluent-modal-dialog bg-white dark:bg-[#2b2b2b] text-[#1a1a1a] dark:text-white rounded-none border border-neutral-300/80 dark:border-white/15 shadow-[0_12px_36px_rgba(0,0,0,0.35)] animate-in zoom-in-95 duration-150"
+                className="fluent-modal-dialog bg-white dark:bg-black text-[#1a1a1a] dark:text-white rounded-none border border-[#e3008c] shadow-[0_16px_40px_rgba(0,0,0,0.65)] animate-in zoom-in-90 duration-200"
               >
                 {/* Main Content Area - Native UWP ContentDialog */}
                 <div className="px-6 pt-6 pb-2 space-y-2">
                   <h2
                     id="example-dialog-title"
-                    className="text-[20px] font-normal text-neutral-900 dark:text-white tracking-tight leading-snug"
+                    className="text-[20px] font-light text-neutral-900 dark:text-white tracking-tight leading-snug"
                   >
                     {activePreset.title}
                   </h2>
@@ -388,7 +388,7 @@ export const XAMLControls: React.FC = () => {
                         type="checkbox"
                         checked={checkboxChecked}
                         onChange={(e) => setCheckboxChecked(e.target.checked)}
-                        className="w-4 h-4 rounded-none border border-neutral-400 dark:border-white/30 text-[#0078d4] accent-[#0078d4] cursor-pointer"
+                        className="w-[18px] h-[18px] rounded-none border border-neutral-400 dark:border-white/30 text-[#e3008c] accent-[#e3008c] cursor-pointer"
                       />
                       <span className="text-[13.5px] text-neutral-800 dark:text-neutral-200 font-normal">
                         {activePreset.checkboxLabel}

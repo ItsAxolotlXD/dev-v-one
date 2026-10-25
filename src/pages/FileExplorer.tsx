@@ -1,6 +1,8 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { 
   Folder, 
+  FolderPlus,
   FileText, 
   FileCode, 
   FileSpreadsheet, 
@@ -308,13 +310,25 @@ export const FileExplorer: React.FC<FileExplorerProps> = ({ navigate }) => {
     return files.find(f => f.id === selectedFileId) || null;
   }, [files, selectedFileId]);
 
-  // Actions
-  const handleCreateFolder = () => {
-    const name = prompt('Nhập tên thư mục mới:', 'Thư mục mới');
-    if (!name || !name.trim()) return;
+  // "Name your folder" Modal Dialog state
+  const [isNewFolderOpen, setIsNewFolderOpen] = useState(false);
+  const [newFolderName, setNewFolderName] = useState('New folder');
+  const folderInputRef = useRef<HTMLInputElement>(null);
+
+  const openCreateFolderDialog = () => {
+    setNewFolderName('New folder');
+    setIsNewFolderOpen(true);
+    setTimeout(() => {
+      folderInputRef.current?.focus();
+      folderInputRef.current?.select();
+    }, 60);
+  };
+
+  const handleConfirmCreateFolder = () => {
+    const finalName = newFolderName.trim() || 'New folder';
     const newFolder: FileItem = {
       id: `folder-${Date.now()}`,
-      name: name.trim(),
+      name: finalName,
       type: 'folder',
       category: 'other',
       size: 0,
@@ -322,7 +336,9 @@ export const FileExplorer: React.FC<FileExplorerProps> = ({ navigate }) => {
       parentId: currentFolderId
     };
     setFiles(prev => [...prev, newFolder]);
-    showToast(`Đã tạo thư mục "${name.trim()}"`);
+    setSelectedFileId(newFolder.id);
+    setIsNewFolderOpen(false);
+    showToast(`Đã tạo thư mục "${finalName}"`);
   };
 
   const handleCreateTextFile = () => {
@@ -445,12 +461,12 @@ export const FileExplorer: React.FC<FileExplorerProps> = ({ navigate }) => {
           <div className="flex items-center gap-1">
             <button
               type="button"
-              onClick={handleCreateFolder}
+              onClick={openCreateFolderDialog}
               className="px-2.5 py-1.5 rounded-[6px] hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer text-[#111827] dark:text-white"
-              title="Thư mục mới"
+              title="Create new folder"
             >
-              <Plus className="w-4 h-4 text-[#0078d4] dark:text-[#4cc2ff]" />
-              <span className="hidden sm:inline">Thư mục mới</span>
+              <FolderPlus className="w-4 h-4 text-[#e3008c]" />
+              <span className="hidden sm:inline">Create new folder</span>
             </button>
             <button
               type="button"
@@ -767,10 +783,10 @@ export const FileExplorer: React.FC<FileExplorerProps> = ({ navigate }) => {
               <p className="text-xs">Thư mục này hiện đang trống</p>
               <button
                 type="button"
-                onClick={handleCreateFolder}
-                className="mt-1 px-3 py-1.5 rounded-[6px] bg-[#0078d4] text-white text-xs font-medium cursor-pointer"
+                onClick={openCreateFolderDialog}
+                className="mt-1 px-3 py-1.5 rounded-[6px] bg-[#e3008c] hover:bg-[#d0007f] text-white text-xs font-medium cursor-pointer transition-colors"
               >
-                Tạo thư mục mới
+                Create new folder
               </button>
             </div>
           ) : viewMode === 'details' ? (
@@ -982,6 +998,107 @@ export const FileExplorer: React.FC<FileExplorerProps> = ({ navigate }) => {
           <span>{toastMessage}</span>
         </div>
       )}
+
+      {/* "Name your folder" Modal Dialog - Microsoft Fluent UWP ContentDialog */}
+      <AnimatePresence>
+        {isNewFolderOpen && (
+          <div
+            id="new-folder-dialog-container"
+            className="fixed inset-0 z-9999 flex items-center justify-center p-4 sm:p-6 select-none"
+          >
+            {/* Backdrop */}
+            <motion.div
+              id="new-folder-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+              onClick={() => setIsNewFolderOpen(false)}
+              className="fixed inset-0 bg-black/60"
+            />
+
+            {/* Dialog Modal Box */}
+            <motion.div
+              id="new-folder-dialog"
+              initial={{ opacity: 0, scale: 0.88 }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+                transition: {
+                  duration: 0.22,
+                  ease: [0.1, 0.9, 0.2, 1],
+                },
+              }}
+              exit={{
+                opacity: 0,
+                scale: 0.88,
+                transition: {
+                  duration: 0.16,
+                  ease: 'easeIn',
+                },
+              }}
+              className="fluent-modal-dialog relative z-10 w-full max-w-[480px] bg-white dark:bg-black text-[#1a1a1a] dark:text-white rounded-none shadow-[0_16px_40px_rgba(0,0,0,0.65)] border border-[#e3008c] overflow-hidden"
+            >
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleConfirmCreateFolder();
+                }}
+              >
+                <div className="px-6 pt-6 pb-3 space-y-3">
+                  <div>
+                    <h2
+                      id="new-folder-dialog-title"
+                      className="text-[20px] font-light text-neutral-900 dark:text-white tracking-tight leading-snug"
+                    >
+                      Name your folder
+                    </h2>
+                    <p className="text-[13.5px] text-neutral-700 dark:text-neutral-300 leading-normal mt-1 font-normal">
+                      Enter a name for the new folder in {currentFolderId === 'this-pc' ? 'This PC' : currentFolderId}:
+                    </p>
+                  </div>
+
+                  <div className="pt-1">
+                    <input
+                      ref={folderInputRef}
+                      type="text"
+                      value={newFolderName}
+                      onChange={(e) => setNewFolderName(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Escape') {
+                          e.stopPropagation();
+                          setIsNewFolderOpen(false);
+                        }
+                      }}
+                      className="w-full h-9 px-3 text-sm bg-neutral-100 dark:bg-[#1a1a1a] text-neutral-900 dark:text-white border border-neutral-300 dark:border-neutral-700 focus:border-[#e3008c] focus:outline-none rounded-none transition-colors"
+                      placeholder="Folder name"
+                      maxLength={80}
+                      autoFocus
+                    />
+                  </div>
+                </div>
+
+                {/* Flat gray rectangular buttons - 32px height UWP */}
+                <div className="fluent-modal-footer px-6 pt-4 pb-6 flex items-center justify-end gap-2">
+                  <button
+                    type="submit"
+                    className="fluent-btn-primary min-w-[88px] h-[32px] px-4 bg-[#cccccc] dark:bg-[#383838] text-black dark:text-white hover:bg-[#d6d6d6] dark:hover:bg-[#454545] active:bg-[#b8b8b8] dark:active:bg-[#262626] rounded-none text-[13px] font-normal transition-colors cursor-pointer border-0 inline-flex items-center justify-center"
+                  >
+                    Create
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsNewFolderOpen(false)}
+                    className="fluent-btn-secondary min-w-[88px] h-[32px] px-4 bg-[#cccccc] dark:bg-[#383838] text-black dark:text-white hover:bg-[#d6d6d6] dark:hover:bg-[#454545] active:bg-[#b8b8b8] dark:active:bg-[#262626] rounded-none text-[13px] font-normal transition-colors cursor-pointer border-0 inline-flex items-center justify-center"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

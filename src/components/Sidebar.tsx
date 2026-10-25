@@ -168,14 +168,14 @@ const MorphingVerticalIndicator: React.FC<MorphingIndicatorProps> = ({
 
   if (!bounds.visible) return null;
 
-  const INDICATOR_HEIGHT = 16;
+  const INDICATOR_HEIGHT = 28;
   const centeredTop = bounds.top + Math.round((bounds.height - INDICATOR_HEIGHT) / 2);
 
   // WebView SDK: Selected sidebar tab retains the vertical blue pill, but with NO motion animation across tabs
   if (isWebViewSdk) {
     return (
       <div
-        className="sidebar-static-indicator absolute w-[3px] h-[16px] bg-[#4cc2ff] z-30 pointer-events-none rounded-full shadow-none"
+        className="sidebar-static-indicator absolute w-[3.5px] h-[28px] bg-[#0078d7] dark:bg-[#4cc2ff] z-30 pointer-events-none rounded-none shadow-none"
         style={{
           top: centeredTop,
           left: bounds.left,
@@ -189,7 +189,7 @@ const MorphingVerticalIndicator: React.FC<MorphingIndicatorProps> = ({
 
   return (
     <motion.div
-      className="absolute w-[3px] h-[16px] bg-[#4cc2ff] z-30 pointer-events-none rounded-full shadow-none"
+      className="absolute w-[3.5px] h-[28px] bg-[#0078d7] dark:bg-[#4cc2ff] z-30 pointer-events-none rounded-none shadow-none"
       initial={false}
       animate={{
         top: centeredTop,
@@ -1044,7 +1044,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             data-nav-active={(currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home') ? 'true' : undefined}
             onClick={() => handleNavClick('/')}
             title="Home"
-            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
               (currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home')
                 ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
@@ -1063,7 +1063,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             data-nav-active={currentRoute === '/search' ? 'true' : undefined}
             onClick={() => handleNavClick('/search')}
             title="Explore"
-            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
               currentRoute === '/search'
                 ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
@@ -1082,7 +1082,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             data-nav-active={(currentRoute === '/news' || currentRoute.startsWith('/article') || currentRoute.startsWith('/news/')) ? 'true' : undefined}
             onClick={() => handleNavClick('/news')}
             title="Articles"
-            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
               (currentRoute === '/news' || currentRoute.startsWith('/article') || currentRoute.startsWith('/news/'))
                 ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
@@ -1101,7 +1101,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             data-nav-active={(currentRoute === '/widgets' || currentRoute.startsWith('/widgets')) ? 'true' : undefined}
             onClick={() => handleNavClick('/widgets')}
             title="Widgets"
-            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
               (currentRoute === '/widgets' || currentRoute.startsWith('/widgets'))
                 ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
@@ -1120,7 +1120,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             data-nav-active={(currentRoute === '/tiles' || currentRoute === '/live-tiles' || currentRoute === '/livetiles') ? 'true' : undefined}
             onClick={() => handleNavClick('/tiles')}
             title="Tiles"
-            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
               (currentRoute === '/tiles' || currentRoute === '/live-tiles' || currentRoute === '/livetiles')
                 ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
@@ -1142,7 +1142,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             data-nav-active={(currentRoute === '/copilot' || currentRoute.startsWith('/copilot')) ? 'true' : undefined}
             onClick={() => handleNavClick('/copilot')}
             title="Copilot"
-            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
               (currentRoute === '/copilot' || currentRoute.startsWith('/copilot'))
                 ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
@@ -1167,7 +1167,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             onClick={() => handleNavClick('/recall')}
             title="Recall"
             aria-label="Recall"
-            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
               (currentRoute === '/recall' || currentRoute.startsWith('/recall'))
                 ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
@@ -1187,7 +1187,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             onClick={() => handleNavClick('/sparkos')}
             title="SparkOS"
             aria-label="SparkOS"
-            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
               currentRoute === '/sparkos'
                 ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
@@ -1566,7 +1566,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home') ? 'true' : undefined}
               onClick={() => handleNavClick('/')}
               title="XAML Home"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
                 (currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home')
                   ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
@@ -1585,7 +1585,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/news' || currentRoute.startsWith('/article') || currentRoute.startsWith('/news/')) ? 'true' : undefined}
               onClick={() => handleNavClick('/news')}
               title="Articles"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
                 (currentRoute === '/news' || currentRoute.startsWith('/article') || currentRoute.startsWith('/news/'))
                   ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
@@ -1606,7 +1606,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/widgets' || currentRoute.startsWith('/widgets')) ? 'true' : undefined}
               onClick={() => handleNavClick('/widgets')}
               title="Widgets"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
                 (currentRoute === '/widgets' || currentRoute.startsWith('/widgets'))
                   ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
@@ -1625,7 +1625,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/tiles' || currentRoute === '/live-tiles' || currentRoute === '/livetiles') ? 'true' : undefined}
               onClick={() => handleNavClick('/tiles')}
               title="Tiles"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
                 (currentRoute === '/tiles' || currentRoute === '/live-tiles' || currentRoute === '/livetiles')
                   ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
@@ -1644,7 +1644,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onClick={() => handleNavClick('/store')}
               title="Store"
               aria-label="Store"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${currentRoute === '/store' ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs' : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'}`}
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${currentRoute === '/store' ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs' : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'}`}
             >
               <img src={STORE_ICON_URL} alt="" className="size-5 shrink-0 object-contain" />
               <span className="truncate text-[13.5px]">Store</span>
@@ -1659,7 +1659,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onClick={() => handleNavClick('/sparkos')}
               title="SparkOS"
               aria-label="SparkOS"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${currentRoute === '/sparkos' ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs' : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'}`}
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${currentRoute === '/sparkos' ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs' : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'}`}
             >
               <Monitor aria-hidden="true" className="size-5 shrink-0 text-[#1684e8]" />
               <span className="truncate text-[13.5px]">SparkOS</span>
@@ -1675,7 +1675,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onClick={() => handleNavClick('/recall')}
               title="Recall (preview)"
               aria-label="Recall"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
                 (currentRoute === '/recall' || currentRoute.startsWith('/recall'))
                   ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
@@ -1704,7 +1704,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/swift-bank' || currentRoute.startsWith('/swift-bank') || currentRoute === '/bank') ? 'true' : undefined}
               onClick={() => handleNavClick('/swift-bank')}
               title="Swift Bank - Ngân hàng số bảo mật"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
                 (currentRoute === '/swift-bank' || currentRoute.startsWith('/swift-bank') || currentRoute === '/bank')
                   ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
@@ -1724,7 +1724,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/swift' || currentRoute.startsWith('/swift') || currentRoute === '/swift-social') ? 'true' : undefined}
               onClick={() => handleNavClick('/swift')}
               title="Swift - Mạng xã hội đa năng"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
                 (currentRoute === '/swift' || currentRoute.startsWith('/swift') || currentRoute === '/swift-social')
                   ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
@@ -1744,7 +1744,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/friends' || currentRoute.startsWith('/friends')) ? 'true' : undefined}
               onClick={() => handleNavClick('/friends')}
               title="People - Danh sách 100 người dùng Sparkle (Dev)"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
                 (currentRoute === '/friends' || currentRoute.startsWith('/friends'))
                   ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
@@ -1764,7 +1764,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/logos-fandom' || currentRoute === '/logos-wiki' || currentRoute === '/fandom') ? 'true' : undefined}
               onClick={() => handleNavClick('/logos-fandom')}
               title="Logos Fandom - Bách khoa toàn thư nhận diện thương hiệu"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
                 (currentRoute === '/logos-fandom' || currentRoute === '/logos-wiki' || currentRoute === '/fandom')
                   ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
@@ -1801,7 +1801,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   data-nav-active={active ? 'true' : undefined}
                   onClick={() => handleNavClick(item.route)}
                   title={item.label}
-                  className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${active ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs' : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'}`}
+                  className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${active ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs' : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'}`}
                 >
                   <img src={item.icon} alt="" className="size-5 shrink-0 object-contain" />
                   <span className="truncate text-[13.5px]">{item.label}</span>
@@ -1819,7 +1819,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/copilot' || currentRoute.startsWith('/copilot')) ? 'true' : undefined}
               onClick={() => handleNavClick('/copilot')}
               title="Copilot"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
                 (currentRoute === '/copilot' || currentRoute.startsWith('/copilot'))
                   ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
@@ -2207,7 +2207,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={currentRoute === '/craftmine' ? 'true' : undefined}
               onClick={() => handleNavClick('/craftmine')}
               title="Craftmine"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
                 currentRoute === '/craftmine'
                   ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
@@ -2227,7 +2227,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/photopea' || currentRoute === '/photoshop') ? 'true' : undefined}
               onClick={() => handleNavClick('/photopea')}
               title="Photopea - Trình chỉnh sửa ảnh PSD & Vector"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
                 (currentRoute === '/photopea' || currentRoute === '/photoshop')
                   ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
@@ -2273,7 +2273,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={isCurrentActive('/xaml-controls') ? 'true' : undefined}
               onClick={() => handleNavClick('/xaml-controls')}
               title="XAML Controls"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
                 isCurrentActive('/xaml-controls')
                   ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
@@ -2296,7 +2296,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             data-nav-active={isCurrentActive('/settings') ? 'true' : undefined}
             onClick={() => handleNavClick('/settings')}
             title="Settings"
-            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
               isCurrentActive('/settings')
                 ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
@@ -2964,7 +2964,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   {isCurrentActive('/settings') && (
                     <span
                       aria-hidden="true"
-                      className="sidebar-static-indicator absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[14px] bg-[#4cc2ff] rounded-full z-30 pointer-events-none"
+                      className="sidebar-static-indicator absolute left-0 top-1/2 -translate-y-1/2 w-[3.5px] h-[28px] bg-[#0078d7] dark:bg-[#4cc2ff] rounded-none z-30 pointer-events-none"
                       style={{ transition: 'none', animation: 'none' }}
                     />
                   )}

@@ -67,10 +67,16 @@ import { Channel, NewsArticle } from './types';
 import { useSettings } from './hooks/useSettings';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { useSystemTasks } from './context/SystemTasksContext';
+import { initDialogRevealEffect } from './utils/dialogReveal';
 
 export default function App() {
   const { isSystemCrashed, crashPhase, crashReason, restartSystem } = useSystemTasks();
   const { settings } = useSettings();
+
+  // Initialize Windows 10 Fluent Reveal Highlight effect for dialog buttons
+  useEffect(() => {
+    return initDialogRevealEffect();
+  }, []);
 
   const [installedApps, setInstalledApps] = useState<string[]>(() => {
     try {
@@ -1005,7 +1011,7 @@ export default function App() {
           settings.navigationMode === 'floaty' && !isFullBleedRoute
             ? 'pb-28 sm:pb-32'
             : ''
-        } ${isSparkOSRoute || currentRoute === '/xaml-home' ? '!h-full !min-h-0 !p-0 !max-w-none !bg-black' : ''}`}>
+        } ${isSparkOSRoute ? '!h-full !min-h-0 !p-0 !max-w-none !bg-black' : ''}`}>
           <div
             key={`tab-loaded-${currentRoute}-${routeState?.storeAppId ?? ''}`}
             className="tab-page-slide-up w-full h-full rounded-tl-[10px] rounded-tr-none rounded-br-none rounded-bl-none overflow-hidden"
@@ -1017,7 +1023,7 @@ export default function App() {
               key={`tab-splash-${currentRoute}-${routeState?.storeAppId ?? ''}`}
               route={currentRoute}
               label={currentRoute === '/search' ? 'Find and search' : 'Loading'}
-              duration={2000}
+              duration={350}
               onFinish={() => setIsTabSplashVisible(false)}
             />
           )}

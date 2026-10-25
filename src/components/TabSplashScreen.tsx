@@ -47,7 +47,7 @@ export const TabSplashScreen: React.FC<TabSplashScreenProps> = ({
   route,
   label = 'Loading',
   onFinish,
-  duration = 2000,
+  duration = 350,
 }) => {
   useEffect(() => {
     const timer = window.setTimeout(onFinish, duration);

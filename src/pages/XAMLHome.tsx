@@ -122,7 +122,7 @@ export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, o
   };
 
   return (
-    <section className="min-h-[calc(100vh-3.5rem)] w-full bg-black px-1 pb-10 text-[#e8e8e8] font-sans">
+    <section className="min-h-[calc(100vh-3.5rem)] w-full bg-transparent px-1 pb-10 text-neutral-900 dark:text-[#e8e8e8] font-sans">
       <div className="mx-auto w-full max-w-5xl px-2 sm:px-4 pt-3 space-y-4">
         {/* Live Tiles Home Insider Flag Banner */}
         <div className="w-full rounded-xl bg-gradient-to-r from-[#0078d4]/20 via-[#0050ef]/10 to-transparent border border-[#0078d4]/30 p-3 sm:p-3.5 flex items-center justify-between gap-3 text-xs">
@@ -153,7 +153,7 @@ export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, o
         </div>
 
         {/* Real-Time VnExpress News Summary Block (5s auto-rotate) */}
-        <div className="w-full rounded-2xl bg-[#141416] border border-white/10 p-4 sm:p-5 shadow-2xl overflow-hidden relative backdrop-blur-md">
+        <div className="w-full rounded-2xl bg-black/25 dark:bg-black/35 border border-white/10 p-4 sm:p-5 shadow-2xl overflow-hidden relative backdrop-blur-md">
           {/* Top Bar inside News Block */}
           <div className="flex items-center justify-between gap-3 mb-3 pb-2.5 border-b border-white/10">
             <div className="flex items-center gap-2">
@@ -295,7 +295,7 @@ export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, o
                       key={label}
                       type="button"
                       onClick={() => onNavigate(route)}
-                      className="grid min-h-9 cursor-pointer grid-cols-[1fr_155px] items-center px-1 text-left text-[13px] hover:bg-[#111111] transition-colors rounded-[4px]"
+                      className="grid min-h-9 cursor-pointer grid-cols-[1fr_155px] items-center px-1 text-left text-[13px] hover:bg-white/10 transition-colors rounded-[4px]"
                     >
                       <div className="flex items-center gap-2">
                         <AppTabIcon name={icon} className="size-4 shrink-0" />
@@ -358,7 +358,7 @@ export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, o
         </div>
 
         {/* Live Channels Section */}
-        <div className="mt-5 border-t border-[#202020] pt-3">
+        <div className="mt-5 border-t border-white/10 pt-3">
           <button type="button" onClick={() => toggleCategory('liveChannels')} className="mb-1 flex cursor-pointer items-center gap-1 text-[13px] hover:text-white transition-colors">
             {expanded.liveChannels ? <ChevronDown className="size-3 text-[#bdbdbd]" /> : <ChevronRight className="size-3 text-[#bdbdbd]" />}
             <span>Live channels</span>
@@ -380,7 +380,7 @@ export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, o
                       key={channel.id}
                       type="button"
                       onClick={() => onSelectChannel(channel)}
-                      className="grid min-h-11 cursor-pointer grid-cols-[34px_1fr_155px] items-center gap-1 px-1 text-left text-[13px] hover:bg-[#171717] transition-colors rounded-[4px]"
+                      className="grid min-h-11 cursor-pointer grid-cols-[34px_1fr_155px] items-center gap-1 px-1 text-left text-[13px] hover:bg-white/10 transition-colors rounded-[4px]"
                     >
                       <span className="flex size-7 items-center justify-center">
                         <img src={channel.logo} alt="" className="max-h-6 max-w-7 object-contain" referrerPolicy="no-referrer" />

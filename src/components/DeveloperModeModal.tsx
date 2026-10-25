@@ -85,30 +85,30 @@ export const DeveloperModeModal: React.FC<DeveloperModeModalProps> = ({
           {/* Windows 10 ContentDialog Box */}
           <motion.div
             id="developer-mode-modal-dialog"
-            initial={{ opacity: 0, scale: 0.98 }}
+            initial={{ opacity: 0, scale: 0.88 }}
             animate={{
               opacity: 1,
               scale: 1,
               transition: {
-                duration: 0.2,
-                ease: [0.16, 1, 0.3, 1],
+                duration: 0.22,
+                ease: [0.1, 0.9, 0.2, 1],
               },
             }}
             exit={{
               opacity: 0,
-              scale: 0.98,
+              scale: 0.88,
               transition: {
-                duration: 0.15,
-                ease: 'easeOut',
+                duration: 0.16,
+                ease: 'easeIn',
               },
             }}
-            className="fluent-modal-dialog relative z-10 w-full max-w-[500px] bg-white dark:bg-[#2b2b2b] text-[#1a1a1a] dark:text-white rounded-none shadow-[0_12px_36px_rgba(0,0,0,0.35)] border border-neutral-300/80 dark:border-white/15 overflow-hidden"
+            className="fluent-modal-dialog relative z-10 w-full max-w-[500px] bg-white dark:bg-black text-[#1a1a1a] dark:text-white rounded-none shadow-[0_16px_40px_rgba(0,0,0,0.65)] border border-[#e3008c] overflow-hidden"
           >
             {/* Header & Body Content Area */}
             <div className="px-6 pt-6 pb-2 space-y-2">
               <h2
                 id="developer-mode-modal-title"
-                className="text-[20px] font-normal text-neutral-900 dark:text-white tracking-tight leading-snug"
+                className="text-[20px] font-light text-neutral-900 dark:text-white tracking-tight leading-snug"
               >
                 Activate Developer Mode?
               </h2>
