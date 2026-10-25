@@ -89,7 +89,7 @@ export const NewsSummaryModal: React.FC<NewsSummaryModalProps> = ({
             className="fixed inset-0 bg-black/60"
           />
 
-          {/* Windows 10 Blue Dialog Box */}
+          {/* Windows 10 ContentDialog Box */}
           <motion.div
             id="news-summary-dialog"
             initial={{ opacity: 0, scale: 0.98 }}
@@ -109,16 +109,11 @@ export const NewsSummaryModal: React.FC<NewsSummaryModalProps> = ({
                 ease: 'easeOut'
               }
             }}
-            className="fluent-modal-dialog relative z-10 w-full max-w-[520px] bg-[#0078d4] text-white rounded-none shadow-[0_24px_60px_rgba(0,0,0,0.65)] border border-[#005a9e] overflow-hidden"
+            className="fluent-modal-dialog relative z-10 w-full max-w-[540px] bg-white dark:bg-[#2b2b2b] text-[#1a1a1a] dark:text-white rounded-none shadow-[0_12px_36px_rgba(0,0,0,0.35)] border border-neutral-300/80 dark:border-white/15 overflow-hidden"
           >
-            {/* Top thin caption */}
-            <div className="px-6 py-2.5 bg-[#0063b1] text-xs font-normal text-white/90 select-none">
-              Articles & News
-            </div>
-
             {/* Header & Body Area */}
-            <div className="p-6 pt-5 pb-4">
-              <h2 className="text-2xl sm:text-[26px] font-normal text-white tracking-tight leading-snug">
+            <div className="px-6 pt-6 pb-2">
+              <h2 className="text-[20px] font-normal text-neutral-900 dark:text-white tracking-tight leading-snug">
                 Article Summary
               </h2>
 
@@ -126,13 +121,13 @@ export const NewsSummaryModal: React.FC<NewsSummaryModalProps> = ({
               {isLoading ? (
                 <div className="py-8 px-4 flex flex-col items-center justify-center text-center space-y-3 my-2">
                   <div className="flex items-center justify-center py-2">
-                    <SpinningRing size={48} strokeWidth={4} color="#ffffff" />
+                    <SpinningRing size={48} strokeWidth={4} color="#0078d4" />
                   </div>
                   <div className="space-y-1">
-                    <h3 className="text-base font-normal text-white">
+                    <h3 className="text-base font-normal text-neutral-900 dark:text-white">
                       Processing article...
                     </h3>
-                    <p className="text-xs text-white/80 max-w-[300px]">
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400 max-w-[300px]">
                       Extracting key insights and highlights
                     </p>
                   </div>
@@ -140,33 +135,33 @@ export const NewsSummaryModal: React.FC<NewsSummaryModalProps> = ({
               ) : (
                 <div className="mt-3 space-y-3 max-h-[55vh] overflow-y-auto pr-1">
                   <div>
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-white/80">
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-sky-600 dark:text-sky-400">
                       {article.category}
                     </span>
-                    <h3 className="text-base font-normal text-white mt-0.5 leading-snug">
+                    <h3 className="text-base font-medium text-neutral-900 dark:text-white mt-0.5 leading-snug">
                       {article.title}
                     </h3>
                   </div>
 
                   {/* Core takeaway */}
-                  <div className="p-3 bg-black/15 border border-white/20">
-                    <p className="text-[13px] font-normal text-white/95 leading-relaxed">
+                  <div className="p-3 bg-neutral-100 dark:bg-black/20 border border-neutral-200 dark:border-white/10">
+                    <p className="text-[13px] font-normal text-neutral-800 dark:text-neutral-200 leading-relaxed italic">
                       "{leadText}"
                     </p>
                   </div>
 
                   {/* Bullet points */}
                   <div>
-                    <h4 className="text-xs font-semibold text-white/80 mb-2 uppercase tracking-wide">
+                    <h4 className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 mb-2 uppercase tracking-wide">
                       Key Highlights:
                     </h4>
                     <div className="space-y-1.5">
                       {bulletPoints.map((bp, idx) => (
                         <div
                           key={idx}
-                          className="p-2.5 bg-black/15 border border-white/15 text-[13px] text-white flex items-start gap-2.5"
+                          className="p-2.5 bg-neutral-100 dark:bg-black/20 border border-neutral-200 dark:border-white/10 text-[13px] text-neutral-800 dark:text-neutral-200 flex items-start gap-2.5"
                         >
-                          <span className="w-5 h-5 rounded-none bg-white/20 text-white text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                          <span className="w-5 h-5 rounded-none bg-neutral-200 dark:bg-white/10 text-neutral-800 dark:text-white text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5">
                             {idx + 1}
                           </span>
                           <p className="leading-relaxed font-normal">{bp}</p>
@@ -176,13 +171,13 @@ export const NewsSummaryModal: React.FC<NewsSummaryModalProps> = ({
                   </div>
 
                   {article.summary?.conclusion && (
-                    <div className="p-3 bg-black/15 border border-white/15 text-[13px] text-white/95 leading-relaxed font-normal">
+                    <div className="p-3 bg-neutral-100 dark:bg-black/20 border border-neutral-200 dark:border-white/10 text-[13px] text-neutral-800 dark:text-neutral-200 leading-relaxed font-normal">
                       {article.summary.conclusion}
                     </div>
                   )}
 
-                  <div className="flex items-center justify-between text-[11px] text-white/70 pt-2 border-t border-white/15">
-                    <span>Category: <strong className="text-white">{article.category}</strong></span>
+                  <div className="flex items-center justify-between text-[11px] text-neutral-500 dark:text-neutral-400 pt-2 border-t border-neutral-200 dark:border-white/10">
+                    <span>Category: <strong className="text-neutral-800 dark:text-neutral-200">{article.category}</strong></span>
                     <span>Published: {article.publishedAt}</span>
                   </div>
                 </div>
@@ -190,13 +185,13 @@ export const NewsSummaryModal: React.FC<NewsSummaryModalProps> = ({
             </div>
 
             {/* Bottom Actions Footer */}
-            <div className="fluent-modal-footer bg-[#0078d4] px-6 py-4 pt-2 flex items-center justify-end gap-3">
+            <div className="fluent-modal-footer px-6 pt-4 pb-6 flex items-center justify-end gap-2">
               {!isLoading && (
                 <>
                   <button
                     type="button"
                     onClick={handleCopySummary}
-                    className="fluent-btn-primary min-w-[85px] px-6 py-1.5 border-2 border-white bg-transparent hover:bg-white hover:text-[#0078d4] active:bg-white/90 text-white text-sm font-medium rounded-none transition-colors cursor-pointer text-center flex items-center justify-center gap-1.5"
+                    className="fluent-btn-primary min-w-[88px] h-[32px] px-4 bg-[#cccccc] dark:bg-[#383838] text-black dark:text-white hover:bg-[#d6d6d6] dark:hover:bg-[#454545] active:bg-[#b8b8b8] dark:active:bg-[#262626] rounded-none text-[13px] font-normal transition-colors cursor-pointer border-0 inline-flex items-center justify-center gap-1.5"
                   >
                     {copied ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
                     <span>{copied ? 'Copied' : 'Copy'}</span>
@@ -205,7 +200,7 @@ export const NewsSummaryModal: React.FC<NewsSummaryModalProps> = ({
                     type="button"
                     onClick={handleExportDocx}
                     disabled={exporting}
-                    className="fluent-btn-secondary min-w-[85px] px-6 py-1.5 border-2 border-white bg-transparent hover:bg-white hover:text-[#0078d4] active:bg-white/90 text-white text-sm font-medium rounded-none transition-colors cursor-pointer text-center flex items-center justify-center gap-1.5"
+                    className="fluent-btn-secondary min-w-[88px] h-[32px] px-4 bg-[#cccccc] dark:bg-[#383838] text-black dark:text-white hover:bg-[#d6d6d6] dark:hover:bg-[#454545] active:bg-[#b8b8b8] dark:active:bg-[#262626] rounded-none text-[13px] font-normal transition-colors cursor-pointer border-0 inline-flex items-center justify-center gap-1.5"
                   >
                     <FileText className="w-3.5 h-3.5" />
                     <span>{exporting ? 'Exporting...' : 'Export'}</span>
@@ -215,7 +210,7 @@ export const NewsSummaryModal: React.FC<NewsSummaryModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="fluent-btn-secondary min-w-[85px] px-6 py-1.5 border-2 border-white bg-transparent hover:bg-white hover:text-[#0078d4] active:bg-white/90 text-white text-sm font-medium rounded-none transition-colors cursor-pointer text-center"
+                className="fluent-btn-secondary min-w-[88px] h-[32px] px-4 bg-[#cccccc] dark:bg-[#383838] text-black dark:text-white hover:bg-[#d6d6d6] dark:hover:bg-[#454545] active:bg-[#b8b8b8] dark:active:bg-[#262626] rounded-none text-[13px] font-normal transition-colors cursor-pointer border-0 inline-flex items-center justify-center"
               >
                 Close
               </button>

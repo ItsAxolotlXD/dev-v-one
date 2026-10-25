@@ -48,7 +48,7 @@ export const UnderConstructionModal: React.FC<UnderConstructionModalProps> = ({
             className="fixed inset-0 bg-black/60"
           />
 
-          {/* 2. Dialog Modal Box - Windows 10 Solid Blue Dialog Style */}
+          {/* 2. Dialog Modal Box - Windows 10 ContentDialog Style */}
           <motion.div
             id="under-construction-modal-dialog"
             initial={{ opacity: 0, scale: 0.98 }}
@@ -68,46 +68,32 @@ export const UnderConstructionModal: React.FC<UnderConstructionModalProps> = ({
                 ease: 'easeOut'
               }
             }}
-            className="fluent-modal-dialog relative z-10 w-full max-w-[580px] bg-[#0078d4] text-white rounded-none shadow-[0_24px_60px_rgba(0,0,0,0.65)] border border-[#005a9e] overflow-hidden"
+            className="fluent-modal-dialog relative z-10 w-full max-w-[500px] bg-white dark:bg-[#2b2b2b] text-[#1a1a1a] dark:text-white rounded-none shadow-[0_12px_36px_rgba(0,0,0,0.35)] border border-neutral-300/80 dark:border-white/15 overflow-hidden"
           >
-            {/* Top thin caption bar */}
-            <div className="pl-3.5 pr-4 py-1.5 bg-[#0063b1] text-xs font-[350] text-white/90 select-none">
-              Sparkle System Notice
-            </div>
-
-            {/* Header & Body Content Area */}
-            <div className="px-6 py-3.5 space-y-1.5 font-[350]">
+            {/* Header & Body Content Area - Native ContentDialog */}
+            <div className="px-6 pt-6 pb-2 space-y-2">
               <h2
                 id="under-construction-modal-title"
-                style={{ fontWeight: 350 }}
-                className="text-xl sm:text-[22px] font-[350] text-white tracking-tight leading-snug"
+                className="text-[20px] font-normal text-neutral-900 dark:text-white tracking-tight leading-snug"
               >
                 {title}
               </h2>
 
               <p
                 id="under-construction-modal-description"
-                style={{ fontWeight: 350 }}
-                className="text-xs sm:text-[13px] text-white/95 leading-relaxed font-[350]"
+                className="text-[13.5px] text-neutral-700 dark:text-neutral-300 leading-relaxed font-normal"
               >
                 {description}
               </p>
             </div>
 
             {/* Bottom Actions Footer */}
-            <div className="fluent-modal-footer bg-[#0078d4] px-6 py-2 pb-4 flex items-center justify-end gap-2.5">
+            <div className="fluent-modal-footer px-6 pt-4 pb-6 flex items-center justify-end gap-2">
               <button
                 type="button"
                 id="btn-under-construction-close"
                 onClick={onClose}
-                style={{
-                  border: '2px solid #FFFFFF',
-                  borderBottom: '2px solid #FFFFFF',
-                  boxSizing: 'border-box',
-                  fontWeight: 350,
-                  height: '28px',
-                }}
-                className="fluent-btn-primary min-w-[80px] h-[28px] px-4 py-0 border-2 border-white bg-transparent hover:bg-white hover:text-[#0078d4] active:bg-white/90 text-white text-xs font-[350] rounded-none transition-colors cursor-pointer text-center inline-flex items-center justify-center"
+                className="fluent-btn-primary min-w-[88px] h-[32px] px-4 bg-[#cccccc] dark:bg-[#383838] text-black dark:text-white hover:bg-[#d6d6d6] dark:hover:bg-[#454545] active:bg-[#b8b8b8] dark:active:bg-[#262626] rounded-none text-[13px] font-normal transition-colors cursor-pointer border-0 inline-flex items-center justify-center"
               >
                 {buttonText}
               </button>

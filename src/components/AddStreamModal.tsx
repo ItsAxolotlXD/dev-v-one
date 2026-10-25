@@ -69,7 +69,7 @@ export const AddStreamModal: React.FC<AddStreamModalProps> = ({
             className="fixed inset-0 bg-black/60"
           />
 
-          {/* Windows 10 Blue Dialog Box */}
+          {/* Windows 10 ContentDialog Box */}
           <motion.div
             id="add-stream-dialog"
             initial={{ opacity: 0, scale: 0.98 }}
@@ -89,28 +89,23 @@ export const AddStreamModal: React.FC<AddStreamModalProps> = ({
                 ease: 'easeOut'
               }
             }}
-            className="fluent-modal-dialog relative z-10 w-full max-w-[480px] bg-[#0078d4] text-white rounded-none shadow-[0_24px_60px_rgba(0,0,0,0.65)] border border-[#005a9e] overflow-hidden"
+            className="fluent-modal-dialog relative z-10 w-full max-w-[480px] bg-white dark:bg-[#2b2b2b] text-[#1a1a1a] dark:text-white rounded-none shadow-[0_12px_36px_rgba(0,0,0,0.35)] border border-neutral-300/80 dark:border-white/15 overflow-hidden"
           >
-            {/* Top thin caption */}
-            <div className="px-6 py-2.5 bg-[#0063b1] text-xs font-normal text-white/90 select-none">
-              Live TV
-            </div>
-
             {/* Header & Body Content Area */}
             <form onSubmit={handleSubmit}>
-              <div className="p-6 pt-5 pb-5 space-y-3">
+              <div className="px-6 pt-6 pb-2 space-y-3">
                 <div>
-                  <h2 className="text-2xl sm:text-[26px] font-normal text-white tracking-tight leading-snug">
+                  <h2 className="text-[20px] font-normal text-neutral-900 dark:text-white tracking-tight leading-snug">
                     Add New Live Stream
                   </h2>
-                  <p className="text-[13.5px] sm:text-sm text-white/90 leading-normal mt-1.5 font-normal">
+                  <p className="text-[13.5px] text-neutral-700 dark:text-neutral-300 leading-normal mt-1 font-normal">
                     Enter HLS / M3U8 stream details to watch directly
                   </p>
                 </div>
 
                 <div className="space-y-3 pt-1">
                   <div>
-                    <label className="block text-[13px] font-medium text-white/95 mb-1">
+                    <label className="block text-[13px] font-medium text-neutral-700 dark:text-neutral-300 mb-1">
                       Stream Name *
                     </label>
                     <input
@@ -119,12 +114,12 @@ export const AddStreamModal: React.FC<AddStreamModalProps> = ({
                       value={streamName}
                       onChange={(e) => setStreamName(e.target.value)}
                       placeholder="e.g., Live Broadcast Feed"
-                      className="w-full px-3 py-2 rounded-none bg-black/20 border-2 border-white/60 text-white placeholder:text-white/40 text-sm focus:outline-none focus:border-white transition-all"
+                      className="w-full px-3 py-1.5 rounded-none bg-neutral-100 dark:bg-black/30 border border-neutral-300 dark:border-white/20 text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm focus:outline-none focus:border-neutral-500 dark:focus:border-white/60 transition-all font-normal"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[13px] font-medium text-white/95 mb-1">
+                    <label className="block text-[13px] font-medium text-neutral-700 dark:text-neutral-300 mb-1">
                       Stream URL (.m3u8) *
                     </label>
                     <input
@@ -133,12 +128,12 @@ export const AddStreamModal: React.FC<AddStreamModalProps> = ({
                       value={streamUrl}
                       onChange={(e) => setStreamUrl(e.target.value)}
                       placeholder="https://example.com/live/stream.m3u8"
-                      className="w-full px-3 py-2 rounded-none bg-black/20 border-2 border-white/60 text-white placeholder:text-white/40 text-sm font-mono focus:outline-none focus:border-white transition-all"
+                      className="w-full px-3 py-1.5 rounded-none bg-neutral-100 dark:bg-black/30 border border-neutral-300 dark:border-white/20 text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm font-mono focus:outline-none focus:border-neutral-500 dark:focus:border-white/60 transition-all font-normal"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[13px] font-medium text-white/95 mb-1.5">
+                    <label className="block text-[13px] font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
                       Quality
                     </label>
                     <div className="flex gap-2">
@@ -147,10 +142,10 @@ export const AddStreamModal: React.FC<AddStreamModalProps> = ({
                           key={q}
                           type="button"
                           onClick={() => setStreamQuality(q)}
-                          className={`flex-1 py-1.5 rounded-none text-xs font-medium transition-all cursor-pointer border-2 ${
+                          className={`flex-1 py-1 rounded-none text-xs font-normal transition-all cursor-pointer ${
                             streamQuality === q
-                              ? 'bg-white text-[#0078d4] border-white'
-                              : 'bg-transparent text-white border-white/60 hover:border-white'
+                              ? 'bg-neutral-800 text-white dark:bg-white dark:text-black font-medium'
+                              : 'bg-neutral-100 dark:bg-black/20 text-neutral-700 dark:text-neutral-300 border border-neutral-300 dark:border-white/15 hover:bg-neutral-200 dark:hover:bg-white/10'
                           }`}
                         >
                           {q}
@@ -162,11 +157,11 @@ export const AddStreamModal: React.FC<AddStreamModalProps> = ({
               </div>
 
               {/* Bottom Actions Footer */}
-              <div className="fluent-modal-footer bg-[#0078d4] px-6 py-4 pt-2 flex items-center justify-end gap-3">
+              <div className="fluent-modal-footer px-6 pt-4 pb-6 flex items-center justify-end gap-2">
                 <button
                   type="submit"
                   id="btn-add-stream-submit"
-                  className="fluent-btn-primary min-w-[100px] px-6 py-1.5 border-2 border-white bg-transparent hover:bg-white hover:text-[#0078d4] active:bg-white/90 text-white text-sm font-medium rounded-none transition-colors cursor-pointer text-center flex items-center justify-center gap-1.5"
+                  className="fluent-btn-primary min-w-[88px] h-[32px] px-4 bg-[#cccccc] dark:bg-[#383838] text-black dark:text-white hover:bg-[#d6d6d6] dark:hover:bg-[#454545] active:bg-[#b8b8b8] dark:active:bg-[#262626] rounded-none text-[13px] font-normal transition-colors cursor-pointer border-0 inline-flex items-center justify-center gap-1.5"
                 >
                   <Play className="w-3.5 h-3.5 fill-current" />
                   <span>Play</span>
@@ -174,7 +169,7 @@ export const AddStreamModal: React.FC<AddStreamModalProps> = ({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="fluent-btn-secondary min-w-[85px] px-6 py-1.5 border-2 border-white bg-transparent hover:bg-white hover:text-[#0078d4] active:bg-white/90 text-white text-sm font-medium rounded-none transition-colors cursor-pointer text-center"
+                  className="fluent-btn-secondary min-w-[88px] h-[32px] px-4 bg-[#cccccc] dark:bg-[#383838] text-black dark:text-white hover:bg-[#d6d6d6] dark:hover:bg-[#454545] active:bg-[#b8b8b8] dark:active:bg-[#262626] rounded-none text-[13px] font-normal transition-colors cursor-pointer border-0 inline-flex items-center justify-center"
                 >
                   Cancel
                 </button>

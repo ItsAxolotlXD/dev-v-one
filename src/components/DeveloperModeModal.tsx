@@ -82,7 +82,7 @@ export const DeveloperModeModal: React.FC<DeveloperModeModalProps> = ({
             className="fixed inset-0 bg-black/60"
           />
 
-          {/* Windows 10 Blue Dialog Box */}
+          {/* Windows 10 ContentDialog Box */}
           <motion.div
             id="developer-mode-modal-dialog"
             initial={{ opacity: 0, scale: 0.98 }}
@@ -102,35 +102,28 @@ export const DeveloperModeModal: React.FC<DeveloperModeModalProps> = ({
                 ease: 'easeOut',
               },
             }}
-            className="fluent-modal-dialog relative z-10 w-full max-w-[580px] bg-[#0078d4] text-white rounded-none shadow-[0_24px_60px_rgba(0,0,0,0.65)] border border-[#005a9e] overflow-hidden"
+            className="fluent-modal-dialog relative z-10 w-full max-w-[500px] bg-white dark:bg-[#2b2b2b] text-[#1a1a1a] dark:text-white rounded-none shadow-[0_12px_36px_rgba(0,0,0,0.35)] border border-neutral-300/80 dark:border-white/15 overflow-hidden"
           >
-            {/* Top thin caption */}
-            <div className="pl-3.5 pr-4 py-1.5 bg-[#0063b1] text-xs font-[350] text-white/90 select-none">
-              Developer Settings
-            </div>
-
             {/* Header & Body Content Area */}
-            <div className="px-6 py-3.5 space-y-2 font-[350]">
+            <div className="px-6 pt-6 pb-2 space-y-2">
               <h2
                 id="developer-mode-modal-title"
-                style={{ fontWeight: 350 }}
-                className="text-xl sm:text-[22px] font-[350] text-white tracking-tight leading-snug"
+                className="text-[20px] font-normal text-neutral-900 dark:text-white tracking-tight leading-snug"
               >
                 Activate Developer Mode?
               </h2>
 
               <p
                 id="developer-mode-modal-description"
-                style={{ fontWeight: 350 }}
-                className="text-xs sm:text-[13px] text-white/95 leading-relaxed font-[350]"
+                className="text-[13.5px] text-neutral-700 dark:text-neutral-300 leading-relaxed font-normal"
               >
                 Enter the 6-character security code to unlock advanced diagnostic tools and experimental system settings.
               </p>
 
               {/* 6-character Code Input Field */}
-              <div className="mt-2">
+              <div className="mt-3">
                 <div className="relative flex items-center">
-                  <div className="absolute left-3 text-white/70 pointer-events-none">
+                  <div className="absolute left-3 text-neutral-500 dark:text-white/60 pointer-events-none">
                     <KeyRound className="w-4 h-4" />
                   </div>
                   <input
@@ -145,13 +138,13 @@ export const DeveloperModeModal: React.FC<DeveloperModeModalProps> = ({
                     }}
                     onKeyDown={handleKeyDownInput}
                     placeholder="••••••"
-                    className="w-full bg-black/20 border-2 border-white/60 rounded-none pl-9 pr-10 py-1.5 text-center text-base font-mono tracking-[0.3em] text-white placeholder:text-white/40 focus:outline-none focus:border-white transition-all font-[350]"
+                    className="w-full bg-neutral-100 dark:bg-black/30 border border-neutral-300 dark:border-white/20 rounded-none pl-9 pr-10 py-1.5 text-center text-base font-mono tracking-[0.3em] text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-neutral-500 dark:focus:border-white/60 transition-all font-normal"
                     autoComplete="off"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 text-white/70 hover:text-white transition-colors cursor-pointer p-1"
+                    className="absolute right-3 text-neutral-500 dark:text-white/60 hover:text-neutral-800 dark:hover:text-white transition-colors cursor-pointer p-1"
                     title={showPassword ? 'Hide code' : 'Show code'}
                     aria-label={showPassword ? 'Hide code' : 'Show code'}
                   >
@@ -159,7 +152,7 @@ export const DeveloperModeModal: React.FC<DeveloperModeModalProps> = ({
                   </button>
                 </div>
                 {error && (
-                  <p className="text-xs text-amber-300 mt-1.5 px-1 font-[350]">
+                  <p className="text-xs text-rose-500 dark:text-rose-400 mt-1.5 px-1 font-normal">
                     {error}
                   </p>
                 )}
@@ -167,19 +160,12 @@ export const DeveloperModeModal: React.FC<DeveloperModeModalProps> = ({
             </div>
 
             {/* Bottom Actions Footer */}
-            <div className="fluent-modal-footer bg-[#0078d4] px-6 py-2 pb-4 flex items-center justify-end gap-2.5">
+            <div className="fluent-modal-footer px-6 pt-4 pb-6 flex items-center justify-end gap-2">
               <button
                 type="button"
                 id="btn-devmode-activate"
                 onClick={handleActivate}
-                style={{
-                  border: '2px solid #FFFFFF',
-                  borderBottom: '2px solid #FFFFFF',
-                  boxSizing: 'border-box',
-                  fontWeight: 350,
-                  height: '28px',
-                }}
-                className="fluent-btn-primary min-w-[80px] h-[28px] px-4 py-0 border-2 border-white bg-transparent hover:bg-white hover:text-[#0078d4] active:bg-white/90 text-white text-xs font-[350] rounded-none transition-colors cursor-pointer text-center inline-flex items-center justify-center"
+                className="fluent-btn-primary min-w-[88px] h-[32px] px-4 bg-[#cccccc] dark:bg-[#383838] text-black dark:text-white hover:bg-[#d6d6d6] dark:hover:bg-[#454545] active:bg-[#b8b8b8] dark:active:bg-[#262626] rounded-none text-[13px] font-normal transition-colors cursor-pointer border-0 inline-flex items-center justify-center"
               >
                 Activate
               </button>
@@ -187,14 +173,7 @@ export const DeveloperModeModal: React.FC<DeveloperModeModalProps> = ({
                 type="button"
                 id="btn-devmode-close"
                 onClick={onClose}
-                style={{
-                  border: '2px solid #FFFFFF',
-                  borderBottom: '2px solid #FFFFFF',
-                  boxSizing: 'border-box',
-                  fontWeight: 350,
-                  height: '28px',
-                }}
-                className="fluent-btn-secondary min-w-[80px] h-[28px] px-4 py-0 border-2 border-white bg-transparent hover:bg-white hover:text-[#0078d4] active:bg-white/90 text-white text-xs font-[350] rounded-none transition-colors cursor-pointer text-center inline-flex items-center justify-center"
+                className="fluent-btn-secondary min-w-[88px] h-[32px] px-4 bg-[#cccccc] dark:bg-[#383838] text-black dark:text-white hover:bg-[#d6d6d6] dark:hover:bg-[#454545] active:bg-[#b8b8b8] dark:active:bg-[#262626] rounded-none text-[13px] font-normal transition-colors cursor-pointer border-0 inline-flex items-center justify-center"
               >
                 Cancel
               </button>

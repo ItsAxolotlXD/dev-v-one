@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Check, Clipboard, Play, X, ExternalLink } from 'lucide-react';
+import { Check, Clipboard, Play, ExternalLink } from 'lucide-react';
 
 const XAML_ICON_URL = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-kj8VATj48xgpu6hRIVOSoJomQMTGnR.png';
 
@@ -10,6 +10,7 @@ interface DialogPreset {
   caption: string;
   title: string;
   message: string;
+  checkboxLabel?: string;
   primaryButton: string;
   secondaryButton?: string;
   closeButton?: string;
@@ -17,6 +18,26 @@ interface DialogPreset {
 }
 
 const DIALOG_PRESETS: DialogPreset[] = [
+  {
+    id: 'delete-confirm',
+    name: 'Delete files? (Windows 10 Photos)',
+    caption: 'Photos',
+    title: 'Delete these files?',
+    message: 'These files will be deleted from your PC.',
+    checkboxLabel: 'Also delete from OneDrive',
+    primaryButton: 'Delete',
+    secondaryButton: 'Cancel',
+    xamlCode: `<ContentDialog x:Name="DeleteDialog"
+    Title="Delete these files?"
+    PrimaryButtonText="Delete"
+    CloseButtonText="Cancel"
+    DefaultButton="Close">
+    <StackPanel>
+        <TextBlock Text="These files will be deleted from your PC." />
+        <CheckBox Content="Also delete from OneDrive" Margin="0,12,0,0" />
+    </StackPanel>
+</ContentDialog>`,
+  },
   {
     id: 'switch-app',
     name: 'Switch Applications',
@@ -48,21 +69,6 @@ const DIALOG_PRESETS: DialogPreset[] = [
     SecondaryButtonText="Don't Save"
     CloseButtonText="Cancel"
     DefaultButton="Primary" />`,
-  },
-  {
-    id: 'delete-confirm',
-    name: 'Confirm Deletion',
-    caption: 'File Management',
-    title: 'Delete this item permanently?',
-    message: 'This file will be permanently removed from your library. You cannot undo this action.',
-    primaryButton: 'Delete',
-    secondaryButton: 'Cancel',
-    xamlCode: `<ContentDialog x:Name="DeleteDialog"
-    Title="Delete this item permanently?"
-    Content="This file will be permanently removed from your library."
-    PrimaryButtonText="Delete"
-    CloseButtonText="Cancel"
-    DefaultButton="Close" />`,
   },
 ];
 
@@ -98,7 +104,8 @@ const controls = [
 
 export const XAMLControls: React.FC = () => {
   const [copied, setCopied] = useState<string | null>(null);
-  const [selectedPresetId, setSelectedPresetId] = useState<string>('switch-app');
+  const [selectedPresetId, setSelectedPresetId] = useState<string>('delete-confirm');
+  const [checkboxChecked, setCheckboxChecked] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isMounted, setIsMounted] = useState<boolean>(false);
   const [lastActionResult, setLastActionResult] = useState<string | null>(null);
@@ -195,7 +202,7 @@ export const XAMLControls: React.FC = () => {
                 Trigger an example modal dialog
               </h2>
               <p className="mt-1 max-w-xl text-[12px] leading-5 text-[#aaaaaa]">
-                Interactive preview of the classic Windows 10 UWP ContentDialog dialog styled with crisp blue background (<code className="text-[#4cc2ff]">#0078d4</code>), sharp unrounded borders, white outline action buttons, and clear unblurred background overlay.
+                Interactive preview of the classic Windows 10 UWP ContentDialog dialog (Photos / Shell) styled with pure clean surface, sharp unrounded borders, flat gray action buttons, and clear unblurred background overlay.
               </p>
             </div>
 
@@ -208,7 +215,7 @@ export const XAMLControls: React.FC = () => {
                   e.stopPropagation();
                   triggerModal();
                 }}
-                className="inline-flex items-center gap-2 rounded-none border-2 border-white bg-[#0078d4] hover:bg-white hover:text-[#0078d4] px-6 py-2.5 text-xs font-bold text-white shadow-xl transition-all active:scale-[0.98] cursor-pointer"
+                className="inline-flex items-center gap-2 rounded-none bg-[#383838] hover:bg-[#454545] border border-neutral-600 px-6 py-2.5 text-xs font-medium text-white shadow-md transition-all active:scale-[0.98] cursor-pointer"
               >
                 <Play className="size-3.5 fill-current" />
                 Trigger Modal Dialog
@@ -298,7 +305,7 @@ export const XAMLControls: React.FC = () => {
                         e.stopPropagation();
                         triggerModal();
                       }}
-                      className="ml-2 inline-flex items-center gap-1 px-3 py-1 text-[11px] font-semibold rounded-none border border-white/60 bg-[#0078d4] text-white hover:bg-white hover:text-[#0078d4] transition-colors cursor-pointer"
+                      className="ml-2 inline-flex items-center gap-1 px-3 py-1 text-[11px] font-medium rounded-none bg-[#383838] text-white hover:bg-[#454545] border border-neutral-600 transition-colors cursor-pointer"
                     >
                       <Play className="size-3 fill-current" />
                       Trigger Example Modal Dialog
@@ -355,84 +362,50 @@ export const XAMLControls: React.FC = () => {
                 style={{
                   zIndex: 100000000,
                   position: 'relative',
-                  backgroundColor: '#0078d4',
-                  color: '#FFFFFF',
                   borderRadius: 0,
-                  border: '1px solid rgba(255, 255, 255, 0.20)',
-                  boxShadow: '0 24px 60px rgba(0, 0, 0, 0.75)',
                   width: '100%',
-                  maxWidth: '580px',
+                  maxWidth: '520px',
                   overflow: 'hidden',
                 }}
-                className="fluent-modal-dialog animate-in zoom-in-95 duration-150"
+                className="fluent-modal-dialog bg-white dark:bg-[#2b2b2b] text-[#1a1a1a] dark:text-white rounded-none border border-neutral-300/80 dark:border-white/15 shadow-[0_12px_36px_rgba(0,0,0,0.35)] animate-in zoom-in-95 duration-150"
               >
-                {/* Top Caption Banner (#0063b1 deeper blue) - Compact Height & Left-shifted Caption */}
-                <div
-                  style={{ backgroundColor: '#0063b1', borderBottom: '1px solid rgba(255, 255, 255, 0.15)' }}
-                  className="pl-3.5 pr-2.5 py-1.5 text-[11px] font-[350] tracking-normal text-white/95 flex items-center justify-between select-none"
-                >
-                  <span className="font-[350] normal-case tracking-normal text-white/95" style={{ fontWeight: 350 }}>
-                    {activePreset.caption}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setIsModalOpen(false)}
-                    style={{ borderRadius: 0 }}
-                    className="hover:bg-white/20 p-1 text-white text-xs transition-colors cursor-pointer"
-                    aria-label="Close dialog"
-                  >
-                    <X className="size-3.5" />
-                  </button>
-                </div>
-
-                {/* Main Content Area - Decreased Height with Semi-light Font */}
-                <div style={{ backgroundColor: '#0078d4' }} className="px-6 py-3.5 space-y-1.5 font-[350]">
-                  <h3
+                {/* Main Content Area - Native UWP ContentDialog */}
+                <div className="px-6 pt-6 pb-2 space-y-2">
+                  <h2
                     id="example-dialog-title"
-                    style={{ fontWeight: 350 }}
-                    className="text-lg sm:text-[19px] font-[350] text-white tracking-tight leading-snug"
+                    className="text-[20px] font-normal text-neutral-900 dark:text-white tracking-tight leading-snug"
                   >
                     {activePreset.title}
-                  </h3>
+                  </h2>
                   <p
-                    style={{ fontWeight: 350 }}
-                    className="text-xs sm:text-[13px] text-white/95 leading-relaxed font-[350]"
+                    className="text-[13.5px] text-neutral-700 dark:text-neutral-300 leading-relaxed font-normal"
                   >
                     {activePreset.message}
                   </p>
+                  {activePreset.checkboxLabel && (
+                    <label className="flex items-center gap-2.5 pt-3 cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        checked={checkboxChecked}
+                        onChange={(e) => setCheckboxChecked(e.target.checked)}
+                        className="w-4 h-4 rounded-none border border-neutral-400 dark:border-white/30 text-[#0078d4] accent-[#0078d4] cursor-pointer"
+                      />
+                      <span className="text-[13.5px] text-neutral-800 dark:text-neutral-200 font-normal">
+                        {activePreset.checkboxLabel}
+                      </span>
+                    </label>
+                  )}
                 </div>
 
-                {/* Footer with sharp rectangular white outline buttons - 28px Height & Semi-light Font */}
+                {/* Footer with flat gray rectangular buttons (IMG_0568.jpeg) */}
                 <div
-                  style={{
-                    backgroundColor: '#0078d4',
-                    padding: '8px 24px 16px 24px',
-                    boxSizing: 'border-box',
-                    overflow: 'visible',
-                  }}
-                  className="fluent-modal-footer flex items-center justify-end gap-2.5"
+                  className="fluent-modal-footer px-6 pt-4 pb-6 flex items-center justify-end gap-2"
                 >
                   {activePreset.primaryButton && (
                     <button
                       type="button"
                       onClick={() => handleDialogAction(activePreset.primaryButton)}
-                      style={{
-                        border: '2px solid #FFFFFF',
-                        borderBottom: '2px solid #FFFFFF',
-                        borderRadius: 0,
-                        backgroundColor: 'transparent',
-                        color: '#FFFFFF',
-                        minWidth: '80px',
-                        height: '28px',
-                        padding: '0 16px',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        boxSizing: 'border-box',
-                        fontWeight: 350,
-                        lineHeight: 1,
-                      }}
-                      className="text-xs font-[350] hover:bg-white hover:text-[#0078d4] transition-colors cursor-pointer"
+                      className="min-w-[88px] h-[32px] px-4 bg-[#cccccc] dark:bg-[#383838] text-black dark:text-white hover:bg-[#d6d6d6] dark:hover:bg-[#454545] active:bg-[#b8b8b8] dark:active:bg-[#262626] rounded-none text-[13px] font-normal transition-colors cursor-pointer border-0 inline-flex items-center justify-center"
                     >
                       {activePreset.primaryButton}
                     </button>
@@ -441,23 +414,7 @@ export const XAMLControls: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => handleDialogAction(activePreset.secondaryButton!)}
-                      style={{
-                        border: '2px solid #FFFFFF',
-                        borderBottom: '2px solid #FFFFFF',
-                        borderRadius: 0,
-                        backgroundColor: 'transparent',
-                        color: '#FFFFFF',
-                        minWidth: '80px',
-                        height: '28px',
-                        padding: '0 16px',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        boxSizing: 'border-box',
-                        fontWeight: 350,
-                        lineHeight: 1,
-                      }}
-                      className="text-xs font-[350] hover:bg-white hover:text-[#0078d4] transition-colors cursor-pointer"
+                      className="min-w-[88px] h-[32px] px-4 bg-[#cccccc] dark:bg-[#383838] text-black dark:text-white hover:bg-[#d6d6d6] dark:hover:bg-[#454545] active:bg-[#b8b8b8] dark:active:bg-[#262626] rounded-none text-[13px] font-normal transition-colors cursor-pointer border-0 inline-flex items-center justify-center"
                     >
                       {activePreset.secondaryButton}
                     </button>
@@ -466,23 +423,7 @@ export const XAMLControls: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => handleDialogAction(activePreset.closeButton!)}
-                      style={{
-                        border: '2px solid #FFFFFF',
-                        borderBottom: '2px solid #FFFFFF',
-                        borderRadius: 0,
-                        backgroundColor: 'transparent',
-                        color: '#FFFFFF',
-                        minWidth: '80px',
-                        height: '28px',
-                        padding: '0 16px',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        boxSizing: 'border-box',
-                        fontWeight: 350,
-                        lineHeight: 1,
-                      }}
-                      className="text-xs font-[350] hover:bg-white hover:text-[#0078d4] transition-colors cursor-pointer"
+                      className="min-w-[88px] h-[32px] px-4 bg-[#cccccc] dark:bg-[#383838] text-black dark:text-white hover:bg-[#d6d6d6] dark:hover:bg-[#454545] active:bg-[#b8b8b8] dark:active:bg-[#262626] rounded-none text-[13px] font-normal transition-colors cursor-pointer border-0 inline-flex items-center justify-center"
                     >
                       {activePreset.closeButton}
                     </button>
