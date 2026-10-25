@@ -664,24 +664,26 @@ export const PhotosApp: React.FC<PhotosAppProps> = ({ navigate }) => {
         {/* Right: Search, Select Mode, Grid Density & Upload */}
         <div className="flex items-center gap-2 shrink-0">
           {/* Quick Search */}
-          <div className="w-32 sm:w-52 h-8 px-2.5 rounded-[8px] bg-white/5 border border-white/10 flex items-center gap-2 focus-within:border-[#4cc2ff]/50 focus-within:bg-white/10 transition-colors">
-            <FluentSearchIcon className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
+          <div className="relative w-32 sm:w-52 h-8 px-2.5 rounded-none windows-search-box flex items-center gap-2 transition-colors">
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Tìm Ảnh, Video..."
-              className="w-full bg-transparent text-xs text-white placeholder-neutral-500 outline-none"
+              placeholder="Tìm ảnh, video..."
+              className="w-full bg-transparent text-xs outline-none pr-10"
             />
-            {searchQuery && (
-              <button
-                type="button"
-                onClick={() => setSearchQuery('')}
-                className="text-neutral-400 hover:text-white"
-              >
-                <X className="w-3 h-3" />
-              </button>
-            )}
+            <div className="absolute right-2 flex items-center gap-1">
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="text-neutral-400 hover:text-white p-0.5"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              )}
+              <FluentSearchIcon className="w-3.5 h-3.5 shrink-0 pointer-events-none" />
+            </div>
           </div>
 
           {/* Select Mode Toggle */}

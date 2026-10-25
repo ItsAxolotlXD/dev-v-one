@@ -781,24 +781,26 @@ export const MailApp: React.FC<MailAppProps> = ({ navigate }) => {
         <div className="w-96 border-r border-black/10 dark:border-white/10 bg-white/50 dark:bg-[#1f2227]/70 backdrop-blur-md flex flex-col shrink-0">
           {/* List Search & Command Bar */}
           <div className="p-3 border-b border-black/10 dark:border-white/10 space-y-2">
-            <div className="relative">
-              <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
+            <div className="relative h-8 sm:h-8.5 rounded-none windows-search-box flex items-center px-3">
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Tìm Kiếm Thư, Người Gửi, Chủ Đề..."
-                className="w-full h-8 pl-8.5 pr-7 rounded-[8px] bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs focus:outline-none focus:ring-1 focus:ring-[#0078d4] text-neutral-900 dark:text-white placeholder:text-neutral-400"
+                placeholder="Tìm kiếm thư, người gửi..."
+                className="w-full bg-transparent text-xs outline-none border-none pr-14"
               />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-white"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              )}
+              <div className="absolute right-2.5 flex items-center gap-1.5">
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery('')}
+                    className="text-neutral-400 hover:text-neutral-600 dark:hover:text-white p-0.5"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+                <Search className="w-3.5 h-3.5 text-neutral-400 shrink-0 pointer-events-none" />
+              </div>
             </div>
 
             {/* Filter Chips Bar */}

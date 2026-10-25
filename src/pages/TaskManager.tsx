@@ -219,24 +219,26 @@ export const TaskManager: React.FC<TaskManagerProps> = ({ navigate }) => {
         <div className="flex-1 flex flex-col bg-white/70 dark:bg-[#282c31]/80 backdrop-blur-md rounded-[8px] border border-black/10 dark:border-white/10 shadow-xs overflow-hidden">
           {/* Search & Filter Header */}
           <div className="p-3 border-b border-black/10 dark:border-white/10 flex items-center justify-between gap-3 bg-black/[0.02] dark:bg-black/20">
-            <div className="group relative flex-1 max-w-sm h-8 sm:h-8.5 bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10 rounded-[5px] flex items-center px-3.5 gap-2 transition-all focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]">
-              <FluentSearchIcon className="w-3.5 h-3.5 text-[#71717a] dark:text-[#a1a1aa] shrink-0 pointer-events-none" />
+            <div className="group relative flex-1 max-w-sm h-8 sm:h-8.5 rounded-none windows-search-box flex items-center px-3 gap-2 transition-all cursor-text select-none">
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Tìm Kiếm Tác Vụ (A-Z, PID) Hoặc Dùng /search..."
-                className="w-full bg-transparent text-xs text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#9ca3af] outline-none border-none py-1 pr-6 no-fluent-line"
+                placeholder="Tìm kiếm tác vụ (A-Z, PID)..."
+                className="w-full bg-transparent text-xs outline-none border-none py-1 pr-14 no-fluent-line"
               />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-2 text-[#71717a] hover:text-black dark:hover:text-white p-0.5 cursor-pointer"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              )}
+              <div className="absolute right-2.5 flex items-center gap-1.5">
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery('')}
+                    className="p-0.5 cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+                <FluentSearchIcon className="w-3.5 h-3.5 shrink-0 pointer-events-none" />
+              </div>
             </div>
 
             <div className="text-xs text-[#6b7280] dark:text-[#9ca3af]">

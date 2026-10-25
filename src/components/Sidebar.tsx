@@ -168,14 +168,14 @@ const MorphingVerticalIndicator: React.FC<MorphingIndicatorProps> = ({
 
   if (!bounds.visible) return null;
 
-  const INDICATOR_HEIGHT = 28;
+  const INDICATOR_HEIGHT = 24;
   const centeredTop = bounds.top + Math.round((bounds.height - INDICATOR_HEIGHT) / 2);
 
   // WebView SDK: Selected sidebar tab retains the vertical blue pill, but with NO motion animation across tabs
   if (isWebViewSdk) {
     return (
       <div
-        className="sidebar-static-indicator absolute w-[3.5px] h-[28px] bg-[#0078d7] dark:bg-[#4cc2ff] z-30 pointer-events-none rounded-none shadow-none"
+        className="sidebar-static-indicator absolute w-[2px] h-[24px] bg-[#005fb8] dark:bg-[#0078d4] z-30 pointer-events-none rounded-none shadow-none"
         style={{
           top: centeredTop,
           left: bounds.left,
@@ -189,7 +189,7 @@ const MorphingVerticalIndicator: React.FC<MorphingIndicatorProps> = ({
 
   return (
     <motion.div
-      className="absolute w-[3.5px] h-[28px] bg-[#0078d7] dark:bg-[#4cc2ff] z-30 pointer-events-none rounded-none shadow-none"
+      className="absolute w-[2px] h-[24px] bg-[#005fb8] dark:bg-[#0078d4] z-30 pointer-events-none rounded-none shadow-none"
       initial={false}
       animate={{
         top: centeredTop,
@@ -283,6 +283,64 @@ export const Sidebar: React.FC<SidebarProps> = ({
       navigate('/');
     }
   };
+
+  const handleSidebarPointerMove = (e: React.PointerEvent<HTMLElement>) => {
+    const item = (e.target as HTMLElement).closest('.sidebar-nav-item') as HTMLElement | null;
+    if (item) {
+      const rect = item.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      item.style.setProperty('--sidebar-reveal-x', `${x}px`);
+      item.style.setProperty('--sidebar-reveal-y', `${y}px`);
+      item.style.setProperty('--reveal-opacity', '1');
+    }
+  };
+
+  const handleSidebarPointerLeave = () => {
+    const activeItems = document.querySelectorAll<HTMLElement>('.sidebar-nav-item[style*="--reveal-opacity"]');
+    activeItems.forEach((el) => el.style.setProperty('--reveal-opacity', '0'));
+  };
+
+  // Real-time Fluent Reveal Effect cursor coordinate tracking
+  useEffect(() => {
+    let currentItem: HTMLElement | null = null;
+
+    const onPointerMove = (e: PointerEvent) => {
+      const item = (e.target as HTMLElement)?.closest('.sidebar-nav-item') as HTMLElement | null;
+      if (item) {
+        if (currentItem && currentItem !== item) {
+          currentItem.style.setProperty('--reveal-opacity', '0');
+        }
+        currentItem = item;
+        const rect = item.getBoundingClientRect();
+        const x = Math.round(e.clientX - rect.left);
+        const y = Math.round(e.clientY - rect.top);
+        item.style.setProperty('--sidebar-reveal-x', `${x}px`);
+        item.style.setProperty('--sidebar-reveal-y', `${y}px`);
+        item.style.setProperty('--reveal-opacity', '1');
+      } else if (currentItem) {
+        currentItem.style.setProperty('--reveal-opacity', '0');
+        currentItem = null;
+      }
+    };
+
+    const onPointerLeave = () => {
+      if (currentItem) {
+        currentItem.style.setProperty('--reveal-opacity', '0');
+        currentItem = null;
+      }
+      const activeItems = document.querySelectorAll<HTMLElement>('.sidebar-nav-item[style*="--reveal-opacity"]');
+      activeItems.forEach((el) => el.style.setProperty('--reveal-opacity', '0'));
+    };
+
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    window.addEventListener('pointerleave', onPointerLeave, { passive: true });
+
+    return () => {
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerleave', onPointerLeave);
+    };
+  }, []);
 
   const desktopNavRef = useRef<HTMLDivElement>(null);
   const mobileNavRef = useRef<HTMLDivElement>(null);
@@ -868,7 +926,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             setIsToolsFlyoutOpen(false);
             onOpenHelp();
           }}
-          className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-pointer text-left"
+          className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-default text-left"
         >
           <div className="flex items-center gap-2.5">
             <Info className="w-4 h-4 text-[#111827] dark:text-white stroke-[1.75]" />
@@ -884,7 +942,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             setIsToolsFlyoutOpen(false);
             onOpenDiscord();
           }}
-          className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-pointer text-left"
+          className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-default text-left"
         >
           <div className="flex items-center gap-2.5">
             <MessageSquarePlus className="w-4 h-4 text-[#111827] dark:text-white stroke-[1.75]" />
@@ -899,7 +957,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             setIsToolsFlyoutOpen(false);
             onOpenNotifications();
           }}
-          className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-pointer text-left"
+          className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-default text-left"
         >
           <div className="flex items-center gap-2.5">
             <MessageSquare className="w-4 h-4 text-[#111827] dark:text-white stroke-[1.75]" />
@@ -916,7 +974,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             setIsToolsFlyoutOpen(false);
             onOpenAddStream();
           }}
-          className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-pointer text-left"
+          className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-default text-left"
         >
           <div className="flex items-center gap-2.5">
             <PlusCircle className="w-4 h-4 text-[#0078d4] dark:text-[#4cc2ff] stroke-[1.75]" />
@@ -931,7 +989,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             setIsToolsFlyoutOpen(false);
             fileInputRef.current?.click();
           }}
-          className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-pointer text-left"
+          className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-default text-left"
         >
           <div className="flex items-center gap-2.5">
             <UploadCloud className="w-4 h-4 text-neutral-500 dark:text-neutral-300 stroke-[1.75]" />
@@ -946,7 +1004,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             setIsToolsFlyoutOpen(false);
             handleExportM3U8();
           }}
-          className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-pointer text-left"
+          className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-default text-left"
         >
           <div className="flex items-center gap-2.5">
             <DownloadCloud className="w-4 h-4 text-neutral-500 dark:text-neutral-300 stroke-[1.75]" />
@@ -968,7 +1026,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             setIsToolsFlyoutOpen(false);
             handleNavClick('/notes');
           }}
-          className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-pointer text-left"
+          className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-default text-left"
         >
           <div className="flex items-center gap-2.5">
             <AppTabIcon name="notes" className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
@@ -985,7 +1043,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             setIsToolsFlyoutOpen(false);
             handleNavClick('/file-explorer');
           }}
-          className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-pointer text-left"
+          className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-default text-left"
         >
           <div className="flex items-center gap-2.5">
             <AppTabIcon name="fileExplorer" className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
@@ -1002,7 +1060,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             setIsToolsFlyoutOpen(false);
             handleNavClick('/ms-paint');
           }}
-          className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-pointer text-left"
+          className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-default text-left"
         >
           <div className="flex items-center gap-2.5">
             <AppTabIcon name="paint" className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
@@ -1021,7 +1079,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 setIsToolsFlyoutOpen(false);
                 onOpenFindWords();
               }}
-              className="w-full h-[36px] px-3 rounded-[4px] flex items-center gap-2.5 text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-pointer text-left"
+              className="w-full h-[36px] px-3 rounded-[4px] flex items-center gap-2.5 text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-default text-left"
             >
               <FluentSearchIcon className="w-4 h-4 text-neutral-500 dark:text-neutral-300 shrink-0" />
               <span>Find words</span>
@@ -1044,9 +1102,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
             data-nav-active={(currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home') ? 'true' : undefined}
             onClick={() => handleNavClick('/')}
             title="Home"
-            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${
               (currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home')
-                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
             }`}
           >
@@ -1063,9 +1121,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
             data-nav-active={currentRoute === '/search' ? 'true' : undefined}
             onClick={() => handleNavClick('/search')}
             title="Explore"
-            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${
               currentRoute === '/search'
-                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
             }`}
           >
@@ -1082,9 +1140,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
             data-nav-active={(currentRoute === '/news' || currentRoute.startsWith('/article') || currentRoute.startsWith('/news/')) ? 'true' : undefined}
             onClick={() => handleNavClick('/news')}
             title="Articles"
-            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${
               (currentRoute === '/news' || currentRoute.startsWith('/article') || currentRoute.startsWith('/news/'))
-                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
             }`}
           >
@@ -1101,9 +1159,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
             data-nav-active={(currentRoute === '/widgets' || currentRoute.startsWith('/widgets')) ? 'true' : undefined}
             onClick={() => handleNavClick('/widgets')}
             title="Widgets"
-            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${
               (currentRoute === '/widgets' || currentRoute.startsWith('/widgets'))
-                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
             }`}
           >
@@ -1120,9 +1178,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
             data-nav-active={(currentRoute === '/tiles' || currentRoute === '/live-tiles' || currentRoute === '/livetiles') ? 'true' : undefined}
             onClick={() => handleNavClick('/tiles')}
             title="Tiles"
-            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${
               (currentRoute === '/tiles' || currentRoute === '/live-tiles' || currentRoute === '/livetiles')
-                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
             }`}
           >
@@ -1142,9 +1200,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
             data-nav-active={(currentRoute === '/copilot' || currentRoute.startsWith('/copilot')) ? 'true' : undefined}
             onClick={() => handleNavClick('/copilot')}
             title="Copilot"
-            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${
               (currentRoute === '/copilot' || currentRoute.startsWith('/copilot'))
-                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
             }`}
           >
@@ -1167,9 +1225,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
             onClick={() => handleNavClick('/recall')}
             title="Recall"
             aria-label="Recall"
-            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${
               (currentRoute === '/recall' || currentRoute.startsWith('/recall'))
-                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
             }`}
           >
@@ -1187,9 +1245,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
             onClick={() => handleNavClick('/sparkos')}
             title="SparkOS"
             aria-label="SparkOS"
-            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${
               currentRoute === '/sparkos'
-                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
             }`}
           >
@@ -1213,9 +1271,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 id={isMobile ? `mobile-nav-folder-${folder.id}` : `sidebar-nav-folder-${folder.id}`}
                 onClick={() => toggleFolder(folder.id)}
                 title={folder.name}
-                className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-4 cursor-default relative text-left rounded-none transition-colors ${
                   isOpen || hasActiveChild
-                    ? 'bg-black/5 dark:bg-white/[0.06] text-black dark:text-white font-medium'
+                    ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                     : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                 }`}
               >
@@ -1252,9 +1310,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         data-nav-active={active ? 'true' : undefined}
                         onClick={() => handleNavClick(item.route)}
                         title={item.label}
-                        className={`sidebar-nav-item w-full h-[36px] flex items-center justify-between px-2.5 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+                        className={`sidebar-nav-item w-full h-[36px] flex items-center justify-between px-4 cursor-default relative text-left rounded-none transition-colors ${
                           active
-                            ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                            ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                             : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                         }`}
                       >
@@ -1288,9 +1346,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           onMouseEnter={(e) => handleTooltipEnter(e, 'Home')}
           onMouseLeave={handleTooltipLeave}
           aria-label="Home"
-          className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+          className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
             (currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home')
-              ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+              ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
               : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
           }`}
         >
@@ -1306,9 +1364,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           onMouseEnter={(e) => handleTooltipEnter(e, 'Articles')}
           onMouseLeave={handleTooltipLeave}
           aria-label="Articles"
-          className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+          className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
             (currentRoute === '/news' || currentRoute.startsWith('/article') || currentRoute.startsWith('/news/'))
-              ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+              ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
               : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
           }`}
         >
@@ -1324,9 +1382,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           onMouseEnter={(e) => handleTooltipEnter(e, 'Widgets')}
           onMouseLeave={handleTooltipLeave}
           aria-label="Widgets"
-          className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+          className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
             (currentRoute === '/widgets' || currentRoute.startsWith('/widgets'))
-              ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+              ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
               : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
           }`}
         >
@@ -1342,9 +1400,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           onMouseEnter={(e) => handleTooltipEnter(e, 'Tiles')}
           onMouseLeave={handleTooltipLeave}
           aria-label="Tiles"
-          className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+          className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
             (currentRoute === '/tiles' || currentRoute === '/live-tiles' || currentRoute === '/livetiles')
-              ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+              ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
               : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
           }`}
         >
@@ -1363,9 +1421,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           onMouseEnter={(e) => handleTooltipEnter(e, 'Copilot')}
           onMouseLeave={handleTooltipLeave}
           aria-label="Copilot"
-          className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+          className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
             (currentRoute === '/copilot' || currentRoute.startsWith('/copilot'))
-              ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+              ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
               : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
           }`}
         >
@@ -1386,9 +1444,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           onMouseEnter={(e) => handleTooltipEnter(e, 'Recall')}
           onMouseLeave={handleTooltipLeave}
           aria-label="Recall"
-          className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+          className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
             (currentRoute === '/recall' || currentRoute.startsWith('/recall'))
-              ? 'bg-black/5 dark:bg-white/[0.08] shadow-xs'
+              ? 'bg-transparent hover:bg-black/5 dark:hover:bg-white/[0.05]'
               : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'
           }`}
         >
@@ -1404,9 +1462,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           onMouseEnter={(e) => handleTooltipEnter(e, 'SparkOS')}
           onMouseLeave={handleTooltipLeave}
           aria-label="SparkOS"
-          className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+          className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
             currentRoute === '/sparkos'
-              ? 'bg-black/5 dark:bg-white/[0.08] shadow-xs'
+              ? 'bg-transparent hover:bg-black/5 dark:hover:bg-white/[0.05]'
               : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'
           }`}
         >
@@ -1430,9 +1488,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onMouseEnter={(e) => handleTooltipEnter(e, folder.name)}
                 onMouseLeave={handleTooltipLeave}
                 aria-label={folder.name}
-                className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                   isOpen || hasActiveChild
-                    ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                    ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                     : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                 }`}
               >
@@ -1456,9 +1514,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         onMouseEnter={(e) => handleTooltipEnter(e, item.label)}
                         onMouseLeave={handleTooltipLeave}
                         aria-label={item.label}
-                        className={`sidebar-nav-item w-10 h-[36px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                        className={`sidebar-nav-item w-full h-[36px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                           active
-                            ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                            ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                             : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                         }`}
                       >
@@ -1504,7 +1562,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             onMouseEnter={(e) => handleTooltipEnter(e, 'Quay lại', true)}
             onMouseLeave={handleTooltipLeave}
             aria-label="Quay lại"
-            className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-[6px] flex items-center justify-center text-black dark:text-white hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 cursor-pointer transition-colors shrink-0"
+            className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-[6px] flex items-center justify-center text-black dark:text-white hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 cursor-default transition-colors shrink-0"
           >
             <ArrowLeft className="w-4.5 h-4.5 stroke-[1.75] text-black dark:text-white" />
           </button>
@@ -1517,7 +1575,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             onMouseEnter={(e) => handleTooltipEnter(e, isMobile ? 'Đóng menu' : 'Thu gọn menu', true)}
             onMouseLeave={handleTooltipLeave}
             aria-label={isMobile ? 'Close menu' : 'Collapse menu'}
-            className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-[6px] flex items-center justify-center text-black dark:text-white hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 cursor-pointer transition-colors shrink-0"
+            className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-[6px] flex items-center justify-center text-black dark:text-white hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 cursor-default transition-colors shrink-0"
           >
             {isMobile ? <X className="w-4.5 h-4.5 stroke-[1.75] text-black dark:text-white" /> : <Menu className="w-4.5 h-4.5 stroke-[1.75] text-black dark:text-white" />}
           </button>
@@ -1526,7 +1584,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <button
             type="button"
             onClick={() => handleNavClick('/')}
-            className="cursor-pointer flex items-center p-0 border-0 bg-transparent hover:opacity-85 active:scale-95 transition-opacity"
+            className="cursor-default flex items-center p-0 border-0 bg-transparent hover:opacity-85 active:scale-95 transition-opacity"
             title="Home"
           >
             <img 
@@ -1544,7 +1602,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           key="sidebar-nav-expanded"
           className={`sidebar-items-slide-up sidebar-app-scroller flex-1 overflow-y-auto pb-4 ${
             settings.windowsAppSdkPreview ? 'space-y-[2px]' : 'space-y-1'
-          } px-2.5 font-normal relative`}
+          } px-0 font-normal relative`}
         >
           {/* Morphing Vertical Blue Accent Bar */}
           <MorphingVerticalIndicator
@@ -1566,9 +1624,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home') ? 'true' : undefined}
               onClick={() => handleNavClick('/')}
               title="XAML Home"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${
                 (currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home')
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
@@ -1585,9 +1643,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/news' || currentRoute.startsWith('/article') || currentRoute.startsWith('/news/')) ? 'true' : undefined}
               onClick={() => handleNavClick('/news')}
               title="Articles"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${
                 (currentRoute === '/news' || currentRoute.startsWith('/article') || currentRoute.startsWith('/news/'))
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
@@ -1606,9 +1664,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/widgets' || currentRoute.startsWith('/widgets')) ? 'true' : undefined}
               onClick={() => handleNavClick('/widgets')}
               title="Widgets"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${
                 (currentRoute === '/widgets' || currentRoute.startsWith('/widgets'))
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
@@ -1625,9 +1683,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/tiles' || currentRoute === '/live-tiles' || currentRoute === '/livetiles') ? 'true' : undefined}
               onClick={() => handleNavClick('/tiles')}
               title="Tiles"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${
                 (currentRoute === '/tiles' || currentRoute === '/live-tiles' || currentRoute === '/livetiles')
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
@@ -1644,7 +1702,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onClick={() => handleNavClick('/store')}
               title="Store"
               aria-label="Store"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${currentRoute === '/store' ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs' : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'}`}
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${currentRoute === '/store' ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]' : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'}`}
             >
               <img src={STORE_ICON_URL} alt="" className="size-5 shrink-0 object-contain" />
               <span className="truncate text-[13.5px]">Store</span>
@@ -1659,7 +1717,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onClick={() => handleNavClick('/sparkos')}
               title="SparkOS"
               aria-label="SparkOS"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${currentRoute === '/sparkos' ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs' : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'}`}
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${currentRoute === '/sparkos' ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]' : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'}`}
             >
               <Monitor aria-hidden="true" className="size-5 shrink-0 text-[#1684e8]" />
               <span className="truncate text-[13.5px]">SparkOS</span>
@@ -1675,9 +1733,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onClick={() => handleNavClick('/recall')}
               title="Recall (preview)"
               aria-label="Recall"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${
                 (currentRoute === '/recall' || currentRoute.startsWith('/recall'))
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
@@ -1704,9 +1762,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/swift-bank' || currentRoute.startsWith('/swift-bank') || currentRoute === '/bank') ? 'true' : undefined}
               onClick={() => handleNavClick('/swift-bank')}
               title="Swift Bank - Ngân hàng số bảo mật"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${
                 (currentRoute === '/swift-bank' || currentRoute.startsWith('/swift-bank') || currentRoute === '/bank')
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
@@ -1724,9 +1782,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/swift' || currentRoute.startsWith('/swift') || currentRoute === '/swift-social') ? 'true' : undefined}
               onClick={() => handleNavClick('/swift')}
               title="Swift - Mạng xã hội đa năng"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${
                 (currentRoute === '/swift' || currentRoute.startsWith('/swift') || currentRoute === '/swift-social')
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
@@ -1744,9 +1802,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/friends' || currentRoute.startsWith('/friends')) ? 'true' : undefined}
               onClick={() => handleNavClick('/friends')}
               title="People - Danh sách 100 người dùng Sparkle (Dev)"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${
                 (currentRoute === '/friends' || currentRoute.startsWith('/friends'))
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
@@ -1764,9 +1822,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/logos-fandom' || currentRoute === '/logos-wiki' || currentRoute === '/fandom') ? 'true' : undefined}
               onClick={() => handleNavClick('/logos-fandom')}
               title="Logos Fandom - Bách khoa toàn thư nhận diện thương hiệu"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${
                 (currentRoute === '/logos-fandom' || currentRoute === '/logos-wiki' || currentRoute === '/fandom')
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
@@ -1801,7 +1859,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   data-nav-active={active ? 'true' : undefined}
                   onClick={() => handleNavClick(item.route)}
                   title={item.label}
-                  className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${active ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs' : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'}`}
+                  className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${active ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]' : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'}`}
                 >
                   <img src={item.icon} alt="" className="size-5 shrink-0 object-contain" />
                   <span className="truncate text-[13.5px]">{item.label}</span>
@@ -1819,9 +1877,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/copilot' || currentRoute.startsWith('/copilot')) ? 'true' : undefined}
               onClick={() => handleNavClick('/copilot')}
               title="Copilot"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${
                 (currentRoute === '/copilot' || currentRoute.startsWith('/copilot'))
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
@@ -1843,9 +1901,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/edge' || currentRoute === '/browser' || currentRoute.startsWith('/edge')) ? 'true' : undefined}
               onClick={() => handleNavClick('/edge')}
               title="Microsoft Edge"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-4 cursor-default relative text-left rounded-none transition-colors ${
                 (currentRoute === '/edge' || currentRoute === '/browser' || currentRoute.startsWith('/edge'))
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
@@ -1865,9 +1923,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/file-explorer' || currentRoute === '/files' || currentRoute.startsWith('/file-explorer')) ? 'true' : undefined}
               onClick={() => handleNavClick('/file-explorer')}
               title="File Explorer"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-4 cursor-default relative text-left rounded-none transition-colors ${
                 (currentRoute === '/file-explorer' || currentRoute === '/files' || currentRoute.startsWith('/file-explorer'))
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
@@ -1886,9 +1944,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/live-tv' || currentRoute.startsWith('/live-tv')) ? 'true' : undefined}
               onClick={() => handleNavClick('/live-tv')}
               title="Watch"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-4 cursor-default relative text-left rounded-none transition-colors ${
                 (currentRoute === '/live-tv' || currentRoute.startsWith('/live-tv'))
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
@@ -1952,9 +2010,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/notes' || currentRoute === '/write' || currentRoute === '/present' || currentRoute === '/table') ? 'true' : undefined}
               onClick={() => handleNavClick('/notes')}
               title="Notes"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-4 cursor-default relative text-left rounded-none transition-colors ${
                 (currentRoute === '/notes' || currentRoute === '/write' || currentRoute === '/present' || currentRoute === '/table')
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
@@ -1974,9 +2032,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/photos' || currentRoute === '/gallery' || currentRoute.startsWith('/photos') || currentRoute.startsWith('/gallery')) ? 'true' : undefined}
               onClick={() => handleNavClick('/photos')}
               title="Gallery"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-4 cursor-default relative text-left rounded-none transition-colors ${
                 (currentRoute === '/photos' || currentRoute === '/gallery' || currentRoute.startsWith('/photos') || currentRoute.startsWith('/gallery'))
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
@@ -1996,9 +2054,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/camera' || currentRoute.startsWith('/camera')) ? 'true' : undefined}
               onClick={() => handleNavClick('/camera')}
               title="Camera"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-4 cursor-default relative text-left rounded-none transition-colors ${
                 (currentRoute === '/camera' || currentRoute.startsWith('/camera'))
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
@@ -2018,9 +2076,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/ms-paint' || currentRoute === '/paint' || currentRoute.startsWith('/ms-paint')) ? 'true' : undefined}
               onClick={() => handleNavClick('/ms-paint')}
               title="Paint"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-4 cursor-default relative text-left rounded-none transition-colors ${
                 (currentRoute === '/ms-paint' || currentRoute === '/paint' || currentRoute.startsWith('/ms-paint'))
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
@@ -2040,9 +2098,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
       data-nav-active={(currentRoute === '/ink-space' || currentRoute === '/inkspace' || currentRoute === '/ink-canvas' || currentRoute === '/inkcanvas') ? 'true' : undefined}
       onClick={() => handleNavClick('/ink-space')}
       title="Ink Canvas - Infinite canvas"
-      className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+      className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-4 cursor-default relative text-left rounded-none transition-colors ${
         (currentRoute === '/ink-space' || currentRoute === '/inkspace' || currentRoute === '/ink-canvas' || currentRoute === '/inkcanvas')
-          ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+          ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
           : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
       }`}
     >
@@ -2059,9 +2117,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/calculator' || currentRoute === '/calc') ? 'true' : undefined}
               onClick={() => handleNavClick('/calculator')}
               title="Calculator - Máy tính Fluent"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-4 cursor-default relative text-left rounded-none transition-colors ${
                 (currentRoute === '/calculator' || currentRoute === '/calc')
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
@@ -2081,9 +2139,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/clock' || currentRoute.startsWith('/clock') || currentRoute === '/alarm' || currentRoute === '/timer' || currentRoute === '/stopwatch') ? 'true' : undefined}
               onClick={() => handleNavClick('/clock')}
               title="Clock - Đặt báo thức & Bấm giờ"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-4 cursor-default relative text-left rounded-none transition-colors ${
                 (currentRoute === '/clock' || currentRoute.startsWith('/clock') || currentRoute === '/alarm' || currentRoute === '/timer' || currentRoute === '/stopwatch')
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
@@ -2103,9 +2161,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/vlc' || currentRoute.startsWith('/vlc') || currentRoute === '/media-player') ? 'true' : undefined}
               onClick={() => handleNavClick('/vlc')}
               title="VLC Media Player"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-4 cursor-default relative text-left rounded-none transition-colors ${
                 (currentRoute === '/vlc' || currentRoute.startsWith('/vlc') || currentRoute === '/media-player')
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
@@ -2125,9 +2183,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/cookbook' || currentRoute.startsWith('/cookbook')) ? 'true' : undefined}
               onClick={() => handleNavClick('/cookbook')}
               title="Cookbook - Ẩm thực"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-4 cursor-default relative text-left rounded-none transition-colors ${
                 (currentRoute === '/cookbook' || currentRoute.startsWith('/cookbook'))
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
@@ -2157,9 +2215,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/task-manager' || currentRoute.startsWith('/task-manager')) ? 'true' : undefined}
               onClick={() => handleNavClick('/task-manager')}
               title="Task Manager"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-4 cursor-default relative text-left rounded-none transition-colors ${
                 (currentRoute === '/task-manager' || currentRoute.startsWith('/task-manager'))
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
@@ -2178,9 +2236,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/feedback-hub' || currentRoute === '/feedback') ? 'true' : undefined}
               onClick={() => handleNavClick('/feedback-hub')}
               title="Feedback Hub - Trung tâm phản hồi"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-3 cursor-pointer relative text-left rounded-[6px] transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-4 cursor-default relative text-left rounded-none transition-colors ${
                 (currentRoute === '/feedback-hub' || currentRoute === '/feedback')
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
@@ -2207,9 +2265,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={currentRoute === '/craftmine' ? 'true' : undefined}
               onClick={() => handleNavClick('/craftmine')}
               title="Craftmine"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${
                 currentRoute === '/craftmine'
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
@@ -2227,9 +2285,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={(currentRoute === '/photopea' || currentRoute === '/photoshop') ? 'true' : undefined}
               onClick={() => handleNavClick('/photopea')}
               title="Photopea - Trình chỉnh sửa ảnh PSD & Vector"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${
                 (currentRoute === '/photopea' || currentRoute === '/photoshop')
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
@@ -2249,7 +2307,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 window.open('https://discord.gg/wcdjaDDayK', '_blank', 'noopener,noreferrer');
               }}
               title="Discord"
-              className="sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white cursor-pointer text-left rounded-[6px] transition-colors"
+              className="sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white cursor-default text-left rounded-none transition-colors"
             >
               <svg className="w-5 h-5 fill-current shrink-0 text-black dark:text-white" viewBox="0 0 24 24">
                 <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.893.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.078.078 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
@@ -2262,7 +2320,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* Bottom Section: Sign In (placed directly above Settings) & Settings */}
-        <div className="px-2.5 py-2 shrink-0 mt-auto space-y-1 relative signin-flyout-container">
+        <div className="px-0 py-2 shrink-0 mt-auto space-y-1 relative signin-flyout-container">
           {/* Sign In item placed directly ABOVE Settings tab */}
 
           {/* XAML Controls - only in legacy mode (in smart layout it is in System folder) */}
@@ -2273,9 +2331,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-nav-active={isCurrentActive('/xaml-controls') ? 'true' : undefined}
               onClick={() => handleNavClick('/xaml-controls')}
               title="XAML Controls"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
+              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${
                 isCurrentActive('/xaml-controls')
-                  ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
@@ -2296,9 +2354,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
             data-nav-active={isCurrentActive('/settings') ? 'true' : undefined}
             onClick={() => handleNavClick('/settings')}
             title="Settings"
-            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-3 cursor-pointer relative text-left rounded-none transition-colors ${
+            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${
               isCurrentActive('/settings')
-                ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white font-medium shadow-xs'
+                ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
             }`}
           >
@@ -2320,10 +2378,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
           initial={false}
           animate={{ width: effectiveCollapsed ? 48 : 260 }}
           transition={shouldAnimateSidebar ? { duration: 0.2, ease: [0.16, 1, 0.3, 1] } : { duration: 0 }}
+          onPointerMove={handleSidebarPointerMove}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => {
             setIsHovered(false);
             setActiveTooltip(null);
+            handleSidebarPointerLeave();
           }}
           className={`hidden md:flex flex-col h-screen ${
             settings.windowsAppSdkPreview
@@ -2356,7 +2416,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onClick={handleGoBack} 
                   onMouseEnter={(e) => handleTooltipEnter(e, 'Quay lại')}
                   onMouseLeave={handleTooltipLeave}
-                  className="w-9 h-9 shrink-0 rounded-[6px] flex items-center justify-center text-black dark:text-white/90 hover:bg-black/5 dark:hover:bg-white/10 hover:text-black dark:hover:text-white cursor-pointer transition-colors"
+                  className="w-9 h-9 shrink-0 rounded-[6px] flex items-center justify-center text-black dark:text-white/90 hover:bg-black/5 dark:hover:bg-white/10 hover:text-black dark:hover:text-white cursor-default transition-colors"
                   aria-label="Quay lại"
                 >
                   <ArrowLeft className="w-5 h-5 stroke-[1.75] text-black dark:text-white" />
@@ -2369,7 +2429,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onClick={onToggleCollapse} 
                   onMouseEnter={(e) => handleTooltipEnter(e, 'Mở rộng menu')}
                   onMouseLeave={handleTooltipLeave}
-                  className="w-9 h-9 shrink-0 rounded-[6px] flex items-center justify-center text-black dark:text-white/90 hover:bg-black/5 dark:hover:bg-white/10 hover:text-black dark:hover:text-white cursor-pointer transition-colors"
+                  className="w-9 h-9 shrink-0 rounded-[6px] flex items-center justify-center text-black dark:text-white/90 hover:bg-black/5 dark:hover:bg-white/10 hover:text-black dark:hover:text-white cursor-default transition-colors"
                   aria-label="Expand menu"
                 >
                   <Menu className="w-5 h-5 stroke-[1.75] text-black dark:text-white" />
@@ -2404,9 +2464,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'XAML Home')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="XAML Home"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                     (currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home')
-                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
@@ -2422,9 +2482,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'Articles')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="Articles"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                     (currentRoute === '/news' || currentRoute.startsWith('/article') || currentRoute.startsWith('/news/'))
-                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
@@ -2440,9 +2500,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'Widgets')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="Widgets"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                     (currentRoute === '/widgets' || currentRoute.startsWith('/widgets'))
-                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
@@ -2458,7 +2518,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'Store')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="Store"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${currentRoute === '/store' ? 'bg-black/5 dark:bg-white/[0.08] shadow-xs' : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'}`}
+                  className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${currentRoute === '/store' ? 'bg-transparent hover:bg-black/5 dark:hover:bg-white/[0.05]' : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'}`}
                 >
                   <img src={STORE_ICON_URL} alt="" className="size-5 object-contain" />
                 </button>
@@ -2472,7 +2532,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'SparkOS')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="SparkOS"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${currentRoute === '/sparkos' ? 'bg-black/5 dark:bg-white/[0.08] shadow-xs' : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'}`}
+                  className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${currentRoute === '/sparkos' ? 'bg-transparent hover:bg-black/5 dark:hover:bg-white/[0.05]' : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'}`}
                 >
                   <Monitor aria-hidden="true" className="size-5 text-[#1684e8]" />
                 </button>
@@ -2486,9 +2546,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'Recall (preview)')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="Recall"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                     (currentRoute === '/recall' || currentRoute.startsWith('/recall'))
-                      ? 'bg-black/5 dark:bg-white/[0.08] shadow-xs'
+                      ? 'bg-transparent hover:bg-black/5 dark:hover:bg-white/[0.05]'
                       : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   }`}
                 >
@@ -2507,9 +2567,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'Swift Bank - Ngân hàng số')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="Swift Bank"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                     (currentRoute === '/swift-bank' || currentRoute.startsWith('/swift-bank') || currentRoute === '/bank')
-                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
@@ -2526,9 +2586,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'Swift Social')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="Swift Social"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                     (currentRoute === '/swift' || currentRoute.startsWith('/swift') || currentRoute === '/swift-social')
-                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
@@ -2545,9 +2605,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'People - 100 Người dùng')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="People"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                     (currentRoute === '/friends' || currentRoute.startsWith('/friends'))
-                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
@@ -2564,9 +2624,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'Logos Fandom')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="Logos Fandom"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                     (currentRoute === '/logos-fandom' || currentRoute === '/logos-wiki' || currentRoute === '/fandom')
-                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
@@ -2591,7 +2651,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     onMouseEnter={(e) => handleTooltipEnter(e, item.label)}
                     onMouseLeave={handleTooltipLeave}
                     aria-label={item.label}
-                    className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${currentRoute === item.route ? 'bg-black/5 dark:bg-white/[0.08] shadow-xs' : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'}`}
+                    className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${currentRoute === item.route ? 'bg-transparent hover:bg-black/5 dark:hover:bg-white/[0.05]' : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'}`}
                   >
                     <img src={item.icon} alt="" className="size-5 object-contain" />
                   </button>
@@ -2606,9 +2666,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'Copilot')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="Copilot"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                     (currentRoute === '/copilot' || currentRoute.startsWith('/copilot'))
-                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
@@ -2629,9 +2689,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'Microsoft Edge')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="Microsoft Edge"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                     (currentRoute === '/edge' || currentRoute === '/browser' || currentRoute.startsWith('/edge'))
-                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
@@ -2648,9 +2708,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'File Explorer')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="File Explorer"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                     (currentRoute === '/file-explorer' || currentRoute === '/files' || currentRoute.startsWith('/file-explorer'))
-                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
@@ -2666,9 +2726,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'Watch')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="Watch"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                     (currentRoute === '/live-tv' || currentRoute.startsWith('/live-tv'))
-                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
@@ -2685,9 +2745,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'Notes')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="Notes"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                     (currentRoute === '/notes' || currentRoute === '/write' || currentRoute === '/present' || currentRoute === '/table')
-                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
@@ -2704,9 +2764,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'Gallery')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="Gallery"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                     (currentRoute === '/photos' || currentRoute === '/gallery' || currentRoute.startsWith('/photos') || currentRoute.startsWith('/gallery'))
-                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
@@ -2723,9 +2783,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'Camera')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="Camera"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                     (currentRoute === '/camera' || currentRoute.startsWith('/camera'))
-                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
@@ -2742,9 +2802,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'Paint')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="Paint"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                     (currentRoute === '/ms-paint' || currentRoute === '/paint' || currentRoute.startsWith('/ms-paint'))
-                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
@@ -2761,9 +2821,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'Clock')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="Clock"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                     (currentRoute === '/clock' || currentRoute.startsWith('/clock') || currentRoute === '/alarm' || currentRoute === '/timer' || currentRoute === '/stopwatch')
-                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
@@ -2779,9 +2839,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'VLC Media Player')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="VLC Media Player"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                     (currentRoute === '/vlc' || currentRoute.startsWith('/vlc') || currentRoute === '/media-player')
-                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
@@ -2797,9 +2857,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'Lịch phát sóng')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="Lịch phát sóng"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                     (currentRoute === '/schedule' || currentRoute.startsWith('/schedule') || currentRoute === '/epg')
-                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
@@ -2815,9 +2875,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'Cookbook - Ẩm thực')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="Cookbook"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                     (currentRoute === '/cookbook' || currentRoute.startsWith('/cookbook'))
-                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
@@ -2836,9 +2896,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'Task Manager')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="Task Manager"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                     (currentRoute === '/task-manager' || currentRoute.startsWith('/task-manager'))
-                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
@@ -2857,9 +2917,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'Craftmine')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="Craftmine"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                     currentRoute === '/craftmine'
-                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
@@ -2876,9 +2936,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'Photopea')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="Photopea"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                     (currentRoute === '/photopea' || currentRoute === '/photoshop')
-                      ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                      ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
@@ -2894,7 +2954,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'Discord')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="Discord"
-                  className="sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white"
+                  className="sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white"
                 >
                   <svg className="w-5 h-5 fill-current text-black dark:text-white" viewBox="0 0 24 24">
                     <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.893.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.078.078 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
@@ -2911,9 +2971,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     onMouseEnter={(e) => handleTooltipEnter(e, 'Insider Flags (Lab)')}
                     onMouseLeave={handleTooltipLeave}
                     aria-label="Insider Flags (Lab)"
-                    className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                       currentRoute === '/test'
-                        ? 'bg-black/5 dark:bg-white/[0.08] text-black dark:text-white shadow-xs'
+                        ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                         : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                     }`}
                   >
@@ -2936,9 +2996,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     onMouseEnter={(e) => handleTooltipEnter(e, 'XAML Controls')}
                     onMouseLeave={handleTooltipLeave}
                     aria-label="XAML Controls"
-                    className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                    className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                       isCurrentActive('/xaml-controls')
-                        ? 'bg-black/5 dark:bg-white/[0.08] text-[#111827] dark:text-white shadow-xs'
+                        ? 'bg-transparent text-[#111827] dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                         : 'text-[#4b5563] dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-[#111827] dark:hover:text-white'
                     }`}
                   >
@@ -2955,16 +3015,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onMouseEnter={(e) => handleTooltipEnter(e, 'Settings')}
                   onMouseLeave={handleTooltipLeave}
                   aria-label="Settings"
-                  className={`sidebar-nav-item w-10 h-[38px] shrink-0 rounded-[6px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                  className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
                     isCurrentActive('/settings')
-                      ? 'bg-black/5 dark:bg-white/[0.08] text-[#111827] dark:text-white shadow-xs'
+                      ? 'bg-transparent text-[#111827] dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                       : 'text-[#4b5563] dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-[#111827] dark:hover:text-white'
                   }`}
                 >
                   {isCurrentActive('/settings') && (
                     <span
                       aria-hidden="true"
-                      className="sidebar-static-indicator absolute left-0 top-1/2 -translate-y-1/2 w-[3.5px] h-[28px] bg-[#0078d7] dark:bg-[#4cc2ff] rounded-none z-30 pointer-events-none"
+                      className="sidebar-static-indicator absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-[24px] bg-[#005fb8] dark:bg-[#0078d4] rounded-none z-30 pointer-events-none"
                       style={{ transition: 'none', animation: 'none' }}
                     />
                   )}
@@ -3004,6 +3064,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
             {/* Slide-out Sidebar Drawer following finger in real-time */}
             <motion.div 
               id="waves-mobile-sidebar"
+              onPointerMove={handleSidebarPointerMove}
+              onPointerLeave={handleSidebarPointerLeave}
               initial={mobileDragOffset !== null ? false : { x: '-100%', opacity: 0.8 }}
               animate={{ 
                 x: mobileDragOffset !== null 

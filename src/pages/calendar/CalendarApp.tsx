@@ -557,15 +557,15 @@ export const CalendarApp: React.FC<CalendarAppProps> = ({ navigate }) => {
         {/* Right: Search, Views Switcher, New Event & Export */}
         <div className="flex items-center gap-2">
           {/* Quick Search */}
-          <div className="relative hidden md:block">
-            <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-neutral-400" />
+          <div className="relative hidden md:flex items-center h-8 px-3 rounded-none windows-search-box">
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Tìm Sự Kiện..."
-              className="w-44 h-8 pl-8 pr-2.5 rounded-[8px] bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-[#0078d4]"
+              placeholder="Tìm sự kiện..."
+              className="w-40 bg-transparent text-xs outline-none border-none pr-6"
             />
+            <Search className="w-3.5 h-3.5 shrink-0 pointer-events-none absolute right-2.5 text-neutral-400" />
           </div>
 
           {/* View Mode Toggle */}

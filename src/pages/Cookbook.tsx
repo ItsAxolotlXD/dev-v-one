@@ -348,25 +348,27 @@ export const Cookbook: React.FC = () => {
             </div>
           </div>
 
-          {/* Search Input with 5px radius */}
-          <div className="relative w-full md:w-80 lg:w-96 h-10 flex items-center px-4 rounded-[5px] bg-black/5 dark:bg-white/[0.06] border border-black/10 dark:border-white/10 focus-within:border-orange-500 focus-within:ring-1 focus-within:ring-orange-500 transition-all shadow-2xs">
-            <FluentSearchIcon className="w-4 h-4 text-neutral-400 mr-2.5 shrink-0" />
+          {/* Search Input */}
+          <div className="relative w-full md:w-80 lg:w-96 h-8.5 sm:h-9 flex items-center px-3 rounded-none windows-search-box transition-all">
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Tìm Món Ăn, Nguyên Liệu, Thịt Bò, Canh Chua..."
-              className="w-full bg-transparent text-xs sm:text-sm text-neutral-900 dark:text-white placeholder-neutral-400 outline-none border-none"
+              placeholder="Tìm món ăn, nguyên liệu..."
+              className="w-full bg-transparent text-xs sm:text-[13px] outline-none border-none pr-14"
             />
-            {searchQuery && (
-              <button
-                type="button"
-                onClick={() => setSearchQuery('')}
-                className="text-neutral-400 hover:text-black dark:hover:text-white"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            )}
+            <div className="absolute right-2.5 flex items-center gap-1.5">
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="p-0.5 cursor-pointer"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+              <FluentSearchIcon className="w-3.5 h-3.5 shrink-0 pointer-events-none" />
+            </div>
           </div>
         </div>
       </div>

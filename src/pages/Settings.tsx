@@ -331,17 +331,8 @@ export const Settings: React.FC<SettingsProps> = ({
                 setIsFocused(true);
                 inputRef.current?.focus();
               }}
-              className={`group relative w-full h-8 sm:h-8.5 rounded-full ${
-                draftSettings.windowsAppSdkPreview
-                  ? '!bg-[#424752] !border-0 !border-none !shadow-none'
-                  : 'bg-black/5 dark:bg-[#282c31] border border-black/10 dark:border-white/10'
-              } flex items-center px-3.5 gap-2 transition-all cursor-text select-none ${
-                draftSettings.windowsAppSdkPreview
-                  ? '!border-0 !border-none !ring-0 !outline-none'
-                  : 'focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff]'
-              }`}
+              className="group relative w-full h-8 sm:h-8.5 rounded-none windows-search-box flex items-center px-3 gap-2 transition-all cursor-text select-none"
             >
-              <FluentSearchIcon className="w-3.5 h-3.5 text-neutral-400 shrink-0 pointer-events-none" />
               <input
                 ref={inputRef}
                 id="settings-search-input"
@@ -350,11 +341,11 @@ export const Settings: React.FC<SettingsProps> = ({
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
-                placeholder="Search In Settings"
-                className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#a0a6b2] outline-none border-none py-1 pr-14 no-fluent-line"
+                placeholder="Find a setting"
+                className="w-full bg-transparent text-xs sm:text-[13px] outline-none border-none py-1 pr-20 no-fluent-line"
               />
 
-              <div className="absolute right-2.5 flex items-center gap-1">
+              <div className="absolute right-2.5 flex items-center gap-1.5">
                 {searchQuery && (
                   <button
                     type="button"
@@ -363,7 +354,7 @@ export const Settings: React.FC<SettingsProps> = ({
                       setSearchQuery('');
                       inputRef.current?.focus();
                     }}
-                    className="text-[#71717a] dark:text-[#8e8e8e] hover:text-[#111827] dark:hover:text-white p-0.5 transition-colors cursor-pointer"
+                    className="p-0.5 transition-colors cursor-pointer"
                     title="Clear search"
                   >
                     <X className="w-3.5 h-3.5" />
@@ -376,14 +367,13 @@ export const Settings: React.FC<SettingsProps> = ({
                     toggleListening();
                   }}
                   className={`p-0.5 transition-colors cursor-pointer ${
-                    isListening
-                      ? 'text-[#E6005A] animate-pulse'
-                      : 'text-[#71717a] dark:text-[#8e8e8e] hover:text-[#111827] dark:hover:text-white'
+                    isListening ? 'text-[#E6005A] animate-pulse' : ''
                   }`}
                   title={isListening ? 'Stop listening' : 'Voice search'}
                 >
                   {isListening ? <MicOff className="w-3.5 h-3.5" /> : <Mic className="w-3.5 h-3.5" />}
                 </button>
+                <FluentSearchIcon className="w-3.5 h-3.5 shrink-0 pointer-events-none" />
               </div>
             </div>
             {searchQuery.trim() && (

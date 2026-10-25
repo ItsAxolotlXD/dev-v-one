@@ -445,39 +445,23 @@ export const SpotlightModal: React.FC<SpotlightModalProps> = ({
                     setIsFocused(true);
                     inputRef.current?.focus();
                   }}
-                  className="group relative w-full h-10 bg-[#1d1b1a]/85 border border-[#4cc2ff]/80 flex items-center px-3.5 gap-2 rounded-[12px] shadow-[0_0_0_1px_rgba(76,194,255,0.12),0_6px_18px_rgba(0,0,0,0.18)] focus-within:border-[#5dcaff] focus-within:ring-2 focus-within:ring-[#4cc2ff]/20 transition-all cursor-text select-none"
+                  className="group relative w-full h-10 rounded-none windows-search-box flex items-center px-3.5 gap-2 transition-all cursor-text select-none"
                 >
-                  <motion.div 
-                    animate={{
-                      x: isFocused || query ? 0 : 'calc(50% - 75px)',
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={query}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => {
+                      if (!query && !isListening) setIsFocused(false);
                     }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 350,
-                      damping: 28,
-                      mass: 0.8
-                    }}
-                    className={`flex items-center gap-2.5 w-full ${isFocused || isListening || query ? 'pr-24' : 'pr-14'}`}
-                  >
-                    <div className="w-[18px] h-[18px] min-w-[18px] min-h-[18px] max-w-[18px] max-h-[18px] flex items-center justify-center shrink-0">
-                      <FluentSearchIcon className="w-3.5 h-3.5 text-[#71717a] dark:text-white" />
-                    </div>
-                    <input
-                      ref={inputRef}
-                      type="text"
-                      value={query}
-                      onFocus={() => setIsFocused(true)}
-                      onBlur={() => {
-                        if (!query && !isListening) setIsFocused(false);
-                      }}
-                      onChange={(e) => setQuery(e.target.value)}
-                      placeholder={isListening ? "Listening..." : "Spotlight Search"}
-                      className="bg-transparent text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-white text-xs sm:text-[13px] focus:outline-none border-none font-medium w-full text-left no-fluent-line"
-                    />
-                  </motion.div>
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder={isListening ? "Listening..." : "Spotlight Search..."}
+                    className="bg-transparent text-xs sm:text-[13px] outline-none border-none font-medium w-full text-left pr-24 no-fluent-line"
+                  />
 
                   {/* Right Side Actions: Clear, Voice Search Mic & Search Settings */}
-                  <div className="absolute right-2 flex items-center gap-1 shrink-0 overflow-visible">
+                  <div className="absolute right-2 flex items-center gap-1.5 shrink-0 overflow-visible">
                     <AnimatePresence>
                       {query && (
                         <motion.button 
@@ -544,6 +528,7 @@ export const SpotlightModal: React.FC<SpotlightModalProps> = ({
                     >
                       <SettingsIcon className="w-4 h-4" />
                     </button>
+                    <FluentSearchIcon className="w-3.5 h-3.5 shrink-0 pointer-events-none" />
                   </div>
                 </div>
 

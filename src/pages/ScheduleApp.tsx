@@ -242,15 +242,15 @@ export const ScheduleApp: React.FC<ScheduleAppProps> = ({
             </div>
 
             {/* Search Input */}
-            <div className="relative w-full h-8 flex items-center px-3 rounded-[8px] bg-black/5 dark:bg-white/[0.06] border border-black/10 dark:border-white/10 focus-within:border-[#0078d4] focus-within:ring-1 focus-within:ring-[#0078d4] transition-all">
-              <FluentSearchIcon className="w-3.5 h-3.5 text-neutral-400 mr-2 shrink-0" />
+            <div className="relative w-full h-8 flex items-center px-3 rounded-none windows-search-box transition-all">
               <input
                 type="text"
                 value={channelSearch}
                 onChange={(e) => setChannelSearch(e.target.value)}
-                placeholder="Tìm Kênh (VTV1, HTV7...)"
-                className="w-full bg-transparent text-xs text-neutral-900 dark:text-white placeholder-neutral-400 outline-none border-none"
+                placeholder="Tìm kênh (VTV1, HTV7...)"
+                className="w-full bg-transparent text-xs outline-none border-none pr-6"
               />
+              <FluentSearchIcon className="w-3.5 h-3.5 shrink-0 pointer-events-none absolute right-2.5" />
             </div>
           </div>
 
@@ -329,15 +329,15 @@ export const ScheduleApp: React.FC<ScheduleAppProps> = ({
             </div>
 
             {/* Search Input for Programs */}
-            <div className="relative w-full lg:w-72 h-9 flex items-center px-3.5 rounded-[8px] bg-black/5 dark:bg-white/[0.06] border border-black/10 dark:border-white/10 focus-within:border-[#0078d4] focus-within:ring-1 focus-within:ring-[#0078d4] transition-all">
-              <FluentSearchIcon className="w-3.5 h-3.5 text-neutral-400 mr-2 shrink-0" />
+            <div className="relative w-full lg:w-72 h-8.5 sm:h-9 flex items-center px-3.5 rounded-none windows-search-box transition-all">
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Tìm Chương Trình, Thời Sự, Phim..."
-                className="w-full bg-transparent text-xs text-neutral-900 dark:text-white placeholder-neutral-400 outline-none border-none"
+                placeholder="Tìm chương trình, thời sự, phim..."
+                className="w-full bg-transparent text-xs sm:text-[13px] outline-none border-none pr-6"
               />
+              <FluentSearchIcon className="w-3.5 h-3.5 shrink-0 pointer-events-none absolute right-2.5" />
             </div>
           </div>
 

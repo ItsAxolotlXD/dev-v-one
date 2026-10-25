@@ -357,38 +357,40 @@ export const ImmersiveSearch: React.FC<ImmersiveSearchProps> = ({
       <div className="max-w-6xl mx-auto space-y-7 sm:space-y-9">
         {/* Top Search Bar Row */}
         <div className="flex items-center justify-center gap-3 w-full">
-          {/* Search Box matching Let's chat Copilot */}
+          {/* Search Box */}
           <div 
             id="immersive-search-capsule"
             onClick={() => {
               inputRef.current?.focus();
             }}
-            className="group relative w-full max-w-md sm:max-w-lg h-10 sm:h-11 bg-white/[0.06] dark:bg-white/[0.06] border border-white/10 flex items-center px-4 gap-2.5 rounded-xl shadow-[0_8px_24px_rgba(0,0,0,.14)] transition-all cursor-text select-none focus-within:ring-1 focus-within:ring-[#62c8ff]/35 focus-within:border-[#62c8ff]/60"
+            className="group relative w-full max-w-md sm:max-w-lg h-9 sm:h-10 rounded-none windows-search-box flex items-center px-3 gap-2 transition-all cursor-text select-none"
           >
-            <FluentSearchIcon className="w-4 h-4 text-[#71717a] dark:text-[#a1a1aa] shrink-0 pointer-events-none" />
             <input
               ref={inputRef}
               id="immersive-search-input"
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Find and search"
-              className="w-full bg-transparent text-xs sm:text-[13.5px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#9ca3af] outline-none border-none py-1 pr-10 no-fluent-line"
+              placeholder="Find and search..."
+              className="w-full bg-transparent text-xs sm:text-[13.5px] outline-none border-none py-1 pr-14 no-fluent-line"
             />
-            {query && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setQuery('');
-                  inputRef.current?.focus();
-                }}
-                className="absolute right-2.5 text-[#71717a] dark:text-white hover:text-[#111827] dark:hover:text-white p-0.5 transition-colors cursor-pointer"
-                title="Clear search"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            )}
+            <div className="absolute right-2.5 flex items-center gap-1.5">
+              {query && (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setQuery('');
+                    inputRef.current?.focus();
+                  }}
+                  className="p-0.5 transition-colors cursor-pointer"
+                  title="Clear search"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+              <FluentSearchIcon className="w-4 h-4 shrink-0 pointer-events-none" />
+            </div>
           </div>
         </div>
 

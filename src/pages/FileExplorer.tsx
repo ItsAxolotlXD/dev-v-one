@@ -646,15 +646,15 @@ export const FileExplorer: React.FC<FileExplorerProps> = ({ navigate }) => {
         </div>
 
         {/* Search within Current Folder */}
-        <div className="w-44 sm:w-64 h-7 px-2.5 rounded-[5px] bg-white dark:bg-[#1b1f24] border border-black/10 dark:border-white/10 flex items-center gap-2 shadow-2xs">
-          <Search className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
+        <div className="group relative w-44 sm:w-64 h-7 px-2.5 rounded-none windows-search-box flex items-center gap-2">
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder={`Tìm Trong ${breadcrumbItems[breadcrumbItems.length - 1]?.name}...`}
-            className="w-full bg-transparent text-xs text-[#111827] dark:text-white placeholder-neutral-400 outline-none"
+            placeholder={`Tìm trong ${breadcrumbItems[breadcrumbItems.length - 1]?.name}...`}
+            className="w-full bg-transparent text-xs outline-none pr-6"
           />
+          <Search className="w-3.5 h-3.5 shrink-0 pointer-events-none absolute right-2" />
         </div>
       </div>
 

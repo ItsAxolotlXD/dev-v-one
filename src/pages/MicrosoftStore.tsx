@@ -167,10 +167,12 @@ export const MicrosoftStore: React.FC<MicrosoftStoreProps> = ({ installedApps, o
               </button>
             ))}
           </nav>
-          <label className="ml-auto flex h-10 min-w-[220px] flex-1 items-center gap-2 rounded-full border border-white/15 bg-[#1b1b1e] px-3.5 focus-within:border-[#53c7ff] sm:max-w-[340px]">
-            <Search className="size-4 shrink-0 text-white/55" />
-            <input value={search} onChange={(event) => { setSearch(event.target.value); setSelectedAppId(null); }} placeholder="Search apps, games, and more" className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white/40" aria-label="Search Store" />
-            {search && <button type="button" onClick={() => setSearch('')} aria-label="Clear search"><X className="size-4 text-white/50" /></button>}
+          <label className="ml-auto relative flex h-8.5 min-w-[220px] flex-1 items-center gap-2 rounded-none windows-search-box px-3 sm:max-w-[340px]">
+            <input value={search} onChange={(event) => { setSearch(event.target.value); setSelectedAppId(null); }} placeholder="Search apps, games, and more" className="min-w-0 flex-1 bg-transparent text-xs sm:text-[13px] outline-none pr-14" aria-label="Search Store" />
+            <div className="absolute right-2.5 flex items-center gap-1.5">
+              {search && <button type="button" onClick={() => setSearch('')} aria-label="Clear search" className="p-0.5"><X className="size-3.5" /></button>}
+              <Search className="size-3.5 shrink-0 pointer-events-none" />
+            </div>
           </label>
           <button type="button" onClick={() => { setActiveCategory('All'); setActiveSection('Apps'); setSelectedAppId(null); }} className="hidden items-center gap-2 rounded-full border border-white/15 px-3.5 py-2 text-xs text-white/80 transition hover:bg-white/10 sm:flex"><Download className="size-3.5" /> Library <span className="rounded-full bg-white/10 px-1.5 py-0.5 text-[10px]">{installedApps.length}</span></button>
         </div>

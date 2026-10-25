@@ -974,21 +974,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                   setIsSearchFlyoutOpen(true);
                 }}
                 data-flyout-open={isSearchFlyoutOpen ? "true" : "false"}
-                className={`fluent-search-box group relative w-full h-8.5 sm:h-9 ${
-                  settings.windowsAppSdkPreview
-                    ? '!h-[38px] !min-h-[38px] !rounded-[9999px] !bg-[#1f1f1f] !border-0 !border-none !border-b-0 !shadow-none'
-                    : settings.roundedSearchBox
-                      ? 'rounded-xl bg-white/[0.06] border border-white/10 shadow-[0_8px_24px_rgba(0,0,0,.14)]'
-                      : 'rounded-xl bg-white/[0.06] border border-white/10 shadow-[0_8px_24px_rgba(0,0,0,.14)]'
-                } flex items-center px-2.5 gap-1.5 transition-all cursor-text select-none ${
-                  settings.windowsAppSdkPreview
-                    ? '!border-0 !border-none !ring-0 !outline-none'
-                    : `focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff] ${
-                        isSearchFlyoutOpen && !settings.roundedSearchBox
-                          ? 'border-b-2 border-b-[#005fb8] dark:border-b-[#4cc2ff]'
-                          : ''
-                      }`
-                }`}
+                className="fluent-search-box windows-search-box group relative w-full h-8.5 sm:h-9 rounded-none flex items-center px-2.5 gap-1.5 transition-all cursor-text select-none"
               >
                 {/* Left Search Icon */}
                 <button
@@ -1166,21 +1152,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                   setIsSearchFlyoutOpen(true);
                 }}
                 data-flyout-open={isSearchFlyoutOpen ? "true" : "false"}
-                className={`fluent-search-box group relative w-full h-8.5 sm:h-9 ${
-                  settings.windowsAppSdkPreview
-                    ? '!h-[38px] !min-h-[38px] !rounded-[9999px] !bg-[#1f1f1f] !border-0 !border-none !border-b-0 !shadow-none'
-                    : settings.roundedSearchBox
-                      ? 'rounded-xl bg-white/[0.06] border border-white/10 shadow-[0_8px_24px_rgba(0,0,0,.14)]'
-                      : 'rounded-xl bg-white/[0.06] border border-white/10 shadow-[0_8px_24px_rgba(0,0,0,.14)]'
-                } flex items-center px-2.5 gap-1.5 transition-all cursor-text select-none ${
-                  settings.windowsAppSdkPreview
-                    ? '!border-0 !border-none !ring-0 !outline-none'
-                    : `focus-within:ring-1 focus-within:ring-[#0078d4]/30 dark:focus-within:ring-[#4cc2ff]/30 focus-within:border-b-2 focus-within:border-b-[#005fb8] dark:focus-within:border-b-[#4cc2ff] ${
-                        isSearchFlyoutOpen && !settings.roundedSearchBox
-                          ? 'border-b-2 border-b-[#005fb8] dark:border-b-[#4cc2ff]'
-                          : ''
-                      }`
-                }`}
+                className="fluent-search-box windows-search-box group relative w-full h-8.5 sm:h-9 rounded-none flex items-center px-2.5 gap-1.5 transition-all cursor-text select-none"
               >
                 {/* Left Search Icon (if Move search to the left is active OR WebView SDK is enabled) */}
                 {(searchExperience === 'left' || settings.windowsAppSdkPreview) && (

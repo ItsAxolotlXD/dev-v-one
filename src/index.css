@@ -139,11 +139,10 @@
   border-bottom-color: #4cc2ff !important;
 }
 
-/* Global Interactive Cursor Hand (pointer) */
+/* Global Interactive Cursor Hand (pointer) - excludes sidebar and modal dialogs */
 button,
 a,
 [role="button"],
-.sidebar-nav-item,
 .fluent-reveal-item,
 .channel-card,
 .news-card,
@@ -157,73 +156,592 @@ input[type="reset"],
 }
 
 /* ========================================================
-   TOÀN BỘ SEARCH BOX / INPUT BOX DẠNG PILL (BO TRÒN GÓC 9999PX)
+   SIDEBAR & MODAL DIALOGS: NORMAL ARROW CURSOR (DEFAULT), NOT HAND (POINTER)
    ======================================================== */
-input[type="text"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
-input[type="search"],
-input[type="url"],
-input[type="email"],
-input[type="password"],
-input[type="tel"],
-input[type="number"],
-.copilot-style-input,
-.fluent-search-box,
-[id*="search-box"],
-[id*="search-bar"],
-[id*="search-container"],
-[id*="search-capsule"],
-[id*="search-input"],
-[class*="search-box"],
-[class*="search-bar"],
-[class*="search-container"],
-[class*="search-input"],
-#topbar-search-box,
-#sidebar-search-box,
-#channels-search-box,
-#settings-search-box,
-#immersive-search-capsule,
-#floating-search-bar-pill,
-#copilot-search-box,
-#copilot-flyout-search-box,
-#spotlight-search-container {
-  border-radius: 9999px !important;
+#waves-desktop-sidebar,
+#waves-desktop-sidebar *,
+#waves-collapsed-sidebar,
+#waves-collapsed-sidebar *,
+#waves-mobile-sidebar,
+#waves-mobile-sidebar *,
+aside#waves-desktop-sidebar,
+aside#waves-desktop-sidebar *,
+.sidebar-nav-item,
+.sidebar-nav-item *,
+button.sidebar-nav-item,
+button.sidebar-nav-item *,
+[data-nav-item],
+[data-nav-item] * {
+  cursor: default !important;
 }
 
-#topbar-search-box[data-flyout-open="true"] {
-  border-radius: 9999px !important;
+/* Modal Dialogs: action buttons & interactive items use normal cursor point (arrow), not hand */
+.fluent-modal-dialog button,
+.fluent-modal-dialog [role="button"],
+.fluent-modal-dialog input[type="button"],
+.fluent-modal-dialog input[type="submit"],
+.fluent-modal-dialog input[type="reset"],
+.fluent-modal-footer button,
+.fluent-modal-footer [role="button"],
+.fluent-modal-footer input[type="button"],
+.fluent-modal-footer input[type="submit"],
+[role="dialog"] button,
+[role="dialog"] [role="button"],
+[role="dialog"] input[type="button"],
+[role="dialog"] input[type="submit"],
+[role="dialog"] input[type="reset"],
+[aria-modal="true"] button,
+[aria-modal="true"] [role="button"],
+[aria-modal="true"] input[type="button"],
+[aria-modal="true"] input[type="submit"],
+[aria-modal="true"] input[type="reset"],
+#welcome-modal-dialog button,
+#under-construction-modal-dialog button,
+#discord-welcome-dialog button,
+#developer-mode-modal-dialog button,
+#custom-stream-dialog button,
+#help-modal-dialog button,
+#news-summary-dialog button,
+#add-stream-dialog button,
+#unsaved-settings-modal-dialog button,
+#spotlight-modal button {
+  cursor: default !important;
+}
+
+[role="dialog"] input[type="text"],
+[role="dialog"] input[type="search"],
+[role="dialog"] input[type="url"],
+[role="dialog"] textarea {
+  cursor: text !important;
 }
 
 /* ========================================================
-   INSIDER FLAG: ROUNDED SEARCH BOX (100% ROUND / PILL)
+   SIDEBAR REVEAL EFFECT & FULL-BLEED HOVER BACKGROUND
    ======================================================== */
-html.rounded-search-boxes input[type="text"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
-html.rounded-search-boxes input[type="search"],
-html.rounded-search-boxes .copilot-style-input,
-html.rounded-search-boxes .fluent-search-box,
-html.rounded-search-boxes [id*="search-box"],
-html.rounded-search-boxes [id*="search-bar"],
-html.rounded-search-boxes [id*="search-container"],
-html.rounded-search-boxes [id*="search-capsule"],
-html.rounded-search-boxes [id*="search-input"],
-html.rounded-search-boxes [class*="search-box"],
-html.rounded-search-boxes [class*="search-bar"],
-html.rounded-search-boxes [class*="search-container"],
-html.rounded-search-boxes [class*="search-input"],
-html.rounded-search-boxes #topbar-search-box,
-html.rounded-search-boxes #topbar-search-box[data-flyout-open="true"],
-html.rounded-search-boxes #sidebar-search-box,
-html.rounded-search-boxes #channels-search-box,
-html.rounded-search-boxes #settings-search-box,
-html.rounded-search-boxes #immersive-search-capsule,
-html.rounded-search-boxes #floating-search-bar-pill,
-html.rounded-search-boxes #copilot-search-box,
-html.rounded-search-boxes #copilot-flyout-search-box,
-html.rounded-search-boxes #spotlight-search-container,
-html.rounded-search-boxes #find-words-bar,
-html.rounded-search-boxes #find-words-bar > div,
-body.rounded-search-boxes #topbar-search-box,
-body.rounded-search-boxes [id*="search-box"] {
-  border-radius: 9999px !important;
+.sidebar-nav-item {
+  width: 100% !important;
+  border-radius: 0 !important;
+  position: relative;
+  overflow: hidden;
+  transition: background-color 0.12s ease-out, color 0.12s ease-out;
+}
+
+/* Selected tab on sidebar has NO background */
+.sidebar-nav-item[data-nav-active="true"] {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.sidebar-nav-item:hover,
+.sidebar-nav-item[data-nav-active="true"]:hover {
+  background-color: rgba(255, 255, 255, 0.04) !important;
+}
+
+html.light-mode .sidebar-nav-item:hover,
+html.light-mode .sidebar-nav-item[data-nav-active="true"]:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Reveal Highlight Surface Glow on Sidebar Items */
+.sidebar-nav-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.12s ease-out;
+  background: radial-gradient(
+    circle 130px at var(--sidebar-reveal-x, 50%) var(--sidebar-reveal-y, 50%),
+    rgba(255, 255, 255, 0.28) 0%,
+    rgba(255, 255, 255, 0.12) 40%,
+    rgba(255, 255, 255, 0.03) 65%,
+    transparent 80%
+  );
+  z-index: 1;
+}
+
+html.light-mode .sidebar-nav-item::before {
+  background: radial-gradient(
+    circle 130px at var(--sidebar-reveal-x, 50%) var(--sidebar-reveal-y, 50%),
+    rgba(0, 0, 0, 0.14) 0%,
+    rgba(0, 0, 0, 0.06) 40%,
+    rgba(0, 0, 0, 0.02) 65%,
+    transparent 80%
+  );
+}
+
+.sidebar-nav-item:hover::before {
+  opacity: 1 !important;
+}
+
+/* Reveal Border Illumination (1px border stroke illuminated under the cursor) */
+.sidebar-nav-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.12s ease-out;
+  z-index: 2;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  background: radial-gradient(
+    circle 110px at var(--sidebar-reveal-x, 50%) var(--sidebar-reveal-y, 50%),
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.18) 45%,
+    transparent 75%
+  ) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+html.light-mode .sidebar-nav-item::after {
+  background: radial-gradient(
+    circle 110px at var(--sidebar-reveal-x, 50%) var(--sidebar-reveal-y, 50%),
+    rgba(0, 0, 0, 0.25) 0%,
+    rgba(0, 0, 0, 0.10) 45%,
+    transparent 75%
+  ) border-box;
+}
+
+.sidebar-nav-item:hover::after {
+  opacity: 1 !important;
+}
+
+/* Keep icon and label content on top of reveal layer */
+.sidebar-nav-item > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Sidebar vertical pill indicator: thinner (2px), darker blue, no background */
+.sidebar-static-indicator,
+.sidebar-indicator {
+  width: 2px !important;
+  height: 24px !important;
+  background-color: #005fb8 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+:where(.dark, .dark *) .sidebar-static-indicator,
+:where(.dark, .dark *) .sidebar-indicator {
+  background-color: #0078d4 !important;
+}
+
+/* ========================================================
+   WINDOWS 10 UNIVERSAL SEARCH BOX SPECIFICATION
+   Hình 1: Search box thường (Unfocused)
+     - Border radius: 0px (Góc vuông, sắc cạnh hoàn toàn)
+     - Nền: màu tối #1a1a1a / rgba(0,0,0,0.45)
+     - Viền: 2px solid rgba(255, 255, 255, 0.45) bao quanh 4 cạnh
+     - Text / placeholder: #a6a6a6 / #cccccc
+     - Icon kính lúp bên phải: màu #a6a6a6
+   Hình 2: Search box focused (:focus-within, :focus)
+     - Border radius: 0px (Góc vuông sắc cạnh)
+     - Nền: MÀU TRẮNG TINH #ffffff
+     - Viền: 2px solid #0078d7 bao quanh 4 cạnh
+     - Text: màu đen #000000
+     - Caret (con trỏ soạn thảo): màu đen #000000
+     - Placeholder: #767676
+     - Icon kính lúp & nút bấm bên phải: màu tối #333333
+   ======================================================== */
+.windows-search-box,
+#topbar-search-box,
+#sidebar-search-box,
+#channels-search-box,
+#news-search-box,
+#settings-search-box,
+#widgets-search-box,
+#copilot-search-box,
+#copilot-flyout-search-box,
+#immersive-search-capsule,
+#spotlight-search-container,
+#find-words-bar > div,
+.fluent-search-box,
+[id*="search-box"] {
+  border-radius: 0px !important;
+  background-color: #1a1a1a !important;
+  background-image: none !important;
+  border: 2px solid rgba(255, 255, 255, 0.45) !important;
+  box-shadow: none !important;
+  outline: none !important;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease !important;
+}
+
+.windows-search-box:hover,
+#topbar-search-box:hover,
+#sidebar-search-box:hover,
+#channels-search-box:hover,
+#news-search-box:hover,
+#settings-search-box:hover,
+#widgets-search-box:hover,
+#copilot-search-box:hover,
+#copilot-flyout-search-box:hover,
+#immersive-search-capsule:hover,
+#spotlight-search-container:hover,
+#find-words-bar > div:hover,
+.fluent-search-box:hover,
+[id*="search-box"]:hover {
+  border-color: rgba(255, 255, 255, 0.65) !important;
+}
+
+/* Unfocused inner elements */
+.windows-search-box input,
+#topbar-search-box input,
+#sidebar-search-box input,
+#channels-search-box input,
+#news-search-box input,
+#settings-search-box input,
+#widgets-search-box input,
+#copilot-search-box input,
+#copilot-flyout-search-box input,
+#immersive-search-capsule input,
+#spotlight-search-container input,
+#find-words-bar input,
+.fluent-search-box input,
+[id*="search-box"] input {
+  border-radius: 0px !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  color: #ffffff !important;
+  caret-color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+.windows-search-box input::placeholder,
+#topbar-search-box input::placeholder,
+#sidebar-search-box input::placeholder,
+#channels-search-box input::placeholder,
+#news-search-box input::placeholder,
+#settings-search-box input::placeholder,
+#widgets-search-box input::placeholder,
+#copilot-search-box input::placeholder,
+#copilot-flyout-search-box input::placeholder,
+#immersive-search-capsule input::placeholder,
+#spotlight-search-container input::placeholder,
+#find-words-bar input::placeholder,
+.fluent-search-box input::placeholder,
+[id*="search-box"] input::placeholder {
+  color: #a6a6a6 !important;
+  opacity: 1 !important;
+}
+
+.windows-search-box svg,
+.windows-search-box button,
+#topbar-search-box svg,
+#topbar-search-box button,
+#sidebar-search-box svg,
+#sidebar-search-box button,
+#channels-search-box svg,
+#channels-search-box button,
+#news-search-box svg,
+#news-search-box button,
+#settings-search-box svg,
+#settings-search-box button,
+#widgets-search-box svg,
+#widgets-search-box button,
+#copilot-search-box svg,
+#copilot-search-box button,
+#copilot-flyout-search-box svg,
+#copilot-flyout-search-box button,
+#immersive-search-capsule svg,
+#immersive-search-capsule button,
+#spotlight-search-container svg,
+#spotlight-search-container button,
+#find-words-bar svg,
+#find-words-bar button,
+.fluent-search-box svg,
+.fluent-search-box button,
+[id*="search-box"] svg,
+[id*="search-box"] button {
+  color: #a6a6a6 !important;
+}
+
+/* Light Mode Unfocused State */
+html.light-mode .windows-search-box,
+html.light-mode #topbar-search-box,
+html.light-mode #sidebar-search-box,
+html.light-mode #channels-search-box,
+html.light-mode #news-search-box,
+html.light-mode #settings-search-box,
+html.light-mode #widgets-search-box,
+html.light-mode #copilot-search-box,
+html.light-mode #copilot-flyout-search-box,
+html.light-mode #immersive-search-capsule,
+html.light-mode #spotlight-search-container,
+html.light-mode #find-words-bar > div,
+html.light-mode .fluent-search-box,
+html.light-mode [id*="search-box"] {
+  background-color: #f3f3f3 !important;
+  border: 2px solid #767676 !important;
+  color: #000000 !important;
+}
+
+html.light-mode .windows-search-box input,
+html.light-mode #topbar-search-box input,
+html.light-mode #sidebar-search-box input,
+html.light-mode #channels-search-box input,
+html.light-mode #news-search-box input,
+html.light-mode #settings-search-box input,
+html.light-mode #widgets-search-box input,
+html.light-mode #copilot-search-box input,
+html.light-mode #copilot-flyout-search-box input,
+html.light-mode #immersive-search-capsule input,
+html.light-mode #spotlight-search-container input,
+html.light-mode #find-words-bar input,
+html.light-mode .fluent-search-box input,
+html.light-mode [id*="search-box"] input {
+  color: #000000 !important;
+  caret-color: #000000 !important;
+}
+
+html.light-mode .windows-search-box input::placeholder,
+html.light-mode #topbar-search-box input::placeholder,
+html.light-mode #sidebar-search-box input::placeholder,
+html.light-mode #channels-search-box input::placeholder,
+html.light-mode #news-search-box input::placeholder,
+html.light-mode #settings-search-box input::placeholder,
+html.light-mode #widgets-search-box input::placeholder,
+html.light-mode #copilot-search-box input::placeholder,
+html.light-mode #copilot-flyout-search-box input::placeholder,
+html.light-mode #immersive-search-capsule input::placeholder,
+html.light-mode #spotlight-search-container input::placeholder,
+html.light-mode #find-words-bar input::placeholder,
+html.light-mode .fluent-search-box input::placeholder,
+html.light-mode [id*="search-box"] input::placeholder {
+  color: #767676 !important;
+}
+
+html.light-mode .windows-search-box svg,
+html.light-mode .windows-search-box button,
+html.light-mode #topbar-search-box svg,
+html.light-mode #topbar-search-box button,
+html.light-mode #sidebar-search-box svg,
+html.light-mode #sidebar-search-box button,
+html.light-mode #channels-search-box svg,
+html.light-mode #channels-search-box button,
+html.light-mode #news-search-box svg,
+html.light-mode #news-search-box button,
+html.light-mode #settings-search-box svg,
+html.light-mode #settings-search-box button,
+html.light-mode #widgets-search-box svg,
+html.light-mode #widgets-search-box button,
+html.light-mode #copilot-search-box svg,
+html.light-mode #copilot-search-box button,
+html.light-mode #copilot-flyout-search-box svg,
+html.light-mode #copilot-flyout-search-box button,
+html.light-mode #immersive-search-capsule svg,
+html.light-mode #immersive-search-capsule button,
+html.light-mode #spotlight-search-container svg,
+html.light-mode #spotlight-search-container button,
+html.light-mode #find-words-bar svg,
+html.light-mode #find-words-bar button,
+html.light-mode .fluent-search-box svg,
+html.light-mode .fluent-search-box button,
+html.light-mode [id*="search-box"] svg,
+html.light-mode [id*="search-box"] button {
+  color: #555555 !important;
+}
+
+/* ========================================================
+   HÌNH 2: FOCUSED SEARCH BOX (Cho cả Dark và Light Mode)
+   - Nền: MÀU TRẮNG TINH #ffffff
+   - Viền: 2px solid #0078d7
+   - Text: màu đen #000000
+   - Caret: màu đen #000000
+   - Placeholder: màu xám #767676
+   - Icon / buttons: màu đen / xám đậm #333333
+   ======================================================== */
+.windows-search-box:focus-within,
+#topbar-search-box:focus-within,
+#sidebar-search-box:focus-within,
+#channels-search-box:focus-within,
+#news-search-box:focus-within,
+#settings-search-box:focus-within,
+#widgets-search-box:focus-within,
+#copilot-search-box:focus-within,
+#copilot-flyout-search-box:focus-within,
+#immersive-search-capsule:focus-within,
+#spotlight-search-container:focus-within,
+#find-words-bar > div:focus-within,
+.fluent-search-box:focus-within,
+[id*="search-box"]:focus-within,
+html.light-mode .windows-search-box:focus-within,
+html.light-mode #topbar-search-box:focus-within,
+html.light-mode #sidebar-search-box:focus-within,
+html.light-mode #channels-search-box:focus-within,
+html.light-mode #news-search-box:focus-within,
+html.light-mode #settings-search-box:focus-within,
+html.light-mode #widgets-search-box:focus-within,
+html.light-mode #copilot-search-box:focus-within,
+html.light-mode #copilot-flyout-search-box:focus-within,
+html.light-mode #immersive-search-capsule:focus-within,
+html.light-mode #spotlight-search-container:focus-within,
+html.light-mode #find-words-bar > div:focus-within,
+html.light-mode .fluent-search-box:focus-within,
+html.light-mode [id*="search-box"]:focus-within,
+html.dark .windows-search-box:focus-within,
+html.dark #topbar-search-box:focus-within,
+html.dark #sidebar-search-box:focus-within,
+html.dark #channels-search-box:focus-within,
+html.dark #news-search-box:focus-within,
+html.dark #settings-search-box:focus-within,
+html.dark #widgets-search-box:focus-within,
+html.dark #copilot-search-box:focus-within,
+html.dark #copilot-flyout-search-box:focus-within,
+html.dark #immersive-search-capsule:focus-within,
+html.dark #spotlight-search-container:focus-within,
+html.dark #find-words-bar > div:focus-within,
+html.dark .fluent-search-box:focus-within,
+html.dark [id*="search-box"]:focus-within {
+  border-radius: 0px !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border: 2px solid #0078d7 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Focused Inner Elements */
+.windows-search-box:focus-within input,
+#topbar-search-box:focus-within input,
+#sidebar-search-box:focus-within input,
+#channels-search-box:focus-within input,
+#news-search-box:focus-within input,
+#settings-search-box:focus-within input,
+#widgets-search-box:focus-within input,
+#copilot-search-box:focus-within input,
+#copilot-flyout-search-box:focus-within input,
+#immersive-search-capsule:focus-within input,
+#spotlight-search-container:focus-within input,
+#find-words-bar > div:focus-within input,
+.fluent-search-box:focus-within input,
+[id*="search-box"]:focus-within input,
+html.dark .windows-search-box:focus-within input,
+html.dark #topbar-search-box:focus-within input,
+html.dark #sidebar-search-box:focus-within input,
+html.dark #channels-search-box:focus-within input,
+html.dark #news-search-box:focus-within input,
+html.dark #settings-search-box:focus-within input,
+html.dark #widgets-search-box:focus-within input,
+html.dark #copilot-search-box:focus-within input,
+html.dark #copilot-flyout-search-box:focus-within input,
+html.dark #immersive-search-capsule:focus-within input,
+html.dark #spotlight-search-container:focus-within input,
+html.dark #find-words-bar > div:focus-within input,
+html.dark .fluent-search-box:focus-within input,
+html.dark [id*="search-box"]:focus-within input,
+html.light-mode .windows-search-box:focus-within input,
+html.light-mode #topbar-search-box:focus-within input,
+html.light-mode #sidebar-search-box:focus-within input,
+html.light-mode #channels-search-box:focus-within input,
+html.light-mode #news-search-box:focus-within input,
+html.light-mode #settings-search-box:focus-within input,
+html.light-mode #widgets-search-box:focus-within input,
+html.light-mode #copilot-search-box:focus-within input,
+html.light-mode #copilot-flyout-search-box:focus-within input,
+html.light-mode #immersive-search-capsule:focus-within input,
+html.light-mode #spotlight-search-container:focus-within input,
+html.light-mode #find-words-bar > div:focus-within input,
+html.light-mode .fluent-search-box:focus-within input,
+html.light-mode [id*="search-box"]:focus-within input {
+  color: #000000 !important;
+  caret-color: #000000 !important;
+  background-color: transparent !important;
+}
+
+.windows-search-box:focus-within input::placeholder,
+#topbar-search-box:focus-within input::placeholder,
+#sidebar-search-box:focus-within input::placeholder,
+#channels-search-box:focus-within input::placeholder,
+#news-search-box:focus-within input::placeholder,
+#settings-search-box:focus-within input::placeholder,
+#widgets-search-box:focus-within input::placeholder,
+#copilot-search-box:focus-within input::placeholder,
+#copilot-flyout-search-box:focus-within input::placeholder,
+#immersive-search-capsule:focus-within input::placeholder,
+#spotlight-search-container:focus-within input::placeholder,
+#find-words-bar > div:focus-within input::placeholder,
+.fluent-search-box:focus-within input::placeholder,
+[id*="search-box"]:focus-within input::placeholder,
+html.dark .windows-search-box:focus-within input::placeholder,
+html.dark #topbar-search-box:focus-within input::placeholder,
+html.dark #sidebar-search-box:focus-within input::placeholder,
+html.dark #channels-search-box:focus-within input::placeholder,
+html.dark #news-search-box:focus-within input::placeholder,
+html.dark #settings-search-box:focus-within input::placeholder,
+html.dark #widgets-search-box:focus-within input::placeholder,
+html.dark #copilot-search-box:focus-within input::placeholder,
+html.dark #copilot-flyout-search-box:focus-within input::placeholder,
+html.dark #immersive-search-capsule:focus-within input::placeholder,
+html.dark #spotlight-search-container:focus-within input::placeholder,
+html.dark #find-words-bar > div:focus-within input::placeholder,
+html.dark .fluent-search-box:focus-within input::placeholder,
+html.dark [id*="search-box"]:focus-within input::placeholder,
+html.light-mode .windows-search-box:focus-within input::placeholder,
+html.light-mode #topbar-search-box:focus-within input::placeholder,
+html.light-mode #sidebar-search-box:focus-within input::placeholder,
+html.light-mode #channels-search-box:focus-within input::placeholder,
+html.light-mode #news-search-box:focus-within input::placeholder,
+html.light-mode #settings-search-box:focus-within input::placeholder,
+html.light-mode #widgets-search-box:focus-within input::placeholder,
+html.light-mode #copilot-search-box:focus-within input::placeholder,
+html.light-mode #copilot-flyout-search-box:focus-within input::placeholder,
+html.light-mode #immersive-search-capsule:focus-within input::placeholder,
+html.light-mode #spotlight-search-container:focus-within input::placeholder,
+html.light-mode #find-words-bar > div:focus-within input::placeholder,
+html.light-mode .fluent-search-box:focus-within input::placeholder,
+html.light-mode [id*="search-box"]:focus-within input::placeholder {
+  color: #767676 !important;
+  opacity: 1 !important;
+}
+
+.windows-search-box:focus-within svg,
+.windows-search-box:focus-within button,
+#topbar-search-box:focus-within svg,
+#topbar-search-box:focus-within button,
+#sidebar-search-box:focus-within svg,
+#sidebar-search-box:focus-within button,
+#channels-search-box:focus-within svg,
+#channels-search-box:focus-within button,
+#news-search-box:focus-within svg,
+#news-search-box:focus-within button,
+#settings-search-box:focus-within svg,
+#settings-search-box:focus-within button,
+#widgets-search-box:focus-within svg,
+#widgets-search-box:focus-within button,
+#copilot-search-box:focus-within svg,
+#copilot-search-box:focus-within button,
+#copilot-flyout-search-box:focus-within svg,
+#copilot-flyout-search-box:focus-within button,
+#immersive-search-capsule:focus-within svg,
+#immersive-search-capsule:focus-within button,
+#spotlight-search-container:focus-within svg,
+#spotlight-search-container:focus-within button,
+#find-words-bar > div:focus-within svg,
+#find-words-bar > div:focus-within button,
+.fluent-search-box:focus-within svg,
+.fluent-search-box:focus-within button,
+[id*="search-box"]:focus-within svg,
+[id*="search-box"]:focus-within button,
+html.dark #settings-search-box:focus-within svg,
+html.dark #settings-search-box:focus-within button,
+html.dark #topbar-search-box:focus-within svg,
+html.dark #topbar-search-box:focus-within button,
+html.dark #channels-search-box:focus-within svg,
+html.dark #channels-search-box:focus-within button,
+html.dark #news-search-box:focus-within svg,
+html.dark #news-search-box:focus-within button,
+html.dark #widgets-search-box:focus-within svg,
+html.dark #widgets-search-box:focus-within button,
+html.dark #immersive-search-capsule:focus-within svg,
+html.dark #immersive-search-capsule:focus-within button,
+html.dark #spotlight-search-container:focus-within svg,
+html.dark #spotlight-search-container:focus-within button {
+  color: #333333 !important;
 }
 
 
@@ -4903,23 +5421,19 @@ html.light-mode .fluent-btn-secondary:active {
   background-color: #EFEFEF !important;
 }
 
-/* Fluent Design Search Boxes: Thanh line ngang phẳng chạy hết chiều ngang thanh search, không cong lên hay chạy sang 2 bên */
+/* Fluent Design Search Boxes: Windows 10 border and background (no linear-gradient bottom line) */
 #topbar-search-box,
 #spotlight-search-container,
 #immersive-search-capsule,
 #sidebar-search-box,
 #channels-search-box,
+#news-search-box,
 #settings-search-box,
 #copilot-search-box,
 #copilot-flyout-search-box,
 #widgets-search-box,
 .fluent-search-box {
-  border-bottom: none !important;
-  background-image: linear-gradient(to right, #777777, #777777) !important;
-  background-size: 100% 2px !important;
-  background-position: left bottom !important;
-  background-repeat: no-repeat !important;
-  transition: background-image 0.15s ease-in-out !important;
+  background-image: none !important;
 }
 
 #topbar-search-box:focus-within,
@@ -4927,16 +5441,15 @@ html.light-mode .fluent-btn-secondary:active {
 #immersive-search-capsule:focus-within,
 #sidebar-search-box:focus-within,
 #channels-search-box:focus-within,
+#news-search-box:focus-within,
 #settings-search-box:focus-within,
 #copilot-search-box:focus-within,
 #copilot-flyout-search-box:focus-within,
 #widgets-search-box:focus-within,
 .fluent-search-box:focus-within {
-  border-bottom: none !important;
-  background-image: linear-gradient(to right, #4cc2ff, #4cc2ff) !important;
-  background-size: 100% 2px !important;
-  background-position: left bottom !important;
-  background-repeat: no-repeat !important;
+  background-image: none !important;
+  background-color: #ffffff !important;
+  border: 2px solid #0078d7 !important;
   outline: none !important;
 }
 
@@ -4945,16 +5458,13 @@ html.light-mode #spotlight-search-container,
 html.light-mode #immersive-search-capsule,
 html.light-mode #sidebar-search-box,
 html.light-mode #channels-search-box,
+html.light-mode #news-search-box,
 html.light-mode #settings-search-box,
 html.light-mode #copilot-search-box,
 html.light-mode #copilot-flyout-search-box,
 html.light-mode #widgets-search-box,
 html.light-mode .fluent-search-box {
-  border-bottom: none !important;
-  background-image: linear-gradient(to right, #8e8e93, #8e8e93) !important;
-  background-size: 100% 2px !important;
-  background-position: left bottom !important;
-  background-repeat: no-repeat !important;
+  background-image: none !important;
 }
 
 html.light-mode #topbar-search-box:focus-within,
@@ -4962,16 +5472,15 @@ html.light-mode #spotlight-search-container:focus-within,
 html.light-mode #immersive-search-capsule:focus-within,
 html.light-mode #sidebar-search-box:focus-within,
 html.light-mode #channels-search-box:focus-within,
+html.light-mode #news-search-box:focus-within,
 html.light-mode #settings-search-box:focus-within,
 html.light-mode #copilot-search-box:focus-within,
 html.light-mode #copilot-flyout-search-box:focus-within,
 html.light-mode #widgets-search-box:focus-within,
 html.light-mode .fluent-search-box:focus-within {
-  border-bottom: none !important;
-  background-image: linear-gradient(to right, #005fb8, #005fb8) !important;
-  background-size: 100% 2px !important;
-  background-position: left bottom !important;
-  background-repeat: no-repeat !important;
+  background-image: none !important;
+  background-color: #ffffff !important;
+  border: 2px solid #0078d7 !important;
 }
 
 /* Standard inline text inputs with horizontal bottom line */
