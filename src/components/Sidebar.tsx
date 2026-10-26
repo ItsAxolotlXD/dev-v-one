@@ -79,7 +79,7 @@ import { getStoreAppForRoute } from '../data/storeApps';
 const LOGO_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-7bX9C6ZMjpXAbn0eXLI2Wk6ZhwUwk0.png';
 const COPILOT_ICON_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-7bX9C6ZMjpXAbn0eXLI2Wk6ZhwUwk0.png';
 const XAML_ICON_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-kj8VATj48xgpu6hRIVOSoJomQMTGnR.png';
-const ONEDRIVE_FOLDER_ICON_URL = 'https://thumb.wikimedia.org/wikipedia/commons/thumb/5/59/OneDrive_Folder_Icon.svg/3840px-OneDrive_Folder_Icon.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail';
+const ONEDRIVE_FOLDER_ICON_URL = 'https://winaero.com/blog/wp-content/uploads/2014/12/folder_win10.png';
 
 
 interface MorphingIndicatorProps {
@@ -392,6 +392,56 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const toggleToolsFlyout = () => {
     setIsToolsFlyoutOpen((prev) => !prev);
   };
+
+  const [sidebarSearchQuery, setSidebarSearchQuery] = useState('');
+  const [isSidebarSearchFlyoutOpen, setIsSidebarSearchFlyoutOpen] = useState(false);
+  const sidebarSearchRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isSidebarSearchFlyoutOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (sidebarSearchRef.current && !sidebarSearchRef.current.contains(target as Node)) {
+        setIsSidebarSearchFlyoutOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isSidebarSearchFlyoutOpen]);
+
+  const handleSidebarSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = sidebarSearchQuery.trim();
+    if (trimmed) {
+      setIsSidebarSearchFlyoutOpen(false);
+      navigate(`/search?q=${encodeURIComponent(trimmed)}`);
+    } else {
+      onOpenSearch();
+    }
+  };
+
+  const sidebarQuickApps = useMemo(() => {
+    return [
+      { label: 'Watch (Live TV)', route: '/live-tv', desc: 'Xem truyền hình trực tiếp' },
+      { label: 'Articles', route: '/news', desc: 'Bản tin & bài viết mới nhất' },
+      { label: 'Widgets', route: '/widgets', desc: 'Bảng tiện ích thời tiết & tin tức' },
+      { label: 'Tiles', route: '/tiles', desc: 'Màn hình Live Tiles start' },
+      { label: 'Copilot', route: '/copilot', desc: 'Trợ lý AI Copilot tìm kiếm' },
+      { label: 'Notes', route: '/notes', desc: 'Soạn thảo ghi chú văn phòng' },
+      { label: 'Store', route: '/store', desc: 'Kho ứng dụng Microsoft Store' },
+      { label: 'Clock', route: '/clock', desc: 'Đồng hồ, hẹn giờ, báo thức' },
+      { label: 'Lịch phát sóng', route: '/schedule', desc: 'Lịch phát sóng EPG truyền hình' },
+      { label: 'Settings', route: '/settings', desc: 'Cài đặt hệ thống & giao diện' },
+    ];
+  }, []);
+
+  const filteredSidebarQuickApps = useMemo(() => {
+    const q = sidebarSearchQuery.trim().toLowerCase();
+    if (!q) return sidebarQuickApps.slice(0, 5);
+    return sidebarQuickApps.filter(
+      (a) => a.label.toLowerCase().includes(q) || a.desc.toLowerCase().includes(q)
+    );
+  }, [sidebarQuickApps, sidebarSearchQuery]);
 
   // Close flyouts when clicking outside
   useEffect(() => {
@@ -1624,6 +1674,95 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </button>
         </div>
 
+        {/* Search on sidebar - placed between title bar and Home tab */}
+        {settings.searchOnSidebar && (
+          <div className="px-3 pb-2 pt-0.5 shrink-0 w-full relative z-30" ref={sidebarSearchRef}>
+            <form onSubmit={handleSidebarSearchSubmit} className="w-full">
+              <div
+                id="sidebar-search-box"
+                onClick={() => setIsSidebarSearchFlyoutOpen(true)}
+                className="fluent-search-box windows-search-box group relative w-full h-8 rounded-none flex items-center px-2.5 gap-1.5 transition-all cursor-text select-none bg-black/40 border border-white/20 backdrop-blur-md"
+              >
+                <input
+                  type="text"
+                  value={sidebarSearchQuery}
+                  onChange={(e) => {
+                    setSidebarSearchQuery(e.target.value);
+                    setIsSidebarSearchFlyoutOpen(true);
+                  }}
+                  onFocus={() => setIsSidebarSearchFlyoutOpen(true)}
+                  placeholder="Search"
+                  className="w-full bg-transparent text-[12px] text-white placeholder-white/70 outline-none border-none py-1 pl-0.5 pr-12"
+                />
+                <div className="absolute right-1.5 flex items-center gap-1 z-10">
+                  {sidebarSearchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSidebarSearchQuery('');
+                        setIsSidebarSearchFlyoutOpen(false);
+                      }}
+                      title="Clear search"
+                      className="text-white/70 hover:text-white p-0.5 transition-colors cursor-pointer rounded-full"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                  <button
+                    type="submit"
+                    title="Search"
+                    className="p-1 text-white hover:text-[#4cc2ff] transition-colors cursor-pointer flex items-center justify-center shrink-0"
+                  >
+                    <FluentSearchIcon className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            </form>
+
+            {/* Sidebar Search Flyout */}
+            <AnimatePresence>
+              {isSidebarSearchFlyoutOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 4, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 4, scale: 0.98 }}
+                  transition={{ duration: 0.12 }}
+                  className="absolute left-3 right-3 top-full mt-1 z-50 rounded-[8px] bg-[#1e2025]/98 backdrop-blur-2xl border border-white/20 shadow-[0_16px_40px_rgba(0,0,0,0.5)] p-1.5 select-none text-white max-h-[320px] overflow-y-auto"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="text-[10.5px] font-semibold text-white/50 px-2 py-1 uppercase tracking-wider">
+                    Quick suggestions
+                  </div>
+                  {filteredSidebarQuickApps.map((item) => (
+                    <button
+                      key={item.route}
+                      type="button"
+                      onClick={() => {
+                        setIsSidebarSearchFlyoutOpen(false);
+                        navigate(item.route);
+                      }}
+                      className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-[4px] text-left hover:bg-white/10 transition-colors text-xs text-white"
+                    >
+                      <span className="font-medium text-white">{item.label}</span>
+                      <span className="text-[11px] text-white/50 truncate max-w-[120px]">{item.desc}</span>
+                    </button>
+                  ))}
+                  {sidebarSearchQuery.trim() && (
+                    <button
+                      type="button"
+                      onClick={handleSidebarSearchSubmit}
+                      className="w-full mt-1 pt-1 border-t border-white/10 flex items-center gap-2 px-2.5 py-1.5 rounded-[4px] text-left hover:bg-white/10 transition-colors text-xs text-[#4cc2ff] font-medium"
+                    >
+                      <FluentSearchIcon className="w-3.5 h-3.5" />
+                      <span className="truncate">Search for "{sidebarSearchQuery.trim()}"</span>
+                    </button>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )}
+
         {/* Unified Navigation List inside common scroll container */}
         <div 
           ref={containerRef}
@@ -2413,15 +2552,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
             setActiveTooltip(null);
             handleSidebarPointerLeave();
           }}
-          className={`hidden md:flex flex-col h-screen ${
-            settings.windowsAppSdkPreview
-              ? '!bg-[#141414] border-r border-[#202020]'
-              : 'bg-[#f3f3f3] dark:bg-[#1b1f24] border-r border-[#e5e5e5] dark:border-[#2e2e2e]'
-          } text-[#111827] dark:text-white select-none shrink-0 fixed top-0 z-40 overflow-visible shadow-none ${
+          className={`hidden md:flex flex-col h-screen bg-[#250F1A] border-r border-[#3d182b] text-[#111827] dark:text-white select-none shrink-0 fixed top-0 z-40 overflow-visible shadow-none ${
             settings.sidebarPosition === 'right' ? 'right-0' : 'left-0'
           } ${effectiveCollapsed ? 'w-[48px]' : 'w-[260px]'}`}
           style={{
-            backgroundColor: settings.windowsAppSdkPreview ? '#141414' : (settings.theme === 'light' ? '#f3f3f3' : '#1b1f24'),
+            backgroundColor: '#250F1A',
+            backgroundImage: 'none',
             backdropFilter: 'none',
             WebkitBackdropFilter: 'none',
             boxShadow: 'none',
@@ -2462,6 +2598,24 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 >
                   <Menu className="w-5 h-5 stroke-[1.75] text-black dark:text-white" />
                 </button>
+
+                {/* Search Button in Collapsed Mode */}
+                {settings.searchOnSidebar && (
+                  <button 
+                    id="btn-sidebar-collapsed-search"
+                    type="button"
+                    onClick={() => {
+                      if (onToggleCollapse) onToggleCollapse();
+                      else onOpenSearch();
+                    }} 
+                    onMouseEnter={(e) => handleTooltipEnter(e, 'Search')}
+                    onMouseLeave={handleTooltipLeave}
+                    className="w-9 h-9 shrink-0 rounded-[6px] flex items-center justify-center text-black dark:text-white/90 hover:bg-black/5 dark:hover:bg-white/10 hover:text-black dark:hover:text-white cursor-default transition-colors"
+                    aria-label="Search"
+                  >
+                    <FluentSearchIcon className="w-5 h-5 text-black dark:text-white" />
+                  </button>
+                )}
               </div>
 
               {/* Scrollable Middle Navigation Items List (Items maintain uniform spacing, do not cram, fully scrollable) */}
@@ -3111,13 +3265,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onTouchStart={handleDrawerTouchStart}
               onTouchMove={handleDrawerTouchMove}
               onTouchEnd={handleDrawerTouchEnd}
-              className={`relative w-[285px] max-w-[85vw] h-full ${
-                settings.windowsAppSdkPreview
-                  ? '!bg-[#141414] border-r border-[#202020]'
-                  : 'bg-[#f3f3f3] dark:bg-[#1b1f24] border-r border-[#e5e5e5] dark:border-[#333333]'
-              } text-[#111827] dark:text-white shadow-none flex flex-col z-10`}
+              className={`relative w-[285px] max-w-[85vw] h-full bg-[#250F1A] border-r border-[#3d182b] text-[#111827] dark:text-white shadow-none flex flex-col z-10`}
               style={{
-                backgroundColor: settings.windowsAppSdkPreview ? '#141414' : undefined,
+                backgroundColor: '#250F1A',
+                backgroundImage: 'none',
                 boxShadow: 'none',
               }}
             >

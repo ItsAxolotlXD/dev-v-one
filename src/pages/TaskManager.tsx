@@ -102,7 +102,7 @@ export const TaskManager: React.FC<TaskManagerProps> = ({ navigate }) => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-transparent text-[#111827] dark:text-[#f3f4f6] flex flex-col p-3 sm:p-5 md:p-6 select-none font-sans">
+    <div className="w-full min-h-screen bg-transparent text-[#111827] dark:text-[#f3f4f6] flex flex-col px-3 sm:px-5 md:px-6 pt-5 pb-6 select-none font-sans">
       {/* Top Header Bar */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-3">
@@ -111,7 +111,7 @@ export const TaskManager: React.FC<TaskManagerProps> = ({ navigate }) => {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#111827] dark:text-white">
+              <h1 className="text-2xl sm:text-3xl font-normal tracking-tight text-[#111827] dark:text-white">
                 Task Manager
               </h1>
               <span className="text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff] border border-[#0078d4]/20 dark:border-[#4cc2ff]/30">

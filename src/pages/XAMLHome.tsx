@@ -124,152 +124,11 @@ export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, o
   return (
     <section className="min-h-[calc(100vh-3.5rem)] w-full bg-transparent px-1 pb-10 text-neutral-900 dark:text-[#e8e8e8] font-sans">
       <div className="mx-auto w-full max-w-5xl px-2 sm:px-4 pt-3 space-y-4">
-        {/* Live Tiles Home Insider Flag Banner */}
-        <div className="w-full rounded-xl bg-gradient-to-r from-[#0078d4]/20 via-[#0050ef]/10 to-transparent border border-[#0078d4]/30 p-3 sm:p-3.5 flex items-center justify-between gap-3 text-xs">
-          <div className="flex items-center gap-2.5">
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#0078d4] text-white uppercase tracking-wider">
-              Insider Flag
-            </span>
-            <span className="text-neutral-200 font-medium">
-              Trải nghiệm giao diện <strong className="text-white">Live Tiles Home</strong> phong cách Windows 8 & Windows 10
-            </span>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              type="button"
-              onClick={() => updateSetting('liveTilesHome', true)}
-              className="px-3 py-1 bg-[#0078d4] hover:bg-[#0067b8] text-white font-semibold rounded text-xs transition-colors cursor-pointer"
-            >
-              Bật Live Tiles
-            </button>
-            <button
-              type="button"
-              onClick={() => onNavigate('/settings')}
-              className="text-neutral-400 hover:text-white px-1.5 py-1 text-xs underline cursor-pointer"
-            >
-              Cài đặt
-            </button>
-          </div>
-        </div>
-
-        {/* Real-Time VnExpress News Summary Block (5s auto-rotate) */}
-        <div className="w-full rounded-2xl bg-black/25 dark:bg-black/35 border border-white/10 p-4 sm:p-5 shadow-2xl overflow-hidden relative backdrop-blur-md">
-          {/* Top Bar inside News Block */}
-          <div className="flex items-center justify-between gap-3 mb-3 pb-2.5 border-b border-white/10">
-            <div className="flex items-center gap-2">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
-              </span>
-              <div className="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-red-400 uppercase">
-                <Radio className="w-3.5 h-3.5" />
-                <span>Trực tiếp VnExpress</span>
-              </div>
-              <span className="text-[11px] text-neutral-400 hidden sm:inline-block">
-                • Cập nhật tự động (5s đổi tin)
-              </span>
-            </div>
-
-            {/* Controls & Nav to /news */}
-            <div className="flex items-center gap-2">
-              <div className="text-[11px] text-neutral-400 font-mono">
-                {newsArticles.length > 0 ? `${currentNewsIndex + 1}/${newsArticles.length}` : '1/1'}
-              </div>
-
-              <div className="flex items-center gap-1">
-                <button
-                  type="button"
-                  onClick={handlePrevNews}
-                  className="p-1 rounded-full bg-white/5 hover:bg-white/10 text-neutral-300 hover:text-white transition-colors cursor-pointer"
-                  title="Tin trước"
-                  aria-label="Tin trước"
-                >
-                  <ChevronLeft className="w-3.5 h-3.5" />
-                </button>
-                <button
-                  type="button"
-                  onClick={handleNextNews}
-                  className="p-1 rounded-full bg-white/5 hover:bg-white/10 text-neutral-300 hover:text-white transition-colors cursor-pointer"
-                  title="Tin tiếp theo"
-                  aria-label="Tin tiếp theo"
-                >
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => onNavigate('/news')}
-                className="text-xs font-medium text-[#4cc2ff] hover:text-[#7fd7ff] hover:underline flex items-center gap-1 ml-2 cursor-pointer transition-colors"
-              >
-                <span>Xem tất cả</span>
-                <ChevronRight className="w-3 h-3" />
-              </button>
-            </div>
-          </div>
-
-          {/* Animated Article Content */}
-          {currentArticle && (
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentArticle.id || currentNewsIndex}
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.3, ease: 'easeOut' }}
-                className="grid grid-cols-1 md:grid-cols-[180px_1fr] sm:grid-cols-[140px_1fr] gap-4 items-center cursor-pointer group"
-                onClick={() => onNavigate('/news')}
-              >
-                {/* Thumbnail Image */}
-                {currentArticle.imageUrl ? (
-                  <div className="w-full h-28 sm:h-24 md:h-28 rounded-lg overflow-hidden bg-neutral-900 border border-white/5 shrink-0 relative">
-                    <img
-                      src={currentArticle.imageUrl}
-                      alt={currentArticle.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      onError={(e) => {
-                        (e.currentTarget as HTMLElement).style.display = 'none';
-                      }}
-                    />
-                  </div>
-                ) : (
-                  <div className="w-full h-24 rounded-lg bg-neutral-900 border border-white/5 flex items-center justify-center shrink-0 text-neutral-500">
-                    <Newspaper className="w-8 h-8" />
-                  </div>
-                )}
-
-                {/* Details */}
-                <div className="space-y-1.5 min-w-0">
-                  <div className="flex items-center gap-2 text-[11px] text-neutral-400">
-                    <span className="font-semibold text-neutral-300">
-                      {currentArticle.source || 'VnExpress'}
-                    </span>
-                    <span>•</span>
-                    <span className="truncate">{currentArticle.pubDate}</span>
-                  </div>
-
-                  <h3 className="text-sm sm:text-base font-bold text-white group-hover:text-[#4cc2ff] transition-colors line-clamp-2 leading-snug">
-                    {currentArticle.title}
-                  </h3>
-
-                  <p className="text-xs text-neutral-300 line-clamp-2 leading-relaxed">
-                    {currentArticle.description}
-                  </p>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          )}
-
-          {/* 5-second animated progress line at bottom */}
-          <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/5 overflow-hidden">
-            <motion.div
-              key={currentNewsIndex}
-              initial={{ width: '0%' }}
-              animate={{ width: '100%' }}
-              transition={{ duration: 5, ease: 'linear' }}
-              className="h-full bg-[#4cc2ff]"
-            />
-          </div>
+        {/* Tab Title: Home (Font Regular, shifted down slightly) */}
+        <div className="pt-2 sm:pt-3 pb-1">
+          <h1 className="text-2xl sm:text-3xl font-normal text-white tracking-tight">
+            Home
+          </h1>
         </div>
 
         {/* Quick Access Section */}
@@ -327,7 +186,7 @@ export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, o
                 className="overflow-hidden"
               >
                 <div className="xaml-category-items flex min-h-8 items-center gap-2 px-1 text-[13px]">
-                  <Folder className="size-4 text-[#8d8d8d]" strokeWidth={1.5} />
+                  <img src="https://winaero.com/blog/wp-content/uploads/2014/12/folder_win10.png" alt="Folder" className="size-4 object-contain" />
                   <span className="text-[#dedede]">No Items</span>
                 </div>
               </motion.div>

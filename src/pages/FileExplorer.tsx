@@ -430,9 +430,11 @@ export const FileExplorer: React.FC<FileExplorerProps> = ({ navigate }) => {
     showToast(`Đang tải xuống "${file.name}"`);
   };
 
+const FOLDER_WIN10_ICON_URL = 'https://winaero.com/blog/wp-content/uploads/2014/12/folder_win10.png';
+
   const renderFileIcon = (item: FileItem, sizeClass = 'w-5 h-5') => {
     if (item.type === 'folder') {
-      return <Folder className={`${sizeClass} text-amber-500 fill-amber-500/20`} />;
+      return <img src={FOLDER_WIN10_ICON_URL} alt="Folder" className={`${sizeClass} object-contain shrink-0`} />;
     }
     switch (item.category) {
       case 'video':
@@ -455,6 +457,13 @@ export const FileExplorer: React.FC<FileExplorerProps> = ({ navigate }) => {
 
   return (
     <div className="w-full min-h-[calc(100vh-4rem)] flex flex-col bg-transparent text-[#111827] dark:text-[#f3f4f6] select-none font-sans">
+      {/* Tab Title: Explore (Font Regular, shifted down slightly) */}
+      <div className="px-4 sm:px-6 pt-3 pb-2">
+        <h1 className="text-2xl sm:text-3xl font-normal text-white tracking-tight">
+          Explore
+        </h1>
+      </div>
+
       {/* 1. Windows 11 Fluent Command Bar / Ribbon */}
       <div className="h-12 px-3 sm:px-4 border-b border-black/10 dark:border-white/10 bg-white/70 dark:bg-[#202429]/70 backdrop-blur-xl flex items-center justify-between gap-2 shrink-0">
         <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar">
@@ -780,7 +789,7 @@ export const FileExplorer: React.FC<FileExplorerProps> = ({ navigate }) => {
         >
           {currentFiles.length === 0 ? (
             <div className="h-64 flex flex-col items-center justify-center text-center text-neutral-400 gap-2">
-              <Folder className="w-12 h-12 text-neutral-300 dark:text-neutral-600 stroke-[1]" />
+              <img src={FOLDER_WIN10_ICON_URL} alt="Folder" className="w-12 h-12 object-contain opacity-70" />
               <p className="text-xs">Thư mục này hiện đang trống</p>
               <button
                 type="button"

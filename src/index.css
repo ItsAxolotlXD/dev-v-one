@@ -154,12 +154,28 @@
   }
 
   body {
-    background-color: #282c31;
+    background-color: #000000;
     background-image: none;
     color: #F3F4F6;
     overflow-x: hidden;
     min-height: 100vh;
   }
+}
+
+/* Sidebar dark magenta requirement */
+#waves-desktop-sidebar,
+#waves-mobile-sidebar {
+  background-color: #250F1A !important;
+  background-image: none !important;
+  border-color: #3d182b !important;
+}
+
+/* Tab page pure black background and square top-left corner */
+.main-tab-page,
+.main-tab-page > div,
+.main-app-container {
+  background-color: #000000 !important;
+  border-top-left-radius: 0px !important;
 }
 
 /* Universal input box and search box styles matching Let's chat Copilot */
@@ -1465,17 +1481,20 @@ html.dark main,
 html.dark .tab-element-slide-up-container,
 html:not(.light-mode) main,
 html:not(.light-mode) .tab-element-slide-up-container {
-  background-color: #282c31 !important;
+  background-color: #000000 !important;
 }
 
-/* Main tab page: bo cong 10px ở góc trên trái trang, các góc còn lại ko bo */
+/* Main tab page: sharp corner (0px) ở góc trên trái trang, các góc còn lại ko bo */
 main,
 .main-tab-page,
-.tab-element-slide-up-container {
-  border-top-left-radius: 10px !important;
+.main-tab-page > div,
+.tab-element-slide-up-container,
+.tab-page-slide-up {
+  border-top-left-radius: 0px !important;
   border-top-right-radius: 0px !important;
   border-bottom-right-radius: 0px !important;
   border-bottom-left-radius: 0px !important;
+  border-radius: 0px !important;
 }
 
 
@@ -2345,12 +2364,12 @@ html.light-mode #settings-section-search hr {
 
 /* Theme Surface Overrides in Dark Mode */
 html:not(.light-mode) body {
-  background-color: #282c31 !important;
+  background-color: #000000 !important;
   background-image: none !important;
 }
 
 #fixed-app-background-solid {
-  background-color: #282c31 !important;
+  background-color: #000000 !important;
   background-image: none !important;
 }
 
@@ -8658,15 +8677,15 @@ a:hover .settings-spin-icon,
   color: #ffffff !important;
 }
 
-/* Reference surface palette: Windows 10 UWP Acrylic & Dark Sidebar (image_30531aa4.png) */
+/* Reference surface palette: Dark Magenta Sidebar and Pure Black Tab Page */
 :root {
-  --reference-sidebar-bg: #181a20;
-  --reference-topbar-bg: #181a20;
-  --reference-tab-bg: linear-gradient(112deg, #373443 0%, #40343d 55%, #4b3039 100%);
+  --reference-sidebar-bg: #250F1A;
+  --reference-topbar-bg: #250F1A;
+  --reference-tab-bg: #000000;
 }
 
 /* ========================================================
-   WINDOWS 10 UWP NAVIGATIONVIEW SIDEBAR (image_30531aa4.png)
+   WINDOWS 10 UWP NAVIGATIONVIEW SIDEBAR
    - Pill lengthened (28px height, 3.5px width)
    - Pill square corners (border-radius: 0)
    - Sidebar nav items with square corners (border-radius: 0)
@@ -8694,7 +8713,8 @@ html:not(.light-mode) [class*="sidebar-static-indicator"] {
 }
 
 body {
-  background: var(--reference-sidebar-bg) !important;
+  background: #000000 !important;
+  background-color: #000000 !important;
 }
 
 #waves-desktop-sidebar,
@@ -8702,16 +8722,22 @@ body {
 .sidebar,
 .topbar-header,
 header {
-  background: var(--reference-sidebar-bg) !important;
+  background: #250F1A !important;
+  background-color: #250F1A !important;
+  border-color: #3d182b !important;
 }
 
 .main-tab-page,
 .main-tab-content-container {
-  background: var(--reference-tab-bg) !important;
+  background: #000000 !important;
+  background-color: #000000 !important;
+  border-top-left-radius: 0px !important;
+  border-radius: 0px !important;
 }
 
 html body {
-  background: var(--reference-sidebar-bg) !important;
+  background: #000000 !important;
+  background-color: #000000 !important;
 }
 
 html body #waves-desktop-sidebar,
@@ -8721,20 +8747,25 @@ html body > #root > header,
 html body > #root > div > header,
 html body header[class*="top"],
 html body [data-testid="topbar"] {
-  background: var(--reference-topbar-bg) !important;
+  background: #250F1A !important;
+  background-color: #250F1A !important;
 }
 
 html body #waves-desktop-sidebar,
 html body #waves-mobile-sidebar,
 html body #waves-desktop-sidebar > div,
 html body #waves-mobile-sidebar > div {
-  background: var(--reference-topbar-bg) !important;
+  background: #250F1A !important;
+  background-color: #250F1A !important;
 }
 
 html body main.main-tab-page,
 html body main.main-tab-page > div,
 html body .main-tab-content-container {
-  background: var(--reference-tab-bg) !important;
+  background: #000000 !important;
+  background-color: #000000 !important;
+  border-top-left-radius: 0px !important;
+  border-radius: 0px !important;
 }
 
 /* ========================================================
@@ -8886,3 +8917,140 @@ html.light-mode #example-content-dialog button:active {
 }
 
 
+
+
+/* =========================================================================
+   WINDOWS 10 UWP TOGGLE SWITCH OVERRIDES (Matching image_d48311d2.png)
+   ========================================================================= */
+button[role="switch"],
+.toggle-switch-btn,
+[id^="toggle-"],
+[class*="toggle-switch-btn"],
+[class*="toggle-switch-track"] {
+  width: 40px !important;
+  height: 20px !important;
+  min-width: 40px !important;
+  min-height: 20px !important;
+  box-sizing: border-box !important;
+  border-radius: 9999px !important;
+  padding: 0 !important;
+  position: relative !important;
+  overflow: hidden !important;
+  outline: none !important;
+  outline-width: 0 !important;
+  outline-style: none !important;
+  outline-color: transparent !important;
+  box-shadow: none !important;
+  background-image: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  transition: background-color 0.15s ease, border-color 0.15s ease !important;
+  cursor: pointer !important;
+  flex-shrink: 0 !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+button[role="switch"]:focus,
+button[role="switch"]:focus-visible,
+button[role="switch"]:active,
+.toggle-switch-btn:focus,
+.toggle-switch-btn:focus-visible,
+.toggle-switch-btn:active {
+  outline: none !important;
+  outline-width: 0 !important;
+  outline-style: none !important;
+  outline-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* OFF state: Transparent interior with 2px gray border */
+button[role="switch"][aria-checked="false"],
+.toggle-switch-btn[aria-checked="false"] {
+  background-color: transparent !important;
+  border: 2px solid #8a8a8a !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+button[role="switch"][aria-checked="false"]:hover,
+.toggle-switch-btn[aria-checked="false"]:hover {
+  border-color: #ffffff !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* ON state: Solid Windows 10 blue #0078d7 with white thumb */
+button[role="switch"][aria-checked="true"],
+.toggle-switch-btn[aria-checked="true"] {
+  background-color: #0078d7 !important;
+  border: 2px solid #0078d7 !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+button[role="switch"][aria-checked="true"]:hover,
+.toggle-switch-btn[aria-checked="true"]:hover {
+  background-color: #0063b1 !important;
+  border-color: #0063b1 !important;
+  outline: none !important;
+}
+
+button[role="switch"]:active,
+.toggle-switch-btn:active {
+  transform: none !important;
+}
+
+/* Circular Thumb (Windows 10 toggle knob) */
+button[role="switch"] span,
+.toggle-switch-thumb {
+  display: block !important;
+  position: absolute !important;
+  top: 2px !important;
+  width: 12px !important;
+  height: 12px !important;
+  min-width: 12px !important;
+  min-height: 12px !important;
+  border-radius: 9999px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  translate: none !important;
+  transform: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  transition: left 0.16s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.15s ease !important;
+  pointer-events: none !important;
+  will-change: left;
+}
+
+/* OFF state Thumb: Gray knob at left */
+button[role="switch"][aria-checked="false"] span,
+.toggle-switch-btn[aria-checked="false"] .toggle-switch-thumb {
+  left: 3px !important;
+  right: auto !important;
+  background-color: #cccccc !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+button[role="switch"][aria-checked="false"]:hover span,
+.toggle-switch-btn[aria-checked="false"]:hover .toggle-switch-thumb {
+  background-color: #ffffff !important;
+}
+
+/* ON state Thumb: White knob at right */
+button[role="switch"][aria-checked="true"] span,
+.toggle-switch-btn[aria-checked="true"] .toggle-switch-thumb {
+  left: 21px !important;
+  right: auto !important;
+  background-color: #ffffff !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+button[role="switch"]:hover span,
+button[role="switch"] span:hover,
+.toggle-switch-btn:hover .toggle-switch-thumb,
+.toggle-switch-thumb:hover {
+  background-image: none !important;
+}

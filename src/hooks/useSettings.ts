@@ -54,6 +54,7 @@ export interface SystemSettings {
   sidebarSmartLayout: boolean;
   liveTilesHome: boolean;
   controlBar: boolean;
+  searchOnSidebar: boolean;
   pageLoading: boolean;
   loadPagesSequentially: boolean;
   legacyProgressDots: boolean;
@@ -111,9 +112,10 @@ export const DEFAULT_SETTINGS: SystemSettings = {
   sidebarSmartLayout: true,
   liveTilesHome: false,
   controlBar: false,
+  searchOnSidebar: true,
   pageLoading: true,
   loadPagesSequentially: false,
-  legacyProgressDots: false,
+  legacyProgressDots: true,
   customKeybinds: DEFAULT_KEYBINDS,
 };
 
@@ -208,8 +210,10 @@ export const getStoredSettings = (): SystemSettings => {
         sidebarSmartLayout: typeof parsed.sidebarSmartLayout === 'boolean' ? parsed.sidebarSmartLayout : true,
         liveTilesHome: typeof parsed.liveTilesHome === 'boolean' ? parsed.liveTilesHome : false,
         controlBar: typeof parsed.controlBar === 'boolean' ? parsed.controlBar : false,
+        searchOnSidebar: typeof parsed.searchOnSidebar === 'boolean' ? parsed.searchOnSidebar : true,
         pageLoading: typeof parsed.pageLoading === 'boolean' ? parsed.pageLoading : true,
         loadPagesSequentially: typeof parsed.loadPagesSequentially === 'boolean' ? parsed.loadPagesSequentially : false,
+        legacyProgressDots: typeof parsed.legacyProgressDots === 'boolean' ? parsed.legacyProgressDots : true,
         fontScale,
         fontScaleVersion: 2,
       };

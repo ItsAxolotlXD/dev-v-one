@@ -278,7 +278,7 @@ export const TabLoadingScreen: React.FC<TabLoadingScreenProps> = ({ route = '', 
       role="status"
       aria-live="polite"
       aria-label={meta.title}
-      className={`w-full h-full flex-1 flex flex-col items-center justify-center min-h-[60vh] sm:min-h-[70vh] py-12 select-none my-auto pointer-events-none bg-[#f3f4f6] dark:bg-[#202024] text-neutral-800 dark:text-neutral-100 rounded-tl-[10px] ${className}`}
+      className={`w-full h-full flex-1 flex flex-col items-center justify-center min-h-[60vh] sm:min-h-[70vh] py-12 select-none my-auto pointer-events-none bg-black dark:bg-black text-neutral-800 dark:text-neutral-100 rounded-none ${className}`}
     >
       {/* Icon outline with smooth zoom animation on neutral gray background */}
       <div className="flex items-center justify-center">

@@ -241,15 +241,22 @@ export const FeedbackHub: React.FC<FeedbackHubProps> = ({ navigate }) => {
         </div>
       )}
 
+      {/* Tab Title: Feedback Hub (Font Regular, shifted down slightly) */}
+      <div className="px-4 sm:px-6 pt-3 pb-2">
+        <h1 className="text-2xl sm:text-3xl font-normal text-white tracking-tight">
+          Feedback Hub
+        </h1>
+      </div>
+
       {/* Top Application Ribbon Header */}
       <div className="bg-white dark:bg-[#22252a] border-b border-black/10 dark:border-white/10 px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3 shadow-xs">
         <div className="flex items-center gap-3">
           <FluentFeedbackHubColorIcon className="w-8 h-8 shrink-0 drop-shadow-sm" />
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-base sm:text-lg font-bold tracking-tight text-neutral-900 dark:text-white">
-                Feedback Hub (Trung tâm phản hồi)
-              </h1>
+              <h2 className="text-base sm:text-lg font-normal tracking-tight text-neutral-900 dark:text-white">
+                Trung tâm phản hồi
+              </h2>
               <span className="px-2 py-0.5 rounded-full bg-[#0078d4]/15 text-[#0078d4] dark:text-[#4cc2ff] text-[10px] font-bold uppercase tracking-wider">
                 Insider Preview
               </span>

@@ -194,7 +194,7 @@ export const FriendsApp: React.FC<FriendsAppProps> = ({ navigate }) => {
   const friendCount = users.filter((u) => u.isFriend).length;
 
   return (
-    <div className="w-full min-h-[calc(100vh-64px)] flex flex-col bg-[#f9f9f9] dark:bg-[#1a1c20] text-black dark:text-white select-none">
+    <div className="w-full min-h-[calc(100vh-64px)] flex flex-col bg-black dark:bg-black text-black dark:text-white select-none">
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed top-16 right-6 z-50 px-4 py-2.5 rounded-full bg-black/90 dark:bg-white/95 text-white dark:text-black text-xs font-semibold shadow-2xl flex items-center gap-2 border border-white/20 animate-fade-in">

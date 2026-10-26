@@ -172,14 +172,14 @@ export const XAMLControls: React.FC = () => {
   };
 
   return (
-    <section className="min-h-[calc(100vh-3.5rem)] w-full bg-black px-4 pb-12 pt-5 font-sans text-[#e8e8e8] sm:px-7">
+    <section className="min-h-[calc(100vh-3.5rem)] w-full bg-black px-4 pb-12 pt-6 font-sans text-[#e8e8e8] sm:px-7">
       <div className="mx-auto w-full max-w-6xl">
         <header className="mb-6 border-b border-[#252525] pb-5">
           <div className="flex items-center gap-2 text-[#bdbdbd]">
             <img src={XAML_ICON_URL} alt="" aria-hidden="true" className="size-5 object-contain" />
             <span className="text-[12px] uppercase tracking-[0.18em]">WinUI 3 / XAML</span>
           </div>
-          <h1 className="mt-2 text-2xl font-semibold tracking-tight text-[#f5f5f5]">XAML Controls</h1>
+          <h1 className="mt-3 text-2xl sm:text-3xl font-normal tracking-tight text-[#f5f5f5]">XAML Controls</h1>
           <p className="mt-1 max-w-2xl text-[13px] leading-6 text-[#909090]">
             A quick reference of commonly used WinUI 3 XAML controls and their binding-ready markup.
           </p>

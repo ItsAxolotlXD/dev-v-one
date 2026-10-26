@@ -1078,6 +1078,13 @@ export const LiveTilesHome: React.FC<LiveTilesHomeProps> = ({
 
   return (
     <div className="w-full h-full min-h-[calc(100vh-64px)] bg-transparent text-black dark:text-white select-none flex flex-col font-sans transition-colors relative overflow-hidden">
+      {/* Tab Title: Tiles (Font Regular, shifted down slightly) */}
+      <div className="px-8 sm:px-12 pt-3 pb-1 z-30">
+        <h1 className="text-2xl sm:text-3xl font-normal text-white tracking-tight">
+          Tiles
+        </h1>
+      </div>
+
       {/* Compact Top-Right Controls (Start & LIVE TILES PANORAMA header removed) */}
       <div className="absolute top-4 right-8 z-40 flex items-center gap-2">
         {/* Horizontal Pan Controls */}

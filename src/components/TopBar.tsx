@@ -708,7 +708,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   return (
     <header className={`topbar-header w-full h-14 relative ${
       settings.windowsAppSdkPreview ? '!bg-[#141414] !border-0 !border-b-0' : 'bg-[#f3f3f3] dark:bg-[#1b1f24]'
-    } px-3 sm:px-6 md:px-8 flex items-center justify-between gap-3 sticky top-0 z-30 select-none`}>
+    } pl-3 sm:pl-4 pr-1.5 sm:pr-2 flex items-center justify-between gap-2 sticky top-0 z-30 select-none`}>
       {/* 1. Left Section */}
       <div className="flex items-center gap-2 sm:gap-3 shrink-0 z-10">
         {settings.navigationMode !== 'floaty' && (
@@ -829,10 +829,10 @@ export const TopBar: React.FC<TopBarProps> = ({
         )}
       </div>
 
-      {/* 2. Right-Aligned Search Box with Flyout - Shortened width */}
+      {/* 2. Right-Aligned Search Box with Flyout - positioned close to right margin */}
       <div 
         ref={searchContainerRef}
-        className="flex items-center justify-end min-w-0 px-2 sm:px-3 z-40 ml-auto transition-[max-width,width] duration-300 ease-out"
+        className="flex items-center justify-end min-w-0 pl-1 pr-0 z-40 ml-auto mr-0 transition-[max-width,width] duration-300 ease-out"
       >
         <div className={`relative w-[210px] sm:w-[250px] md:w-[290px] min-w-0 transition-[max-width,width] duration-300 ease-out ${
           (settings.searchVisualExperimental || 'treatment-1') === 'treatment-5'
