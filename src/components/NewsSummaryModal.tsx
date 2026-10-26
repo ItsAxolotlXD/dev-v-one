@@ -74,8 +74,13 @@ export const NewsSummaryModal: React.FC<NewsSummaryModalProps> = ({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div
+        <motion.div
+          key="news-summary-modal-container"
           id="news-summary-modal-container"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.18, ease: 'easeOut' }}
           className="fixed inset-0 z-9999 flex items-center justify-center p-4 sm:p-6 select-none"
         >
           {/* Backdrop with zero blur */}
@@ -84,7 +89,7 @@ export const NewsSummaryModal: React.FC<NewsSummaryModalProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2, ease: 'easeOut' }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
             onClick={onClose}
             className="fixed inset-0 bg-black/60"
           />
@@ -92,10 +97,11 @@ export const NewsSummaryModal: React.FC<NewsSummaryModalProps> = ({
           {/* Windows 10 ContentDialog Box */}
           <motion.div
             id="news-summary-dialog"
-            initial={{ opacity: 0, scale: 0.88 }}
+            initial={{ opacity: 0, scale: 0.92, y: 10 }}
             animate={{ 
               opacity: 1, 
               scale: 1,
+              y: 0,
               transition: {
                 duration: 0.22,
                 ease: [0.1, 0.9, 0.2, 1]
@@ -103,7 +109,8 @@ export const NewsSummaryModal: React.FC<NewsSummaryModalProps> = ({
             }}
             exit={{ 
               opacity: 0, 
-              scale: 0.88,
+              scale: 0.92,
+              y: 8,
               transition: {
                 duration: 0.16,
                 ease: 'easeIn'
@@ -115,7 +122,7 @@ export const NewsSummaryModal: React.FC<NewsSummaryModalProps> = ({
             <div className="px-6 pt-6 pb-2">
               <h2
                 id="news-summary-title"
-                className="text-[20px] font-light text-neutral-900 dark:text-white tracking-tight leading-snug"
+                className="text-[20px] font-normal text-neutral-900 dark:text-white tracking-tight leading-snug"
               >
                 Article Summary
               </h2>
@@ -219,7 +226,7 @@ export const NewsSummaryModal: React.FC<NewsSummaryModalProps> = ({
               </button>
             </div>
           </motion.div>
-        </div>
+        </motion.div>
       )}
     </AnimatePresence>
   );

@@ -33,9 +33,10 @@ import {
   Edit3, 
   ExternalLink,
   Check,
-  File as FileIcon
+  File as FileIcon,
+  X
 } from 'lucide-react';
-import { FluentFileExplorerIcon } from '../components/FluentIcons';
+import { FluentFileExplorerIcon, FluentSearchIcon } from '../components/FluentIcons';
 
 export interface FileItem {
   id: string;
@@ -1002,8 +1003,13 @@ export const FileExplorer: React.FC<FileExplorerProps> = ({ navigate }) => {
       {/* "Name your folder" Modal Dialog - Microsoft Fluent UWP ContentDialog */}
       <AnimatePresence>
         {isNewFolderOpen && (
-          <div
+          <motion.div
+            key="new-folder-dialog-container"
             id="new-folder-dialog-container"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
             className="fixed inset-0 z-9999 flex items-center justify-center p-4 sm:p-6 select-none"
           >
             {/* Backdrop */}
@@ -1012,18 +1018,19 @@ export const FileExplorer: React.FC<FileExplorerProps> = ({ navigate }) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
+              transition={{ duration: 0.18, ease: 'easeOut' }}
               onClick={() => setIsNewFolderOpen(false)}
               className="fixed inset-0 bg-black/60"
             />
 
-            {/* Dialog Modal Box */}
+            {/* Dialog Modal Box with Fluent enter/exit scale animation */}
             <motion.div
               id="new-folder-dialog"
-              initial={{ opacity: 0, scale: 0.88 }}
+              initial={{ opacity: 0, scale: 0.92, y: 10 }}
               animate={{
                 opacity: 1,
                 scale: 1,
+                y: 0,
                 transition: {
                   duration: 0.22,
                   ease: [0.1, 0.9, 0.2, 1],
@@ -1031,7 +1038,8 @@ export const FileExplorer: React.FC<FileExplorerProps> = ({ navigate }) => {
               }}
               exit={{
                 opacity: 0,
-                scale: 0.88,
+                scale: 0.92,
+                y: 8,
                 transition: {
                   duration: 0.16,
                   ease: 'easeIn',
@@ -1049,7 +1057,7 @@ export const FileExplorer: React.FC<FileExplorerProps> = ({ navigate }) => {
                   <div>
                     <h2
                       id="new-folder-dialog-title"
-                      className="text-[20px] font-light text-neutral-900 dark:text-white tracking-tight leading-snug"
+                      className="text-[20px] font-normal text-neutral-900 dark:text-white tracking-tight leading-snug"
                     >
                       Name your folder
                     </h2>
@@ -1059,22 +1067,53 @@ export const FileExplorer: React.FC<FileExplorerProps> = ({ navigate }) => {
                   </div>
 
                   <div className="pt-1">
-                    <input
-                      ref={folderInputRef}
-                      type="text"
-                      value={newFolderName}
-                      onChange={(e) => setNewFolderName(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Escape') {
-                          e.stopPropagation();
-                          setIsNewFolderOpen(false);
-                        }
-                      }}
-                      className="w-full h-9 px-3 text-sm bg-neutral-100 dark:bg-[#1a1a1a] text-neutral-900 dark:text-white border border-neutral-300 dark:border-neutral-700 focus:border-[#e3008c] focus:outline-none rounded-none transition-colors"
-                      placeholder="Folder name"
-                      maxLength={80}
-                      autoFocus
-                    />
+                    {/* Search box design identical to TopBar search bar */}
+                    <div
+                      id="new-folder-search-box"
+                      className="fluent-search-box windows-search-box group relative w-full h-8.5 sm:h-9 rounded-none flex items-center px-2.5 gap-1.5 transition-all cursor-text select-none"
+                    >
+                      <input
+                        ref={folderInputRef}
+                        type="text"
+                        value={newFolderName}
+                        onChange={(e) => setNewFolderName(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Escape') {
+                            e.stopPropagation();
+                            setIsNewFolderOpen(false);
+                          }
+                        }}
+                        className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#a0a6b2] outline-none border-none py-1 pl-1 pr-16 no-fluent-line"
+                        placeholder="Folder name"
+                        maxLength={80}
+                        autoFocus
+                      />
+
+                      {/* Right Action Icons: Clear button and Right Search Icon matching TopBar */}
+                      <div className="absolute right-2 flex items-center gap-1 z-10">
+                        {newFolderName ? (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setNewFolderName('');
+                              folderInputRef.current?.focus();
+                            }}
+                            title="Clear"
+                            className="text-[#71717a] dark:text-neutral-300 hover:text-[#111827] dark:hover:text-white p-1 transition-colors cursor-pointer rounded-full hover:bg-black/5 dark:hover:bg-white/10"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        ) : null}
+
+                        <button
+                          type="submit"
+                          title="Create folder"
+                          className="p-1 transition-colors cursor-pointer flex items-center justify-center shrink-0"
+                        >
+                          <FluentSearchIcon className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -1096,7 +1135,7 @@ export const FileExplorer: React.FC<FileExplorerProps> = ({ navigate }) => {
                 </div>
               </form>
             </motion.div>
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>

@@ -829,26 +829,22 @@ export const TopBar: React.FC<TopBarProps> = ({
         )}
       </div>
 
-      {/* 2. Center Search Box with Flyout matching Microsoft Fluent Design and reference image */}
+      {/* 2. Right-Aligned Search Box with Flyout - Shortened width */}
       <div 
         ref={searchContainerRef}
-        className={`flex-1 flex items-center justify-center min-w-0 px-2 sm:px-4 z-40 md:absolute md:left-1/2 md:-translate-x-1/2 transition-[max-width,width] duration-300 ease-out ${
-          (settings.searchVisualExperimental || 'treatment-1') === 'treatment-5'
-            ? 'w-auto max-w-[92vw] sm:max-w-[560px] md:max-w-[640px]'
-            : 'md:w-full md:max-w-[460px]'
-        }`}
+        className="flex items-center justify-end min-w-0 px-2 sm:px-3 z-40 ml-auto transition-[max-width,width] duration-300 ease-out"
       >
-        <div className={`relative w-full min-w-0 mx-auto transition-[max-width,width] duration-300 ease-out ${
+        <div className={`relative w-[210px] sm:w-[250px] md:w-[290px] min-w-0 transition-[max-width,width] duration-300 ease-out ${
           (settings.searchVisualExperimental || 'treatment-1') === 'treatment-5'
-            ? 'w-auto max-w-full flex justify-center'
-            : 'max-w-[460px]'
+            ? 'w-auto max-w-full flex justify-end'
+            : ''
         } ${
           (settings.searchVisualExperimental || 'treatment-1') === 'treatment-2'
             ? 'flex justify-end'
             : (settings.searchVisualExperimental || 'treatment-1') === 'treatment-3'
             ? 'flex justify-center'
             : (settings.searchVisualExperimental || 'treatment-1') === 'treatment-4'
-            ? 'flex justify-center'
+            ? 'flex justify-end'
             : ''
         }`}>
           {(settings.searchVisualExperimental || 'treatment-1') === 'treatment-2' ? (

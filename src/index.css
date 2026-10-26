@@ -63,15 +63,14 @@
   header h1, header h2, header h3, header h4, header h5, header h6,
   [role="heading"],
   .title,
-  [class*="title"],
-  [id*="title"],
+  [class*="title"]:not([id*="modal-title"]):not([id*="dialog-title"]):not(.modal-title),
+  [id*="title"]:not([id*="modal-title"]):not([id*="dialog-title"]):not(#new-folder-dialog-title),
   .heading,
   [class*="heading"],
   .big-title,
   [class*="big-title"],
   .header-title,
   .section-title,
-  .modal-title,
   .card-title {
     font-family: 'Segoe UI', 'Segoe UI Variable Display', 'Segoe UI Variable', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif !important;
     font-weight: 700 !important;
@@ -90,21 +89,64 @@
   }
 
   /* Global typography: bold font for headers, headings, h1-h6, titles & big titles */
-  h1, h2, h3, h4, h5, h6,
+  h1:not(.fluent-modal-dialog *):not([role="dialog"] *),
+  h2:not(.fluent-modal-dialog *):not([role="dialog"] *),
+  h3:not(.fluent-modal-dialog *):not([role="dialog"] *),
+  h4:not(.fluent-modal-dialog *):not([role="dialog"] *),
+  h5:not(.fluent-modal-dialog *):not([role="dialog"] *),
+  h6:not(.fluent-modal-dialog *):not([role="dialog"] *),
   header h1, header h2, header h3, header h4, header h5, header h6,
-  [role="heading"],
+  [role="heading"]:not(.fluent-modal-dialog *):not([role="dialog"] *),
   .title,
-  [class*="title"],
-  [id*="title"],
+  [class*="title"]:not([id*="modal-title"]):not([id*="dialog-title"]):not(.modal-title),
+  [id*="title"]:not([id*="modal-title"]):not([id*="dialog-title"]):not(#new-folder-dialog-title),
   .heading,
   [class*="heading"],
   .big-title,
   [class*="big-title"],
   .header-title,
   .section-title,
-  .modal-title,
   .card-title {
     font-weight: 700 !important;
+  }
+
+  /* Modal Dialog Titles: STRICTLY Regular Font Weight (400) */
+  .fluent-modal-dialog h1,
+  .fluent-modal-dialog h2,
+  .fluent-modal-dialog h3,
+  .fluent-modal-dialog [role="heading"],
+  .fluent-modal-dialog .modal-title,
+  .fluent-modal-dialog [class*="modal-title"],
+  .fluent-modal-dialog [id*="modal-title"],
+  .fluent-modal-dialog [id*="dialog-title"],
+  #new-folder-dialog h2,
+  #new-folder-dialog-title,
+  #welcome-modal-title,
+  #under-construction-modal-title,
+  #discord-welcome-title,
+  #developer-mode-modal-title,
+  #custom-stream-dialog-title,
+  #help-modal-title,
+  #news-summary-modal-title,
+  #add-stream-modal-title,
+  #add-stream-title,
+  #unsaved-settings-modal-title,
+  [role="dialog"] h1,
+  [role="dialog"] h2,
+  [role="dialog"] h3,
+  [role="dialog"] .modal-title,
+  [role="dialog"] [class*="modal-title"],
+  [role="dialog"] [id*="modal-title"],
+  [role="dialog"] [id*="dialog-title"],
+  [aria-modal="true"] h1,
+  [aria-modal="true"] h2,
+  [aria-modal="true"] h3,
+  [aria-modal="true"] .modal-title,
+  [aria-modal="true"] [class*="modal-title"],
+  [aria-modal="true"] [id*="modal-title"],
+  [aria-modal="true"] [id*="dialog-title"] {
+    font-family: 'Segoe UI', 'Segoe UI Variable Text', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif !important;
+    font-weight: 400 !important;
   }
 
   html {
@@ -224,11 +266,70 @@ a:hover,
   cursor: default !important;
 }
 
+/* ========================================================
+   SEARCH BOX & INPUT CURSOR: TEXT SELECT (I-BEAM) ON HOVER
+   ======================================================== */
+.windows-search-box,
+.windows-search-box:hover,
+.windows-search-box *,
+.windows-search-box *:hover,
+.fluent-search-box,
+.fluent-search-box:hover,
+.fluent-search-box *,
+.fluent-search-box *:hover,
+[id*="search-box"],
+[id*="search-box"]:hover,
+[id*="search-box"] *,
+[id*="search-box"] *:hover,
+[id*="search-capsule"],
+[id*="search-capsule"]:hover,
+[id*="search-capsule"] *,
+[id*="search-capsule"] *:hover,
+#topbar-search-box,
+#topbar-search-box:hover,
+#topbar-search-box *,
+#topbar-search-box *:hover,
+#new-folder-search-box,
+#new-folder-search-box:hover,
+#new-folder-search-box *,
+#new-folder-search-box *:hover,
+.cursor-text,
+.cursor-text:hover,
 [role="dialog"] input[type="text"],
 [role="dialog"] input[type="search"],
 [role="dialog"] input[type="url"],
-[role="dialog"] textarea {
+[role="dialog"] textarea,
+input[type="text"],
+input[type="text"]:hover,
+input[type="search"],
+input[type="search"]:hover,
+input[type="url"],
+input[type="url"]:hover,
+input[type="password"],
+input[type="password"]:hover,
+input[type="email"],
+input[type="email"]:hover,
+input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]):hover,
+textarea,
+textarea:hover {
   cursor: text !important;
+}
+
+/* Action buttons and icons inside search boxes retain default arrow cursor */
+.windows-search-box button,
+.windows-search-box button:hover,
+.windows-search-box [role="button"],
+.windows-search-box [role="button"]:hover,
+.fluent-search-box button,
+.fluent-search-box button:hover,
+.fluent-search-box [role="button"],
+.fluent-search-box [role="button"]:hover,
+[id*="search-box"] button,
+[id*="search-box"] button:hover,
+[id*="search-box"] [role="button"],
+[id*="search-box"] [role="button"]:hover {
+  cursor: default !important;
 }
 
 /* ========================================================
@@ -5047,7 +5148,7 @@ html.light-mode .spatial-glass-modal {
   max-width: 540px !important;
 }
 
-/* Modal Title Font: Segoe UI Light (font-weight: 300) */
+/* Modal Title Font: Regular Font (font-weight: 400) */
 .fluent-modal-dialog h2,
 .fluent-modal-dialog h3,
 #example-content-dialog h2,
@@ -5055,9 +5156,18 @@ html.light-mode .spatial-glass-modal {
 #new-folder-dialog h2,
 #new-folder-dialog h3,
 [id$="-modal-title"],
-[id$="-dialog-title"] {
-  font-family: "Segoe UI Light", "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif !important;
-  font-weight: 300 !important;
+[id$="-dialog-title"],
+#new-folder-dialog-title,
+#welcome-modal-title,
+#under-construction-modal-title,
+#discord-welcome-title,
+#developer-mode-modal-title,
+#custom-stream-dialog-title,
+#help-modal-title,
+#news-summary-modal-title,
+#add-stream-title {
+  font-family: "Segoe UI", "Segoe UI Variable Text", system-ui, sans-serif !important;
+  font-weight: 400 !important;
   font-size: 20px !important;
   line-height: 1.3 !important;
   letter-spacing: -0.01em !important;
@@ -8673,8 +8783,8 @@ html.light-mode #example-content-dialog {
 #new-folder-dialog h3,
 [id$="-modal-title"],
 [id$="-dialog-title"] {
-  font-family: "Segoe UI Light", "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif !important;
-  font-weight: 300 !important;
+  font-family: "Segoe UI", "Segoe UI Variable Text", system-ui, sans-serif !important;
+  font-weight: 400 !important;
   font-size: 20px !important;
   line-height: 1.3 !important;
   letter-spacing: -0.01em !important;
