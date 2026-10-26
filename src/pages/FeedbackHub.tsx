@@ -451,9 +451,9 @@ export const FeedbackHub: React.FC<FeedbackHubProps> = ({ navigate }) => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Tìm Kiếm Phản Hồi, Sự Cố Hoặc Ý Tưởng..."
-                  className="w-full pl-9 pr-4 py-2 rounded-xl bg-white dark:bg-[#23272d] border border-black/10 dark:border-white/10 text-xs outline-none focus:border-[#0078d4]"
+                  className="w-full pl-4 pr-10 py-2 rounded-xl bg-white dark:bg-[#23272d] border border-black/10 dark:border-white/10 text-xs outline-none focus:border-[#0078d4]"
                 />
-                <Search className="w-4 h-4 text-neutral-400 absolute left-3 top-2.5" />
+                <FluentSearchIcon className="w-4 h-4 absolute right-3 top-2.5 pointer-events-none" />
               </div>
 
               {/* Category Filter */}

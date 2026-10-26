@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { Channel } from '../../types';
 import { CHANNELS_DATA } from '../../data/channels';
+import { FluentSearchIcon } from '../../components/FluentIcons';
 
 export interface CalendarEvent {
   id: string;
@@ -565,7 +566,7 @@ export const CalendarApp: React.FC<CalendarAppProps> = ({ navigate }) => {
               placeholder="Tìm sự kiện..."
               className="w-40 bg-transparent text-xs outline-none border-none pr-6"
             />
-            <Search className="w-3.5 h-3.5 shrink-0 pointer-events-none absolute right-2.5 text-neutral-400" />
+            <FluentSearchIcon className="w-3.5 h-3.5 shrink-0 pointer-events-none absolute right-2.5" />
           </div>
 
           {/* View Mode Toggle */}

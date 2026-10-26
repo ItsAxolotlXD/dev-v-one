@@ -28,7 +28,8 @@ import {
   Compass,
   Bookmark,
   Eye,
-  Layers
+  Layers,
+  X
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useSystemTasks } from '../context/SystemTasksContext';

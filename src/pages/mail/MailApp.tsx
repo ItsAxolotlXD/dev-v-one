@@ -30,6 +30,7 @@ import {
   CheckSquare,
   Square
 } from 'lucide-react';
+import { FluentSearchIcon } from '../../components/FluentIcons';
 
 export interface EmailAttachment {
   id: string;
@@ -799,7 +800,7 @@ export const MailApp: React.FC<MailAppProps> = ({ navigate }) => {
                     <X className="w-3.5 h-3.5" />
                   </button>
                 )}
-                <Search className="w-3.5 h-3.5 text-neutral-400 shrink-0 pointer-events-none" />
+                <FluentSearchIcon className="w-3.5 h-3.5 shrink-0 pointer-events-none" />
               </div>
             </div>
 

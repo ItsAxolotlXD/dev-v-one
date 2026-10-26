@@ -139,39 +139,55 @@
   border-bottom-color: #4cc2ff !important;
 }
 
-/* Global Interactive Cursor Hand (pointer) - excludes sidebar and modal dialogs */
+/* ========================================================
+   GLOBAL CURSOR CONFIGURATION: NORMAL ARROW CURSOR (DEFAULT) EVERYWHERE
+   Use standard arrow pointer instead of hand pointer across all elements on hover
+   ======================================================== */
+*, *::before, *::after,
+body,
 button,
 a,
 [role="button"],
+.cursor-pointer,
 .fluent-reveal-item,
+.reveal-item,
 .channel-card,
 .news-card,
 .onair-card,
 .setting-card,
-input[type="button"],
-input[type="submit"],
-input[type="reset"],
-[tabindex="0"] {
-  cursor: pointer !important;
-}
-
-/* ========================================================
-   SIDEBAR & MODAL DIALOGS: NORMAL ARROW CURSOR (DEFAULT), NOT HAND (POINTER)
-   ======================================================== */
+.sidebar-nav-item,
+[id^="sidebar-nav-"],
+[id^="mobile-nav-"],
+[id^="nav-item-"],
+[id^="mobile-nav-item-"],
 #waves-desktop-sidebar,
 #waves-desktop-sidebar *,
 #waves-collapsed-sidebar,
 #waves-collapsed-sidebar *,
 #waves-mobile-sidebar,
 #waves-mobile-sidebar *,
-aside#waves-desktop-sidebar,
-aside#waves-desktop-sidebar *,
-.sidebar-nav-item,
-.sidebar-nav-item *,
-button.sidebar-nav-item,
-button.sidebar-nav-item *,
-[data-nav-item],
-[data-nav-item] * {
+aside,
+aside *,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+input[type="checkbox"],
+input[type="radio"],
+select,
+[tabindex],
+[tabindex="0"],
+button:hover,
+a:hover,
+[role="button"]:hover,
+.cursor-pointer:hover,
+.sidebar-nav-item:hover,
+.channel-card:hover,
+.news-card:hover,
+.setting-card:hover,
+[id^="sidebar-nav-"]:hover,
+[id^="mobile-nav-"]:hover,
+[id^="nav-item-"]:hover,
+[id^="mobile-nav-item-"]:hover {
   cursor: default !important;
 }
 
@@ -216,13 +232,17 @@ button.sidebar-nav-item *,
 }
 
 /* ========================================================
-   SIDEBAR REVEAL EFFECT & FULL-BLEED HOVER BACKGROUND
+   SIDEBAR REVEAL EFFECT (PURE SURFACE GLOW, NO BORDERS)
    ======================================================== */
 .sidebar-nav-item {
   width: 100% !important;
   border-radius: 0 !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
   position: relative;
   overflow: hidden;
+  cursor: default !important;
   transition: background-color 0.12s ease-out, color 0.12s ease-out;
 }
 
@@ -230,89 +250,75 @@ button.sidebar-nav-item *,
 .sidebar-nav-item[data-nav-active="true"] {
   background-color: transparent !important;
   box-shadow: none !important;
+  border: none !important;
 }
 
 .sidebar-nav-item:hover,
 .sidebar-nav-item[data-nav-active="true"]:hover {
   background-color: rgba(255, 255, 255, 0.04) !important;
+  cursor: default !important;
 }
 
 html.light-mode .sidebar-nav-item:hover,
 html.light-mode .sidebar-nav-item[data-nav-active="true"]:hover {
   background-color: rgba(0, 0, 0, 0.04) !important;
+  cursor: default !important;
 }
 
-/* Reveal Highlight Surface Glow on Sidebar Items */
+/* Reveal Highlight Surface Glow (No borders on top, bottom, left, or right edges) */
 .sidebar-nav-item::before {
-  content: '';
+  content: '' !important;
+  display: block !important;
   position: absolute;
   inset: 0;
+  border: none !important;
+  outline: none !important;
   pointer-events: none;
-  opacity: 0;
+  opacity: var(--sidebar-reveal-surface-opacity, 0);
   transition: opacity 0.12s ease-out;
   background: radial-gradient(
     circle 130px at var(--sidebar-reveal-x, 50%) var(--sidebar-reveal-y, 50%),
-    rgba(255, 255, 255, 0.28) 0%,
-    rgba(255, 255, 255, 0.12) 40%,
-    rgba(255, 255, 255, 0.03) 65%,
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(255, 255, 255, 0.10) 40%,
+    rgba(255, 255, 255, 0.02) 65%,
     transparent 80%
-  );
+  ) !important;
   z-index: 1;
 }
 
 html.light-mode .sidebar-nav-item::before {
   background: radial-gradient(
     circle 130px at var(--sidebar-reveal-x, 50%) var(--sidebar-reveal-y, 50%),
-    rgba(0, 0, 0, 0.14) 0%,
-    rgba(0, 0, 0, 0.06) 40%,
-    rgba(0, 0, 0, 0.02) 65%,
+    rgba(0, 0, 0, 0.12) 0%,
+    rgba(0, 0, 0, 0.05) 40%,
+    rgba(0, 0, 0, 0.01) 65%,
     transparent 80%
-  );
+  ) !important;
 }
 
 .sidebar-nav-item:hover::before {
   opacity: 1 !important;
 }
 
-/* Reveal Border Illumination (1px border stroke illuminated under the cursor) */
+/* Completely remove/disable border reveal on top, bottom, left, and right edges */
 .sidebar-nav-item::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.12s ease-out;
-  z-index: 2;
-  box-sizing: border-box;
-  border: 1px solid transparent;
-  background: radial-gradient(
-    circle 110px at var(--sidebar-reveal-x, 50%) var(--sidebar-reveal-y, 50%),
-    rgba(255, 255, 255, 0.45) 0%,
-    rgba(255, 255, 255, 0.18) 45%,
-    transparent 75%
-  ) border-box;
-  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
+  display: none !important;
+  content: none !important;
+  border: none !important;
+  outline: none !important;
 }
 
 html.light-mode .sidebar-nav-item::after {
-  background: radial-gradient(
-    circle 110px at var(--sidebar-reveal-x, 50%) var(--sidebar-reveal-y, 50%),
-    rgba(0, 0, 0, 0.25) 0%,
-    rgba(0, 0, 0, 0.10) 45%,
-    transparent 75%
-  ) border-box;
-}
-
-.sidebar-nav-item:hover::after {
-  opacity: 1 !important;
+  display: none !important;
+  content: none !important;
+  border: none !important;
+  outline: none !important;
 }
 
 /* Keep icon and label content on top of reveal layer */
 .sidebar-nav-item > * {
   position: relative;
-  z-index: 2;
+  z-index: 3;
 }
 
 /* Sidebar vertical pill indicator: thinner (2px), darker blue, no background */
@@ -364,7 +370,7 @@ html.light-mode .sidebar-nav-item::after {
   border-radius: 0px !important;
   background-color: #1a1a1a !important;
   background-image: none !important;
-  border: 2px solid rgba(255, 255, 255, 0.45) !important;
+  border: 2.5px solid rgba(255, 255, 255, 0.45) !important;
   box-shadow: none !important;
   outline: none !important;
   transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease !important;
@@ -383,8 +389,22 @@ html.light-mode .sidebar-nav-item::after {
 #spotlight-search-container:hover,
 #find-words-bar > div:hover,
 .fluent-search-box:hover,
-[id*="search-box"]:hover {
-  border-color: rgba(255, 255, 255, 0.65) !important;
+[id*="search-box"]:hover,
+.windows-search-box:hover:focus-within,
+#topbar-search-box:hover:focus-within,
+#sidebar-search-box:hover:focus-within,
+#channels-search-box:hover:focus-within,
+#news-search-box:hover:focus-within,
+#settings-search-box:hover:focus-within,
+#widgets-search-box:hover:focus-within,
+#copilot-search-box:hover:focus-within,
+#copilot-flyout-search-box:hover:focus-within,
+#immersive-search-capsule:hover:focus-within,
+#spotlight-search-container:hover:focus-within,
+#find-words-bar > div:hover:focus-within,
+.fluent-search-box:hover:focus-within,
+[id*="search-box"]:hover:focus-within {
+  border-color: #ffffff !important;
 }
 
 /* Unfocused inner elements */
@@ -600,7 +620,7 @@ html.dark [id*="search-box"]:focus-within {
   border-radius: 0px !important;
   background-color: #ffffff !important;
   background-image: none !important;
-  border: 2px solid #0078d7 !important;
+  border: 2.5px solid #0078d7 !important;
   box-shadow: none !important;
   outline: none !important;
 }
@@ -2368,7 +2388,6 @@ nav button,
 .fluent-reveal-item::before,
 .reveal-item::before,
 .reveal-target::before,
-.sidebar-nav-item::before,
 .channel-card::before,
 .news-card::before,
 .banner-card::before,
@@ -2384,8 +2403,6 @@ div[id^="livetv-channel-card-"]::before,
 .glass-player-btn::before,
 .video-player-glass-btn::before,
 .category-pill::before,
-#waves-desktop-sidebar button::before,
-#waves-mobile-sidebar button::before,
 header button::before,
 nav button::before,
 .modal-content button::before {
@@ -2396,7 +2413,6 @@ nav button::before,
 html.light-mode .fluent-reveal-item::before,
 html.light-mode .reveal-item::before,
 html.light-mode .reveal-target::before,
-html.light-mode .sidebar-nav-item::before,
 html.light-mode .channel-card::before,
 html.light-mode .news-card::before,
 html.light-mode .banner-card::before,
@@ -2412,8 +2428,6 @@ html.light-mode .floaty-bar__item::before,
 html.light-mode .glass-player-btn::before,
 html.light-mode .video-player-glass-btn::before,
 html.light-mode .category-pill::before,
-html.light-mode #waves-desktop-sidebar button::before,
-html.light-mode #waves-mobile-sidebar button::before,
 html.light-mode header button::before,
 html.light-mode nav button::before,
 html.light-mode .modal-content button::before {
@@ -2429,7 +2443,6 @@ html.light-mode .modal-content button::before {
 .fluent-reveal-item::after,
 .reveal-item::after,
 .reveal-target::after,
-.sidebar-nav-item::after,
 .channel-card::after,
 .news-card::after,
 .banner-card::after,
@@ -2445,8 +2458,6 @@ div[id^="livetv-channel-card-"]::after,
 .glass-player-btn::after,
 .video-player-glass-btn::after,
 .category-pill::after,
-#waves-desktop-sidebar button::after,
-#waves-mobile-sidebar button::after,
 header button::after,
 nav button::after,
 .modal-content button::after {
@@ -2457,7 +2468,6 @@ nav button::after,
 html.light-mode .fluent-reveal-item::after,
 html.light-mode .reveal-item::after,
 html.light-mode .reveal-target::after,
-html.light-mode .sidebar-nav-item::after,
 html.light-mode .channel-card::after,
 html.light-mode .news-card::after,
 html.light-mode .banner-card::after,
@@ -2473,8 +2483,6 @@ html.light-mode .floaty-bar__item::after,
 html.light-mode .glass-player-btn::after,
 html.light-mode .video-player-glass-btn::after,
 html.light-mode .category-pill::after,
-html.light-mode #waves-desktop-sidebar button::after,
-html.light-mode #waves-mobile-sidebar button::after,
 html.light-mode header button::after,
 html.light-mode nav button::after,
 html.light-mode .modal-content button::after {
@@ -3616,7 +3624,7 @@ button[role="switch"],
   align-items: center !important;
   justify-content: flex-start !important;
   transition: background-color 0.16s ease !important;
-  cursor: pointer !important;
+  cursor: default !important;
   flex-shrink: 0 !important;
   -webkit-tap-highlight-color: transparent !important;
 }
@@ -3725,7 +3733,7 @@ button[role="switch"] span:hover,
   background-image: none !important;
 }
 
-/* Interactive cursor: Hand select (pointer) on buttons and sidebar items when hovering */
+/* Interactive cursor: Normal arrow cursor (default) on buttons and sidebar items when hovering */
 .cursor-pointer,
 .sidebar-nav-item,
 #waves-desktop-sidebar button,
@@ -3735,7 +3743,7 @@ button[role="switch"] span:hover,
 #waves-mobile-sidebar [role="button"],
 #waves-mobile-sidebar a,
 .tools-flyout-container button {
-  cursor: pointer !important;
+  cursor: default !important;
 }
 
 #waves-desktop-sidebar h2,
@@ -3764,7 +3772,7 @@ button:hover,
 .tools-flyout-container button:hover *,
 .signin-flyout-container button:hover,
 .signin-flyout-container button:hover * {
-  cursor: pointer !important;
+  cursor: default !important;
 }
 
 /* Global Button Hover Bounce for general buttons across the app */
@@ -3874,7 +3882,7 @@ html:not(.light-mode) .signin-flyout-panel {
 [id^="mobile-nav-"]:hover *,
 [id^="nav-item-"]:hover,
 [id^="mobile-nav-item-"]:hover {
-  cursor: pointer !important;
+  cursor: default !important;
 }
 #waves-desktop-sidebar button:active,
 #waves-desktop-sidebar a:active,
@@ -5067,7 +5075,7 @@ html.light-mode .spatial-glass-modal {
   min-height: 18px !important;
   border-radius: 0px !important;
   accent-color: #e3008c !important;
-  cursor: pointer !important;
+  cursor: default !important;
 }
 
 /* Windows 10 ContentDialog Footer - Seamless flat padding & pure black in dark mode */
@@ -5111,7 +5119,7 @@ html.light-mode .fluent-modal-footer {
   padding: 0 16px !important;
   box-shadow: none !important;
   outline: none !important;
-  cursor: pointer !important;
+  cursor: default !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -5223,7 +5231,7 @@ html.light-mode [role="dialog"] .fluent-btn-secondary {
   padding: 0 16px !important;
   box-shadow: none !important;
   outline: none !important;
-  cursor: pointer !important;
+  cursor: default !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -5449,7 +5457,7 @@ html.light-mode .fluent-btn-secondary:active {
 .fluent-search-box:focus-within {
   background-image: none !important;
   background-color: #ffffff !important;
-  border: 2px solid #0078d7 !important;
+  border: 2.5px solid #0078d7 !important;
   outline: none !important;
 }
 
@@ -8705,7 +8713,7 @@ html.light-mode #example-content-dialog {
   min-width: 88px !important;
   outline: none !important;
   box-shadow: none !important;
-  cursor: pointer !important;
+  cursor: default !important;
   transition: background-color 0.1s ease, color 0.1s ease !important;
 }
 

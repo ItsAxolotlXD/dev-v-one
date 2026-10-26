@@ -20,9 +20,7 @@ import {
   ChevronRight,
   ChevronLeft,
   ChevronDown,
-  Check,
-  Sun,
-  Moon
+  Check
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useSettings, FONT_SCALE_CONFIG, SystemSettings } from '../hooks/useSettings';
@@ -64,10 +62,10 @@ const SETTINGS_GROUP_1: SettingsCategoryItem[] = [
   {
     id: 'interface',
     title: 'Interface',
-    subtitle: 'Navigation bar, app theme, text scaling, and display mode',
+    subtitle: 'Navigation bar, text scaling, and display mode',
     icon: Palette,
     badgeColor: 'bg-gradient-to-b from-[#34C759] to-[#248A3D]',
-    keywords: ['interface', 'navigation', 'sidebar', 'topbar', 'side view', 'top view', 'floaty', 'tab view', 'theme', 'light mode', 'dark mode', 'font', 'scale', 'super dark'],
+    keywords: ['interface', 'navigation', 'sidebar', 'topbar', 'side view', 'top view', 'floaty', 'tab view', 'dark mode', 'font', 'scale', 'super dark'],
   },
   {
     id: 'accessibility',
@@ -779,48 +777,7 @@ export const Settings: React.FC<SettingsProps> = ({
                 data-settings-search-label="Interface"
                 className="rounded-[8px] bg-white dark:bg-[#38383d] border border-[#e5e5e5] dark:border-[#383838] shadow-xs overflow-hidden select-none"
               >
-                {/* 1. Chế độ ứng dụng (Ban ngày / Ban đêm) */}
-                <div
-                  id="setting-theme-mode"
-                  className="px-4 py-3 sm:py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
-                >
-                  <div className="min-w-0 flex-1">
-                    <div className="font-semibold text-sm text-[#111827] dark:text-white">Chế độ ứng dụng</div>
-                  </div>
-                  <div className="settings-segmented-group grid grid-cols-2 gap-1 rounded-md sm:rounded-lg bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/10 p-1 w-full sm:w-auto sm:min-w-[220px]" role="group" aria-label="Chế độ ứng dụng">
-                    {([
-                      ['light', 'Ban ngày', Sun],
-                      ['dark', 'Ban đêm', Moon],
-                    ] as const).map(([val, label, IconComponent]) => (
-                      <button
-                        key={val}
-                        type="button"
-                        id={`theme-btn-${val}`}
-                        onClick={() => {
-                          updateDraft('theme', val);
-                          if (val === 'light') {
-                            updateDraft('spatialGlassOpacity', 43);
-                          } else if (draftSettings.spatialGlassOpacity === 43) {
-                            updateDraft('spatialGlassOpacity', 20);
-                          }
-                        }}
-                        className={`flex items-center justify-center gap-1.5 rounded-sm sm:rounded-[6px] px-3 py-1.5 text-xs font-semibold transition-all cursor-default ${
-                          (draftSettings.theme || 'dark') === val
-                            ? 'bg-[#0078d4] dark:bg-[#4cc2ff] text-white dark:text-black shadow-xs font-normal'
-                            : 'text-[#6B7280] dark:text-[#9CA3AF] hover:text-[#111827] dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
-                        }`}
-                        aria-pressed={(draftSettings.theme || 'dark') === val}
-                      >
-                        <IconComponent className="w-3.5 h-3.5" />
-                        <span>{label}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="divider-line h-[1px] bg-black/5 dark:bg-white/10 ml-4 mr-4" />
-
-                {/* 2. Thanh điều hướng */}
+                {/* 1. Thanh điều hướng */}
                 <div className="px-4 py-3 sm:py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">

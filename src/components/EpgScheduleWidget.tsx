@@ -166,19 +166,21 @@ export const EpgScheduleWidget: React.FC<EpgScheduleWidgetProps> = ({
               value={filterQuery}
               onChange={(e) => setFilterQuery(e.target.value)}
               placeholder="Search For Programs"
-              className="w-full h-9 pl-9 pr-8 rounded-[5px] text-xs sm:text-[13px] bg-white/10 dark:bg-white/10 border-0 outline-none text-white placeholder-[#9CA3AF] focus:ring-1 focus:ring-[#4cc2ff] transition-all"
+              className="w-full h-9 pl-3 pr-14 rounded-[5px] text-xs sm:text-[13px] bg-white/10 dark:bg-white/10 border-0 outline-none text-white placeholder-[#9CA3AF] focus:ring-1 focus:ring-[#4cc2ff] transition-all"
             />
-            <FluentSearchIcon className="w-4 h-4 text-[#9CA3AF] absolute left-3 top-2.5 pointer-events-none" />
-            {filterQuery && (
-              <button
-                type="button"
-                onClick={() => setFilterQuery('')}
-                className="absolute right-2.5 top-2.5 text-[#9CA3AF] hover:text-white transition-colors cursor-pointer"
-                title="Xóa tìm kiếm"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            )}
+            <div className="absolute right-2.5 top-2.5 flex items-center gap-1.5">
+              {filterQuery && (
+                <button
+                  type="button"
+                  onClick={() => setFilterQuery('')}
+                  className="text-[#9CA3AF] hover:text-white transition-colors cursor-pointer"
+                  title="Xóa tìm kiếm"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+              <FluentSearchIcon className="w-4 h-4 pointer-events-none" />
+            </div>
           </div>
 
           {/* Action buttons: live quick jump, refresh, and close X button */}

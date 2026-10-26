@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import type { LucideIcon } from 'lucide-react';
 import { AppTabIcon, STORE_ICON_URL } from '../components/FluentIcons';
 import type { AppTabIconName } from '../components/FluentIcons';
-import { FluentClockIcon, FluentSnippingToolIcon } from '../components/FluentIcons';
+import { FluentClockIcon, FluentSnippingToolIcon, FluentSearchIcon } from '../components/FluentIcons';
 import { getStoreAppForRoute, type StoreApp } from '../data/storeApps';
 import { useIsMobile } from '../hooks/useIsMobile';
 import { hasSparkOSSetup, resetSparkOSSetup, sparkOSResetOobeEvent, SparkOSBootScreen, SparkOSBootSetup } from '../components/SparkOSBootSetup';
@@ -425,7 +425,6 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
         >
           <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-5 pb-2 pt-[clamp(12px,4dvh,32px)] sm:px-9">
             <div className="flex h-[clamp(40px,5.5dvh,44px)] shrink-0 items-center gap-3 border border-white/10 bg-white/[0.09] px-3.5 shadow-inner focus-within:border-sky-300/70 focus-within:bg-white/[0.13]">
-              <img src={SEARCH_ICON_SRC} alt="" className="size-[18px] shrink-0 object-contain" />
               <input
                 ref={searchRef}
                 onFocus={() => launch('/search', false, 'Search')}
@@ -437,6 +436,7 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
                 className="min-w-0 flex-1 bg-transparent text-[13px] text-white outline-none placeholder:text-slate-300/80"
               />
               {query && <button type="button" onClick={() => { setQuery(''); searchRef.current?.focus(); }} aria-label="Clear search" className="rounded p-1 text-slate-300 hover:bg-white/10"><span aria-hidden="true">×</span></button>}
+              <FluentSearchIcon className="size-[18px] shrink-0 pointer-events-none" />
             </div>
 
             <div className="mb-1 mt-[clamp(12px,3.5dvh,28px)] flex items-center justify-between">

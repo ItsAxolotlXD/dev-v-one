@@ -868,7 +868,6 @@ export const ClockApp: React.FC<ClockAppProps> = ({ navigate }) => {
               </div>
 
               <div className="group relative flex items-center gap-2 h-9 bg-black/20 border-2 border-white/60 rounded-none px-3 text-xs transition-all focus-within:border-white">
-                <FluentSearchIcon className="w-3.5 h-3.5 text-white/70 shrink-0 pointer-events-none" />
                 <input
                   type="text"
                   placeholder="Tìm thành phố..."
@@ -876,6 +875,7 @@ export const ClockApp: React.FC<ClockAppProps> = ({ navigate }) => {
                   onChange={(e) => setCitySearchQuery(e.target.value)}
                   className="bg-transparent border-none outline-none w-full text-white placeholder-white/40"
                 />
+                <FluentSearchIcon className="w-3.5 h-3.5 shrink-0 pointer-events-none" />
               </div>
 
               <div className="max-h-60 overflow-y-auto divide-y divide-white/10 text-xs">

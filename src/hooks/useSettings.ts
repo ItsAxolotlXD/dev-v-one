@@ -157,9 +157,7 @@ export const getStoredSettings = (): SystemSettings => {
       const immersiveSearch = parsed.immersiveSearchVersion === 2
         ? parsed.immersiveSearch
         : true;
-      const theme = parsed.themeVersion === 2
-        ? (parsed.theme === 'light' ? 'light' : 'dark')
-        : 'dark';
+      const theme = 'dark';
       return { 
         ...DEFAULT_SETTINGS, 
         ...parsed,

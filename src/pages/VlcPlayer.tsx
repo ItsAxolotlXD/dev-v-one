@@ -36,7 +36,7 @@ import {
   Layers,
   ArrowRight
 } from 'lucide-react';
-import { FluentVlcColorIcon } from '../components/FluentIcons';
+import { FluentVlcColorIcon, FluentSearchIcon } from '../components/FluentIcons';
 
 interface PlaylistItem {
   id: string;
@@ -1293,23 +1293,25 @@ export const VlcPlayer: React.FC = () => {
             {/* Playlist Search Bar (Styled strictly matching the "Let's chat Copilot" layout) */}
             <div className="p-2.5 border-b border-black/10 dark:border-white/10">
               <div className="relative w-full h-8 flex items-center px-2.5 rounded-[5px] bg-black/5 dark:bg-white/[0.06] border border-black/10 dark:border-white/10 focus-within:border-[#ea580c] focus-within:ring-1 focus-within:ring-[#ea580c] transition-all">
-                <Search className="w-3.5 h-3.5 text-neutral-400 mr-2 shrink-0" />
                 <input
                   type="text"
                   value={playlistSearch}
                   onChange={(e) => setPlaylistSearch(e.target.value)}
                   placeholder="Tìm Kiếm Danh Sách Phát..."
-                  className="w-full bg-transparent text-xs text-neutral-900 dark:text-white placeholder-neutral-400 outline-none border-none"
+                  className="w-full bg-transparent text-xs text-neutral-900 dark:text-white placeholder-neutral-400 outline-none border-none pr-14"
                 />
-                {playlistSearch && (
-                  <button
-                    type="button"
-                    onClick={() => setPlaylistSearch('')}
-                    className="text-neutral-400 hover:text-black dark:hover:text-white"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
-                )}
+                <div className="absolute right-2.5 flex items-center gap-1.5">
+                  {playlistSearch && (
+                    <button
+                      type="button"
+                      onClick={() => setPlaylistSearch('')}
+                      className="text-neutral-400 hover:text-black dark:hover:text-white"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  )}
+                  <FluentSearchIcon className="w-3.5 h-3.5 shrink-0 pointer-events-none" />
+                </div>
               </div>
             </div>
 

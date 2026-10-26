@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowRight, Check, ChevronRight, Download, LoaderCircle, Search, Star, Store, X } from 'lucide-react';
-import { AppTabIcon, FluentCraftmineIcon, FluentPhotopeaIcon, STORE_ICON_URL } from '../components/FluentIcons';
+import { AppTabIcon, FluentCraftmineIcon, FluentPhotopeaIcon, FluentSearchIcon, STORE_ICON_URL } from '../components/FluentIcons';
 import { STORE_APPS, type StoreApp } from '../data/storeApps';
 
 interface MicrosoftStoreProps {
@@ -171,7 +171,7 @@ export const MicrosoftStore: React.FC<MicrosoftStoreProps> = ({ installedApps, o
             <input value={search} onChange={(event) => { setSearch(event.target.value); setSelectedAppId(null); }} placeholder="Search apps, games, and more" className="min-w-0 flex-1 bg-transparent text-xs sm:text-[13px] outline-none pr-14" aria-label="Search Store" />
             <div className="absolute right-2.5 flex items-center gap-1.5">
               {search && <button type="button" onClick={() => setSearch('')} aria-label="Clear search" className="p-0.5"><X className="size-3.5" /></button>}
-              <Search className="size-3.5 shrink-0 pointer-events-none" />
+              <FluentSearchIcon className="size-3.5 shrink-0 pointer-events-none" />
             </div>
           </label>
           <button type="button" onClick={() => { setActiveCategory('All'); setActiveSection('Apps'); setSelectedAppId(null); }} className="hidden items-center gap-2 rounded-full border border-white/15 px-3.5 py-2 text-xs text-white/80 transition hover:bg-white/10 sm:flex"><Download className="size-3.5" /> Library <span className="rounded-full bg-white/10 px-1.5 py-0.5 text-[10px]">{installedApps.length}</span></button>

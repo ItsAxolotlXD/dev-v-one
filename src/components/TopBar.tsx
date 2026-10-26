@@ -8,6 +8,7 @@ import {
   FluentTilesIcon,
   FluentMicOutlineIcon,
   FluentMicOffOutlineIcon,
+  FluentSearchIcon,
   FLUENT_ICON_URLS 
 } from './FluentIcons';
 import { motion, AnimatePresence } from 'motion/react';
@@ -976,19 +977,6 @@ export const TopBar: React.FC<TopBarProps> = ({
                 data-flyout-open={isSearchFlyoutOpen ? "true" : "false"}
                 className="fluent-search-box windows-search-box group relative w-full h-8.5 sm:h-9 rounded-none flex items-center px-2.5 gap-1.5 transition-all cursor-text select-none"
               >
-                {/* Left Search Icon */}
-                <button
-                  type="submit"
-                  title="Search"
-                  className="text-[#a7a7a7] hover:text-white p-1 transition-colors cursor-pointer flex items-center justify-center shrink-0 -ml-0.5 mr-0"
-                >
-                  {searchQuery.trim() ? (
-                    <SpinningRing size={14} strokeWidth={3.5} color="#4cc2ff" />
-                  ) : (
-                    <Search className="size-[20px] shrink-0" strokeWidth={1.7} />
-                  )}
-                </button>
-
                 {/* Input with real-time temperature placeholder */}
                 <input
                   type="text"
@@ -1005,10 +993,10 @@ export const TopBar: React.FC<TopBarProps> = ({
                   }}
                   placeholder={getSearchInsightsPlaceholder()}
                   title={getSearchInsightsPlaceholder()}
-                  className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#0078d4] dark:placeholder-[#4cc2ff] font-medium outline-none border-none py-1 pr-14 no-fluent-line"
+                  className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#0078d4] dark:placeholder-[#4cc2ff] font-medium outline-none border-none py-1 pl-1 pr-24 no-fluent-line"
                 />
 
-                {/* Right Action Icons: Map Icon to change location & Clear button */}
+                {/* Right Action Icons: Map Icon to change location, Clear button & Search Icon */}
                 <div className="absolute right-2 flex items-center gap-1 z-10">
                   {/* Map Pin icon button on search box */}
                   <button
@@ -1042,6 +1030,18 @@ export const TopBar: React.FC<TopBarProps> = ({
                       <X className="w-3.5 h-3.5" />
                     </button>
                   )}
+
+                  <button
+                    type="submit"
+                    title="Search"
+                    className="p-1 transition-colors cursor-pointer flex items-center justify-center shrink-0"
+                  >
+                    {searchQuery.trim() ? (
+                      <SpinningRing size={16} strokeWidth={3.5} color="#4cc2ff" />
+                    ) : (
+                      <FluentSearchIcon className="w-4 h-4" />
+                    )}
+                  </button>
                 </div>
               </div>
 
@@ -1073,14 +1073,14 @@ export const TopBar: React.FC<TopBarProps> = ({
 
                     {/* Search custom city */}
                     <div className="relative mb-2.5">
-                      <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-neutral-400" />
                       <input
                         type="text"
                         value={locationSearchQuery}
                         onChange={(e) => setLocationSearchQuery(e.target.value)}
                         placeholder="Tìm kiếm thành phố..."
-                        className="w-full h-8 pl-8 pr-3 text-xs rounded-[6px] bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/15 text-[#111827] dark:text-white placeholder-neutral-400 focus:outline-none focus:ring-1 focus:ring-[#0078d4] dark:focus:ring-[#4cc2ff]"
+                        className="w-full h-8 pl-3 pr-8 text-xs rounded-[6px] bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/15 text-[#111827] dark:text-white placeholder-neutral-400 focus:outline-none focus:ring-1 focus:ring-[#0078d4] dark:focus:ring-[#4cc2ff]"
                       />
+                      <FluentSearchIcon className="w-3.5 h-3.5 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                     </div>
 
                     {/* Current location weather preview */}
@@ -1154,21 +1154,6 @@ export const TopBar: React.FC<TopBarProps> = ({
                 data-flyout-open={isSearchFlyoutOpen ? "true" : "false"}
                 className="fluent-search-box windows-search-box group relative w-full h-8.5 sm:h-9 rounded-none flex items-center px-2.5 gap-1.5 transition-all cursor-text select-none"
               >
-                {/* Left Search Icon (if Move search to the left is active OR WebView SDK is enabled) */}
-                {(searchExperience === 'left' || settings.windowsAppSdkPreview) && (
-                  <button
-                    type="submit"
-                    title="Search"
-                    className="text-[#a7a7a7] hover:text-white p-1 transition-colors cursor-pointer flex items-center justify-center shrink-0 -ml-0.5 mr-0"
-                  >
-                    {searchQuery.trim() ? (
-                      <SpinningRing size={14} strokeWidth={3.5} color="#4cc2ff" />
-                    ) : (
-                      <Search className="size-[20px] shrink-0" strokeWidth={1.7} />
-                    )}
-                  </button>
-                )}
-
                 <input
                   type="text"
                   value={searchQuery}
@@ -1183,7 +1168,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                     setIsSearchFlyoutOpen(true);
                   }}
                   placeholder={getSearchPlaceholder(currentRoute)}
-                  className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#a0a6b2] outline-none border-none py-1 pr-9 no-fluent-line"
+                  className="w-full bg-transparent text-xs sm:text-[13px] text-[#111827] dark:text-white placeholder-[#71717a] dark:placeholder-[#a0a6b2] outline-none border-none py-1 pl-1 pr-16 no-fluent-line"
                 />
 
                 {/* Right Action Icons: Clear button and Right Search Icon */}
@@ -1202,19 +1187,17 @@ export const TopBar: React.FC<TopBarProps> = ({
                     </button>
                   ) : null}
 
-                  {searchExperience !== 'left' && !settings.windowsAppSdkPreview && searchExperience !== 'hidden' && (
-                    <button
-                      type="submit"
-                      title="Search"
-                      className="text-[#71717a] dark:text-neutral-200 hover:text-[#0078d4] dark:hover:text-[#4cc2ff] p-1 transition-colors cursor-pointer flex items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10"
-                    >
-                      {searchQuery.trim() ? (
-                        <SpinningRing size={17} strokeWidth={3.5} color="#4cc2ff" />
-                      ) : (
-                        <Search className="size-[18px] shrink-0" strokeWidth={2.2} />
-                      )}
-                    </button>
-                  )}
+                  <button
+                    type="submit"
+                    title="Search"
+                    className="p-1 transition-colors cursor-pointer flex items-center justify-center shrink-0"
+                  >
+                    {searchQuery.trim() ? (
+                      <SpinningRing size={16} strokeWidth={3.5} color="#4cc2ff" />
+                    ) : (
+                      <FluentSearchIcon className="w-4 h-4" />
+                    )}
+                  </button>
                 </div>
               </div>
             </form>

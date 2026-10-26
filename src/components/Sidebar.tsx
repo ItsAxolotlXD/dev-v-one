@@ -288,55 +288,83 @@ export const Sidebar: React.FC<SidebarProps> = ({
     const item = (e.target as HTMLElement).closest('.sidebar-nav-item') as HTMLElement | null;
     if (item) {
       const rect = item.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const x = Math.round(e.clientX - rect.left);
+      const y = Math.round(e.clientY - rect.top);
       item.style.setProperty('--sidebar-reveal-x', `${x}px`);
       item.style.setProperty('--sidebar-reveal-y', `${y}px`);
+      item.style.setProperty('--sidebar-reveal-surface-opacity', '1');
       item.style.setProperty('--reveal-opacity', '1');
     }
   };
 
   const handleSidebarPointerLeave = () => {
-    const activeItems = document.querySelectorAll<HTMLElement>('.sidebar-nav-item[style*="--reveal-opacity"]');
-    activeItems.forEach((el) => el.style.setProperty('--reveal-opacity', '0'));
+    const activeItems = document.querySelectorAll<HTMLElement>('.sidebar-nav-item[style*="--sidebar-reveal"]');
+    activeItems.forEach((el) => {
+      el.style.setProperty('--sidebar-reveal-surface-opacity', '0');
+      el.style.setProperty('--reveal-opacity', '0');
+    });
   };
 
-  // Real-time Fluent Reveal Effect cursor coordinate tracking
+  // Real-time Fluent Reveal Effect cursor coordinate tracking (pure surface glow, no borders)
   useEffect(() => {
     let currentItem: HTMLElement | null = null;
+    let rafId: number | null = null;
+    let lastEvent: PointerEvent | null = null;
 
-    const onPointerMove = (e: PointerEvent) => {
+    const updateReveal = () => {
+      rafId = null;
+      if (!lastEvent) return;
+      const e = lastEvent;
+
       const item = (e.target as HTMLElement)?.closest('.sidebar-nav-item') as HTMLElement | null;
       if (item) {
         if (currentItem && currentItem !== item) {
+          currentItem.style.setProperty('--sidebar-reveal-surface-opacity', '0');
           currentItem.style.setProperty('--reveal-opacity', '0');
         }
         currentItem = item;
         const rect = item.getBoundingClientRect();
         const x = Math.round(e.clientX - rect.left);
         const y = Math.round(e.clientY - rect.top);
+
         item.style.setProperty('--sidebar-reveal-x', `${x}px`);
         item.style.setProperty('--sidebar-reveal-y', `${y}px`);
+        item.style.setProperty('--sidebar-reveal-surface-opacity', '1');
         item.style.setProperty('--reveal-opacity', '1');
       } else if (currentItem) {
+        currentItem.style.setProperty('--sidebar-reveal-surface-opacity', '0');
         currentItem.style.setProperty('--reveal-opacity', '0');
         currentItem = null;
       }
     };
 
+    const onPointerMove = (e: PointerEvent) => {
+      lastEvent = e;
+      if (rafId === null) {
+        rafId = requestAnimationFrame(updateReveal);
+      }
+    };
+
     const onPointerLeave = () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = null;
       if (currentItem) {
+        currentItem.style.setProperty('--sidebar-reveal-surface-opacity', '0');
         currentItem.style.setProperty('--reveal-opacity', '0');
         currentItem = null;
       }
-      const activeItems = document.querySelectorAll<HTMLElement>('.sidebar-nav-item[style*="--reveal-opacity"]');
-      activeItems.forEach((el) => el.style.setProperty('--reveal-opacity', '0'));
+      const activeItems = document.querySelectorAll<HTMLElement>('.sidebar-nav-item[style*="--sidebar-reveal"]');
+      activeItems.forEach((el) => {
+        el.style.setProperty('--sidebar-reveal-surface-opacity', '0');
+        el.style.setProperty('--reveal-opacity', '0');
+      });
     };
 
     window.addEventListener('pointermove', onPointerMove, { passive: true });
     window.addEventListener('pointerleave', onPointerLeave, { passive: true });
 
     return () => {
+      if (rafId) cancelAnimationFrame(rafId);
       window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('pointerleave', onPointerLeave);
     };

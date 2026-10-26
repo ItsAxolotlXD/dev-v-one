@@ -108,47 +108,21 @@ export interface FluentSearchIconProps {
 }
 
 export const FluentSearchIcon: React.FC<FluentSearchIconProps> = ({ 
-  className = 'w-5 h-5', 
+  className = 'w-4 h-4', 
   style, 
-  treatment 
 }) => {
-  const { draftSettings, settings } = useSettings();
-  const activeTreatment = treatment || draftSettings.searchIconTreatment || settings.searchIconTreatment || 'default';
-
-  if (activeTreatment === 'sparkle') {
-    return (
-      <img
-        src={SPARKLE_SEARCH_ICON_URL}
-        alt="Search"
-        referrerPolicy="no-referrer"
-        className={`${className} object-contain shrink-0 select-none inline-block`}
-        style={style}
-      />
-    );
-  }
-
-  if (activeTreatment === 'globe') {
-    return (
-      <img
-        src={GLOBE_SEARCH_ICON_URL}
-        alt="Search"
-        referrerPolicy="no-referrer"
-        className={`${className} object-contain shrink-0 select-none inline-block brightness-0 dark:brightness-0 dark:invert`}
-        style={style}
-      />
-    );
-  }
-
   return (
-    <svg 
-      viewBox="0 0 48 48" 
-      fill="none" 
-      xmlns="http://www.w3.org/2000/svg" 
-      className={`${className} ${activeTreatment === 'flipped' ? 'scale-x-[-1]' : ''}`} 
-      style={style}
-    >
-      <path d="M31.3975 33.1615C28.601 35.5546 24.9693 37 21 37C12.1634 37 5 29.8366 5 21C5 12.1634 12.1634 5 21 5C29.8366 5 37 12.1634 37 21C37 24.9674 35.556 28.5975 33.1649 31.3934L42.6376 40.8661C43.1257 41.3542 43.1257 42.1457 42.6376 42.6338C42.1494 43.122 41.3579 43.122 40.8698 42.6338L31.3975 33.1615ZM34.5 21C34.5 13.5442 28.4558 7.5 21 7.5C13.5442 7.5 7.5 13.5442 7.5 21C7.5 28.4558 13.5442 34.5 21 34.5C28.4558 34.5 34.5 28.4558 34.5 21Z" fill="currentColor"/>
-    </svg>
+    <img
+      src="https://cdn.iconscout.com/icon/free/png-256/free-search-icon-svg-download-png-1174913.png"
+      alt="Search"
+      referrerPolicy="no-referrer"
+      className={`${className} object-contain shrink-0 select-none pointer-events-none inline-block`}
+      style={{
+        filter: 'brightness(0) invert(1)',
+        transform: 'scaleX(-1)',
+        ...style,
+      }}
+    />
   );
 };
 

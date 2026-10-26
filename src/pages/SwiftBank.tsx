@@ -37,7 +37,7 @@ import {
   Filter,
   DollarSign
 } from 'lucide-react';
-import { FluentSwiftBankIcon, FluentSwiftBankColorIcon } from '../components/FluentIcons';
+import { FluentSwiftBankIcon, FluentSwiftBankColorIcon, FluentSearchIcon } from '../components/FluentIcons';
 
 interface BankAccount {
   accountNumber: string;
@@ -1392,7 +1392,6 @@ export const SwiftBank: React.FC<SwiftBankProps> = ({ navigate }) => {
               {/* Search & Filter */}
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-1.5 bg-[#1e293b] border border-white/10 rounded-[5px] px-3 py-1.5 text-xs text-white">
-                  <Search className="w-3.5 h-3.5 text-neutral-400" />
                   <input
                     type="text"
                     placeholder="Tìm Theo Tên, Nội Dung, Mã..."
@@ -1400,6 +1399,7 @@ export const SwiftBank: React.FC<SwiftBankProps> = ({ navigate }) => {
                     onChange={(e) => setHistorySearch(e.target.value)}
                     className="bg-transparent border-none outline-none w-36 sm:w-48 text-xs"
                   />
+                  <FluentSearchIcon className="w-3.5 h-3.5 shrink-0 pointer-events-none" />
                 </div>
 
                 <div className="flex rounded-xl bg-white/5 p-1 border border-white/10 text-xs font-semibold">
