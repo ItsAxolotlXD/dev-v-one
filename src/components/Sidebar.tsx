@@ -8,6 +8,8 @@ import {
   CalendarDays,
   Camera,
   Calculator,
+  ChevronDown,
+  ChevronRight,
   Clock3,
   DownloadCloud,
   FileText,
@@ -81,7 +83,6 @@ type SidebarAppIconName = keyof typeof SIDEBAR_APP_ICONS;
 
 function SidebarAppIcon({ name, className }: { name: SidebarAppIconName; className?: string }) {
   const Icon = SIDEBAR_APP_ICONS[name];
-  console.log('[v0] Sidebar app icon render', name, typeof Icon);
   return (
     <Icon
       aria-hidden="true"
@@ -278,7 +279,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const { settings } = useSettings();
   const { favoriteChannelIds } = useFavorites();
-  console.log('[v0] Sidebar render start', currentRoute, settings.sidebarSmartLayout);
 
   const getDownloadIndicator = (route: string, collapsed = isCollapsed) => {
     const app = getStoreAppForRoute(route);
@@ -1185,7 +1185,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   // Smart Sidebar Navigation (Expanded & Mobile Drawer)
   const renderSmartSidebarNav = (isMobile: boolean) => {
-    console.log('[v0] Sidebar smart nav render', isMobile);
     return (
       <>
   {/* 1. Home */}
@@ -1419,7 +1418,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   // Smart Sidebar Navigation (Collapsed Rail)
   const renderSmartCollapsedNav = () => {
-    console.log('[v0] Sidebar collapsed nav render');
     return (
       <>
         {/* Home Icon */}
@@ -1618,7 +1616,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   // Render Full Windows 10 Settings Style Sidebar Content
   const renderSidebarBody = (isMobile: boolean = false) => {
-    console.log('[v0] Sidebar body render', isMobile, settings.searchOnSidebar, settings.sidebarSmartLayout);
     const containerRef = isMobile ? mobileNavRef : desktopNavRef;
 
     return (
