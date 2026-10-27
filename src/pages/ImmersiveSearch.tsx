@@ -17,7 +17,8 @@ import {
   Settings,
   StickyNote,
   Tv2,
-  Video
+  Video,
+  Search,
 } from 'lucide-react';
 import { AppTabIcon, AppTabIconName, FluentSearchIcon } from '../components/FluentIcons';
 
@@ -389,7 +390,7 @@ export const ImmersiveSearch: React.FC<ImmersiveSearchProps> = ({
                   <X className="w-3.5 h-3.5" />
                 </button>
               )}
-              <FluentSearchIcon className="w-4 h-4 shrink-0 pointer-events-none" />
+              <Search className="w-4 h-4 shrink-0 pointer-events-none" strokeWidth={1.75} strokeLinecap="square" strokeLinejoin="miter" />
             </div>
           </div>
         </div>

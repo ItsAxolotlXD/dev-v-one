@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,600;1,700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400;1,700&display=swap');
 @custom-variant dark (&:where(.dark, .dark *));
 
 @font-face {
@@ -22,7 +23,6 @@
   font-display: swap;
   src: url('https://fonts.gstatic.com/s/googlesans/v58/4UabrENHsxJlGDuGo1OIlLV154t3CwZ-Pw.woff2') format('woff2');
 }
-@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,600;1,700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400;1,700&display=swap');
 @layer base {
   :root {
     --primary-red: #ff2bbd;
@@ -170,11 +170,20 @@
   border-color: #3d182b !important;
 }
 
-/* Tab page pure black background and square top-left corner */
+#waves-desktop-sidebar svg,
+#waves-mobile-sidebar svg {
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-linecap: square !important;
+  stroke-linejoin: miter !important;
+}
+
+/* Tab page dark gray background and square top-left corner */
+main,
 .main-tab-page,
 .main-tab-page > div,
 .main-app-container {
-  background-color: #000000 !important;
+  background-color: #1a1a1a !important;
   border-top-left-radius: 0px !important;
 }
 
@@ -457,13 +466,13 @@ html.light-mode .sidebar-nav-item::after {
    WINDOWS 10 UNIVERSAL SEARCH BOX SPECIFICATION
    Hình 1: Search box thường (Unfocused)
      - Border radius: 0px (Góc vuông, sắc cạnh hoàn toàn)
-     - Nền: màu tối #1a1a1a / rgba(0,0,0,0.45)
+     - Nền: rgba(26, 26, 26, 0.5)
      - Viền: 2px solid rgba(255, 255, 255, 0.45) bao quanh 4 cạnh
      - Text / placeholder: #a6a6a6 / #cccccc
      - Icon kính lúp bên phải: màu #a6a6a6
    Hình 2: Search box focused (:focus-within, :focus)
      - Border radius: 0px (Góc vuông sắc cạnh)
-     - Nền: MÀU TRẮNG TINH #ffffff
+     - Nền: trắng 50% opacity, rgba(255, 255, 255, 0.5)
      - Viền: 2px solid #0078d7 bao quanh 4 cạnh
      - Text: màu đen #000000
      - Caret (con trỏ soạn thảo): màu đen #000000
@@ -485,7 +494,7 @@ html.light-mode .sidebar-nav-item::after {
 .fluent-search-box,
 [id*="search-box"] {
   border-radius: 0px !important;
-  background-color: #1a1a1a !important;
+  background-color: rgba(26, 26, 26, 0.5) !important;
   background-image: none !important;
   border: 2.5px solid rgba(255, 255, 255, 0.45) !important;
   box-shadow: none !important;
@@ -612,7 +621,7 @@ html.light-mode #spotlight-search-container,
 html.light-mode #find-words-bar > div,
 html.light-mode .fluent-search-box,
 html.light-mode [id*="search-box"] {
-  background-color: #f3f3f3 !important;
+  background-color: rgba(243, 243, 243, 0.5) !important;
   border: 2px solid #767676 !important;
   color: #000000 !important;
 }
@@ -685,12 +694,12 @@ html.light-mode [id*="search-box"] button {
 
 /* ========================================================
    HÌNH 2: FOCUSED SEARCH BOX (Cho cả Dark và Light Mode)
-   - Nền: MÀU TRẮNG TINH #ffffff
+   - Nền: trắng 50% opacity rgba(255, 255, 255, 0.5)
    - Viền: 2px solid #0078d7
    - Text: màu đen #000000
    - Caret: màu đen #000000
    - Placeholder: màu xám #767676
-   - Icon / buttons: màu đen / xám đậm #333333
+   - Icon / buttons: màu đen #000000
    ======================================================== */
 .windows-search-box:focus-within,
 #topbar-search-box:focus-within,
@@ -735,7 +744,7 @@ html.dark #find-words-bar > div:focus-within,
 html.dark .fluent-search-box:focus-within,
 html.dark [id*="search-box"]:focus-within {
   border-radius: 0px !important;
-  background-color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.5) !important;
   background-image: none !important;
   border: 2.5px solid #0078d7 !important;
   box-shadow: none !important;
@@ -878,9 +887,25 @@ html.dark #immersive-search-capsule:focus-within svg,
 html.dark #immersive-search-capsule:focus-within button,
 html.dark #spotlight-search-container:focus-within svg,
 html.dark #spotlight-search-container:focus-within button {
-  color: #333333 !important;
+  color: #000000 !important;
 }
 
+.windows-search-box:focus-within img,
+#topbar-search-box:focus-within img,
+#sidebar-search-box:focus-within img,
+#channels-search-box:focus-within img,
+#news-search-box:focus-within img,
+#settings-search-box:focus-within img,
+#widgets-search-box:focus-within img,
+#copilot-search-box:focus-within img,
+#copilot-flyout-search-box:focus-within img,
+#immersive-search-capsule:focus-within img,
+#spotlight-search-container:focus-within img,
+#find-words-bar > div:focus-within img,
+.fluent-search-box:focus-within img,
+[id*="search-box"]:focus-within img {
+  filter: brightness(0) !important;
+}
 
 /* ========================================================
    INSIDER FLAG: WEBVIEW SDK TEST PREVIEW (Windows App SDK Test Preview)
@@ -1481,7 +1506,7 @@ html.dark main,
 html.dark .tab-element-slide-up-container,
 html:not(.light-mode) main,
 html:not(.light-mode) .tab-element-slide-up-container {
-  background-color: #000000 !important;
+  background-color: #1a1a1a !important;
 }
 
 /* Main tab page: sharp corner (0px) ở góc trên trái trang, các góc còn lại ko bo */
@@ -3349,7 +3374,7 @@ html.light-mode #floating-search-build-info .build-info-line-2 {
 }
 
 /* ==========================================================================
-   Spatial Glass Border: Viền trắng ở 2 cạnh trên - dư���i, giảm opacity dần sang 2 bên trái - phải
+   Spatial Glass Border: Viền trắng ở 2 c���nh trên - dư���i, giảm opacity dần sang 2 bên trái - phải
    Áp dụng đồng nhất cho các nút, ô kênh, banner trong toàn bộ ứng dụng
    ========================================================================== */
 
@@ -5585,7 +5610,7 @@ html.light-mode .fluent-btn-secondary:active {
 #widgets-search-box:focus-within,
 .fluent-search-box:focus-within {
   background-image: none !important;
-  background-color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.5) !important;
   border: 2.5px solid #0078d7 !important;
   outline: none !important;
 }
@@ -5616,7 +5641,7 @@ html.light-mode #copilot-flyout-search-box:focus-within,
 html.light-mode #widgets-search-box:focus-within,
 html.light-mode .fluent-search-box:focus-within {
   background-image: none !important;
-  background-color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.5) !important;
   border: 2px solid #0078d7 !important;
 }
 
@@ -7695,8 +7720,8 @@ html.light-mode .floaty-bar .floaty-bar__item:hover:not(.is-active) {
   width: 100% !important;
   height: 3.25rem !important;
   border-radius: 9999px !important;
-  background: rgba(255, 255, 255, 0.10) !important;
-  background-color: rgba(255, 255, 255, 0.10) !important;
+  background: rgba(255, 255, 255, 0.5) !important;
+  background-color: rgba(255, 255, 255, 0.5) !important;
   background-image: none !important;
   border: 3.5px solid transparent !important;
   box-shadow: none !important;
@@ -7707,8 +7732,8 @@ html.light-mode .floaty-bar .floaty-bar__item:hover:not(.is-active) {
 
 #immersive-search-capsule:hover,
 #immersive-search-capsule:focus-within {
-  background: rgba(255, 255, 255, 0.10) !important;
-  background-color: rgba(255, 255, 255, 0.10) !important;
+  background: rgba(255, 255, 255, 0.5) !important;
+  background-color: rgba(255, 255, 255, 0.5) !important;
   background-image: none !important;
   border: 3.5px solid #FFFFFF !important;
   box-shadow: none !important;
@@ -8729,8 +8754,8 @@ header {
 
 .main-tab-page,
 .main-tab-content-container {
-  background: #000000 !important;
-  background-color: #000000 !important;
+  background: #1a1a1a !important;
+  background-color: #1a1a1a !important;
   border-top-left-radius: 0px !important;
   border-radius: 0px !important;
 }
@@ -8762,8 +8787,8 @@ html body #waves-mobile-sidebar > div {
 html body main.main-tab-page,
 html body main.main-tab-page > div,
 html body .main-tab-content-container {
-  background: #000000 !important;
-  background-color: #000000 !important;
+  background: #1a1a1a !important;
+  background-color: #1a1a1a !important;
   border-top-left-radius: 0px !important;
   border-radius: 0px !important;
 }
