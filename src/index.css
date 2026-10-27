@@ -7695,8 +7695,8 @@ html.light-mode .floaty-bar .floaty-bar__item:hover:not(.is-active) {
   width: 100% !important;
   height: 3.25rem !important;
   border-radius: 9999px !important;
-  background: rgba(255, 255, 255, 0.10) !important;
-  background-color: rgba(255, 255, 255, 0.10) !important;
+  background: rgba(255, 255, 255, 0.5) !important;
+  background-color: rgba(255, 255, 255, 0.5) !important;
   background-image: none !important;
   border: 3.5px solid transparent !important;
   box-shadow: none !important;
@@ -7707,8 +7707,8 @@ html.light-mode .floaty-bar .floaty-bar__item:hover:not(.is-active) {
 
 #immersive-search-capsule:hover,
 #immersive-search-capsule:focus-within {
-  background: rgba(255, 255, 255, 0.10) !important;
-  background-color: rgba(255, 255, 255, 0.10) !important;
+  background: rgba(255, 255, 255, 0.5) !important;
+  background-color: rgba(255, 255, 255, 0.5) !important;
   background-image: none !important;
   border: 3.5px solid #FFFFFF !important;
   box-shadow: none !important;
