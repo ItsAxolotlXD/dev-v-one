@@ -1,71 +1,51 @@
 import React, { useState, useRef, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  Sliders,
-  FlaskConical,
-  Menu,
-  X,
+import {
+  Activity,
   ArrowLeft,
-  ChevronDown,
-  ChevronRight,
-  Wrench,
-  Info,
-  MessageSquarePlus,
-  MessageSquare,
-  PlusCircle,
-  UploadCloud,
+  BookMarked,
+  BookOpen,
+  CalendarDays,
+  Camera,
+  Calculator,
+  Clock3,
   DownloadCloud,
-  RefreshCw,
+  FileText,
+  Film,
+  FlaskConical,
+  Folder,
+  FolderOpen,
+  Gamepad2,
+  Globe,
+  History,
+  Home,
+  Images,
+  Info,
+  Landmark,
+  Layers,
+  LayoutGrid,
+  Mail,
+  Menu,
+  MessageSquare,
+  MessageSquarePlus,
+  Monitor,
+  Newspaper,
+  Paintbrush,
+  PanelsTopLeft,
   Pencil,
-  Monitor
+  PlusCircle,
+  RefreshCw,
+  Search,
+  Settings,
+  Sliders,
+  Sparkles,
+  Store,
+  Tv,
+  UploadCloud,
+  Users,
+  Wrench,
+  X,
 } from 'lucide-react';
-import { 
-  AppTabIcon,
-  MAIL_TAB_ICON_URL,
-  CALENDAR_TAB_ICON_URL,
-  STORE_ICON_URL,
-  FluentHomeIcon, 
-  FluentWatchIcon,
-  FluentLiveTvIcon, 
-  FluentArticlesIcon,
-  FluentNewsIcon, 
-  FluentNotesIcon, 
-  FluentUserIcon, 
-  FluentPersonDeleteIcon, 
-  FluentSearchIcon,
-  FluentSettingsIcon,
-  FluentCraftmineIcon,
-  FluentUpdatesIcon,
-  FluentTaskManagerIcon,
-  FluentWidgetsIcon,
-  FluentFileExplorerIcon,
-  FluentPaintIcon,
-  FluentPhotosIcon,
-  FluentEdgeIcon,
-  FluentCameraIcon,
-  FluentSwiftBankIcon,
-  FluentClockIcon,
-  FluentClockColorIcon,
-  FluentVlcIcon,
-  FluentVlcColorIcon,
-  FluentPhotopeaIcon,
-  FluentPhotopeaColorIcon,
-  FluentScheduleIcon,
-  FluentScheduleColorIcon,
-  FluentCookbookIcon,
-  FluentCookbookColorIcon,
-  FluentSwiftSocialIcon,
-  FluentSwiftSocialColorIcon,
-  FluentFriendsIcon,
-  FluentFriendsColorIcon,
-  FluentLogosFandomIcon,
-  FluentMinecraftWikiIcon,
-  FluentCalculatorIcon,
-  FluentSnippingToolIcon,
-  FluentFeedbackHubIcon,
-  FluentRecallIcon,
-  FluentTilesIcon
-} from './FluentIcons';
 
 import { useFavorites } from '../hooks/useFavorites';
 import { useSettings } from '../hooks/useSettings';
@@ -76,10 +56,44 @@ import { UnderConstructionModal } from './UnderConstructionModal';
 import { parseM3UPlaylist, downloadPlaylistFile } from '../utils/m3uParser';
 import { getStoreAppForRoute } from '../data/storeApps';
 
+const SIDEBAR_APP_ICONS = {
+  home: Home,
+  articles: Newspaper,
+  widgets: LayoutGrid,
+  notes: FileText,
+  fileExplorer: FolderOpen,
+  paint: Paintbrush,
+  bank: Landmark,
+  social: MessageSquare,
+  people: Users,
+  edge: Globe,
+  camera: Camera,
+  gallery: Images,
+  watch: Tv,
+  inkCanvas: Pencil,
+  calculator: Calculator,
+  taskManager: Activity,
+  feedback: MessageSquarePlus,
+  settings: Settings,
+};
+
+type SidebarAppIconName = keyof typeof SIDEBAR_APP_ICONS;
+
+function SidebarAppIcon({ name, className }: { name: SidebarAppIconName; className?: string }) {
+  const Icon = SIDEBAR_APP_ICONS[name];
+  console.log('[v0] Sidebar app icon render', name, typeof Icon);
+  return (
+    <Icon
+      aria-hidden="true"
+      className={className}
+      strokeWidth={1.75}
+      strokeLinecap="square"
+      strokeLinejoin="miter"
+    />
+  );
+}
+
 const LOGO_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-7bX9C6ZMjpXAbn0eXLI2Wk6ZhwUwk0.png';
-const COPILOT_ICON_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-7bX9C6ZMjpXAbn0eXLI2Wk6ZhwUwk0.png';
-const XAML_ICON_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-kj8VATj48xgpu6hRIVOSoJomQMTGnR.png';
-const ONEDRIVE_FOLDER_ICON_URL = 'https://winaero.com/blog/wp-content/uploads/2014/12/folder_win10.png';
 
 
 interface MorphingIndicatorProps {
@@ -264,6 +278,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const { settings } = useSettings();
   const { favoriteChannelIds } = useFavorites();
+  console.log('[v0] Sidebar render start', currentRoute, settings.sidebarSmartLayout);
 
   const getDownloadIndicator = (route: string, collapsed = isCollapsed) => {
     const app = getStoreAppForRoute(route);
@@ -579,7 +594,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         label: 'Watch',
         secondary: 'Watch',
         route: '/live-tv',
-        icon: FluentWatchIcon,
+        icon: Tv,
         hasSubmenu: true,
       },
       {
@@ -587,70 +602,70 @@ export const Sidebar: React.FC<SidebarProps> = ({
         label: 'Articles',
         secondary: 'Articles',
         route: '/news',
-        icon: FluentArticlesIcon,
+        icon: Newspaper,
       },
       {
         id: 'widgets',
         label: 'Widgets',
         secondary: 'Widgets',
         route: '/widgets',
-        icon: FluentWidgetsIcon,
+        icon: LayoutGrid,
       },
       {
         id: 'tiles',
         label: 'Tiles',
         secondary: 'Live Tiles',
         route: '/tiles',
-        icon: FluentTilesIcon,
+        icon: PanelsTopLeft,
       },
       {
         id: 'mail',
         label: 'Mail',
         secondary: 'Outlook Mail',
         route: '/mail',
-        icon: () => <img src={MAIL_TAB_ICON_URL} alt="Mail" className="w-5 h-5 object-contain" />,
+        icon: Mail,
       },
       {
         id: 'calendar',
         label: 'Calendar',
         secondary: 'Lịch & sự kiện',
         route: '/calendar',
-        icon: () => <img src={CALENDAR_TAB_ICON_URL} alt="Calendar" className="w-5 h-5 object-contain" />,
+        icon: CalendarDays,
       },
       {
         id: 'edge',
         label: 'Microsoft Edge',
         secondary: 'Edge',
         route: '/edge',
-        icon: FluentEdgeIcon,
+        icon: Globe,
       },
       {
         id: 'file-explorer',
         label: 'File Explorer',
         secondary: 'Files',
         route: '/file-explorer',
-        icon: FluentFileExplorerIcon,
+        icon: FolderOpen,
       },
       {
         id: 'photos',
         label: 'Gallery',
         secondary: 'Gallery',
         route: '/photos',
-        icon: FluentPhotosIcon,
+        icon: Images,
       },
       {
         id: 'camera',
         label: 'Camera',
         secondary: 'Camera',
         route: '/camera',
-        icon: FluentCameraIcon,
+        icon: Camera,
       },
   {
   id: 'ms-paint',
   label: 'Paint',
   secondary: 'Paint',
   route: '/ms-paint',
-  icon: FluentPaintIcon,
+  icon: Paintbrush,
   },
   {
     id: 'ink-canvas',
@@ -664,56 +679,56 @@ export const Sidebar: React.FC<SidebarProps> = ({
         label: 'Swift Bank',
         secondary: 'Ngân hàng số',
         route: '/swift-bank',
-        icon: FluentSwiftBankIcon,
+        icon: Landmark,
       },
       {
         id: 'clock',
         label: 'Clock',
         secondary: 'Đồng hồ & Báo thức',
         route: '/clock',
-        icon: FluentClockIcon,
+        icon: Clock3,
       },
       {
         id: 'vlc',
         label: 'VLC Media Player',
         secondary: 'Trình phát đa phương tiện',
         route: '/vlc',
-        icon: FluentVlcIcon,
+        icon: Film,
       },
       {
         id: 'schedule',
         label: 'Lịch phát sóng',
         secondary: 'Lịch phát sóng TV EPG',
         route: '/schedule',
-        icon: FluentScheduleIcon,
+        icon: CalendarDays,
       },
       {
         id: 'cookbook',
         label: 'Cookbook',
         secondary: 'Ẩm thực & Món ngon',
         route: '/cookbook',
-        icon: FluentCookbookIcon,
+        icon: BookOpen,
       },
       {
         id: 'swift',
         label: 'Swift',
         secondary: 'Mạng x�� hội đa năng',
         route: '/swift',
-        icon: FluentSwiftSocialIcon,
+        icon: MessageSquare,
       },
       {
         id: 'friends',
         label: 'People',
         secondary: '100 Bạn bè Sparkle (Dev)',
         route: '/friends',
-        icon: FluentFriendsIcon,
+        icon: Users,
       },
       {
         id: 'logos-fandom',
         label: 'Logos Fandom',
         secondary: 'Bách khoa toàn thư thương hiệu & logo',
         route: '/logos-fandom',
-        icon: FluentLogosFandomIcon,
+        icon: BookMarked,
       },
 
     ];
@@ -770,7 +785,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             id: 'edge',
             label: 'Edge',
             route: '/edge',
-            renderIcon: () => <AppTabIcon name="edge" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            renderIcon: () => <SidebarAppIcon name="edge" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
             isActive: (r: string) => r === '/edge' || r === '/browser' || r.startsWith('/edge'),
             hasDownloadIndicator: true,
           },
@@ -778,7 +793,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             id: 'mail',
             label: 'Mail',
             route: '/mail',
-            renderIcon: () => <img src={MAIL_TAB_ICON_URL} alt="Mail" className="size-5 shrink-0 object-contain" />,
+            renderIcon: () => <Mail className="size-5 shrink-0" aria-hidden="true" />,
             isActive: (r: string) => r === '/mail',
             hasDownloadIndicator: true,
           },
@@ -786,7 +801,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             id: 'calendar',
             label: 'Calendar',
             route: '/calendar',
-            renderIcon: () => <img src={CALENDAR_TAB_ICON_URL} alt="Calendar" className="size-5 shrink-0 object-contain" />,
+            renderIcon: () => <CalendarDays className="size-5 shrink-0" aria-hidden="true" />,
             isActive: (r: string) => r === '/calendar',
             hasDownloadIndicator: true,
           },
@@ -794,14 +809,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
             id: 'file-explorer',
             label: 'File Explorer',
             route: '/file-explorer',
-            renderIcon: () => <AppTabIcon name="fileExplorer" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            renderIcon: () => <SidebarAppIcon name="fileExplorer" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
             isActive: (r: string) => r === '/file-explorer' || r === '/files' || r.startsWith('/file-explorer'),
           },
           {
             id: 'notes',
             label: 'Notes',
             route: '/notes',
-            renderIcon: () => <AppTabIcon name="notes" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            renderIcon: () => <SidebarAppIcon name="notes" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
             isActive: (r: string) => r === '/notes' || r === '/write' || r === '/present' || r === '/table',
             hasDownloadIndicator: true,
           },
@@ -809,7 +824,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             id: 'calculator',
             label: 'Calculator',
             route: '/calculator',
-            renderIcon: () => <AppTabIcon name="calculator" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            renderIcon: () => <SidebarAppIcon name="calculator" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
             isActive: (r: string) => r === '/calculator' || r === '/calc',
             hasDownloadIndicator: true,
           },
@@ -817,7 +832,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             id: 'clock',
             label: 'Clock',
             route: '/clock',
-            renderIcon: () => <FluentClockIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            renderIcon: () => <Clock3 className="w-5 h-5 shrink-0 text-black dark:text-white" />,
             isActive: (r: string) => r === '/clock' || r.startsWith('/clock') || r === '/alarm' || r === '/timer' || r === '/stopwatch',
             hasDownloadIndicator: true,
           },
@@ -831,14 +846,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
             id: 'store',
             label: 'Store',
             route: '/store',
-            renderIcon: () => <img src={STORE_ICON_URL} alt="" className="size-5 shrink-0 object-contain" />,
+            renderIcon: () => <Store className="size-5 shrink-0" aria-hidden="true" />,
             isActive: (r: string) => r === '/store',
           },
           {
             id: 'watch',
             label: 'Watch',
             route: '/live-tv',
-            renderIcon: () => <AppTabIcon name="watch" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            renderIcon: () => <SidebarAppIcon name="watch" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
             isActive: (r: string) => r === '/live-tv' || r.startsWith('/live-tv'),
             hasDownloadIndicator: true,
           },
@@ -846,7 +861,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             id: 'photos',
             label: 'Gallery',
             route: '/photos',
-            renderIcon: () => <AppTabIcon name="gallery" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            renderIcon: () => <SidebarAppIcon name="gallery" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
             isActive: (r: string) => r === '/photos' || r === '/gallery' || r.startsWith('/photos') || r.startsWith('/gallery'),
             hasDownloadIndicator: true,
           },
@@ -854,7 +869,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             id: 'camera',
             label: 'Camera',
             route: '/camera',
-            renderIcon: () => <AppTabIcon name="camera" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            renderIcon: () => <SidebarAppIcon name="camera" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
             isActive: (r: string) => r === '/camera' || r.startsWith('/camera'),
             hasDownloadIndicator: true,
           },
@@ -862,7 +877,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             id: 'ms-paint',
             label: 'Paint',
             route: '/ms-paint',
-            renderIcon: () => <AppTabIcon name="paint" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            renderIcon: () => <SidebarAppIcon name="paint" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
             isActive: (r: string) => r === '/ms-paint' || r === '/paint' || r.startsWith('/ms-paint'),
             hasDownloadIndicator: true,
           },
@@ -870,7 +885,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             id: 'ink-canvas',
             label: 'Ink Canvas',
             route: '/ink-space',
-            renderIcon: () => <AppTabIcon name="inkCanvas" className="w-5 h-5 shrink-0" />,
+            renderIcon: () => <SidebarAppIcon name="inkCanvas" className="w-5 h-5 shrink-0" />,
             isActive: (r: string) => r === '/ink-space' || r === '/inkspace' || r === '/ink-canvas' || r === '/inkcanvas',
             hasDownloadIndicator: true,
           },
@@ -878,7 +893,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             id: 'vlc',
             label: 'VLC',
             route: '/vlc',
-            renderIcon: () => <FluentVlcIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            renderIcon: () => <Film className="w-5 h-5 shrink-0 text-black dark:text-white" />,
             isActive: (r: string) => r === '/vlc' || r.startsWith('/vlc') || r === '/media-player',
             hasDownloadIndicator: true,
           },
@@ -886,7 +901,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             id: 'cookbook',
             label: 'Cookbook',
             route: '/cookbook',
-            renderIcon: () => <FluentCookbookIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            renderIcon: () => <BookOpen className="w-5 h-5 shrink-0 text-black dark:text-white" />,
             isActive: (r: string) => r === '/cookbook' || r.startsWith('/cookbook') || r === '/recipes',
             hasDownloadIndicator: true,
           },
@@ -900,7 +915,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             id: 'swift-social',
             label: 'Spark Social',
             route: '/swift',
-            renderIcon: () => <AppTabIcon name="social" className="w-5 h-5 shrink-0" />,
+            renderIcon: () => <SidebarAppIcon name="social" className="w-5 h-5 shrink-0" />,
             isActive: (r: string) => r === '/swift' || r.startsWith('/swift') || r === '/swift-social',
             hasDownloadIndicator: true,
           },
@@ -908,7 +923,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             id: 'swift-bank',
             label: 'Spark Bank',
             route: '/swift-bank',
-            renderIcon: () => <AppTabIcon name="bank" className="w-5 h-5 shrink-0" />,
+            renderIcon: () => <SidebarAppIcon name="bank" className="w-5 h-5 shrink-0" />,
             isActive: (r: string) => r === '/swift-bank' || r.startsWith('/swift-bank') || r === '/bank',
             hasDownloadIndicator: true,
           },
@@ -916,7 +931,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             id: 'logos-fandom',
             label: 'Fandom',
             route: '/logos-fandom',
-            renderIcon: () => <FluentLogosFandomIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            renderIcon: () => <BookMarked className="w-5 h-5 shrink-0 text-black dark:text-white" />,
             isActive: (r: string) => r === '/logos-fandom' || r === '/logos-wiki' || r === '/fandom',
             hasDownloadIndicator: true,
           },
@@ -924,7 +939,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             id: 'friends',
             label: 'People',
             route: '/friends',
-            renderIcon: () => <AppTabIcon name="people" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            renderIcon: () => <SidebarAppIcon name="people" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
             isActive: (r: string) => r === '/friends' || r.startsWith('/friends'),
             hasDownloadIndicator: true,
           },
@@ -938,21 +953,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
             id: 'task-manager',
             label: 'Task Manager',
             route: '/task-manager',
-            renderIcon: () => <AppTabIcon name="taskManager" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            renderIcon: () => <SidebarAppIcon name="taskManager" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
             isActive: (r: string) => r === '/task-manager' || r.startsWith('/task-manager'),
           },
           {
             id: 'feedback-hub',
             label: 'Feedback Hub',
             route: '/feedback-hub',
-            renderIcon: () => <AppTabIcon name="feedback" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
+            renderIcon: () => <SidebarAppIcon name="feedback" className="w-5 h-5 shrink-0 text-black dark:text-white" />,
             isActive: (r: string) => r === '/feedback-hub' || r === '/feedback',
           },
           {
             id: 'xaml-controls',
             label: 'XAML Controls',
             route: '/xaml-controls',
-            renderIcon: () => <img src={XAML_ICON_SRC} alt="" className="size-5 shrink-0 object-contain" />,
+            renderIcon: () => <PanelsTopLeft className="size-5 shrink-0" aria-hidden="true" />,
             isActive: (r: string) => r === '/xaml-controls' || r.startsWith('/xaml-controls'),
           },
           ...(settings.developerMode
@@ -1055,7 +1070,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-default text-left"
         >
           <div className="flex items-center gap-2.5">
-            <PlusCircle className="w-4 h-4 text-[#0078d4] dark:text-[#4cc2ff] stroke-[1.75]" />
+            <PlusCircle className="w-4 h-4 text-black dark:text-white stroke-[1.75]" />
             <span>Add stream</span>
           </div>
         </button>
@@ -1107,7 +1122,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-default text-left"
         >
           <div className="flex items-center gap-2.5">
-            <AppTabIcon name="notes" className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
+            <SidebarAppIcon name="notes" className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
             <span>Notes</span>
           </div>
           <span className="text-[10px] px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-medium">Ghi chú</span>
@@ -1124,7 +1139,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-default text-left"
         >
           <div className="flex items-center gap-2.5">
-            <AppTabIcon name="fileExplorer" className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
+            <SidebarAppIcon name="fileExplorer" className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
             <span>File Explorer</span>
           </div>
           <span className="text-[10px] px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-medium">Tệp tin</span>
@@ -1141,7 +1156,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           className="w-full h-[36px] px-3 rounded-[4px] flex items-center justify-between text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-default text-left"
         >
           <div className="flex items-center gap-2.5">
-            <AppTabIcon name="paint" className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
+            <SidebarAppIcon name="paint" className="w-4 h-4 text-[#111827] dark:text-white shrink-0" />
             <span>MS Paint</span>
           </div>
           <span className="text-[10px] px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-medium">Vẽ tranh</span>
@@ -1159,7 +1174,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }}
               className="w-full h-[36px] px-3 rounded-[4px] flex items-center gap-2.5 text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-default text-left"
             >
-              <FluentSearchIcon className="w-4 h-4 text-neutral-500 dark:text-neutral-300 shrink-0" />
+              <Search className="w-4 h-4 text-neutral-500 dark:text-neutral-300 shrink-0" />
               <span>Find words</span>
             </button>
           </>
@@ -1170,6 +1185,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   // Smart Sidebar Navigation (Expanded & Mobile Drawer)
   const renderSmartSidebarNav = (isMobile: boolean) => {
+    console.log('[v0] Sidebar smart nav render', isMobile);
     return (
       <>
   {/* 1. Home */}
@@ -1186,7 +1202,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
             }`}
           >
-            <AppTabIcon name="home" className="w-5 h-5 shrink-0 text-black dark:text-white" />
+            <SidebarAppIcon name="home" className="w-5 h-5 shrink-0 text-black dark:text-white" />
             <span className="truncate text-[13.5px]">Home</span>
           </button>
         </div>
@@ -1205,7 +1221,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
             }`}
           >
-            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/xperimental%20Search-cubydYtGKKbceg3nPadzTnHo4NZZ6f.png" alt="" className="w-5 h-5 shrink-0 object-contain" />
+            <Search aria-hidden="true" className="w-5 h-5 shrink-0" />
             <span className="truncate text-[13.5px]">Explore</span>
           </button>
         </div>
@@ -1224,7 +1240,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
             }`}
           >
-            <AppTabIcon name="articles" className="w-5 h-5 shrink-0" />
+            <SidebarAppIcon name="articles" className="w-5 h-5 shrink-0" />
             <span className="truncate text-[13.5px]">Articles</span>
           </button>
         </div>
@@ -1243,7 +1259,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
             }`}
           >
-            <AppTabIcon name="widgets" className="w-5 h-5 shrink-0 text-black dark:text-white" />
+            <SidebarAppIcon name="widgets" className="w-5 h-5 shrink-0 text-black dark:text-white" />
             <span className="truncate text-[13.5px]">Widgets</span>
           </button>
         </div>
@@ -1262,7 +1278,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
             }`}
           >
-            <FluentTilesIcon className="w-5 h-5 shrink-0 text-[#0078d4] dark:text-[#4cc2ff]" />
+            <PanelsTopLeft className="w-5 h-5 shrink-0 text-black dark:text-white" />
             <span className="truncate text-[13.5px]">Tiles</span>
           </button>
         </div>
@@ -1284,12 +1300,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
             }`}
           >
-            <img
-              src={COPILOT_ICON_SRC}
-              alt="Copilot"
-              referrerPolicy="no-referrer"
-              className="w-5 h-5 shrink-0 object-contain"
-            />
+            <Sparkles aria-hidden="true" className="w-5 h-5 shrink-0" />
             <span className="truncate text-[13.5px]">Copilot</span>
           </button>
         </div>
@@ -1309,7 +1320,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
             }`}
           >
-            <FluentRecallIcon className="w-5 h-5 shrink-0" />
+            <History className="w-5 h-5 shrink-0" />
             <span className="truncate text-[13.5px]">Recall</span>
           </button>
         </div>
@@ -1329,7 +1340,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
             }`}
           >
-            <Monitor aria-hidden="true" className="size-5 shrink-0 text-[#1684e8]" />
+            <Monitor aria-hidden="true" className="size-5 shrink-0 text-black dark:text-white" />
             <span className="truncate text-[13.5px]">SparkOS</span>
           </button>
         </div>
@@ -1356,12 +1367,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 }`}
               >
                 <div className="flex items-center gap-3.5 truncate">
-                  <img
-                    src={ONEDRIVE_FOLDER_ICON_URL}
-                    alt=""
-                    aria-hidden="true"
-                    className="w-5 h-5 shrink-0 object-contain drop-shadow-xs"
-                  />
+                  <Folder aria-hidden="true" className="w-5 h-5 shrink-0" />
                   <span className="truncate text-[13.5px]">{folder.name}</span>
                 </div>
                 <div className="flex items-center gap-1.5 shrink-0 text-neutral-500 dark:text-neutral-400">
@@ -1413,6 +1419,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   // Smart Sidebar Navigation (Collapsed Rail)
   const renderSmartCollapsedNav = () => {
+    console.log('[v0] Sidebar collapsed nav render');
     return (
       <>
         {/* Home Icon */}
@@ -1430,7 +1437,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
           }`}
         >
-          <AppTabIcon name="home" className="w-5 h-5 text-black dark:text-white" />
+          <SidebarAppIcon name="home" className="w-5 h-5 text-black dark:text-white" />
         </button>
 
         {/* Articles Icon */}
@@ -1448,7 +1455,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
           }`}
         >
-          <AppTabIcon name="articles" className="w-5 h-5" />
+          <SidebarAppIcon name="articles" className="w-5 h-5" />
         </button>
 
         {/* Widgets Icon */}
@@ -1466,7 +1473,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
           }`}
         >
-          <AppTabIcon name="widgets" className="w-5 h-5 text-black dark:text-white" />
+          <SidebarAppIcon name="widgets" className="w-5 h-5 text-black dark:text-white" />
         </button>
 
         {/* Tiles Icon */}
@@ -1484,7 +1491,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
           }`}
         >
-          <FluentTilesIcon className="w-5 h-5 text-[#0078d4] dark:text-[#4cc2ff]" />
+          <PanelsTopLeft className="w-5 h-5 text-black dark:text-white" />
         </button>
 
         {/* Divider */}
@@ -1505,12 +1512,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
           }`}
         >
-          <img
-            src={COPILOT_ICON_SRC}
-            alt="Copilot"
-            referrerPolicy="no-referrer"
-            className="w-5 h-5 object-contain"
-          />
+          <Sparkles aria-hidden="true" className="w-5 h-5" />
         </button>
 
         {/* Recall Icon */}
@@ -1528,7 +1530,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'
           }`}
         >
-          <FluentRecallIcon className="w-5 h-5" />
+          <History className="w-5 h-5" />
         </button>
 
         {/* SparkOS Icon */}
@@ -1546,7 +1548,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'
           }`}
         >
-          <Monitor aria-hidden="true" className="size-5 text-[#1684e8]" />
+          <Monitor aria-hidden="true" className="size-5 text-black dark:text-white" />
         </button>
 
         {/* Divider */}
@@ -1572,7 +1574,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                 }`}
               >
-                <img src={ONEDRIVE_FOLDER_ICON_URL} alt="" className="w-5 h-5 object-contain" />
+                <Folder aria-hidden="true" className="w-5 h-5" />
                 {!isOpen && hasActiveChild && (
                   <span className="absolute bottom-1 right-1 w-1.5 h-1.5 rounded-full bg-[#0078d4] dark:bg-[#4cc2ff]" />
                 )}
@@ -1616,6 +1618,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   // Render Full Windows 10 Settings Style Sidebar Content
   const renderSidebarBody = (isMobile: boolean = false) => {
+    console.log('[v0] Sidebar body render', isMobile, settings.searchOnSidebar, settings.sidebarSmartLayout);
     const containerRef = isMobile ? mobileNavRef : desktopNavRef;
 
     return (
@@ -1713,7 +1716,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     title="Search"
                     className="p-1 text-white hover:text-[#4cc2ff] transition-colors cursor-pointer flex items-center justify-center shrink-0"
                   >
-                    <FluentSearchIcon className="w-3.5 h-3.5" />
+                    <Search className="w-3.5 h-3.5" />
                   </button>
                 </div>
               </div>
@@ -1753,7 +1756,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       onClick={handleSidebarSearchSubmit}
                       className="w-full mt-1 pt-1 border-t border-white/10 flex items-center gap-2 px-2.5 py-1.5 rounded-[4px] text-left hover:bg-white/10 transition-colors text-xs text-[#4cc2ff] font-medium"
                     >
-                      <FluentSearchIcon className="w-3.5 h-3.5" />
+                      <Search className="w-3.5 h-3.5" />
                       <span className="truncate">Search for "{sidebarSearchQuery.trim()}"</span>
                     </button>
                   )}
@@ -1797,7 +1800,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <AppTabIcon name="home" className="w-5 h-5 shrink-0 text-black dark:text-white" />
+              <SidebarAppIcon name="home" className="w-5 h-5 shrink-0 text-black dark:text-white" />
               <span className="truncate text-[13.5px]">XAML Home</span>
             </button>
           </div>
@@ -1816,7 +1819,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <AppTabIcon name="articles" className="w-5 h-5 shrink-0" />
+              <SidebarAppIcon name="articles" className="w-5 h-5 shrink-0" />
               <span className="truncate text-[13.5px]">Articles</span>
             </button>
           </div>
@@ -1837,7 +1840,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <AppTabIcon name="widgets" className="w-5 h-5 shrink-0 text-black dark:text-white" />
+              <SidebarAppIcon name="widgets" className="w-5 h-5 shrink-0 text-black dark:text-white" />
               <span className="truncate text-[13.5px]">Widgets</span>
             </button>
           </div>
@@ -1856,7 +1859,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <FluentTilesIcon className="w-5 h-5 shrink-0 text-[#0078d4] dark:text-[#4cc2ff]" />
+              <PanelsTopLeft className="w-5 h-5 shrink-0 text-black dark:text-white" />
               <span className="truncate text-[13.5px]">Tiles</span>
             </button>
           </div>
@@ -1871,7 +1874,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               aria-label="Store"
               className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${currentRoute === '/store' ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]' : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'}`}
             >
-              <img src={STORE_ICON_URL} alt="" className="size-5 shrink-0 object-contain" />
+              <Store aria-hidden="true" className="size-5 shrink-0" />
               <span className="truncate text-[13.5px]">Store</span>
             </button>
           </div>
@@ -1886,7 +1889,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               aria-label="SparkOS"
               className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${currentRoute === '/sparkos' ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]' : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'}`}
             >
-              <Monitor aria-hidden="true" className="size-5 shrink-0 text-[#1684e8]" />
+              <Monitor aria-hidden="true" className="size-5 shrink-0 text-black dark:text-white" />
               <span className="truncate text-[13.5px]">SparkOS</span>
             </button>
           </div>
@@ -1906,7 +1909,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <FluentRecallIcon className="w-5 h-5 shrink-0" />
+              <History className="w-5 h-5 shrink-0" />
               <span className="truncate text-[13.5px]">Recall</span>
             </button>
           </div>
@@ -1935,7 +1938,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <AppTabIcon name="bank" className="w-5 h-5 shrink-0" />
+              <SidebarAppIcon name="bank" className="w-5 h-5 shrink-0" />
               <span className="truncate text-[13.5px]">Swift Bank</span>
               {getDownloadIndicator('/swift-bank')}
             </button>
@@ -1955,7 +1958,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <AppTabIcon name="social" className="w-5 h-5 shrink-0" />
+              <SidebarAppIcon name="social" className="w-5 h-5 shrink-0" />
               <span className="truncate text-[13.5px]">Swift Social</span>
               {getDownloadIndicator('/swift')}
             </button>
@@ -1975,7 +1978,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <AppTabIcon name="people" className="w-5 h-5 shrink-0 text-black dark:text-white" />
+              <SidebarAppIcon name="people" className="w-5 h-5 shrink-0 text-black dark:text-white" />
               <span className="truncate text-[13.5px]">People</span>
               {getDownloadIndicator('/friends')}
             </button>
@@ -1995,7 +1998,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <FluentLogosFandomIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+              <BookMarked className="w-5 h-5 shrink-0 text-black dark:text-white" />
               <span className="truncate text-[13.5px]">Logos Fandom</span>
               {getDownloadIndicator('/logos-fandom')}
             </button>
@@ -2014,8 +2017,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {/* Mail & Calendar in Apps section */}
           <div className="shrink-0 flex flex-col gap-0.5">
             {[
-              { route: '/mail', label: 'Mail', icon: MAIL_TAB_ICON_URL },
-              { route: '/calendar', label: 'Calendar', icon: CALENDAR_TAB_ICON_URL },
+              { route: '/mail', label: 'Mail', icon: <Mail className="size-5" aria-hidden="true" /> },
+              { route: '/calendar', label: 'Calendar', icon: <CalendarDays className="size-5" aria-hidden="true" /> },
             ].map((item) => {
               const active = currentRoute === item.route;
               return (
@@ -2028,7 +2031,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   title={item.label}
                   className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${active ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]' : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'}`}
                 >
-                  <img src={item.icon} alt="" className="size-5 shrink-0 object-contain" />
+                  {item.icon}
                   <span className="truncate text-[13.5px]">{item.label}</span>
                   {getDownloadIndicator(item.route)}
                 </button>
@@ -2050,12 +2053,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <img
-                src={COPILOT_ICON_SRC}
-                alt="Copilot"
-                referrerPolicy="no-referrer"
-                className="w-5 h-5 shrink-0 object-contain"
-              />
+              <Sparkles aria-hidden="true" className="w-5 h-5 shrink-0" />
               <span className="truncate text-[13.5px]">Copilot</span>
             </button>
           </div>
@@ -2075,7 +2073,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <div className="flex items-center gap-3.5 truncate">
-                <AppTabIcon name="edge" className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <SidebarAppIcon name="edge" className="w-5 h-5 shrink-0 text-black dark:text-white" />
               <span className="truncate text-[13.5px]">Microsoft Edge</span>
             </div>
             {getDownloadIndicator('/edge', isCollapsed)}
@@ -2097,7 +2095,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <div className="flex items-center gap-3.5 truncate">
-                <AppTabIcon name="fileExplorer" className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <SidebarAppIcon name="fileExplorer" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">File Explorer</span>
               </div>
             </button>
@@ -2118,7 +2116,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <div className="flex items-center gap-3.5 truncate">
-                <AppTabIcon name="watch" className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <SidebarAppIcon name="watch" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Watch</span>
               </div>
               {getDownloadIndicator('/live-tv', isCollapsed)}
@@ -2161,7 +2159,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <button
                   type="button"
                   onClick={() => handleNavClick('/live-tv')}
-                  className="w-full text-left px-2.5 py-1 text-[11px] text-[#0078d4] dark:text-[#4cc2ff] hover:underline font-normal cursor-pointer rounded-[4px]"
+                  className="w-full text-left px-2.5 py-1 text-[11px] text-black dark:text-white hover:underline font-normal cursor-pointer rounded-[4px]"
                 >
                   + View all channels
                 </button>
@@ -2184,7 +2182,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <div className="flex items-center gap-3.5 truncate">
-                <AppTabIcon name="notes" className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <SidebarAppIcon name="notes" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Notes</span>
               </div>
               {getDownloadIndicator('/notes', isCollapsed)}
@@ -2206,7 +2204,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <div className="flex items-center gap-3.5 truncate">
-                <AppTabIcon name="gallery" className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <SidebarAppIcon name="gallery" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Gallery</span>
               </div>
               {getDownloadIndicator('/gallery', isCollapsed)}
@@ -2228,7 +2226,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <div className="flex items-center gap-3.5 truncate">
-                <AppTabIcon name="camera" className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <SidebarAppIcon name="camera" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Camera</span>
               </div>
               {getDownloadIndicator('/camera', isCollapsed)}
@@ -2250,7 +2248,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <div className="flex items-center gap-3.5 truncate">
-                <AppTabIcon name="paint" className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <SidebarAppIcon name="paint" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Paint</span>
               </div>
               {getDownloadIndicator('/paint', isCollapsed)}
@@ -2271,7 +2269,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
       }`}
     >
-      <div className="flex items-center gap-3.5 truncate"><AppTabIcon name="inkCanvas" className="w-5 h-5" /><span className="truncate text-[13.5px]">Ink Canvas</span></div>
+      <div className="flex items-center gap-3.5 truncate"><SidebarAppIcon name="inkCanvas" className="w-5 h-5" /><span className="truncate text-[13.5px]">Ink Canvas</span></div>
       {getDownloadIndicator('/ink-space', isCollapsed)}
     </button>
   </div>
@@ -2291,7 +2289,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <div className="flex items-center gap-3.5 truncate">
-                <AppTabIcon name="calculator" className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <SidebarAppIcon name="calculator" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Calculator</span>
               </div>
               {getDownloadIndicator('/calculator', isCollapsed)}
@@ -2313,7 +2311,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <div className="flex items-center gap-3.5 truncate">
-                <FluentClockIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <Clock3 className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Clock</span>
               </div>
               {getDownloadIndicator('/clock', isCollapsed)}
@@ -2335,7 +2333,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <div className="flex items-center gap-3.5 truncate">
-                <FluentVlcIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <Film className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">VLC Media Player</span>
               </div>
               {getDownloadIndicator('/vlc', isCollapsed)}
@@ -2357,7 +2355,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <div className="flex items-center gap-3.5 truncate">
-                <FluentCookbookIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <BookOpen className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Cookbook</span>
               </div>
               {getDownloadIndicator('/cookbook', isCollapsed)}
@@ -2389,7 +2387,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <div className="flex items-center gap-3.5 truncate">
-                <AppTabIcon name="taskManager" className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <SidebarAppIcon name="taskManager" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Task Manager</span>
               </div>
             </button>
@@ -2410,7 +2408,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <div className="flex items-center gap-3.5 truncate">
-                <AppTabIcon name="feedback" className="w-5 h-5 shrink-0 text-black dark:text-white" />
+                <SidebarAppIcon name="feedback" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                 <span className="truncate text-[13.5px]">Feedback Hub</span>
               </div>
             </button>
@@ -2438,7 +2436,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <FluentCraftmineIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+              <Gamepad2 className="w-5 h-5 shrink-0 text-black dark:text-white" />
               <span className="truncate text-[13.5px]">Craftmine</span>
               {getDownloadIndicator('/craftmine', isCollapsed)}
             </button>
@@ -2458,7 +2456,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <FluentPhotopeaIcon className="w-5 h-5 shrink-0 text-black dark:text-white" />
+              <Layers className="w-5 h-5 shrink-0 text-black dark:text-white" />
               <span className="truncate text-[13.5px]">Photopea</span>
               {getDownloadIndicator('/photopea', isCollapsed)}
             </button>
@@ -2504,7 +2502,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <img src={XAML_ICON_SRC} alt="" aria-hidden="true" className="size-5 shrink-0 object-contain" />
+              <PanelsTopLeft aria-hidden="true" className="size-5 shrink-0" />
               <span className="truncate text-[13.5px]">XAML Controls</span>
             </button>
           )}
@@ -2527,7 +2525,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
             }`}
           >
-            <AppTabIcon name="settings" className="w-5 h-5 shrink-0 settings-spin-icon text-black dark:text-white" />
+            <SidebarAppIcon name="settings" className="w-5 h-5 shrink-0 settings-spin-icon text-black dark:text-white" />
             <span className="truncate text-[13.5px]">Settings</span>
           </button>
         </div>
@@ -2613,7 +2611,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     className="w-9 h-9 shrink-0 rounded-[6px] flex items-center justify-center text-black dark:text-white/90 hover:bg-black/5 dark:hover:bg-white/10 hover:text-black dark:hover:text-white cursor-default transition-colors"
                     aria-label="Search"
                   >
-                    <FluentSearchIcon className="w-5 h-5 text-black dark:text-white" />
+                    <Search className="w-5 h-5 text-black dark:text-white" />
                   </button>
                 )}
               </div>
@@ -2652,7 +2650,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
-                  <AppTabIcon name="home" className="w-5 h-5 text-black dark:text-white" />
+                  <SidebarAppIcon name="home" className="w-5 h-5 text-black dark:text-white" />
                 </button>
 
                 {/* 2. Articles Icon */}
@@ -2670,7 +2668,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
-                  <AppTabIcon name="articles" className="w-5 h-5" />
+                  <SidebarAppIcon name="articles" className="w-5 h-5" />
                 </button>
 
                 {/* 4. Widgets Icon */}
@@ -2688,7 +2686,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
-                  <AppTabIcon name="widgets" className="w-5 h-5 text-black dark:text-white" />
+                  <SidebarAppIcon name="widgets" className="w-5 h-5 text-black dark:text-white" />
                 </button>
 
                 {/* Microsoft Store Icon */}
@@ -2702,7 +2700,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   aria-label="Store"
                   className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${currentRoute === '/store' ? 'bg-transparent hover:bg-black/5 dark:hover:bg-white/[0.05]' : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'}`}
                 >
-                  <img src={STORE_ICON_URL} alt="" className="size-5 object-contain" />
+                  <Store aria-hidden="true" className="size-5" />
                 </button>
 
                 {/* SparkOS Icon */}
@@ -2716,7 +2714,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   aria-label="SparkOS"
                   className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${currentRoute === '/sparkos' ? 'bg-transparent hover:bg-black/5 dark:hover:bg-white/[0.05]' : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'}`}
                 >
-                  <Monitor aria-hidden="true" className="size-5 text-[#1684e8]" />
+                  <Monitor aria-hidden="true" className="size-5 text-black dark:text-white" />
                 </button>
 
                 {/* Recall Icon */}
@@ -2734,7 +2732,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   }`}
                 >
-                  <FluentRecallIcon className="w-5 h-5" />
+                  <History className="w-5 h-5" />
                 </button>
 
                 {/* Divider: Social */}
@@ -2755,7 +2753,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
-                  <AppTabIcon name="bank" className="w-5 h-5" />
+                  <SidebarAppIcon name="bank" className="w-5 h-5" />
                   {getDownloadIndicator('/swift-bank', true)}
                 </button>
 
@@ -2774,7 +2772,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
-                  <AppTabIcon name="social" className="w-5 h-5" />
+                  <SidebarAppIcon name="social" className="w-5 h-5" />
                   {getDownloadIndicator('/swift', true)}
                 </button>
 
@@ -2793,7 +2791,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
-                  <AppTabIcon name="people" className="w-5 h-5 text-black dark:text-white" />
+                  <SidebarAppIcon name="people" className="w-5 h-5 text-black dark:text-white" />
                   {getDownloadIndicator('/friends', true)}
                 </button>
 
@@ -2812,7 +2810,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
-                  <FluentLogosFandomIcon className="w-5 h-5 text-black dark:text-white" />
+                  <BookMarked className="w-5 h-5 text-black dark:text-white" />
                   {getDownloadIndicator('/logos-fandom', true)}
                 </button>
 
@@ -2821,8 +2819,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
                 {/* Mail & Calendar Icons in Apps */}
                 {[
-                  { route: '/mail', label: 'Mail', icon: MAIL_TAB_ICON_URL },
-                  { route: '/calendar', label: 'Calendar', icon: CALENDAR_TAB_ICON_URL },
+                  { route: '/mail', label: 'Mail', icon: <Mail className="size-5" aria-hidden="true" /> },
+                  { route: '/calendar', label: 'Calendar', icon: <CalendarDays className="size-5" aria-hidden="true" /> },
                 ].map((item) => (
                   <button
                     key={item.route}
@@ -2835,7 +2833,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     aria-label={item.label}
                     className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${currentRoute === item.route ? 'bg-transparent hover:bg-black/5 dark:hover:bg-white/[0.05]' : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'}`}
                   >
-                    <img src={item.icon} alt="" className="size-5 object-contain" />
+                    {item.icon}
                   </button>
                 ))}
 
@@ -2854,12 +2852,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
-                  <img
-                    src={COPILOT_ICON_SRC}
-                    alt="Copilot"
-                    referrerPolicy="no-referrer"
-                    className="w-5 h-5 object-contain"
-                  />
+                  <Sparkles aria-hidden="true" className="w-5 h-5" />
                 </button>
 
                 {/* Microsoft Edge Icon */}
@@ -2877,7 +2870,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
-                  <AppTabIcon name="edge" className="w-5 h-5 text-black dark:text-white" />
+                  <SidebarAppIcon name="edge" className="w-5 h-5 text-black dark:text-white" />
                   {getDownloadIndicator('/edge', true)}
                 </button>
 
@@ -2896,7 +2889,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
-                  <AppTabIcon name="fileExplorer" className="w-5 h-5 text-black dark:text-white" />
+                  <SidebarAppIcon name="fileExplorer" className="w-5 h-5 text-black dark:text-white" />
                 </button>
 
                 {/* Watch Icon */}
@@ -2914,7 +2907,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
-                  <AppTabIcon name="watch" className="w-5 h-5 text-black dark:text-white" />
+                  <SidebarAppIcon name="watch" className="w-5 h-5 text-black dark:text-white" />
                   {getDownloadIndicator('/live-tv', true)}
                 </button>
 
@@ -2933,7 +2926,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
-                  <AppTabIcon name="notes" className="w-5 h-5 text-black dark:text-white" />
+                  <SidebarAppIcon name="notes" className="w-5 h-5 text-black dark:text-white" />
                   {getDownloadIndicator('/notes', true)}
                 </button>
 
@@ -2952,7 +2945,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
-                  <AppTabIcon name="gallery" className="w-5 h-5 text-black dark:text-white" />
+                  <SidebarAppIcon name="gallery" className="w-5 h-5 text-black dark:text-white" />
                   {getDownloadIndicator('/gallery', true)}
                 </button>
 
@@ -2971,7 +2964,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
-                  <AppTabIcon name="camera" className="w-5 h-5 text-black dark:text-white" />
+                  <SidebarAppIcon name="camera" className="w-5 h-5 text-black dark:text-white" />
                   {getDownloadIndicator('/camera', true)}
                 </button>
 
@@ -2990,7 +2983,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
-                  <AppTabIcon name="paint" className="w-5 h-5 text-black dark:text-white" />
+                  <SidebarAppIcon name="paint" className="w-5 h-5 text-black dark:text-white" />
                   {getDownloadIndicator('/paint', true)}
                 </button>
 
@@ -3009,7 +3002,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
-                  <FluentClockIcon className="w-5 h-5 text-black dark:text-white" />
+                  <Clock3 className="w-5 h-5 text-black dark:text-white" />
                 </button>
 
                 {/* VLC Media Player Icon */}
@@ -3027,7 +3020,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
-                  <FluentVlcIcon className="w-5 h-5 text-black dark:text-white" />
+                  <Film className="w-5 h-5 text-black dark:text-white" />
                 </button>
 
                 {/* Schedule Icon */}
@@ -3045,7 +3038,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
-                  <FluentScheduleIcon className="w-5 h-5 text-black dark:text-white" />
+                  <CalendarDays className="w-5 h-5 text-black dark:text-white" />
                 </button>
 
                 {/* Cookbook Icon */}
@@ -3063,7 +3056,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
-                  <FluentCookbookIcon className="w-5 h-5 text-black dark:text-white" />
+                  <BookOpen className="w-5 h-5 text-black dark:text-white" />
                 </button>
 
                 {/* Divider: System */}
@@ -3084,7 +3077,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
-                  <AppTabIcon name="taskManager" className="w-5 h-5 text-black dark:text-white" />
+                  <SidebarAppIcon name="taskManager" className="w-5 h-5 text-black dark:text-white" />
                 </button>
 
                 {/* Divider: LAC's project */}
@@ -3105,7 +3098,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
-                  <FluentCraftmineIcon className="w-5 h-5 text-black dark:text-white" />
+                  <Gamepad2 className="w-5 h-5 text-black dark:text-white" />
                   {getDownloadIndicator('/craftmine', true)}
                 </button>
 
@@ -3124,7 +3117,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
-                  <FluentPhotopeaIcon className="w-5 h-5 text-black dark:text-white" />
+                  <Layers className="w-5 h-5 text-black dark:text-white" />
                   {getDownloadIndicator('/photopea', true)}
                 </button>
 
@@ -3184,7 +3177,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         : 'text-[#4b5563] dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-[#111827] dark:hover:text-white'
                     }`}
                   >
-                    <img src={XAML_ICON_SRC} alt="" aria-hidden="true" className="size-5 object-contain" />
+                    <PanelsTopLeft aria-hidden="true" className="size-5" />
                   </button>
                 )}
 
@@ -3210,7 +3203,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       style={{ transition: 'none', animation: 'none' }}
                     />
                   )}
-                  <AppTabIcon name="settings" className="w-5 h-5 settings-spin-icon text-[#111827] dark:text-white" />
+                  <SidebarAppIcon name="settings" className="w-5 h-5 settings-spin-icon text-[#111827] dark:text-white" />
                 </button>
               </div>
             </div>

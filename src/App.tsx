@@ -917,7 +917,8 @@ export default function App() {
 
       {/* Sidebar Navigation (Desktop + Mobile Drawer) */}
       {!isSparkOSRoute && (settings.navigationMode === 'sidebar' || isMobileSidebarOpen || mobileDragOffset !== null) && (
-        <Sidebar
+        <SidebarDebugBoundary>
+          <Sidebar
           currentRoute={currentRoute}
           navigate={navigate}
           installedApps={installedApps}
@@ -948,7 +949,8 @@ export default function App() {
           onChangeFontSize={handleFontSizeChange}
           onOpenUpdate={() => setIsUpdating(true)}
           onOpenOfficeTool={handleOpenOfficeTool}
-        />
+          />
+        </SidebarDebugBoundary>
       )}
 
       {/* Main App Container */}
