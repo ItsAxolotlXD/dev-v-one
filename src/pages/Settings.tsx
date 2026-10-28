@@ -535,15 +535,6 @@ export const Settings: React.FC<SettingsProps> = ({
                 <span className="font-medium text-[#111827] dark:text-white">Software Build</span>
                 <span className="font-semibold text-[#9CA3AF]">261013</span>
               </div>
-              {/* Compatible with Fluent Design */}
-              <div id="settings-compatible-spatial-glass" className="pt-2.5 mt-1 border-t border-black/10 dark:border-white/10 flex items-center">
-                <p className="text-sm sm:text-base font-semibold tracking-tight text-[#111827] dark:text-white">
-                  Compatible with{' '}
-                  <span className="text-[#4cc2ff] font-semibold">
-                    Microsoft Fluent Design.
-                  </span>
-                </p>
-              </div>
             </div>
 
             <div className="space-y-2 pt-0.5">
@@ -1802,9 +1793,6 @@ export const Settings: React.FC<SettingsProps> = ({
                       <span className="text-[10px] px-1.5 py-0.2 rounded font-bold uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
                         Insider Flag
                       </span>
-                    </div>
-                    <div className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-1">
-                      Thay thế progress ring bằng animation loading dots kiểu Windows cổ điển.
                     </div>
                   </div>
                   <button

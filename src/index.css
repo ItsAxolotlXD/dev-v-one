@@ -9102,3 +9102,24 @@ button[role="switch"] span:hover,
 #root :is(.windows-search-box, .fluent-search-box, [id*="search-box"], [id*="search-capsule"]):focus-within {
   background-color: rgba(255, 255, 255, 1) !important;
 }
+
+@layer base {
+  #root .settings-page,
+  #root .settings-page *,
+  #root [aria-label="PC Settings"],
+  #root [aria-label="PC Settings"] * {
+    font-weight: 400 !important;
+  }
+
+  #root .settings-page .divider-line {
+    display: none !important;
+  }
+
+  #root .settings-page [class~="border-b"],
+  #root .settings-page [class~="border-t"],
+  #root [aria-label="PC Settings"] [class~="border-b"],
+  #root [aria-label="PC Settings"] [class~="border-t"],
+  #root [aria-label="PC Settings"] [class~="border-r"] {
+    border-width: 0 !important;
+  }
+}
