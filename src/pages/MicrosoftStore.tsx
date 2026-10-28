@@ -66,23 +66,27 @@ function InstallAppDialog({ app, open, installing, secondsRemaining, onInstall, 
         event.preventDefault();
         if (!installing) onClose();
       }}
-      className="fixed left-1/2 top-1/2 m-0 w-[min(92vw,420px)] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-white/10 bg-[#1b1b1d] p-0 text-white shadow-2xl backdrop:bg-black/70 backdrop:backdrop-blur-sm"
-      aria-labelledby="install-first-title"
+      id="install-first-dialog"
+      role="dialog"
+      aria-modal="true"
+      className="fluent-modal-dialog p-0"
+      aria-labelledby="install-first-dialog-title"
+      aria-describedby="install-first-description"
     >
-      <div className="p-6 sm:p-7">
+      <div className="px-6 pt-6 pb-2">
         <div className="flex items-start gap-4">
-          <AppArtwork app={app} className="size-14" />
+          <AppArtwork app={app} className="size-12" />
           <div className="min-w-0 pt-1">
-            <h2 id="install-first-title" className="text-xl font-semibold tracking-tight">Install your app first</h2>
-            <p className="mt-2 text-sm leading-5 text-white/65">Install {app.name} before opening it. It will be ready on this device once installation finishes.</p>
+            <h2 id="install-first-dialog-title" className="text-[20px] font-light tracking-tight leading-snug">Install your app first</h2>
+            <p id="install-first-description" className="mt-2 text-[13.5px] leading-relaxed font-normal text-neutral-700 dark:text-neutral-300">Install {app.name} before opening it. It will be ready on this device once installation finishes.</p>
           </div>
         </div>
-        <div className="mt-7 flex justify-end gap-3">
-          <button type="button" onClick={onClose} disabled={installing} className="h-10 rounded-lg border border-white/20 px-4 text-sm text-white/75 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50">Not now</button>
-          <button type="button" onClick={onInstall} disabled={installing} aria-busy={installing} className="inline-flex h-10 min-w-[140px] items-center justify-center gap-2 rounded-lg bg-[#1688e5] px-4 text-sm font-semibold text-white transition hover:bg-[#2998f1] disabled:cursor-wait disabled:opacity-90">
-            {installing ? <><LoaderCircle className="size-4 animate-spin" /> Installing {secondsRemaining}s</> : <><Download className="size-4" /> Install app</>}
-          </button>
-        </div>
+      </div>
+      <div className="fluent-modal-footer">
+        <button type="button" onClick={onClose} disabled={installing} className="min-w-[88px] h-[32px] rounded-none px-4 text-[13px] font-normal transition disabled:cursor-not-allowed disabled:opacity-50">Not now</button>
+        <button type="button" onClick={onInstall} disabled={installing} aria-busy={installing} className="min-w-[88px] h-[32px] rounded-none px-4 text-[13px] font-normal transition disabled:cursor-wait disabled:opacity-90">
+          {installing ? `Installing ${secondsRemaining}s` : 'Install app'}
+        </button>
       </div>
     </dialog>
   );

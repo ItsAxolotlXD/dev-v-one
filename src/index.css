@@ -9123,3 +9123,23 @@ button[role="switch"] span:hover,
     border-width: 0 !important;
   }
 }
+
+dialog.fluent-modal-dialog {
+  position: fixed !important;
+  inset: 50% auto auto 50% !important;
+  transform: translate(-50%, -50%) !important;
+  margin: 0 !important;
+  width: min(92vw, 520px) !important;
+  max-width: 520px !important;
+  padding: 0 !important;
+}
+
+dialog.fluent-modal-dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+#root #install-first-dialog .fluent-modal-footer button {
+  border-radius: 0 !important;
+}
