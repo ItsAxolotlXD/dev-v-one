@@ -472,7 +472,7 @@ html.light-mode .sidebar-nav-item::after {
      - Icon kính lúp bên phải: màu #a6a6a6
    Hình 2: Search box focused (:focus-within, :focus)
      - Border radius: 0px (Góc vuông sắc cạnh)
-     - Nền: trắng 50% opacity, rgba(255, 255, 255, 0.5)
+     - Nền: trắng 100% opacity, rgba(255, 255, 255, 1)
      - Viền: 2px solid #0078d7 bao quanh 4 cạnh
      - Text: màu đen #000000
      - Caret (con trỏ soạn thảo): màu đen #000000
@@ -694,7 +694,7 @@ html.light-mode [id*="search-box"] button {
 
 /* ========================================================
    HÌNH 2: FOCUSED SEARCH BOX (Cho cả Dark và Light Mode)
-   - Nền: trắng 50% opacity rgba(255, 255, 255, 0.5)
+   - Nền: trắng 100% opacity rgba(255, 255, 255, 1)
    - Viền: 2px solid #0078d7
    - Text: màu đen #000000
    - Caret: màu đen #000000
@@ -744,7 +744,7 @@ html.dark #find-words-bar > div:focus-within,
 html.dark .fluent-search-box:focus-within,
 html.dark [id*="search-box"]:focus-within {
   border-radius: 0px !important;
-  background-color: rgba(255, 255, 255, 0.5) !important;
+  background-color: rgba(255, 255, 255, 1) !important;
   background-image: none !important;
   border: 2.5px solid #0078d7 !important;
   box-shadow: none !important;
@@ -5610,7 +5610,7 @@ html.light-mode .fluent-btn-secondary:active {
 #widgets-search-box:focus-within,
 .fluent-search-box:focus-within {
   background-image: none !important;
-  background-color: rgba(255, 255, 255, 0.5) !important;
+  background-color: rgba(255, 255, 255, 1) !important;
   border: 2.5px solid #0078d7 !important;
   outline: none !important;
 }
@@ -5641,7 +5641,7 @@ html.light-mode #copilot-flyout-search-box:focus-within,
 html.light-mode #widgets-search-box:focus-within,
 html.light-mode .fluent-search-box:focus-within {
   background-image: none !important;
-  background-color: rgba(255, 255, 255, 0.5) !important;
+  background-color: rgba(255, 255, 255, 1) !important;
   border: 2px solid #0078d7 !important;
 }
 
@@ -7730,10 +7730,17 @@ html.light-mode .floaty-bar .floaty-bar__item:hover:not(.is-active) {
   transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
 }
 
-#immersive-search-capsule:hover,
-#immersive-search-capsule:focus-within {
+#immersive-search-capsule:hover {
   background: rgba(255, 255, 255, 0.5) !important;
   background-color: rgba(255, 255, 255, 0.5) !important;
+  background-image: none !important;
+  border: 3.5px solid #FFFFFF !important;
+  box-shadow: none !important;
+}
+
+#immersive-search-capsule:focus-within {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
   background-image: none !important;
   border: 3.5px solid #FFFFFF !important;
   box-shadow: none !important;
