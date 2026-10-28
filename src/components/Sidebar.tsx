@@ -385,6 +385,124 @@ export const Sidebar: React.FC<SidebarProps> = ({
     };
   }, []);
 
+  useEffect(() => {
+    if (
+      !settings.animateSidebar ||
+      settings.reduceAllMotion ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+      return;
+    }
+
+    const activePresses = new Map<number, { item: HTMLElement; releaseTimer: number | null }>();
+    const pressVariables = [
+      '--sidebar-press-depth',
+      '--sidebar-press-rotate-x',
+      '--sidebar-press-rotate-y',
+    ] as const;
+
+    const clearPress = (item: HTMLElement) => {
+      item.removeAttribute('data-pressing');
+      pressVariables.forEach((property) => item.style.removeProperty(property));
+    };
+
+    const stopPress = (pointerId: number, delay = 100) => {
+      const press = activePresses.get(pointerId);
+      if (!press) return;
+
+      if (press.releaseTimer !== null) {
+        window.clearTimeout(press.releaseTimer);
+      }
+
+      if (delay === 0) {
+        clearPress(press.item);
+        activePresses.delete(pointerId);
+        return;
+      }
+
+      press.releaseTimer = window.setTimeout(() => {
+        clearPress(press.item);
+        activePresses.delete(pointerId);
+      }, delay);
+    };
+
+    const startPress = (item: HTMLElement, pointerX: number, pointerY: number, pointerId: number) => {
+      const previousPress = activePresses.get(pointerId);
+      if (previousPress) {
+        if (previousPress.releaseTimer !== null) {
+          window.clearTimeout(previousPress.releaseTimer);
+        }
+        if (previousPress.item !== item) clearPress(previousPress.item);
+      }
+
+      const rect = item.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+
+      const x = Math.max(-1, Math.min(1, ((pointerX - rect.left) / rect.width) * 2 - 1));
+      const y = Math.max(-1, Math.min(1, ((pointerY - rect.top) / rect.height) * 2 - 1));
+      const distanceFromCenter = Math.min(1, Math.hypot(x, y) / Math.SQRT2);
+      const tilt = distanceFromCenter * 2.8;
+
+      item.style.setProperty('--sidebar-press-depth', `${(1.4 + distanceFromCenter * 1.2).toFixed(2)}px`);
+      item.style.setProperty('--sidebar-press-rotate-x', `${(y * tilt).toFixed(2)}deg`);
+      item.style.setProperty('--sidebar-press-rotate-y', `${(-x * tilt).toFixed(2)}deg`);
+      item.setAttribute('data-pressing', 'true');
+      activePresses.set(pointerId, { item, releaseTimer: null });
+    };
+
+    const getSidebarItem = (target: EventTarget | null) => {
+      if (!(target instanceof Element)) return null;
+      return target.closest<HTMLElement>('.sidebar-nav-item');
+    };
+
+    const onPointerDown = (event: PointerEvent) => {
+      if (event.button !== 0 || !event.isPrimary) return;
+      const item = getSidebarItem(event.target);
+      if (!item) return;
+      startPress(item, event.clientX, event.clientY, event.pointerId);
+    };
+
+    const onPointerUp = (event: PointerEvent) => stopPress(event.pointerId);
+    const onPointerCancel = (event: PointerEvent) => stopPress(event.pointerId, 0);
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if ((event.key !== 'Enter' && event.key !== ' ') || event.repeat) return;
+      const item = getSidebarItem(event.target);
+      if (!item) return;
+      const rect = item.getBoundingClientRect();
+      startPress(item, rect.left + rect.width / 2, rect.top + rect.height / 2, -1);
+    };
+
+    const onKeyUp = (event: KeyboardEvent) => {
+      if (event.key === 'Enter' || event.key === ' ') stopPress(-1);
+    };
+
+    const releaseAll = () => {
+      activePresses.forEach(({ item, releaseTimer }) => {
+        if (releaseTimer !== null) window.clearTimeout(releaseTimer);
+        clearPress(item);
+      });
+      activePresses.clear();
+    };
+
+    window.addEventListener('pointerdown', onPointerDown, true);
+    window.addEventListener('pointerup', onPointerUp, true);
+    window.addEventListener('pointercancel', onPointerCancel, true);
+    window.addEventListener('keydown', onKeyDown, true);
+    window.addEventListener('keyup', onKeyUp, true);
+    window.addEventListener('blur', releaseAll);
+
+    return () => {
+      releaseAll();
+      window.removeEventListener('pointerdown', onPointerDown, true);
+      window.removeEventListener('pointerup', onPointerUp, true);
+      window.removeEventListener('pointercancel', onPointerCancel, true);
+      window.removeEventListener('keydown', onKeyDown, true);
+      window.removeEventListener('keyup', onKeyUp, true);
+      window.removeEventListener('blur', releaseAll);
+    };
+  }, [settings.animateSidebar, settings.reduceAllMotion]);
+
   const desktopNavRef = useRef<HTMLDivElement>(null);
   const mobileNavRef = useRef<HTMLDivElement>(null);
   const collapsedNavRef = useRef<HTMLDivElement>(null);

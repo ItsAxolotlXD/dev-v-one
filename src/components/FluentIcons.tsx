@@ -119,7 +119,6 @@ export const FluentSearchIcon: React.FC<FluentSearchIconProps> = ({
       className={`${className} object-contain shrink-0 select-none pointer-events-none inline-block`}
       style={{
         filter: 'brightness(0) invert(1)',
-        transform: 'scaleX(-1)',
         ...style,
       }}
     />
