@@ -9111,4 +9111,17 @@ button[role="switch"] span:hover,
   #root [aria-label="PC Settings"] * {
     font-weight: 400 !important;
   }
+
+  #root .settings-page .divider-line {
+    display: none !important;
+  }
+
+  #root .settings-page [class~="border-b"],
+  #root .settings-page [class~="border-t"] {
+    border-width: 0 !important;
+  }
+
+  #root .settings-page #settings-compatible-spatial-glass {
+    display: none !important;
+  }
 }
