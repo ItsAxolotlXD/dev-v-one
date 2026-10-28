@@ -9102,3 +9102,13 @@ button[role="switch"] span:hover,
 #root :is(.windows-search-box, .fluent-search-box, [id*="search-box"], [id*="search-capsule"]):focus-within {
   background-color: rgba(255, 255, 255, 1) !important;
 }
+
+@layer base {
+  /* Settings use regular typography despite the app-wide bold heading rules. */
+  #root .settings-page,
+  #root .settings-page *,
+  #root [aria-label="PC Settings"],
+  #root [aria-label="PC Settings"] * {
+    font-weight: 400 !important;
+  }
+}
