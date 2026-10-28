@@ -75,7 +75,6 @@ interface DesktopApp {
 }
 
 const START_ICON_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Start.ico-7zTzhc9DVkKTo2YHGkctgAPJnKFnDF.x-icon';
-const SEARCH_ICON_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Experimental%20Search.ico-RVeoJYyfrrdcdc6VQRwnLzE33aehRZ.x-icon';
 const CHAT_ICON_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Chat.ico-Q0q2Szz5bDf5JCkock3G2RByxusOKd.x-icon';
 
 const apps: DesktopApp[] = [
@@ -705,7 +704,7 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
             aria-label="Search apps"
             className="flex size-10 items-center justify-center rounded-md text-slate-200 transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
           >
-            <img src={SEARCH_ICON_SRC} alt="" className="size-[23px] object-contain" />
+            <FluentSearchIcon className="size-[23px]" />
           </button>
           <button type="button" onClick={() => { setStartOpen(false); setActivePanel((panel) => panel === 'task-view' ? null : 'task-view'); }} aria-label="Open Task View" aria-pressed={activePanel === 'task-view'} className={`flex size-10 items-center justify-center rounded-md transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 ${activePanel === 'task-view' ? 'bg-white/10' : ''}`}>
             <PanelsTopLeft aria-hidden="true" className="size-[21px]" />

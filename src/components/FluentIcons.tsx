@@ -1,20 +1,22 @@
 import React from 'react';
 import { useSettings, SearchIconTreatment } from '../hooks/useSettings';
 
-export const SPARKLE_SEARCH_ICON_URL = 'https://static.wikia.nocookie.net/ep-deo/images/6/6c/Search_sparkle.png/revision/latest/scale-to-width-down/1000?cb=20261015133722';
-export const GLOBE_SEARCH_ICON_URL = 'https://static.wikia.nocookie.net/ftv/images/5/5b/Ic_fluent_globe_search_24_regular.png/revision/latest?cb=20260508150432&path-prefix=vi';
+export const SEARCH_ICON_URL = 'https://cdn.iconscout.com/icon/free/png-256/free-search-icon-svg-download-png-1174913.png';
+export const SPARKLE_SEARCH_ICON_URL = SEARCH_ICON_URL;
+export const GLOBE_SEARCH_ICON_URL = SEARCH_ICON_URL;
 
 export const MAIL_TAB_ICON_URL = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-w08Tu7AUdI6LLJeWquYKJiNuuzCnVN.png';
 export const CALENDAR_TAB_ICON_URL = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-EOTmadFpTcD8ViTHEiYhPMCbFvwgFn.png';
 export const STORE_ICON_URL = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-rwSh33P3L1Yzqgl0DKUj5mbVNzFKj1.png';
 
-export const RECALL_ICON_URL = 'https://www.elevenforum.com/data/attachments/117/117247-2045951e7534a61d1e4e53fb040edb01.jpg?hash=IEWVHnU0ph';
+export const RECALL_ICON_URL = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/icons8-time-machine-96-AHK1ldHVyTMnimHgWsrk7YNkxkI0fu.png';
 
 export const APP_TAB_ICON_URLS = {
   recall: RECALL_ICON_URL,
+  copilot: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/icons8-chat-96-XCDSS4guknB7GitdVX7FS9IW4BJaui.png',
   mail: MAIL_TAB_ICON_URL,
   calendar: CALENDAR_TAB_ICON_URL,
-  home: 'https://www.elevenforum.com/data/attachments/30/30188-c9f25938bd40f9c2e3af267cc96b3e28.jpg?hash=yfJZOL1A-c',
+  home: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/home-131964784858199667_512px-bG0qMfEY1o0IHtvZYIDbIMkjAiERS4.png',
   taskManager: 'https://winaero.com/blog/wp-content/uploads/2021/05/taskmgr-task-manager-fluent-modern-icon.png',
   bank: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/icons8-dollar-bag-96-VS47W4Ne5wDfcYmkNYfhA4QnNrQtXK.png',
   social: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/icons8-google-chat-96-ciTkuoafHNKIjmnY0bljKs26z9mreM.png',
@@ -23,7 +25,7 @@ export const APP_TAB_ICON_URLS = {
   widgets: 'https://www.elevenforum.com/data/attachments/151/151773-6032f62cef01cd41415c88a760f59b31.jpg?hash=MN8WMBUfR7',
   people: 'https://static.wikia.nocookie.net/logopedia/images/0/05/People.png/revision/latest/scale-to-width-down/200?cb=20200711202510',
   edge: 'https://upload.wikimedia.org/wikipedia/commons/7/7e/Microsoft_Edge_logo_%282019%29.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original',
-  fileExplorer: 'https://static.wikia.nocookie.net/logopedia/images/5/51/File_Explorer.png/revision/latest?cb=20210615232646',
+  fileExplorer: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/icons8-folder-512-tfQGdQqjjLyqEah1x5jtWZ0LavvEuI.png',
   watch: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e3/Microsoft_Clipchamp_%282025%E2%80%93present%29.svg/1280px-Microsoft_Clipchamp_%282025%E2%80%93present%29.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail',
   notes: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/post-it-paper-sticky-notes-22390_256-Ck6XAzV1mJhbLfqUSd5fxMeOSMhq0B.png',
   gallery: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/icons8-photo-gallery-96-4tJhaieXrtShrMFtc7m5dgGWBP98BO.png',
@@ -33,18 +35,29 @@ export const APP_TAB_ICON_URLS = {
   calculator: 'https://static.wikia.nocookie.net/logopedia/images/5/54/Calculator_9.svg/revision/latest/scale-to-width-down/150?cb=20200623110053',
   snippingTool: 'data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D',
   feedback: 'https://upload.wikimedia.org/wikipedia/commons/1/18/Windows_Feedback_Hub_Icon.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original',
-  settings: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ac/Windows_Settings_icon.svg/3840px-Windows_Settings_icon.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail',
+  settings: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-NGr2R8uC08ARul3wUgDTFnXVtJ7jFn.png',
 } as const;
 
 export type AppTabIconName = keyof typeof APP_TAB_ICON_URLS;
 
-export const AppTabIcon: React.FC<{ name: AppTabIconName; className?: string; alt?: string }> = ({ name, className = 'size-5', alt = '' }) => (
+const WHITE_MONOCHROME_ICON_NAMES = new Set<AppTabIconName>(['home', 'fileExplorer', 'copilot', 'recall']);
+
+export const AppTabIcon: React.FC<{
+  name: AppTabIconName;
+  className?: string;
+  alt?: string;
+  style?: React.CSSProperties;
+}> = ({ name, className = 'size-5', alt = '', style }) => (
   <img
     src={APP_TAB_ICON_URLS[name]}
     alt={alt}
     aria-hidden={alt ? undefined : true}
     referrerPolicy="no-referrer"
     className={`shrink-0 object-contain ${className}`}
+    style={{
+      ...(WHITE_MONOCHROME_ICON_NAMES.has(name) ? { filter: 'brightness(0) invert(1)' } : {}),
+      ...style,
+    }}
   />
 );
 
@@ -58,7 +71,7 @@ export const FLUENT_ICON_URLS = {
   settings: 'https://raw.githubusercontent.com/microsoft/fluentui-system-icons/refs/heads/main/assets/Settings/SVG/ic_fluent_settings_48_regular.svg',
   user: 'https://raw.githubusercontent.com/microsoft/fluentui-system-icons/refs/heads/main/assets/Person/SVG/ic_fluent_person_48_regular.svg',
   personDelete: 'https://raw.githubusercontent.com/microsoft/fluentui-system-icons/refs/heads/main/assets/Person%20Delete/SVG/ic_fluent_person_delete_24_regular.svg',
-  search: 'https://raw.githubusercontent.com/microsoft/fluentui-system-icons/refs/heads/main/assets/Search/SVG/ic_fluent_search_48_regular.svg'
+  search: SEARCH_ICON_URL
 };
 
 export const FluentHomeIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = ({ className = 'w-5 h-5', style }) => (
@@ -113,8 +126,9 @@ export const FluentSearchIcon: React.FC<FluentSearchIconProps> = ({
 }) => {
   return (
     <img
-      src="https://cdn.iconscout.com/icon/free/png-256/free-search-icon-svg-download-png-1174913.png"
-      alt="Search"
+      src={SEARCH_ICON_URL}
+      alt=""
+      aria-hidden="true"
       referrerPolicy="no-referrer"
       className={`${className} object-contain shrink-0 select-none pointer-events-none inline-block`}
       style={{

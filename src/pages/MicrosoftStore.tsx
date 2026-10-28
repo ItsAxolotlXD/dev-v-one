@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowRight, Check, ChevronRight, Download, LoaderCircle, Search, Star, Store, X } from 'lucide-react';
+import { ArrowRight, Check, ChevronRight, Download, LoaderCircle, Star, Store, X } from 'lucide-react';
 import { AppTabIcon, FluentCraftmineIcon, FluentPhotopeaIcon, FluentSearchIcon, STORE_ICON_URL } from '../components/FluentIcons';
 import { STORE_APPS, type StoreApp } from '../data/storeApps';
 
@@ -222,7 +222,7 @@ export const MicrosoftStore: React.FC<MicrosoftStoreProps> = ({ installedApps, o
               <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 {matchingApps.map((app) => <AppCard key={app.id} app={app} installed={installedApps.includes(app.id)} installing={installingAppId === app.id} blocked={Boolean(installingAppId)} secondsRemaining={installSecondsRemaining} onInstall={() => install(app)} onOpen={() => launch(app)} />)}
               </div>
-              {matchingApps.length === 0 && <div className="mt-5 rounded-2xl border border-white/10 bg-[#1b1b1d] px-6 py-12 text-center"><Search className="mx-auto size-7 text-white/35" /><h3 className="mt-3 text-lg font-medium">No apps found</h3><p className="mt-1 text-sm text-white/55">Try another name or category.</p></div>}
+              {matchingApps.length === 0 && <div className="mt-5 rounded-2xl border border-white/10 bg-[#1b1b1d] px-6 py-12 text-center"><FluentSearchIcon className="mx-auto size-7" /><h3 className="mt-3 text-lg font-medium">No apps found</h3><p className="mt-1 text-sm text-white/55">Try another name or category.</p></div>}
             </section>
 
             <section className="mt-12 rounded-2xl border border-white/10 bg-[#1b1b1d] p-5 sm:p-6">

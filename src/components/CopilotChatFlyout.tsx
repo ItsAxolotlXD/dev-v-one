@@ -8,7 +8,6 @@ import {
   Check,
   Send,
   Sparkles,
-  Search,
   ExternalLink,
   MessageCircle,
   AppWindow,
@@ -61,9 +60,8 @@ const SEARCH_APP_ITEMS = [
     name: app.name,
     route: app.route,
     icon: (app.icon === 'craftmine' || app.icon === 'photopea' ? 'home' : app.icon) as AppTabIconName,
-    customIcon: false,
   })),
-  { id: 'copilot', name: 'Copilot', route: '/copilot', icon: 'home' as const, customIcon: true },
+  { id: 'copilot', name: 'Copilot', route: '/copilot', icon: 'copilot' as const }
 ];
 
 const ROUTE_SHORTCUTS: Record<string, string> = {
@@ -442,7 +440,7 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
                     aria-label={`Find on web with Google: ${searchQuery}`}
                     className="group flex w-full items-center gap-2.5 rounded-none px-2 py-2 text-left text-[12px] transition-colors hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4]"
                   >
-                    <Search className="h-4 w-4 shrink-0 text-[#4285f4]" />
+                    <FluentSearchIcon className="h-4 w-4 shrink-0" />
                     <span className="min-w-0 flex-1 truncate">Find on web: Google</span>
                     <ExternalLink className="h-3.5 w-3.5 shrink-0 text-neutral-400" />
                   </a>
@@ -453,7 +451,7 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
                     aria-label={`Find on web with Bing: ${searchQuery}`}
                     className="group flex w-full items-center gap-2.5 rounded-none px-2 py-2 text-left text-[12px] transition-colors hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4]"
                   >
-                    <Search className="h-4 w-4 shrink-0 text-[#008373]" />
+                    <FluentSearchIcon className="h-4 w-4 shrink-0" />
                     <span className="min-w-0 flex-1 truncate">Find on web: Bing</span>
                     <ExternalLink className="h-3.5 w-3.5 shrink-0 text-neutral-400" />
                   </a>
@@ -493,7 +491,7 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
                       </button>
                     )}
                     <button type="button" onClick={() => { navigate(`/search?q=${encodeURIComponent(selectedAspect.title)}`); onClose(); }} className="flex w-full items-center gap-3 rounded-none px-2.5 py-2 text-left text-[12px] text-[#2b2b2b] transition-colors hover:bg-[#f2f2f2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4]">
-                      <Search className="h-4 w-4 text-[#0078d4]" />
+                      <FluentSearchIcon className="h-4 w-4" />
                       <span>Search the web</span>
                     </button>
                     <button type="button" onClick={handleCopyResult} className="flex w-full items-center gap-3 rounded-none px-2.5 py-2 text-left text-[12px] text-[#2b2b2b] transition-colors hover:bg-[#f2f2f2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4]">
@@ -504,7 +502,7 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
                 </>
               ) : (
                 <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
-                  <Search className="mb-3 h-7 w-7 text-neutral-400" />
+                  <FluentSearchIcon className="mb-3 h-7 w-7" />
                   <p className="text-[13px] font-medium">No results found</p>
                   <p className="mt-1 text-[12px] text-neutral-500">Try another search or ask Copilot.</p>
                 </div>
@@ -518,7 +516,7 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
     onClick={() => { navigate('/search'); onClose(); }}
     className="mb-3 flex w-full items-center justify-between rounded-md border border-[#d8d8d8] px-3 py-2 text-left text-[12px] font-medium text-[#333] transition-colors hover:bg-[#f0f0f0] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff2bbd]"
   >
-    <span className="flex items-center gap-2"><Search className="h-4 w-4 text-[#ff2bbd]" />Open search page</span>
+    <span className="flex items-center gap-2"><FluentSearchIcon className="h-4 w-4" />Open search page</span>
     <ExternalLink className="h-3.5 w-3.5 text-[#777]" />
   </button>
   <div className="mb-3 flex items-center gap-2 border-b border-[#d8d8d8] pb-2">
@@ -535,11 +533,7 @@ export const CopilotChatFlyout: React.FC<CopilotChatFlyoutProps> = ({
                   className="group flex min-h-[76px] flex-col items-center justify-center gap-1.5 rounded-[6px] px-1 py-2 text-center transition-colors hover:bg-[#f0f0f0] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0078d4]"
                 >
                   <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-[7px] bg-transparent">
-                    {app.customIcon ? (
-                      <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-7bX9C6ZMjpXAbn0eXLI2Wk6ZhwUwk0.png" alt="" className="h-8 w-8 object-contain" />
-                    ) : (
-                      <AppTabIcon name={app.icon} className="h-8 w-8" alt="" />
-                    )}
+                    <AppTabIcon name={app.icon} className="h-8 w-8" alt="" />
                   </span>
                   <span className="line-clamp-2 text-[11px] leading-tight text-[#252525]">{app.name}</span>
                 </button>

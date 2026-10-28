@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { 
   Palette, 
   Key, 
-  Search, 
   Type, 
   X,
   Sparkles,
@@ -311,7 +310,7 @@ export const Settings: React.FC<SettingsProps> = ({
   }, [searchQuery]);
 
   return (
-    <div ref={settingsContentRef} className="w-full max-w-7xl mx-auto space-y-6 pb-28 pt-2 select-none">
+    <div ref={settingsContentRef} className="settings-page w-full max-w-7xl mx-auto space-y-6 pb-28 pt-2 select-none">
       {/* 1. Top Header on Main Category View OR Minimal Back Bar on Subpage */}
       {true ? (
         <div className="space-y-2">
@@ -674,7 +673,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     </span>
                   </div>
 
-                  {/* Clean Slider matching image.png */}
+                  {/* Windows-style slider */}
                   <div className="py-2.5 px-1">
                     <div className="group relative w-full h-5 flex items-center transition-all settings-slider-capsule select-none">
                       <input
@@ -685,7 +684,7 @@ export const Settings: React.FC<SettingsProps> = ({
                         step="1"
                         value={draftSettings.spatialGlassOpacity ?? 20}
                         onChange={(e) => updateDraft('spatialGlassOpacity', parseInt(e.target.value, 10))}
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-default z-20"
+                        className="absolute inset-0 z-20 h-full w-full cursor-pointer opacity-0"
                         aria-label="Độ trong suốt (Opacity)"
                       />
 
@@ -696,7 +695,7 @@ export const Settings: React.FC<SettingsProps> = ({
                           className="absolute left-0 top-0 h-full rounded-full bg-[#005fb8] dark:bg-[#4cc2ff] transition-all duration-75 ease-out"
                           style={{ width: `${draftSettings.spatialGlassOpacity ?? 20}%` }}
                         />
-                        {/* Thumb: Concentric Dark Ring & Blue Dot matching image.png */}
+                        {/* Rounded blue pill thumb */}
                         <div 
                           id="settings-slider-thumb-opacity"
                           className="settings-slider-thumb"
@@ -731,7 +730,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     </span>
                   </div>
 
-                  {/* Clean Slider matching image.png */}
+                  {/* Windows-style slider */}
                   <div className="py-2.5 px-1">
                     <div className="group relative w-full h-5 flex items-center transition-all settings-slider-capsule select-none">
                       <input
@@ -742,7 +741,7 @@ export const Settings: React.FC<SettingsProps> = ({
                         step="1"
                         value={draftSettings.spatialGlassBlur ?? 10}
                         onChange={(e) => updateDraft('spatialGlassBlur', parseInt(e.target.value, 10))}
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-default z-20"
+                        className="absolute inset-0 z-20 h-full w-full cursor-pointer opacity-0"
                         aria-label="Độ mờ (Blur)"
                       />
 
@@ -753,7 +752,7 @@ export const Settings: React.FC<SettingsProps> = ({
                           className="absolute left-0 top-0 h-full rounded-full bg-[#005fb8] dark:bg-[#4cc2ff] transition-all duration-75 ease-out"
                           style={{ width: `${draftSettings.spatialGlassBlur ?? 10}%` }}
                         />
-                        {/* Thumb: Concentric Dark Ring & Blue Dot matching image.png */}
+                        {/* Rounded blue pill thumb */}
                         <div 
                           id="settings-slider-thumb-blur"
                           className="settings-slider-thumb"
@@ -831,7 +830,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     </div>
                   </div>
 
-                  {/* Clean Slider matching image.png */}
+                  {/* Windows-style slider */}
                   <div className="py-2.5 px-1">
                     <div className="group relative w-full h-5 flex items-center transition-all settings-slider-capsule select-none">
                       <input
@@ -842,7 +841,7 @@ export const Settings: React.FC<SettingsProps> = ({
                         step="1"
                         value={draftSettings.fontScale}
                         onChange={(e) => updateDraft('fontScale', parseInt(e.target.value, 10))}
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-default z-20"
+                        className="absolute inset-0 z-20 h-full w-full cursor-pointer opacity-0"
                         aria-label="Thu phóng giao diện"
                       />
 
@@ -853,7 +852,7 @@ export const Settings: React.FC<SettingsProps> = ({
                           className="absolute left-0 top-0 h-full rounded-full bg-[#0078d4] dark:bg-[#4cc2ff] transition-all duration-150 ease-out"
                           style={{ width: `${(draftSettings.fontScale / (FONT_SCALE_CONFIG.length - 1)) * 100}%` }}
                         />
-                        {/* Thumb: Concentric Dark Ring & Blue Dot matching image.png */}
+                        {/* Rounded blue pill thumb */}
                         <div 
                           id="settings-slider-thumb"
                           className="settings-slider-thumb"

@@ -12,13 +12,13 @@ import {
   Laptop,
   LockKeyhole,
   Palette,
-  Search,
   Settings2,
   ShieldCheck,
   UserRound,
   Wifi,
   type LucideIcon,
 } from 'lucide-react';
+import { FluentSearchIcon } from '../components/FluentIcons';
 
 const STORAGE_KEY = 'sparkos-pc-settings-v1';
 
@@ -222,7 +222,7 @@ export function SparkOSSettings() {
     <div aria-label="PC Settings" className={`flex h-full min-h-[320px] w-full overflow-hidden ${contentClass}`} style={{ colorScheme: settings.appearance }}>
       <aside aria-label="Settings categories" className={`flex w-[min(39%,220px)] shrink-0 flex-col border-r p-3 sm:w-[220px] sm:p-4 ${settings.appearance === 'light' ? 'border-slate-200 bg-[#edf0f4]' : 'border-white/[0.07] bg-[#14171d]'}`}>
         <div className="mb-4 flex items-center gap-2 px-1"><Settings2 aria-hidden="true" className="size-5 shrink-0" style={{ color: accentColor }} /><span className="truncate text-sm font-semibold">PC Settings</span></div>
-        <label className="relative mb-4 flex h-8.5 items-center rounded-none windows-search-box px-3"><input aria-label="Find a setting" placeholder="Find a setting" value={query} onChange={(event) => applySearch(event.target.value)} className="w-full bg-transparent text-xs outline-none pr-6" /><Search aria-hidden="true" className="size-3.5 shrink-0 pointer-events-none absolute right-2.5" /></label>
+        <label className="relative mb-4 flex h-8.5 items-center rounded-none windows-search-box px-3"><input aria-label="Find a setting" placeholder="Find a setting" value={query} onChange={(event) => applySearch(event.target.value)} className="w-full bg-transparent text-xs outline-none pr-6" /><FluentSearchIcon className="size-3.5 shrink-0 pointer-events-none absolute right-2.5" /></label>
         <nav aria-label="Settings pages" className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto">
           {filteredCategories.map((category) => {
             const Icon = category.icon;
