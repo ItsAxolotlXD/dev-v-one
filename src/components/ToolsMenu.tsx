@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { 
   BookOpen, 
   Sparkles, 
-  Search, 
+
   Type, 
   FileDown, 
   Heart, 
@@ -18,7 +18,7 @@ import {
   Wrench,
   FileText
 } from 'lucide-react';
-import { AppTabIcon, FluentNotesIcon, FluentSearchIcon, FluentFileExplorerIcon, FluentPaintIcon, FluentPhotosIcon, FluentEdgeIcon, FluentCameraIcon, FluentSwiftBankIcon, FluentCalculatorIcon, FluentSnippingToolIcon, FluentFeedbackHubIcon } from './FluentIcons';
+import { AppTabIcon, FluentNotesIcon, FluentSearchIcon, FluentPaintIcon, FluentPhotosIcon, FluentEdgeIcon, FluentCameraIcon, FluentSwiftBankIcon, FluentCalculatorIcon, FluentSnippingToolIcon, FluentFeedbackHubIcon } from './FluentIcons';
 import { Channel, NewsArticle } from '../types';
 import { useFavorites } from '../hooks/useFavorites';
 import { useSettings } from '../hooks/useSettings';

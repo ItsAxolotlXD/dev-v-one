@@ -7,7 +7,6 @@ import {
   Plus, 
   Trash2, 
   Heart, 
-  Search, 
   Grid,
   Tv, 
   Tv2, 
@@ -52,6 +51,7 @@ import {
 } from 'lucide-react';
 import { Channel, NewsArticle } from '../types';
 import { useSettings } from '../hooks/useSettings';
+import { FluentSearchIcon } from './FluentIcons';
 
 interface ControlBarProps {
   currentRoute: string;
@@ -284,7 +284,7 @@ export const ControlBar: React.FC<ControlBarProps> = ({
         },
         {
           id: 'photo-search',
-          icon: Search,
+          icon: FluentSearchIcon,
           label: 'Tìm kiếm ảnh',
           shortcut: 'Ctrl+F',
           onClick: () => {
@@ -365,7 +365,7 @@ export const ControlBar: React.FC<ControlBarProps> = ({
         },
         {
           id: 'news-find-words',
-          icon: Search,
+          icon: FluentSearchIcon,
           label: 'Tìm từ ngữ trong bài',
           shortcut: 'Ctrl+F',
           onClick: () => {
@@ -427,7 +427,7 @@ export const ControlBar: React.FC<ControlBarProps> = ({
         },
         {
           id: 'notes-search',
-          icon: Search,
+          icon: FluentSearchIcon,
           label: 'Tìm ghi chú',
           onClick: () => {
             dispatchPageAction('notes-search');
@@ -821,7 +821,7 @@ export const ControlBar: React.FC<ControlBarProps> = ({
         },
         {
           id: 'home-search',
-          icon: Search,
+          icon: FluentSearchIcon,
           label: 'Tìm kiếm Spotlight (Cmd+K)',
           shortcut: 'Ctrl+K',
           onClick: () => {
@@ -872,7 +872,7 @@ export const ControlBar: React.FC<ControlBarProps> = ({
       },
       {
         id: 'default-search',
-        icon: Search,
+        icon: FluentSearchIcon,
         label: 'Tìm kiếm Spotlight',
         shortcut: 'Ctrl+K',
         onClick: () => {
@@ -1008,10 +1008,7 @@ export const ControlBar: React.FC<ControlBarProps> = ({
             color: '#ffffff'
           }}
         >
-          <Search 
-            style={{ color: '#ffffff', stroke: '#ffffff' }}
-            className="w-5 h-5 transition-transform group-hover:scale-110" 
-          />
+          <FluentSearchIcon className="w-5 h-5" />
           {/* Tooltip to the left (Dạng pill) */}
           <span 
             className="control-bar-pill-btn pointer-events-none absolute right-full mr-3 top-1/2 -translate-y-1/2 px-3.5 py-1.5 rounded-full text-[11px] font-medium whitespace-nowrap shadow-xl opacity-0 group-hover:opacity-100 transition-opacity z-50 text-white"
@@ -1197,7 +1194,7 @@ export const ControlBar: React.FC<ControlBarProps> = ({
                 className="control-bar-pill-btn flex items-center justify-between px-3.5 py-2 rounded-full text-left transition-colors text-white hover:bg-white/15"
               >
                 <div className="flex items-center gap-2.5">
-                  <Search style={{ color: '#ffffff', stroke: '#ffffff' }} className="w-5 h-5 shrink-0" />
+                  <FluentSearchIcon className="w-5 h-5 shrink-0" />
                   <span>Tìm kiếm Spotlight</span>
                 </div>
                 <kbd className="text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-white/70 border border-white/15">Ctrl+K</kbd>

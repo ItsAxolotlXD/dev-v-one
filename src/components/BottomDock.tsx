@@ -1,19 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
+import { LayoutGrid } from 'lucide-react';
 import { 
-  Settings as SettingsIcon,
-  LayoutGrid
-} from 'lucide-react';
-import { 
-  FluentHomeIcon, 
+  AppTabIcon,
   FluentLiveTvIcon, 
   FluentNewsIcon, 
-  FluentSearchIcon, 
-  FluentSettingsIcon,
+  FluentSearchIcon,
   FluentWidgetsIcon,
   FluentTilesIcon,
-  APP_TAB_ICON_URLS,
-  FLUENT_ICON_URLS 
+  APP_TAB_ICON_URLS
 } from './FluentIcons';
 import { useSettings } from '../hooks/useSettings';
 import { useNativeKeyboard } from '../context/NativeKeyboardContext';
@@ -41,7 +36,6 @@ interface BottomDockProps {
   onOpenOfficeTool?: (tool: 'write' | 'table' | 'present') => void;
 }
 
-const SETTINGS_ICON = 'https://static.wikia.nocookie.net/ftv/images/9/97/Settungs.png/revision/latest?cb=20260411085024&path-prefix=vi';
 const MORE_ICON = 'https://static.wikia.nocookie.net/ep-deo/images/7/78/Icons8-apps-90.png/revision/latest?cb=20260925115254';
 
 interface TabItem {
@@ -53,14 +47,22 @@ interface TabItem {
   icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
 }
 
+const HomeDockIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = (props) => (
+  <AppTabIcon name="home" {...props} />
+);
+
+const SettingsDockIcon: React.FC<{ className?: string; style?: React.CSSProperties }> = (props) => (
+  <AppTabIcon name="settings" {...props} />
+);
+
 const DOCK_TABS: TabItem[] = [
-  { id: 'dock-home', label: 'Home', route: '/', image: APP_TAB_ICON_URLS.home, icon: FluentHomeIcon },
+  { id: 'dock-home', label: 'Home', route: '/', image: APP_TAB_ICON_URLS.home, icon: HomeDockIcon },
   { id: 'dock-tv', label: 'Watch', route: '/live-tv', image: APP_TAB_ICON_URLS.watch, icon: FluentLiveTvIcon },
   { id: 'dock-news', label: 'Articles', route: '/news', image: APP_TAB_ICON_URLS.articles, icon: FluentNewsIcon },
   { id: 'dock-widgets', label: 'Widgets', route: '/widgets', image: APP_TAB_ICON_URLS.widgets, icon: FluentWidgetsIcon },
   { id: 'dock-tiles', label: 'Tiles', route: '/tiles', icon: FluentTilesIcon },
-  { id: 'dock-settings', label: 'Settings', route: '/settings', image: APP_TAB_ICON_URLS.settings, icon: FluentSettingsIcon },
-  { id: 'dock-search', label: 'Search', isAction: true, image: FLUENT_ICON_URLS.search, icon: FluentSearchIcon },
+  { id: 'dock-settings', label: 'Settings', route: '/settings', image: APP_TAB_ICON_URLS.settings, icon: SettingsDockIcon },
+  { id: 'dock-search', label: 'Search', isAction: true, icon: FluentSearchIcon },
   { id: 'dock-more', label: 'More', isAction: true, image: MORE_ICON, icon: LayoutGrid },
 ];
 
@@ -290,6 +292,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
             alt={item.label}
             referrerPolicy="no-referrer"
             className={`${iconSizeClasses} ${spinClass} object-contain shrink-0 transition-transform duration-200`}
+            style={{ filter: item.id === 'dock-home' ? 'brightness(0) invert(1)' : 'none' }}
           />
         );
       }
@@ -336,6 +339,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
                 ? 'brightness-0'
                 : 'filter brightness-0 invert'
           } ${isSelectedOrHovered ? 'opacity-100' : 'opacity-75'}`}
+          style={{ filter: item.id === 'dock-home' ? 'brightness(0) invert(1)' : item.id === 'dock-settings' ? 'none' : undefined }}
         />
       );
     }

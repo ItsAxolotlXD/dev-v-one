@@ -4,7 +4,6 @@ import {
   X, 
   Play, 
   Info, 
-  Settings as SettingsIcon,
   ChevronLeft,
   SlidersHorizontal,
   Layers,
@@ -16,7 +15,7 @@ import {
   MessageCircle
 } from 'lucide-react';
 import { 
-  FluentHomeIcon, 
+  AppTabIcon,
   FluentLiveTvIcon, 
   FluentNewsIcon, 
   FluentSearchIcon,
@@ -40,15 +39,23 @@ interface SpotlightModalProps {
   onSelectChannel: (channel: Channel) => void;
 }
 
+const SpotlightHomeIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <AppTabIcon name="home" className={className} />
+);
+
+const SpotlightSettingsIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <AppTabIcon name="settings" className={className} />
+);
+
 const CATEGORY_ITEMS = [
-  { id: 'cat-home', title: 'Home', route: '/', icon: FluentHomeIcon, color: '#4cc2ff' },
+  { id: 'cat-home', title: 'Home', route: '/', icon: SpotlightHomeIcon, color: '#4cc2ff' },
   { id: 'cat-livetv', title: 'Watch', route: '/live-tv', icon: FluentLiveTvIcon, color: '#4cc2ff' },
   { id: 'cat-news', title: 'Articles', route: '/news', icon: FluentNewsIcon, color: '#4cc2ff' },
   { id: 'cat-calc', title: 'Calculator', route: '/calculator', icon: FluentCalculatorIcon, color: '#0078d4' },
   { id: 'cat-snip', title: 'Snipping Tool', route: '/snipping-tool', icon: FluentSnippingToolIcon, color: '#0078d4' },
   { id: 'cat-feedback', title: 'Feedback Hub', route: '/feedback-hub', icon: FluentFeedbackHubIcon, color: '#0078d4' },
-  { id: 'cat-settings', title: 'Settings', route: '/settings', icon: SettingsIcon, color: '#4cc2ff' },
-  { id: 'cat-pc-settings', title: 'PC Settings', route: '/pc-settings', icon: SettingsIcon, color: '#4cc2ff' },
+  { id: 'cat-settings', title: 'Settings', route: '/settings', icon: SpotlightSettingsIcon, color: '#4cc2ff' },
+  { id: 'cat-pc-settings', title: 'PC Settings', route: '/pc-settings', icon: SpotlightSettingsIcon, color: '#4cc2ff' },
 ];
 
 const SETTINGS_SHORTCUTS = [
@@ -526,7 +533,7 @@ export const SpotlightModal: React.FC<SpotlightModalProps> = ({
                       title="Search settings"
                       aria-label="Search settings"
                     >
-                      <SettingsIcon className="w-4 h-4" />
+                      <AppTabIcon name="settings" className="w-4 h-4" />
                     </button>
                     <FluentSearchIcon className="w-3.5 h-3.5 shrink-0 pointer-events-none" />
                   </div>
@@ -686,7 +693,7 @@ export const SpotlightModal: React.FC<SpotlightModalProps> = ({
                             className="flex items-center gap-2.5 p-2.5 rounded-[12px] bg-[#332e2b]/80 hover:bg-[#443d39] border border-white/[0.06] hover:border-white/[0.12] cursor-default transition-all"
                           >
                             <div className="w-7 h-7 flex items-center justify-center shrink-0">
-                              <SettingsIcon className="w-4 h-4 text-[#4cc2ff]" />
+                              <AppTabIcon name="settings" className="w-4 h-4" />
                             </div>
                             <span className="text-xs font-medium text-[#111827] dark:text-white truncate">{st.title}</span>
                           </div>

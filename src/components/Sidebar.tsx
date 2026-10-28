@@ -19,7 +19,6 @@ import {
   FolderOpen,
   Gamepad2,
   Globe,
-  History,
   Home,
   Images,
   Info,
@@ -37,10 +36,8 @@ import {
   Pencil,
   PlusCircle,
   RefreshCw,
-  Search,
   Settings,
   Sliders,
-  Sparkles,
   Store,
   Tv,
   UploadCloud,
@@ -57,6 +54,7 @@ import { DiscordWelcomeModal } from './DiscordWelcomeModal';
 import { UnderConstructionModal } from './UnderConstructionModal';
 import { parseM3UPlaylist, downloadPlaylistFile } from '../utils/m3uParser';
 import { getStoreAppForRoute } from '../data/storeApps';
+import { AppTabIcon, FluentSearchIcon } from './FluentIcons';
 
 const SIDEBAR_APP_ICONS = {
   home: Home,
@@ -82,6 +80,10 @@ const SIDEBAR_APP_ICONS = {
 type SidebarAppIconName = keyof typeof SIDEBAR_APP_ICONS;
 
 function SidebarAppIcon({ name, className }: { name: SidebarAppIconName; className?: string }) {
+  if (name === 'home' || name === 'fileExplorer' || name === 'settings') {
+    return <AppTabIcon name={name} className={className} />;
+  }
+
   const Icon = SIDEBAR_APP_ICONS[name];
   return (
     <Icon
@@ -93,9 +95,6 @@ function SidebarAppIcon({ name, className }: { name: SidebarAppIconName; classNa
     />
   );
 }
-
-const LOGO_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-7bX9C6ZMjpXAbn0eXLI2Wk6ZhwUwk0.png';
-
 
 interface MorphingIndicatorProps {
   containerRef: React.RefObject<HTMLDivElement | null>;
@@ -1174,7 +1173,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }}
               className="w-full h-[36px] px-3 rounded-[4px] flex items-center gap-2.5 text-[13px] text-[#111827] dark:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 transition-colors cursor-default text-left"
             >
-              <Search className="w-4 h-4 text-neutral-500 dark:text-neutral-300 shrink-0" />
+              <FluentSearchIcon className="w-4 h-4 shrink-0" />
               <span>Find words</span>
             </button>
           </>
@@ -1187,25 +1186,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const renderSmartSidebarNav = (isMobile: boolean) => {
     return (
       <>
-  {/* 1. Home */}
-        <div className="shrink-0">
-          <button
-            type="button"
-            id={isMobile ? 'mobile-nav-xaml-home' : 'sidebar-nav-xaml-home'}
-            data-nav-active={(currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home') ? 'true' : undefined}
-            onClick={() => handleNavClick('/')}
-            title="Home"
-            className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${
-              (currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home')
-                ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
-                : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-            }`}
-          >
-            <SidebarAppIcon name="home" className="w-5 h-5 shrink-0 text-black dark:text-white" />
-            <span className="truncate text-[13.5px]">Home</span>
-          </button>
-        </div>
-
         {/* 2. Explore */}
         <div className="shrink-0">
           <button
@@ -1220,7 +1200,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
             }`}
           >
-            <Search aria-hidden="true" className="w-5 h-5 shrink-0" />
+            <FluentSearchIcon className="w-5 h-5 shrink-0" />
             <span className="truncate text-[13.5px]">Explore</span>
           </button>
         </div>
@@ -1299,7 +1279,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
             }`}
           >
-            <Sparkles aria-hidden="true" className="w-5 h-5 shrink-0" />
+            <AppTabIcon name="copilot" className="w-5 h-5 shrink-0" />
             <span className="truncate text-[13.5px]">Copilot</span>
           </button>
         </div>
@@ -1319,20 +1299,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
             }`}
           >
-            <History className="w-5 h-5 shrink-0" />
+            <AppTabIcon name="recall" className="w-5 h-5 shrink-0" />
             <span className="truncate text-[13.5px]">Recall</span>
           </button>
         </div>
 
-        {/* 6. SparkOS */}
+        {/* 6. Core OS */}
         <div className="shrink-0">
           <button
             type="button"
             id={isMobile ? 'mobile-nav-sparkos' : 'sidebar-nav-sparkos'}
             data-nav-active={currentRoute === '/sparkos' ? 'true' : undefined}
             onClick={() => handleNavClick('/sparkos')}
-            title="SparkOS"
-            aria-label="SparkOS"
+            title="Core OS"
+            aria-label="Core OS"
             className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${
               currentRoute === '/sparkos'
                 ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
@@ -1340,7 +1320,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             }`}
           >
             <Monitor aria-hidden="true" className="size-5 shrink-0 text-black dark:text-white" />
-            <span className="truncate text-[13.5px]">SparkOS</span>
+            <span className="truncate text-[13.5px]">Core OS</span>
           </button>
         </div>
 
@@ -1510,7 +1490,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
           }`}
         >
-          <Sparkles aria-hidden="true" className="w-5 h-5" />
+          <AppTabIcon name="copilot" className="w-5 h-5" />
         </button>
 
         {/* Recall Icon */}
@@ -1528,18 +1508,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
               : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'
           }`}
         >
-          <History className="w-5 h-5" />
+          <AppTabIcon name="recall" className="w-5 h-5" />
         </button>
 
-        {/* SparkOS Icon */}
+        {/* Core OS Icon */}
         <button
           type="button"
           id="sidebar-collapsed-sparkos"
           data-nav-active={currentRoute === '/sparkos' ? 'true' : undefined}
           onClick={() => handleNavClick('/sparkos')}
-          onMouseEnter={(e) => handleTooltipEnter(e, 'SparkOS')}
+          onMouseEnter={(e) => handleTooltipEnter(e, 'Core OS')}
           onMouseLeave={handleTooltipLeave}
-          aria-label="SparkOS"
+          aria-label="Core OS"
           className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
             currentRoute === '/sparkos'
               ? 'bg-transparent hover:bg-black/5 dark:hover:bg-white/[0.05]'
@@ -1617,6 +1597,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   // Render Full Windows 10 Settings Style Sidebar Content
   const renderSidebarBody = (isMobile: boolean = false) => {
     const containerRef = isMobile ? mobileNavRef : desktopNavRef;
+    const isHomeActive = currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home';
 
     return (
       <div className="flex flex-col h-full select-none text-[13.5px] font-sans">
@@ -1658,23 +1639,46 @@ export const Sidebar: React.FC<SidebarProps> = ({
             {isMobile ? <X className="w-4.5 h-4.5 stroke-[1.75] text-black dark:text-white" /> : <Menu className="w-4.5 h-4.5 stroke-[1.75] text-black dark:text-white" />}
           </button>
 
-          {/* Logo placed right next to hamburger menu icon */}
+          {/* Sidebar title */}
           <button
             type="button"
             onClick={() => handleNavClick('/')}
-            className="cursor-default flex items-center p-0 border-0 bg-transparent hover:opacity-85 active:scale-95 transition-opacity"
+            className="flex min-w-0 flex-1 cursor-pointer items-center border-0 bg-transparent p-0 text-left transition-opacity hover:opacity-85"
             title="Home"
           >
-            <img 
-              src={LOGO_SRC}
-              alt="Microsoft Edge Dev"
-              referrerPolicy="no-referrer"
-              className="h-6 w-auto object-contain drop-shadow-sm"
-            />
+            <span className="truncate text-[12px] font-semibold tracking-wide text-black dark:text-white sm:text-[13px]">
+              Sparkle Insider Dev
+            </span>
           </button>
         </div>
 
-        {/* Search on sidebar - placed between title bar and Home tab */}
+        {/* Home tab stays above the sidebar search */}
+        <div className="shrink-0">
+          <button
+            type="button"
+            id={isMobile ? 'mobile-nav-xaml-home' : 'sidebar-nav-xaml-home'}
+            data-nav-active={isHomeActive ? 'true' : undefined}
+            aria-current={isHomeActive ? 'page' : undefined}
+            onClick={() => handleNavClick('/')}
+            title="Home"
+            className={`sidebar-nav-item relative flex h-[38px] w-full items-center gap-3.5 rounded-none px-4 text-left transition-colors ${
+              isHomeActive
+                ? 'bg-transparent font-medium text-black hover:bg-black/5 dark:text-white dark:hover:bg-white/[0.05]'
+                : 'text-black hover:bg-black/5 hover:text-black dark:text-[#cccccc] dark:hover:bg-white/[0.05] dark:hover:text-white'
+            }`}
+          >
+            {isHomeActive && (
+              <span
+                aria-hidden="true"
+                className="sidebar-static-indicator pointer-events-none absolute left-0 top-1/2 z-30 h-6 w-[2px] -translate-y-1/2 rounded-none bg-[#005fb8] dark:bg-[#0078d4]"
+              />
+            )}
+            <SidebarAppIcon name="home" className="h-5 w-5 shrink-0 text-black dark:text-white" />
+            <span className="truncate text-[13.5px]">Home</span>
+          </button>
+        </div>
+
+        {/* Search on sidebar */}
         {settings.searchOnSidebar && (
           <div className="px-3 pb-2 pt-0.5 shrink-0 w-full relative z-30" ref={sidebarSearchRef}>
             <form onSubmit={handleSidebarSearchSubmit} className="w-full">
@@ -1713,7 +1717,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     title="Search"
                     className="p-1 text-white hover:text-[#4cc2ff] transition-colors cursor-pointer flex items-center justify-center shrink-0"
                   >
-                    <Search className="w-3.5 h-3.5" />
+                    <FluentSearchIcon className="w-3.5 h-3.5" />
                   </button>
                 </div>
               </div>
@@ -1753,7 +1757,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       onClick={handleSidebarSearchSubmit}
                       className="w-full mt-1 pt-1 border-t border-white/10 flex items-center gap-2 px-2.5 py-1.5 rounded-[4px] text-left hover:bg-white/10 transition-colors text-xs text-[#4cc2ff] font-medium"
                     >
-                      <Search className="w-3.5 h-3.5" />
+                      <FluentSearchIcon className="w-3.5 h-3.5" />
                       <span className="truncate">Search for "{sidebarSearchQuery.trim()}"</span>
                     </button>
                   )}
@@ -1783,26 +1787,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             renderSmartSidebarNav(isMobile)
           ) : (
             <>
-              {/* XAML Home */}
-          <div className="shrink-0">
-            <button
-              type="button"
-              id={isMobile ? 'mobile-nav-xaml-home' : 'sidebar-nav-xaml-home'}
-              data-nav-active={(currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home') ? 'true' : undefined}
-              onClick={() => handleNavClick('/')}
-              title="XAML Home"
-              className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${
-                (currentRoute === '/' || currentRoute === '/home' || currentRoute === '/xaml-home')
-                  ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
-                  : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
-              }`}
-            >
-              <SidebarAppIcon name="home" className="w-5 h-5 shrink-0 text-black dark:text-white" />
-              <span className="truncate text-[13.5px]">XAML Home</span>
-            </button>
-          </div>
-
-          {/* 3. Articles */}
+              {/* 3. Articles */}
           <div className="shrink-0">
             <button
               type="button"
@@ -1882,12 +1867,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
               id={isMobile ? 'mobile-nav-sparkos' : 'sidebar-nav-sparkos'}
               data-nav-active={currentRoute === '/sparkos' ? 'true' : undefined}
               onClick={() => handleNavClick('/sparkos')}
-              title="SparkOS"
-              aria-label="SparkOS"
+              title="Core OS"
+              aria-label="Core OS"
               className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${currentRoute === '/sparkos' ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]' : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'}`}
             >
               <Monitor aria-hidden="true" className="size-5 shrink-0 text-black dark:text-white" />
-              <span className="truncate text-[13.5px]">SparkOS</span>
+              <span className="truncate text-[13.5px]">Core OS</span>
             </button>
           </div>
 
@@ -1906,7 +1891,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <History className="w-5 h-5 shrink-0" />
+              <AppTabIcon name="recall" className="w-5 h-5 shrink-0" />
               <span className="truncate text-[13.5px]">Recall</span>
             </button>
           </div>
@@ -2050,7 +2035,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
               }`}
             >
-              <Sparkles aria-hidden="true" className="w-5 h-5 shrink-0" />
+              <AppTabIcon name="copilot" className="w-5 h-5 shrink-0" />
               <span className="truncate text-[13.5px]">Copilot</span>
             </button>
           </div>
@@ -2608,7 +2593,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     className="w-9 h-9 shrink-0 rounded-[6px] flex items-center justify-center text-black dark:text-white/90 hover:bg-black/5 dark:hover:bg-white/10 hover:text-black dark:hover:text-white cursor-default transition-colors"
                     aria-label="Search"
                   >
-                    <Search className="w-5 h-5 text-black dark:text-white" />
+                    <FluentSearchIcon className="w-5 h-5" />
                   </button>
                 )}
               </div>
@@ -2700,15 +2685,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   <Store aria-hidden="true" className="size-5" />
                 </button>
 
-                {/* SparkOS Icon */}
+                {/* Core OS Icon */}
                 <button
                   type="button"
                   id="sidebar-collapsed-sparkos"
                   data-nav-active={currentRoute === '/sparkos' ? 'true' : undefined}
                   onClick={() => handleNavClick('/sparkos')}
-                  onMouseEnter={(e) => handleTooltipEnter(e, 'SparkOS')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'Core OS')}
                   onMouseLeave={handleTooltipLeave}
-                  aria-label="SparkOS"
+                  aria-label="Core OS"
                   className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${currentRoute === '/sparkos' ? 'bg-transparent hover:bg-black/5 dark:hover:bg-white/[0.05]' : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'}`}
                 >
                   <Monitor aria-hidden="true" className="size-5 text-black dark:text-white" />
@@ -2729,7 +2714,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'
                   }`}
                 >
-                  <History className="w-5 h-5" />
+                  <AppTabIcon name="recall" className="w-5 h-5" />
                 </button>
 
                 {/* Divider: Social */}
@@ -2849,7 +2834,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                   }`}
                 >
-                  <Sparkles aria-hidden="true" className="w-5 h-5" />
+                  <AppTabIcon name="copilot" className="w-5 h-5" />
                 </button>
 
                 {/* Microsoft Edge Icon */}

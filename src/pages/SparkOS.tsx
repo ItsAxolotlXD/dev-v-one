@@ -13,16 +13,21 @@ import {
   BatteryFull,
   Bell,
   Calculator,
+  ChevronUp,
+  Cloud,
+  CloudSun,
   Copy,
+  FileText,
+  Menu,
   Minus,
   PanelsTopLeft,
   Plus,
+  Power,
   Square,
   X,
   CalendarDays,
   Camera,
   Clock3,
-  CloudSun,
   Folder,
   Globe,
   Images,
@@ -36,6 +41,7 @@ import {
   ShoppingBag,
   StickyNote,
   Tv,
+  UserRound,
   Users,
   Wifi,
   Volume2,
@@ -45,6 +51,7 @@ interface SparkOSProps {
   navigate: (path: string) => void;
   renderApp: (route: string, navigate: (route: string) => void) => ReactNode;
   installedApps: string[];
+  emulated?: boolean;
 }
 
 interface AppWindow {
@@ -74,12 +81,11 @@ interface DesktopApp {
   surface: string;
 }
 
-const START_ICON_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Start.ico-7zTzhc9DVkKTo2YHGkctgAPJnKFnDF.x-icon';
-const SEARCH_ICON_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Experimental%20Search.ico-RVeoJYyfrrdcdc6VQRwnLzE33aehRZ.x-icon';
 const CHAT_ICON_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Chat.ico-Q0q2Szz5bDf5JCkock3G2RByxusOKd.x-icon';
 
 const apps: DesktopApp[] = [
   { name: 'Microsoft Edge', route: '/edge', icon: Globe, color: 'text-cyan-300', surface: 'bg-cyan-500/20' },
+  { name: 'Core OS Emulator', route: '/core-os-emulator', icon: Monitor, color: 'text-sky-200', surface: 'bg-sky-500/20' },
   { name: 'Mail', route: '/mail', icon: Mail, color: 'text-sky-300', surface: 'bg-sky-500/20' },
   { name: 'Calendar', route: '/calendar', icon: CalendarDays, color: 'text-blue-300', surface: 'bg-blue-500/20' },
   { name: 'OneNote', route: '/notes', icon: StickyNote, color: 'text-fuchsia-300', surface: 'bg-fuchsia-500/20' },
@@ -90,7 +96,7 @@ const apps: DesktopApp[] = [
   { name: 'News', route: '/news', icon: Newspaper, color: 'text-rose-200', surface: 'bg-rose-500/20' },
   { name: 'Files', route: '/file-explorer', icon: Folder, color: 'text-amber-200', surface: 'bg-amber-400/20' },
   { name: 'Snip & Sketch', route: '/snipping-tool', icon: Scissors, color: 'text-orange-200', surface: 'bg-orange-500/20' },
-  { name: 'PC Settings', route: '/pc-settings', icon: Settings, color: 'text-slate-200', surface: 'bg-slate-400/20' },
+  { name: 'PC Settings', route: '/pc-settings', icon: Settings, color: 'text-white', surface: 'bg-slate-400/20' },
   { name: 'Calculator', route: '/calculator', icon: Calculator, color: 'text-cyan-200', surface: 'bg-cyan-500/20' },
   { name: 'Clock', route: '/clock', icon: Clock3, color: 'text-violet-200', surface: 'bg-violet-500/20' },
   { name: 'Paint', route: '/ms-paint', icon: Paintbrush, color: 'text-rose-200', surface: 'bg-rose-500/20' },
@@ -106,6 +112,48 @@ const recentApps = [
   { name: 'Swift Social', note: 'Recently added', route: '/swift', icon: Wifi, color: 'text-emerald-300' },
 ];
 
+type StartTile = {
+  name: string;
+  route: string;
+  kind?: 'mail' | 'calendar' | 'weather';
+};
+
+const startTileGroups: Array<{ title: string; tiles: StartTile[] }> = [
+  {
+    title: 'Productivity',
+    tiles: [
+      { name: 'Microsoft Edge', route: '/edge' },
+      { name: 'Mail', route: '/mail', kind: 'mail' },
+      { name: 'Calendar', route: '/calendar', kind: 'calendar' },
+      { name: 'Photos', route: '/photos' },
+      { name: 'OneNote', route: '/notes' },
+      { name: 'Files', route: '/file-explorer' },
+    ],
+  },
+  {
+    title: 'Explore',
+    tiles: [
+      { name: 'News', route: '/news' },
+      { name: 'Microsoft Store', route: '/store' },
+      { name: 'Movies & TV', route: '/live-tv' },
+      { name: 'Weather', route: '/widgets', kind: 'weather' },
+      { name: 'Friends', route: '/friends' },
+      { name: 'Camera', route: '/camera' },
+    ],
+  },
+  {
+    title: 'Build',
+    tiles: [
+      { name: 'Calculator', route: '/calculator' },
+      { name: 'Paint', route: '/ms-paint' },
+      { name: 'Task Manager', route: '/task-manager' },
+      { name: 'Snip & Sketch', route: '/snipping-tool' },
+      { name: 'PC Settings', route: '/pc-settings' },
+      { name: 'Clock', route: '/clock' },
+    ],
+  },
+];
+
 const sidebarIconNames: Record<string, AppTabIconName> = {
   '/edge': 'edge', '/mail': 'mail', '/calendar': 'calendar', '/notes': 'notes',
   '/photos': 'gallery', '/task-manager': 'taskManager', '/camera': 'camera',
@@ -114,35 +162,38 @@ const sidebarIconNames: Record<string, AppTabIconName> = {
   '/feedback-hub': 'feedback', '/live-tv': 'watch', '/friends': 'people', '/swift': 'social',
 };
 
-function renderDesktopIcon(route: string, className = 'size-6') {
+function renderDesktopIcon(route: string, className = 'size-6', lightSurface = false) {
   if (route === '/store') return <img src={STORE_ICON_URL} alt="" className={`${className} object-contain`} />;
+  if (route === '/file-explorer') return <Folder aria-hidden="true" className={`${className} ${lightSurface ? 'fill-amber-400 text-amber-700' : 'fill-amber-300 text-amber-200'}`} />;
+  if (route === '/pc-settings') return <Settings aria-hidden="true" className={`${className} ${lightSurface ? 'text-slate-700' : 'text-white'}`} />;
+  if (route === '/core-os-emulator') return <Monitor aria-hidden="true" className={`${className} ${lightSurface ? 'text-sky-700' : 'text-sky-200'}`} />;
   if (route === '/clock') return <FluentClockIcon className={className} />;
   if (route === '/snipping-tool') return <FluentSnippingToolIcon className={className} />;
   const iconName = sidebarIconNames[route];
   return iconName ? <AppTabIcon name={iconName} className={className} /> : <Monitor aria-hidden="true" className={`${className} text-violet-300`} />;
 }
 
-function WindowsMark({ className = 'size-[18px]' }: { className?: string }) {
+function WindowsMark({ className = 'size-[18px]', monochrome = false }: { className?: string; monochrome?: boolean }) {
+  const panes = monochrome
+    ? ['bg-[#263b45]', 'bg-[#263b45]', 'bg-[#263b45]', 'bg-[#263b45]']
+    : ['bg-[#59b9ff]', 'bg-[#2a9dff]', 'bg-[#2a9dff]', 'bg-[#1684e8]'];
+
   return (
     <span aria-hidden="true" className={`grid grid-cols-2 gap-[2px] ${className}`}>
-      <span className="bg-[#59b9ff]" />
-      <span className="bg-[#2a9dff]" />
-      <span className="bg-[#2a9dff]" />
-      <span className="bg-[#1684e8]" />
+      {panes.map((pane, index) => <span key={index} className={pane} />)}
     </span>
   );
 }
 
-export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
+export function SparkOS({ navigate, renderApp, installedApps, emulated = false }: SparkOSProps) {
   const isMobile = useIsMobile();
-  const [bootFinished, setBootFinished] = useState(false);
-  const [setupComplete, setSetupComplete] = useState(false);
-  const [startOpen, setStartOpen] = useState(true);
-  const [showAllApps, setShowAllApps] = useState(false);
+  const [bootFinished, setBootFinished] = useState(emulated);
+  const [setupComplete, setSetupComplete] = useState(emulated);
+  const [startOpen, setStartOpen] = useState(!emulated);
   const [query, setQuery] = useState('');
   const [now, setNow] = useState(() => new Date());
   const [windows, setWindows] = useState<AppWindow[]>([]);
-  const [pinnedRoutes, setPinnedRoutes] = useState(['/edge', '/file-explorer', '/mail', '/pc-settings']);
+  const [pinnedRoutes, setPinnedRoutes] = useState(['/file-explorer', '/edge']);
   const [activeWindowId, setActiveWindowId] = useState<string | null>(null);
   const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null);
   const [activePanel, setActivePanel] = useState<'task-view' | 'widgets' | 'action-center' | 'notifications' | 'copilot' | null>(null);
@@ -151,17 +202,18 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
   const [activeDesktop, setActiveDesktop] = useState(1);
   const [quickSettings, setQuickSettings] = useState({ wifi: true, bluetooth: true, batterySaver: false, focusAssist: false });
   const searchRef = useRef<HTMLInputElement>(null);
+  const desktopRef = useRef<HTMLElement | null>(null);
   const dragRef = useRef<{ id: string; startX: number; startY: number; originX: number; originY: number } | null>(null);
   const splashTimersRef = useRef<Map<string, number>>(new Map());
 
   useEffect(() => {
-    if (isMobile) return;
+    if (isMobile || emulated) return;
     const timer = window.setTimeout(() => {
       setSetupComplete(hasSparkOSSetup());
       setBootFinished(true);
     }, 1800);
     return () => window.clearTimeout(timer);
-  }, [isMobile]);
+  }, [isMobile, emulated]);
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(new Date()), 30_000);
@@ -198,8 +250,11 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
     const handlePointerMove = (event: globalThis.PointerEvent) => {
       const drag = dragRef.current;
       if (!drag) return;
+      const desktopBounds = emulated ? desktopRef.current?.getBoundingClientRect() : undefined;
+      const availableWidth = desktopBounds?.width ?? window.innerWidth;
+      const availableHeight = desktopBounds?.height ?? window.innerHeight;
       setWindows((current) => current.map((appWindow) => appWindow.id === drag.id
-        ? { ...appWindow, x: Math.max(0, Math.min(window.innerWidth - 300, drag.originX + event.clientX - drag.startX)), y: Math.max(0, Math.min(window.innerHeight - 100, drag.originY + event.clientY - drag.startY)) }
+        ? { ...appWindow, x: Math.max(0, Math.min(availableWidth - 300, drag.originX + event.clientX - drag.startX)), y: Math.max(0, Math.min(availableHeight - 100, drag.originY + event.clientY - drag.startY)) }
         : appWindow));
     };
     const handlePointerUp = () => { dragRef.current = null; };
@@ -211,15 +266,26 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerup', handlePointerUp);
     };
-  }, []);
+  }, [emulated]);
 
   const visibleApps = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
-    const filtered = normalizedQuery
-      ? apps.filter((app) => app.name.toLowerCase().includes(normalizedQuery))
-      : apps;
-    return showAllApps || normalizedQuery ? filtered : filtered.slice(0, 15);
-  }, [query, showAllApps]);
+    const availableApps = emulated ? apps.filter((app) => app.route !== '/core-os-emulator') : apps;
+    return availableApps
+      .filter((app) => !normalizedQuery || app.name.toLowerCase().includes(normalizedQuery))
+      .sort((first, second) => first.name.localeCompare(second.name));
+  }, [query, emulated]);
+
+  const groupedApps = useMemo(() => {
+    const groups: Array<{ letter: string; apps: DesktopApp[] }> = [];
+    visibleApps.forEach((app) => {
+      const letter = app.name.charAt(0).toUpperCase();
+      const lastGroup = groups[groups.length - 1];
+      if (lastGroup?.letter === letter) lastGroup.apps.push(app);
+      else groups.push({ letter, apps: [app] });
+    });
+    return groups;
+  }, [visibleApps]);
 
   const launch = (route: string, newWindow = false, forcedName?: string) => {
     const storeApp = getStoreAppForRoute(route);
@@ -244,12 +310,21 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
       setWindows((current) => current.map((item) => item.id === existing.id ? { ...item, minimized: false } : item));
       return;
     }
+    const desktopBounds = emulated ? desktopRef.current?.getBoundingClientRect() : undefined;
+    const availableWidth = desktopBounds?.width ?? window.innerWidth;
+    const availableHeight = desktopBounds?.height ?? window.innerHeight;
+    const isEmulatorWindow = route === '/core-os-emulator' && !emulated;
+    const windowWidth = Math.min(emulated ? 700 : 860, availableWidth - 24);
+    const windowHeight = Math.min(
+      availableHeight * (emulated ? 0.8 : isEmulatorWindow ? 0.82 : 0.7),
+      emulated ? 420 : isEmulatorWindow ? 610 : 560,
+    );
     const id = `${route}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     const offset = windows.length * 24;
     setWindows((current) => [...current, {
       id, name, route,
-      x: Math.max(12, Math.min((window.innerWidth - 720) / 2 + offset, window.innerWidth - 320)),
-      y: Math.max(16, Math.min((window.innerHeight - 480) / 2 + offset, window.innerHeight - 120)),
+      x: Math.max(12, Math.min((availableWidth - windowWidth) / 2 + offset, availableWidth - windowWidth - 12)),
+      y: Math.max(16, Math.min((availableHeight - windowHeight) / 2 + offset, availableHeight - 100)),
       minimized: false, maximized: false, loading: true, desktopId: activeDesktop,
     }]);
     setActiveWindowId(id);
@@ -257,14 +332,14 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
     try {
       logRecallActivity({
         type: 'sparkos',
-        appName: 'SparkOS',
-        title: `SparkOS - ${name}`,
+        appName: 'Core OS',
+        title: `Core OS - ${name}`,
         subtitle: `Cửa sổ đa nhiệm Desktop: ${name}`,
         durationText: 'You spent < 1m on this activity recently',
-        badgeText: `SparkOS: ${name}`,
+        badgeText: `Core OS: ${name}`,
         thumbnail: '/sparkos-wallpaper.png',
         route: `/sparkos`,
-        searchKeywords: `sparkos desktop window ${name}`.toLowerCase()
+        searchKeywords: `core os desktop window ${name}`.toLowerCase()
       });
     } catch {}
 
@@ -316,6 +391,8 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
 
   const formattedTime = new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' }).format(now);
   const formattedDate = new Intl.DateTimeFormat(undefined, { weekday: 'short', month: 'numeric', day: 'numeric' }).format(now);
+  const calendarWeekday = new Intl.DateTimeFormat(undefined, { weekday: 'long' }).format(now);
+  const calendarDay = new Intl.DateTimeFormat(undefined, { day: 'numeric' }).format(now);
 
   if (isMobile) {
     return (
@@ -325,7 +402,7 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
             <Monitor className="size-7" />
           </div>
           <h1 id="sparkos-mobile-title" className="text-xl font-semibold tracking-tight">Get a Bộ PC, silly</h1>
-          <p id="sparkos-mobile-description" className="mt-3 text-sm leading-6 text-slate-300">SparkOS only available for those who use computers 🤓👆</p>
+          <p id="sparkos-mobile-description" className="mt-3 text-sm leading-6 text-slate-300">Core OS is only available on desktop devices.</p>
           <button type="button" onClick={() => navigate('/')} className="mt-6 w-full rounded-xl bg-sky-500 px-4 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-sky-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#17191f]">Back to home</button>
         </section>
       </div>
@@ -337,25 +414,34 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
 
   return (
     <main
-      aria-label="SparkOS desktop"
+      ref={desktopRef}
+      aria-label={emulated ? 'Core OS Emulator desktop' : 'Core OS desktop'}
       onClick={() => { setStartOpen(false); setContextMenu(null); setActivePanel(null); }}
       onContextMenu={(event) => openContextMenu(event)}
-      className="relative isolate h-[100dvh] min-h-[420px] w-full overflow-hidden bg-[#17232b] font-sans text-white"
-      style={{ backgroundImage: "linear-gradient(180deg,rgba(8,12,18,.08),rgba(4,12,16,.18)),url('/sparkos-wallpaper.png')", backgroundPosition: 'center', backgroundSize: 'cover' }}
+      className={`relative isolate ${emulated ? 'h-full min-h-[280px]' : 'h-[100dvh] min-h-[420px]'} w-full overflow-hidden bg-[#086cc2] font-sans text-white`}
+      style={{ backgroundImage: "url('/core-os-wallpaper.png')", backgroundPosition: 'center', backgroundSize: 'cover' }}
     >
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-b from-sky-950/[0.03] via-transparent to-sky-950/[0.08]" />
+      {!emulated && (
+        <div aria-hidden="true" className="pointer-events-none absolute bottom-[58px] right-4 z-[1] hidden text-right text-[11px] leading-[1.35] text-white/85 drop-shadow-[0_1px_3px_rgba(0,0,0,.85)] lg:block">
+          <span className="block">Core OS Insider Preview</span>
+          <span>Evaluation copy · Build 20158.rs_prerelease</span>
+        </div>
+      )}
 
-      <div className="absolute left-4 top-4 flex flex-col items-start gap-5 sm:left-7 sm:top-7">
-        <button
-          type="button"
-          onClick={(event) => { event.stopPropagation(); navigate('/'); }}
-          className="group flex w-[76px] flex-col items-center gap-2 rounded-md p-2 text-center text-[11px] text-white drop-shadow-md transition-colors hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
-          aria-label="Return to vOne"
-        >
-          <span className="flex size-10 items-center justify-center rounded-xl border border-white/15 bg-white/15 shadow-lg backdrop-blur-sm"><WindowsMark /></span>
-          <span>vOne</span>
-        </button>
-      </div>
+      {!emulated && !startOpen && (
+        <div className="absolute left-4 top-4 flex flex-col items-start gap-5 sm:left-7 sm:top-7">
+          <button
+            type="button"
+            onClick={(event) => { event.stopPropagation(); navigate('/'); }}
+            className="group flex w-[76px] flex-col items-center gap-2 rounded-md p-2 text-center text-[11px] text-white drop-shadow-md transition-colors hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+            aria-label="Return to vOne"
+          >
+            <span className="flex size-10 items-center justify-center rounded-xl border border-white/15 bg-white/15 shadow-lg backdrop-blur-sm"><WindowsMark /></span>
+            <span>vOne</span>
+          </button>
+        </div>
+      )}
 
       <AnimatePresence>
         {windows.filter((appWindow) => !appWindow.minimized && appWindow.desktopId === activeDesktop).map((appWindow) => (
@@ -368,7 +454,7 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.84, y: 18 }}
             transition={{ duration: 0.2, ease: [0.2, 0.8, 0.2, 1] }}
-            className={`dark absolute z-10 flex min-h-[260px] min-w-[300px] flex-col overflow-hidden border border-white/10 bg-[#111318] text-slate-100 shadow-[0_24px_72px_rgba(0,0,0,.48)] ${appWindow.maximized ? 'inset-x-0 top-0 bottom-[46px] w-auto rounded-none' : 'h-[min(70dvh,560px)] w-[min(860px,calc(100vw-24px))] rounded-lg'}`}
+            className={`dark absolute z-10 flex min-h-[260px] min-w-[300px] flex-col overflow-hidden border border-white/10 bg-[#111318] text-slate-100 shadow-[0_24px_72px_rgba(0,0,0,.48)] ${appWindow.maximized ? 'inset-x-0 top-0 bottom-[46px] w-auto rounded-none' : emulated ? 'h-[min(80%,420px)] w-[min(700px,calc(100%-24px))] rounded-lg' : appWindow.route === '/core-os-emulator' ? 'h-[min(82dvh,610px)] w-[min(860px,calc(100vw-24px))] rounded-lg' : 'h-[min(70dvh,560px)] w-[min(860px,calc(100vw-24px))] rounded-lg'}`}
             style={appWindow.maximized ? { zIndex: appWindow.id === activeWindowId ? 20 : 10 } : { left: appWindow.x, top: appWindow.y, zIndex: appWindow.id === activeWindowId ? 20 : 10 }}
           >
             <div
@@ -412,90 +498,114 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
       </AnimatePresence>
 
       <AnimatePresence>
-      {startOpen && (
-        <motion.section
-          aria-label="Start menu"
-          onClick={(event) => event.stopPropagation()}
-          onContextMenu={(event) => openContextMenu(event)}
-          initial={{ opacity: 0, y: 38, scale: 0.98 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: 38, scale: 0.98 }}
-          transition={{ type: 'spring', stiffness: 420, damping: 23, mass: 0.72 }}
-          className="absolute left-1/2 top-1/2 z-20 flex h-[min(82dvh,610px)] w-[min(710px,calc(100vw-24px))] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-[8px] border border-white/10 bg-[#111c22]/75 shadow-[0_28px_90px_rgba(0,0,0,.5)] backdrop-blur-2xl"
-        >
-          <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-5 pb-2 pt-[clamp(12px,4dvh,32px)] sm:px-9">
-            <div className="flex h-[clamp(40px,5.5dvh,44px)] shrink-0 items-center gap-3 border border-white/10 bg-white/[0.09] px-3.5 shadow-inner focus-within:border-sky-300/70 focus-within:bg-white/[0.13]">
-              <input
-                ref={searchRef}
-                onFocus={() => launch('/search', false, 'Search')}
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                onKeyDown={handleSearchKeyDown}
-                placeholder="Search the web or your devices"
-                aria-label="Search apps"
-                className="min-w-0 flex-1 bg-transparent text-[13px] text-white outline-none placeholder:text-slate-300/80"
-              />
-              {query && <button type="button" onClick={() => { setQuery(''); searchRef.current?.focus(); }} aria-label="Clear search" className="rounded p-1 text-slate-300 hover:bg-white/10"><span aria-hidden="true">×</span></button>}
-              <FluentSearchIcon className="size-[18px] shrink-0 pointer-events-none" />
-            </div>
-
-            <div className="mb-1 mt-[clamp(12px,3.5dvh,28px)] flex items-center justify-between">
-              <h1 className="text-[13px] font-semibold tracking-wide text-slate-100">My apps and websites</h1>
-              <button
-                type="button"
-                onClick={() => setShowAllApps((current) => !current)}
-                className="rounded-full border border-white/10 bg-white/[0.08] px-3 py-1 text-[11px] font-medium text-slate-100 transition-colors hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
-              >
-                {showAllApps ? 'Show fewer' : 'Show all'}
-              </button>
-            </div>
-
-            {visibleApps.length ? (
-              <div className="grid grid-cols-4 gap-x-1 gap-y-1 sm:grid-cols-5 sm:gap-x-3 sm:gap-y-2">
-                {visibleApps.map(({ name, route }) => (
-                  <button
-                    key={name}
-                    type="button"
-                    onClick={() => launch(route)}
-                    onContextMenu={(event) => openContextMenu(event, apps.find((app) => app.route === route))}
-                    className="group flex min-h-[clamp(56px,7dvh,78px)] flex-col items-center justify-center gap-1.5 rounded-md px-1 py-1.5 text-center transition-colors hover:bg-white/10 focus-visible:bg-white/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50"
-                    aria-label={`Open ${name}`}
-                  >
-                    <span className="flex size-[clamp(36px,6dvh,48px)] items-center justify-center transition-transform group-hover:scale-110">
-                      {renderDesktopIcon(route, 'size-[30px]')}
-                    </span>
-                    <span className="max-w-full truncate text-[10px] leading-tight text-slate-100 sm:text-[11px]">{name}</span>
-                  </button>
-                ))}
+        {startOpen && (
+          <motion.section
+            aria-label="Start menu"
+            onClick={(event) => event.stopPropagation()}
+            onContextMenu={(event) => openContextMenu(event)}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ type: 'spring', stiffness: 420, damping: 28, mass: 0.72 }}
+            className={`absolute bottom-[46px] left-0 z-20 flex ${emulated ? 'h-[min(86%,calc(100%-46px))] w-[min(780px,100%)]' : 'h-[min(86dvh,calc(100dvh-46px))] w-[min(780px,100vw)]'} overflow-hidden border-r border-t border-white/60 bg-[#c9e2ed]/95 text-[#142c38] shadow-[0_18px_58px_rgba(15,58,82,.28)] backdrop-blur-2xl`}
+          >
+            <aside aria-label="Start menu shortcuts" className="flex w-[50px] shrink-0 flex-col justify-between bg-[#a8cbd9]/50 px-1.5 py-2 text-[#203945] sm:w-[56px]">
+              <div aria-hidden="true" className="flex size-9 items-center justify-center"><Menu className="size-[18px]" /></div>
+              <div className="flex flex-col gap-1">
+                <button type="button" onClick={() => launch('/pc-settings')} aria-label="User profile" title="User profile" className="flex size-9 items-center justify-center rounded-sm transition-colors hover:bg-slate-900/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700"><UserRound aria-hidden="true" className="size-[18px]" /></button>
+                <button type="button" onClick={() => launch('/file-explorer')} aria-label="Documents" title="Documents" className="flex size-9 items-center justify-center rounded-sm transition-colors hover:bg-slate-900/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700"><FileText aria-hidden="true" className="size-[18px]" /></button>
+                <button type="button" onClick={() => launch('/photos')} aria-label="Pictures" title="Pictures" className="flex size-9 items-center justify-center rounded-sm transition-colors hover:bg-slate-900/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700"><Images aria-hidden="true" className="size-[18px]" /></button>
+                <button type="button" onClick={() => launch('/pc-settings')} aria-label="Settings" title="Settings" className="flex size-9 items-center justify-center rounded-sm transition-colors hover:bg-slate-900/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700"><Settings aria-hidden="true" className="size-[18px]" /></button>
+                <button type="button" onClick={() => setStartOpen(false)} aria-label="Close Start menu" title="Power" className="flex size-9 items-center justify-center rounded-sm transition-colors hover:bg-slate-900/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700"><Power aria-hidden="true" className="size-[18px]" /></button>
               </div>
-            ) : (
-              <p className="py-8 text-center text-sm text-slate-300">No apps found. Try another search.</p>
-            )}
-          </div>
+            </aside>
 
-          <div className="shrink-0 border-t border-white/10 bg-black/[0.12] px-5 pb-4 pt-3 sm:px-9 sm:pb-5 sm:pt-4">
-            <h2 className="mb-2 text-[12px] font-semibold text-slate-100">Recent</h2>
-            <p className="mb-3 hidden text-[11px] text-slate-300 sm:block">Pick up where you left off, or open something new.</p>
-            <div className="grid grid-cols-3 gap-1 sm:gap-3">
-              {recentApps.map(({ name, note, route }) => (
-                <button
-                  key={name}
-                  type="button"
-                  onClick={() => launch(route, false, name)}
-                  onContextMenu={(event) => openContextMenu(event, { name, route, icon: Monitor, color: 'text-violet-300', surface: 'bg-violet-500/20' })}
-                  className="flex min-w-0 items-center gap-2 rounded-md px-1.5 py-2 text-left transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 sm:gap-3 sm:px-2"
-                >
-                  <span className="flex size-6 shrink-0 items-center justify-center">{renderDesktopIcon(route, 'size-6')}</span>
-                  <span className="min-w-0">
-                    <span className="block truncate text-[10px] text-slate-100 sm:text-[11px]">{name}</span>
-                    <span className="hidden truncate text-[10px] text-slate-300 sm:block">{note}</span>
-                  </span>
-                </button>
+            <section aria-label="All apps" className="min-h-0 w-[42%] min-w-[160px] max-w-[326px] shrink-0 overflow-y-auto border-r border-[#1b4558]/15 px-2 py-3">
+              {groupedApps.length ? groupedApps.map((group) => (
+                <section key={group.letter} className="mb-2 last:mb-0">
+                  <h2 className="px-2 pb-1 text-[12px] font-medium text-[#496573]">{group.letter}</h2>
+                  <div className="flex flex-col">
+                    {group.apps.map(({ name, route }) => (
+                      <button
+                        key={route}
+                        type="button"
+                        onClick={() => launch(route)}
+                        onContextMenu={(event) => openContextMenu(event, apps.find((app) => app.route === route))}
+                        aria-label={`Open ${name}`}
+                        className="group flex min-h-10 items-center gap-2.5 rounded-sm px-2 text-left text-[12px] text-[#152f3b] transition-colors hover:bg-white/55 focus-visible:bg-white/55 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sky-700"
+                      >
+                        <span className="flex size-6 shrink-0 items-center justify-center">{renderDesktopIcon(route, 'size-5', true)}</span>
+                        <span className="min-w-0 truncate">{name}</span>
+                      </button>
+                    ))}
+                  </div>
+                </section>
+              )) : (
+                <p className="px-2 py-4 text-[11px] text-[#496573]">No apps found. Try another search.</p>
+              )}
+            </section>
+
+            <section aria-label="Pinned apps" className="min-h-0 min-w-0 flex-1 overflow-y-auto px-3 pb-4 pt-4 sm:px-4 sm:pt-5">
+              {startTileGroups.map((group) => (
+                <section key={group.title} className="mb-4 last:mb-0">
+                  <h2 className="mb-1.5 text-[13px] font-medium text-[#183644]">{group.title}</h2>
+                  <div className="grid grid-cols-3 gap-1">
+                    {group.tiles.map((tile) => (
+                      <button
+                        key={tile.route}
+                        type="button"
+                        onClick={() => {
+                          if (tile.kind === 'weather') {
+                            setStartOpen(false);
+                            setQuery('');
+                            setActivePanel('widgets');
+                            return;
+                          }
+                          launch(tile.route);
+                        }}
+                        onContextMenu={(event) => {
+                          if (tile.kind !== 'weather') openContextMenu(event, apps.find((app) => app.route === tile.route));
+                        }}
+                        aria-label={`Open ${tile.name}`}
+                        className={`group relative flex h-[clamp(54px,13vw,118px)] w-[clamp(54px,13vw,118px)] flex-col overflow-hidden rounded-[2px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700 ${tile.kind === 'weather' ? 'bg-[#155a7f] text-white hover:bg-[#0d4d70]' : 'bg-white/45 text-[#17323f] hover:bg-white/80'}`}
+                      >
+                        {tile.kind === 'mail' ? (
+                          <span className="flex h-full w-full flex-col justify-between p-2">
+                            <span className="mt-1 text-center text-[10px] leading-tight sm:text-[11px]">See all your<br />mail in one place</span>
+                            <span className="flex items-end justify-between gap-1">
+                              <span className="truncate text-[11px] font-medium">{tile.name}</span>
+                              {renderDesktopIcon(tile.route, 'size-5', true)}
+                            </span>
+                          </span>
+                        ) : tile.kind === 'calendar' ? (
+                          <span className="relative flex h-full w-full flex-col items-center justify-center">
+                            <span className="text-[10px] tracking-wide">{calendarWeekday}</span>
+                            <span className="text-[clamp(30px,3vw,44px)] font-light leading-none">{calendarDay}</span>
+                            <span className="absolute bottom-2 left-2 right-2 truncate text-left text-[10px] font-medium">{tile.name}</span>
+                          </span>
+                        ) : tile.kind === 'weather' ? (
+                          <span className="flex h-full flex-col justify-between p-2">
+                            <span className="truncate text-left text-[10px] font-medium sm:text-[11px]">Mostly sunny</span>
+                            <span className="flex items-center justify-between gap-1">
+                              <span className="text-[clamp(20px,2.2vw,28px)] font-light">28°</span>
+                              <CloudSun aria-hidden="true" className="size-5 shrink-0 text-amber-200" />
+                            </span>
+                            <span className="text-left text-[10px]">Hanoi</span>
+                          </span>
+                        ) : (
+                          <>
+                            <span className="flex min-h-0 flex-1 items-center justify-center pt-2">{renderDesktopIcon(tile.route, 'size-8', true)}</span>
+                            <span className="w-full truncate px-2 pb-2 text-left text-[12px] font-medium">{tile.name}</span>
+                          </>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </section>
               ))}
-            </div>
-          </div>
-        </motion.section>
-      )}
+            </section>
+          </motion.section>
+        )}
       </AnimatePresence>
 
       <AnimatePresence>
@@ -613,7 +723,7 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
                     </div>
                   </div>
                 )}
-                <footer className="border-t border-white/10 px-4 py-3 text-xs text-slate-500">SparkOS · Desktop {activeDesktop}</footer>
+                <footer className="border-t border-white/10 px-4 py-3 text-xs text-slate-500">Core OS · Desktop {activeDesktop}</footer>
               </>
             )}
           </motion.aside>
@@ -664,7 +774,7 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
                 <span className="flex size-12 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.06]">{renderDesktopIcon(storePrompt.route, 'size-7')}</span>
                 <div className="min-w-0 flex-1">
                   <h2 id="sparkos-store-dialog-title" className="text-lg font-semibold">{storePrompt.name} isn&apos;t installed</h2>
-                  <p id="sparkos-store-dialog-description" className="mt-2 text-sm leading-6 text-slate-300">Install this app from Microsoft Store before opening it in SparkOS.</p>
+                  <p id="sparkos-store-dialog-description" className="mt-2 text-sm leading-6 text-slate-300">Install this app from Microsoft Store before opening it in Core OS.</p>
                   <p className="mt-3 text-xs text-slate-400">{storePrompt.publisher} · {storePrompt.size}</p>
                 </div>
                 <button type="button" onClick={() => setStorePrompt(null)} aria-label="Close install dialog" className="-mr-1 -mt-1 rounded-md p-1.5 text-slate-400 hover:bg-white/10 hover:text-white"><X aria-hidden="true" className="size-4" /></button>
@@ -682,61 +792,67 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
         aria-label="System taskbar"
         onContextMenu={(event) => openContextMenu(event)}
         onClick={(event) => event.stopPropagation()}
-        className="absolute inset-x-0 bottom-0 z-30 flex h-[46px] items-center justify-center border-t border-white/10 bg-[#101517]/70 px-2 shadow-[0_-8px_28px_rgba(0,0,0,.22)] backdrop-blur-2xl"
+        className="absolute inset-x-0 bottom-0 z-30 flex h-[46px] items-center justify-between border-t border-[#657f8d]/20 bg-[#c6dfeb]/95 px-1 text-[#1b303a] shadow-[0_-5px_18px_rgba(22,62,82,.18)] backdrop-blur-xl sm:px-2"
       >
-        <button type="button" onClick={() => { setStartOpen(false); setActivePanel((panel) => panel === 'widgets' ? null : 'widgets'); }} aria-label="Open Widgets: 28 degrees and sunny in Hanoi" aria-pressed={activePanel === 'widgets'} className={`absolute left-2 flex h-9 items-center gap-1.5 rounded-md px-2 text-left transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 sm:left-4 ${activePanel === 'widgets' ? 'bg-white/10' : ''}`}>
-          <CloudSun aria-hidden="true" className="size-[19px] shrink-0 text-amber-200" />
-          <span className="text-[12px] font-medium leading-none">28°</span>
-          <span className="hidden text-[10px] leading-tight text-slate-300 sm:block">Hanoi<br />Sunny</span>
-        </button>
-        <div className="flex h-full items-center gap-1 sm:gap-2">
+        <div className="flex h-full min-w-0 items-center gap-0.5">
           <button
             type="button"
             onClick={() => { setStartOpen((open) => !open); setContextMenu(null); setActivePanel(null); setQuery(''); }}
             aria-label={startOpen ? 'Close Start menu' : 'Open Start menu'}
             aria-expanded={startOpen}
-            className={`flex size-10 items-center justify-center rounded-md transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 ${startOpen ? 'bg-white/[0.08]' : ''}`}
+            className={`flex h-full w-[56px] shrink-0 items-center justify-center transition-colors hover:bg-white/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700 ${startOpen ? 'bg-white/35' : ''}`}
           >
-            <img src={START_ICON_SRC} alt="" className="size-[23px] object-contain" />
+            <WindowsMark className="size-[18px]" monochrome />
           </button>
-          <button
-            type="button"
-            onClick={() => launch('/search', false, 'Search')}
-            aria-label="Search apps"
-            className="flex size-10 items-center justify-center rounded-md text-slate-200 transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
-          >
-            <img src={SEARCH_ICON_SRC} alt="" className="size-[23px] object-contain" />
+          <div className="flex h-[34px] w-[min(410px,30vw)] min-w-[128px] shrink items-center gap-2 border border-[#647987]/35 bg-white/90 px-2 shadow-sm transition-colors focus-within:border-sky-600 focus-within:bg-white">
+            <FluentSearchIcon className="size-[17px] shrink-0 text-[#304b59]" />
+            <input
+              ref={searchRef}
+              value={query}
+              onFocus={() => { setStartOpen(true); setActivePanel(null); }}
+              onChange={(event) => { setQuery(event.target.value); setStartOpen(true); setActivePanel(null); }}
+              onKeyDown={handleSearchKeyDown}
+              placeholder="Type here to search"
+              aria-label="Search apps"
+              className="min-w-0 flex-1 bg-transparent text-[14px] text-[#172c37] outline-none placeholder:text-slate-500"
+            />
+            {query && <button type="button" onClick={() => { setQuery(''); searchRef.current?.focus(); }} aria-label="Clear search" className="rounded p-1 text-slate-600 transition-colors hover:bg-slate-900/10"><span aria-hidden="true">×</span></button>}
+          </div>
+          <button type="button" onClick={() => launch('/search', false, 'Search')} aria-label="Open Search assistant" title="Search assistant" className="hidden size-9 shrink-0 items-center justify-center transition-colors hover:bg-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700 sm:flex">
+            <span aria-hidden="true" className="size-[17px] rounded-full border-2 border-sky-600 shadow-[0_0_0_1px_rgba(255,255,255,.7)]" />
           </button>
-          <button type="button" onClick={() => { setStartOpen(false); setActivePanel((panel) => panel === 'task-view' ? null : 'task-view'); }} aria-label="Open Task View" aria-pressed={activePanel === 'task-view'} className={`flex size-10 items-center justify-center rounded-md transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 ${activePanel === 'task-view' ? 'bg-white/10' : ''}`}>
-            <PanelsTopLeft aria-hidden="true" className="size-[21px]" />
+          <button type="button" onClick={() => { setStartOpen(false); setActivePanel((panel) => panel === 'task-view' ? null : 'task-view'); }} aria-label="Open Task View" aria-pressed={activePanel === 'task-view'} className={`flex size-9 shrink-0 items-center justify-center transition-colors hover:bg-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700 ${activePanel === 'task-view' ? 'bg-white/35' : ''}`}>
+            <PanelsTopLeft aria-hidden="true" className="size-[20px]" />
           </button>
-          <button type="button" onClick={() => { setStartOpen(false); setActivePanel((panel) => panel === 'copilot' ? null : 'copilot'); }} aria-label="Open Copilot sidebar" aria-pressed={activePanel === 'copilot'} className={`flex size-10 items-center justify-center rounded-md transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 ${activePanel === 'copilot' ? 'bg-white/10' : ''}`}>
-            <img src={CHAT_ICON_SRC} alt="" className="size-[23px] object-contain" />
-          </button>
-          <span className="mx-1 h-6 w-px bg-white/15" />
-          {pinnedRoutes.map((route) => {
-            const app = apps.find((item) => item.route === route) ?? recentApps.find((item) => item.route === route);
-            if (!app) return null;
-            return <button key={route} type="button" onClick={() => launch(route, false, app.name)} aria-label={`Open ${app.name}`} className="flex size-10 items-center justify-center rounded-md transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 [&>img]:size-[23px] [&>svg]:size-[23px]">{renderDesktopIcon(route, 'size-[23px]')}</button>;
-          })}
-          {windows.filter((appWindow) => appWindow.desktopId === activeDesktop).map((appWindow) => (
-            <button key={appWindow.id} type="button" onClick={() => { setWindows((current) => current.map((item) => item.id === appWindow.id ? { ...item, minimized: !item.minimized } : item)); setActiveWindowId(appWindow.id); }} aria-label={`${appWindow.minimized ? 'Restore' : 'Minimize'} ${appWindow.name}`} className={`relative flex size-10 items-center justify-center rounded-md transition-colors hover:bg-white/10 [&>img]:size-[23px] [&>svg]:size-[23px] ${activeWindowId === appWindow.id && !appWindow.minimized ? 'bg-white/10' : ''}`}>
-              {renderDesktopIcon(appWindow.route, 'size-[23px]')}
-              {!appWindow.minimized && <span aria-hidden="true" className="absolute bottom-0.5 h-0.5 w-3 rounded-full bg-sky-300" />}
-            </button>
-          ))}
+          <div className="flex h-full items-center gap-0.5 border-l border-[#657f8d]/20 pl-0.5 sm:ml-1 sm:gap-1 sm:pl-1">
+            {pinnedRoutes.map((route) => {
+              const app = apps.find((item) => item.route === route) ?? recentApps.find((item) => item.route === route);
+              if (!app) return null;
+              return <button key={route} type="button" onClick={() => launch(route, false, app.name)} aria-label={`Open ${app.name}`} className="flex size-9 shrink-0 items-center justify-center transition-colors hover:bg-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700 [&>img]:size-[23px] [&>svg]:size-[23px]">{renderDesktopIcon(route, 'size-[23px]', true)}</button>;
+            })}
+            {windows.filter((appWindow) => appWindow.desktopId === activeDesktop).map((appWindow) => (
+              <button key={appWindow.id} type="button" onClick={() => { setWindows((current) => current.map((item) => item.id === appWindow.id ? { ...item, minimized: !item.minimized } : item)); setActiveWindowId(appWindow.id); }} aria-label={`${appWindow.minimized ? 'Restore' : 'Minimize'} ${appWindow.name}`} className={`relative flex size-9 shrink-0 items-center justify-center transition-colors hover:bg-white/40 [&>img]:size-[23px] [&>svg]:size-[23px] ${activeWindowId === appWindow.id && !appWindow.minimized ? 'bg-white/35' : ''}`}>
+                {renderDesktopIcon(appWindow.route, 'size-[23px]', true)}
+                {!appWindow.minimized && <span aria-hidden="true" className="absolute bottom-0.5 h-0.5 w-3 rounded-full bg-sky-700" />}
+              </button>
+            ))}
+          </div>
         </div>
 
-        <div className="absolute right-2 flex h-full items-center gap-1.5 text-slate-100 sm:right-4 sm:gap-2.5">
-          <button type="button" onClick={() => { setStartOpen(false); setActivePanel((panel) => panel === 'action-center' ? null : 'action-center'); }} aria-label="Open Action Center" className="flex h-9 items-center gap-1.5 rounded-md px-2 transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300">
-            <Wifi aria-hidden="true" className="size-[15px]" />
-            <Volume2 aria-hidden="true" className="hidden size-[15px] sm:block" />
-            <BatteryFull aria-hidden="true" className="hidden size-[16px] sm:block" />
+        <div className="ml-auto flex h-full shrink-0 items-center gap-0.5 text-[#203845] sm:gap-1">
+          <button type="button" aria-label="Show hidden icons" title="Show hidden icons" className="hidden size-8 items-center justify-center transition-colors hover:bg-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700 sm:flex"><ChevronUp aria-hidden="true" className="size-4" /></button>
+          <span aria-hidden="true" className="hidden h-6 w-px bg-[#657f8d]/20 sm:block" />
+          <button type="button" onClick={() => { setStartOpen(false); setActivePanel((panel) => panel === 'action-center' ? null : 'action-center'); }} aria-label="Open Action Center" className="flex h-9 items-center gap-1 rounded-sm px-1.5 transition-colors hover:bg-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700 sm:gap-1.5">
+            <Cloud aria-hidden="true" className="hidden size-[15px] sm:block" />
+            <Wifi aria-hidden="true" className="size-[14px]" />
+            <Volume2 aria-hidden="true" className="hidden size-[14px] sm:block" />
+            <BatteryFull aria-hidden="true" className="hidden size-[15px] sm:block" />
           </button>
-          <button type="button" onClick={() => { setStartOpen(false); setActivePanel((panel) => panel === 'notifications' ? null : 'notifications'); }} className="min-w-[48px] rounded px-1 py-1 text-right text-[10px] leading-[14px] transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300" aria-label={`Open notification center. System time ${formattedTime}, ${formattedDate}`}>
+          <button type="button" onClick={() => { setStartOpen(false); setActivePanel((panel) => panel === 'notifications' ? null : 'notifications'); }} className="min-w-[60px] rounded-sm px-1.5 py-1 text-right text-[10px] leading-[14px] transition-colors hover:bg-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700" aria-label={`Open notification center. System time ${formattedTime}, ${formattedDate}`}>
             <span className="block">{formattedTime}</span>
-            <span className="block text-slate-300">{formattedDate}</span>
+            <span className="block text-[#405967]">{formattedDate}</span>
           </button>
+          <button type="button" onClick={() => { setStartOpen(false); setActivePanel((panel) => panel === 'notifications' ? null : 'notifications'); }} aria-label="Open Notification Center" className="flex size-9 items-center justify-center transition-colors hover:bg-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700"><Bell aria-hidden="true" className="size-[17px]" /></button>
         </div>
       </footer>
     </main>

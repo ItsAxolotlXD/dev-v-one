@@ -16,7 +16,6 @@ import {
   Upload, 
   Plus, 
   Trash2, 
-  Search, 
   ChevronRight, 
   ArrowLeft, 
   ArrowRight, 
@@ -36,7 +35,7 @@ import {
   File as FileIcon,
   X
 } from 'lucide-react';
-import { FluentFileExplorerIcon, FluentSearchIcon } from '../components/FluentIcons';
+import { FluentSearchIcon } from '../components/FluentIcons';
 
 export interface FileItem {
   id: string;
@@ -664,7 +663,7 @@ const FOLDER_WIN10_ICON_URL = 'https://winaero.com/blog/wp-content/uploads/2014/
             placeholder={`Tìm trong ${breadcrumbItems[breadcrumbItems.length - 1]?.name}...`}
             className="w-full bg-transparent text-xs outline-none pr-6"
           />
-          <Search className="w-3.5 h-3.5 shrink-0 pointer-events-none absolute right-2" />
+          <FluentSearchIcon className="w-3.5 h-3.5 shrink-0 pointer-events-none absolute right-2" />
         </div>
       </div>
 

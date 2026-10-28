@@ -3,15 +3,13 @@ import { LayoutGrid, type LucideIcon } from 'lucide-react';
 import {
   FluentArticlesIcon,
   FluentCraftmineIcon,
-  FluentFileExplorerIcon,
-  FluentHomeIcon,
   FluentNotesIcon,
   FluentPhotosIcon,
   FluentSearchIcon,
-  FluentSettingsIcon,
   FluentTilesIcon,
   FluentWatchIcon,
 } from './FluentIcons';
+import { AppTabIcon, type AppTabIconName } from './FluentIcons';
 import { SpinningRing } from './SpinningRing';
 
 interface TabSplashScreenProps {
@@ -23,17 +21,21 @@ interface TabSplashScreenProps {
 
 type SplashIcon = React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
 
+const appSplashIcon = (name: AppTabIconName): SplashIcon => ({ className, style }) => (
+  <AppTabIcon name={name} className={className} style={style} />
+);
+
 const routeIcons: Array<[string, SplashIcon]> = [
   ['/search', FluentSearchIcon],
-  ['/settings', FluentSettingsIcon],
-  ['/home', FluentHomeIcon],
-  ['/', FluentHomeIcon],
+  ['/settings', appSplashIcon('settings')],
+  ['/home', appSplashIcon('home')],
+  ['/', appSplashIcon('home')],
   ['/feed', FluentArticlesIcon],
   ['/watch', FluentWatchIcon],
   ['/gallery', FluentPhotosIcon],
   ['/photos', FluentPhotosIcon],
-  ['/files', FluentFileExplorerIcon],
-  ['/file-explorer', FluentFileExplorerIcon],
+  ['/files', appSplashIcon('fileExplorer')],
+  ['/file-explorer', appSplashIcon('fileExplorer')],
   ['/notes', FluentNotesIcon],
   ['/craftmine', FluentCraftmineIcon],
   ['/tiles', FluentTilesIcon],

@@ -19,7 +19,7 @@ import { useSystemTasks } from '../context/SystemTasksContext';
 import { SpinningRing } from '../components/SpinningRing';
 import { sparkOSResetOobeEvent } from '../components/SparkOSBootSetup';
 
-export const COPILOT_ICON_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-7bX9C6ZMjpXAbn0eXLI2Wk6ZhwUwk0.png';
+export const COPILOT_ICON_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/icons8-chat-96-XCDSS4guknB7GitdVX7FS9IW4BJaui.png';
 
 const POPULAR_EMOJIS = [
   '😀', '😂', '😍', '🎉', '🚀', '✨', '💡', '🔥', 
@@ -153,7 +153,7 @@ export const CopilotPage: React.FC<CopilotPageProps> = ({ navigate, embedded = f
       const confirmation: ChatMessage = {
         id: `ai-${Date.now()}`,
         role: 'model',
-        text: embedded ? 'Đang khởi động lại OOBE của SparkOS…' : 'Lệnh này chỉ hoạt động trong Copilot bên trong SparkOS.',
+        text: embedded ? 'Đang khởi động lại OOBE của Core OS…' : 'Lệnh này chỉ hoạt động trong Copilot bên trong Core OS.',
         timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
       };
       setMessages((prev) => [...prev, confirmation]);

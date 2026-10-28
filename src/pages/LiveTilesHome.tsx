@@ -13,7 +13,6 @@ import {
   Sliders,
   Sparkles,
   ExternalLink,
-  Search,
   Check,
   ChevronDown,
   X,
@@ -41,6 +40,7 @@ import {
 import { Channel } from '../types';
 import { CHANNELS_DATA } from '../data/channels';
 import { useSettings } from '../hooks/useSettings';
+import { FluentSearchIcon } from '../components/FluentIcons';
 
 export type TileSize = '1x1' | '2x1' | '2x2' | '4x4' | '5x5';
 export type TileCategory = 'channel' | 'app' | 'file' | 'photo' | 'weather' | 'calendar' | 'clock' | 'news' | 'finance';
@@ -1395,7 +1395,7 @@ export const LiveTilesHome: React.FC<LiveTilesHomeProps> = ({
             {/* Search Input for items */}
             <div className="p-3 border-b border-black/10 dark:border-white/10">
               <div className="relative">
-                <Search className="w-4 h-4 absolute left-3 top-2.5 text-neutral-400" />
+                <FluentSearchIcon className="w-4 h-4 absolute left-3 top-2.5" />
                 <input
                   type="text"
                   placeholder="Tìm kiếm mục cần ghim..."

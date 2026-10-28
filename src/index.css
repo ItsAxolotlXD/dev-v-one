@@ -1,5 +1,5 @@
-@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,600;1,700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400;1,700&display=swap');
+@import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
 @font-face {
@@ -744,7 +744,7 @@ html.dark #find-words-bar > div:focus-within,
 html.dark .fluent-search-box:focus-within,
 html.dark [id*="search-box"]:focus-within {
   border-radius: 0px !important;
-  background-color: rgba(255, 255, 255, 0.5) !important;
+  background-color: rgba(255, 255, 255, 1) !important;
   background-image: none !important;
   border: 2.5px solid #0078d7 !important;
   box-shadow: none !important;
@@ -6311,7 +6311,7 @@ html.light-mode .fixed.bottom-4 > div {
   outline: none !important;
 }
 
-/* Settings Slider Capsule: No background as requested */
+/* Settings Slider Capsule: transparent track container */
 .settings-slider-capsule,
 html.light-mode .settings-slider-capsule {
   border: none !important;
@@ -6321,86 +6321,63 @@ html.light-mode .settings-slider-capsule {
   box-shadow: none !important;
 }
 
-/* Settings Slider Thumb (Núm slider với viền thường) */
-#settings-slider-thumb,
-.settings-slider-thumb {
-  position: absolute !important;
-  top: 50% !important;
-  margin: 0 !important;
-  transform: translate(-50%, -50%) scale(1) !important;
-  background-color: #FFFFFF !important;
-  background-image: none !important;
-  border: 1px solid rgba(0, 0, 0, 0.12) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
-  transition: transform 0.35s cubic-bezier(0.34, 1.65, 0.64, 1), background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
-}
-
-/* Slider Styling - Matching user dark mode reference design */
+/* Windows-style slider with a slim track and pill-shaped blue thumb */
 .settings-slider-track {
-  height: 4px !important;
-  min-height: 4px !important;
-  background-color: #7f7f84 !important;
+  height: 2px !important;
+  min-height: 2px !important;
+  background-color: #49494f !important;
   border-radius: 9999px !important;
 }
 
 html.light-mode .settings-slider-track {
-  background-color: #9e9e9e !important;
+  background-color: #8a8a8a !important;
 }
 
-/* Outer Thumb: 22px Dark Disc matching image.png */
 #settings-slider-thumb,
 .settings-slider-thumb,
 [id^="settings-slider-thumb-"] {
   position: absolute !important;
   top: 50% !important;
-  width: 22px !important;
-  height: 22px !important;
-  min-width: 22px !important;
-  min-height: 22px !important;
+  width: 8px !important;
+  height: 20px !important;
+  min-width: 8px !important;
+  min-height: 20px !important;
   margin: 0 !important;
   padding: 0 !important;
-  border-radius: 9999px !important;
-  background-color: #424245 !important;
-  background-image: none !important;
   border: none !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35) !important;
-  transform: translate(-50%, -50%) scale(1) !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  transition: transform 0.12s ease-out, background-color 0.12s ease !important;
+  border-radius: 9999px !important;
+  background-color: #4cc2ff !important;
+  background-image: none !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25) !important;
+  transform: translate(-50%, -50%) !important;
+  transition: transform 0.12s ease-out, filter 0.12s ease !important;
   pointer-events: none !important;
   z-index: 10 !important;
 }
 
-/* Inner Accent Dot: 11px solid #4cc2ff center circle matching image.png */
 #settings-slider-thumb::after,
 .settings-slider-thumb::after,
 [id^="settings-slider-thumb-"]::after {
-  content: "" !important;
-  display: block !important;
-  width: 11px !important;
-  height: 11px !important;
-  border-radius: 9999px !important;
-  background-color: #4cc2ff !important;
-  transition: transform 0.12s ease-out !important;
+  content: none !important;
 }
 
-/* Light Mode Slider Thumb */
 html.light-mode #settings-slider-thumb,
 html.light-mode .settings-slider-thumb,
 html.light-mode [id^="settings-slider-thumb-"] {
-  background-color: #D1D5DB !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) !important;
-}
-
-html.light-mode #settings-slider-thumb::after,
-html.light-mode .settings-slider-thumb::after,
-html.light-mode [id^="settings-slider-thumb-"]::after {
   background-color: #005fb8 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
 }
 
-/* Slider Thumb Hover & Active: Clean smooth feedback */
+.settings-slider-capsule:focus-within {
+  outline: 2px solid rgba(76, 194, 255, 0.8);
+  outline-offset: 3px;
+  border-radius: 9999px;
+}
+
+html.light-mode .settings-slider-capsule:focus-within {
+  outline-color: rgba(0, 95, 184, 0.75);
+}
+
 .settings-slider-capsule:hover #settings-slider-thumb,
 .settings-slider-capsule:hover .settings-slider-thumb,
 .settings-slider-capsule:hover [id^="settings-slider-thumb-"],
@@ -6414,8 +6391,8 @@ html.light-mode [id^="settings-slider-thumb-"]::after {
 #settings-slider-thumb:hover,
 .settings-slider-thumb:hover,
 [id^="settings-slider-thumb-"]:hover {
-  transform: translate(-50%, -50%) scale(1.08) !important;
-  background-color: #4c4c50 !important;
+  transform: translate(-50%, -50%) scaleX(1.12) !important;
+  filter: brightness(1.12) !important;
 }
 
 .settings-slider-capsule:active #settings-slider-thumb,
@@ -6425,14 +6402,8 @@ html.light-mode [id^="settings-slider-thumb-"]::after {
 #slider-font-scale:active ~ * .settings-slider-thumb,
 #slider-spatial-glass-opacity:active ~ * [id^="settings-slider-thumb-"],
 #slider-spatial-glass-blur:active ~ * [id^="settings-slider-thumb-"] {
-  transform: translate(-50%, -50%) scale(1.04) !important;
-  background-color: #38383a !important;
-}
-
-html.light-mode .settings-slider-capsule:hover #settings-slider-thumb,
-html.light-mode .settings-slider-capsule:hover .settings-slider-thumb,
-html.light-mode .settings-slider-capsule:hover [id^="settings-slider-thumb-"] {
-  background-color: #C5CAD3 !important;
+  transform: translate(-50%, -50%) scaleX(1.2) !important;
+  filter: brightness(1.18) !important;
 }
 
 /* Settings Switches in Light Mode (WinUI 3) */
@@ -8599,7 +8570,7 @@ a:hover .settings-spin-icon,
   transform: scale(1.06) !important;
 }
 
-/* Các nút đơn icon bên trong capsule: BỎ NỀN (transparent), không viền, không shadow trừ khi hover/selected */
+/* Các nút đơn icon bên trong capsule: B�� NỀN (transparent), không viền, không shadow trừ khi hover/selected */
 #sparkos-control-bar .control-bar-circle-btn {
   border-radius: 9999px !important;
   width: 40px !important;
@@ -9078,4 +9049,97 @@ button[role="switch"] span:hover,
 .toggle-switch-btn:hover .toggle-switch-thumb,
 .toggle-switch-thumb:hover {
   background-image: none !important;
+}
+
+#root button[role="switch"],
+#root .toggle-switch-btn {
+  border-radius: 9999px !important;
+}
+
+#root .settings-page .settings-fluent-group,
+#root .settings-page [id^="settings-section-"],
+#root .settings-page .setting-card {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+#root .settings-page [id^="settings-section-"] > div:not(.divider-line),
+#root .settings-page [id^="settings-section-"] > div:not(.divider-line):hover,
+#root .settings-page [id^="settings-section-"] [id^="setting-"],
+#root .settings-page [id^="settings-section-"] [id^="setting-"]:hover {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+#root .settings-page [id^="settings-section-"] div:has(> [role="switch"]),
+#root .settings-page [id^="settings-section-"] [id^="setting-"]:has(> button:not([role="switch"])),
+#root .settings-page [id^="settings-section-"] [id^="setting-"]:has(> .settings-segmented-group),
+#root .settings-page [id^="settings-section-"] > div:has(> .settings-segmented-group),
+#root .settings-page [id^="settings-section-"] > div:has(> button),
+#root .settings-page #settings-section-experimental > #setting-experimental-search-experience,
+#root .settings-page #settings-section-experimental > #setting-experimental-search-visual,
+#root .settings-page #settings-section-keybinds [id^="keybind-row-"] > div:first-child,
+#root .settings-page .setting-card:has(> a),
+#root .settings-page .setting-card:has(> button) {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 0.75rem !important;
+}
+
+#root .settings-page [id^="settings-section-"] [role="switch"],
+#root .settings-page [id^="settings-section-"] [id^="setting-"] > button:not([role="switch"]),
+#root .settings-page #settings-section-tools > div > button,
+#root .settings-page .setting-card > a,
+#root .settings-page .setting-card > button {
+  align-self: flex-start !important;
+}
+
+#root :is(.windows-search-box, .fluent-search-box, [id*="search-box"], [id*="search-capsule"]):focus-within {
+  background-color: rgba(255, 255, 255, 1) !important;
+}
+
+@layer base {
+  #root .settings-page,
+  #root .settings-page *,
+  #root [aria-label="PC Settings"],
+  #root [aria-label="PC Settings"] * {
+    font-weight: 400 !important;
+  }
+
+  #root .settings-page .divider-line {
+    display: none !important;
+  }
+
+  #root .settings-page [class~="border-b"],
+  #root .settings-page [class~="border-t"],
+  #root [aria-label="PC Settings"] [class~="border-b"],
+  #root [aria-label="PC Settings"] [class~="border-t"],
+  #root [aria-label="PC Settings"] [class~="border-r"] {
+    border-width: 0 !important;
+  }
+}
+
+dialog.fluent-modal-dialog {
+  position: fixed !important;
+  inset: 50% auto auto 50% !important;
+  transform: translate(-50%, -50%) !important;
+  margin: 0 !important;
+  width: min(92vw, 520px) !important;
+  max-width: 520px !important;
+  padding: 0 !important;
+}
+
+dialog.fluent-modal-dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+#root #install-first-dialog .fluent-modal-footer button {
+  border-radius: 0 !important;
 }

@@ -7,17 +7,16 @@ import {
   logRecallActivity
 } from '../services/recallService';
 import {
-  FluentRecallIcon,
+  AppTabIcon,
+  FluentSearchIcon,
   FluentTimelineIcon,
   FluentFeedbackHubIcon,
   STORE_ICON_URL,
   APP_TAB_ICON_URLS
 } from '../components/FluentIcons';
 import {
-  Search,
   Mic,
   Home as HomeIcon,
-  Settings as SettingsIcon,
   Clock,
   Trash2,
   ExternalLink,
@@ -161,7 +160,7 @@ export const RecallApp: React.FC<RecallAppProps> = ({ navigate }) => {
       {/* Top Window Header Bar */}
       <header className="h-[42px] px-4 shrink-0 flex items-center justify-between border-b border-black/5 dark:border-white/5 bg-white/70 dark:bg-[#202020]/70 backdrop-blur-md z-20">
         <div className="flex items-center gap-2.5">
-          <FluentRecallIcon className="w-4 h-4 object-contain" />
+          <AppTabIcon name="recall" className="w-4 h-4" />
           <span className="text-[12.5px] font-semibold text-neutral-800 dark:text-neutral-200 tracking-tight">
             Recall <span className="text-[10.5px] font-normal text-neutral-500 dark:text-neutral-400">(preview)</span>
           </span>
@@ -258,7 +257,7 @@ export const RecallApp: React.FC<RecallAppProps> = ({ navigate }) => {
               title="Settings"
               className="w-12 h-12 rounded-[8px] flex flex-col items-center justify-center gap-0.5 text-neutral-600 dark:text-neutral-400 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white transition-all cursor-pointer"
             >
-              <SettingsIcon className="w-5 h-5 stroke-[1.75]" />
+              <AppTabIcon name="settings" className="w-5 h-5" />
               <span className="text-[9.5px] font-medium leading-none">Settings</span>
             </button>
           </div>
@@ -279,7 +278,7 @@ export const RecallApp: React.FC<RecallAppProps> = ({ navigate }) => {
           {/* Centered Search Bar (Windows Recall capsule shape) */}
           <div className="max-w-2xl w-full mx-auto mb-8 relative">
             <div className="relative flex items-center bg-white dark:bg-[#252525] rounded-full border border-black/10 dark:border-white/10 shadow-[0_2px_12px_rgba(0,0,0,0.06)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.3)] px-4 py-2.5 transition-all focus-within:ring-2 focus-within:ring-[#0078d4]/50 focus-within:border-[#0078d4]">
-              <Search className="w-4 h-4 text-neutral-400 dark:text-neutral-400 shrink-0 mr-3 stroke-[2]" />
+              <FluentSearchIcon className="w-4 h-4 shrink-0 mr-3" />
               <input
                 type="text"
                 value={searchQuery}
@@ -317,7 +316,7 @@ export const RecallApp: React.FC<RecallAppProps> = ({ navigate }) => {
                 { id: 'livetv', label: 'Live TV' },
                 { id: 'paint', label: 'Paint & Ink' },
                 { id: 'notes', label: 'Notes' },
-                { id: 'sparkos', label: 'SparkOS' },
+                { id: 'sparkos', label: 'Core OS' },
                 { id: 'tab', label: 'Apps & Store' },
                 { id: 'article', label: 'Articles' },
                 { id: 'search', label: 'Searches' },

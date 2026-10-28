@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Menu, History, X, Mic, MicOff, Search, Sparkles, MapPin, Check } from 'lucide-react';
+import { Menu, History, X, Mic, MicOff, Sparkles, MapPin, Check } from 'lucide-react';
 import { 
-  FluentHomeIcon, 
+  AppTabIcon,
   FluentLiveTvIcon, 
   FluentNewsIcon, 
   FluentWidgetsIcon,
@@ -20,12 +20,8 @@ import { CopilotChatFlyout } from './CopilotChatFlyout';
 import { SpinningRing } from './SpinningRing';
 
 const LOGO_SRC = 'https://static.wikia.nocookie.net/ep-deo/images/d/d4/V-one-dev.png/revision/latest?cb=20261012151735';
-const SEARCH_ICON_SRC = 'https://static.wikia.nocookie.net/ep-deo/images/3/3c/Tools_menu.png/revision/latest?cb=20260905055712';
-const EXPERIMENTAL_SEARCH_ICON_URL = 'https://static.wikia.nocookie.net/ep-deo/images/c/cf/Xperimental_Search.png/revision/latest?cb=20261022082041';
-const HOME_ICON_SRC = FLUENT_ICON_URLS.home;
 const TV_ICON_SRC = FLUENT_ICON_URLS.liveTv;
 const NEWS_ICON_SRC = FLUENT_ICON_URLS.news;
-const SETTINGS_ICON_SRC = 'https://static.wikia.nocookie.net/ftv/images/9/97/Settungs.png/revision/latest?cb=20260411085024&path-prefix=vi';
 
 const DEFAULT_HISTORY_ITEMS = [
   'minecraft preview for windows',
@@ -738,7 +734,7 @@ export const TopBar: React.FC<TopBarProps> = ({
               }`}
               title="Home"
             >
-              <FluentHomeIcon className="w-4 h-4 shrink-0 text-[#111827] dark:text-white" />
+              <AppTabIcon name="home" className="w-4 h-4 shrink-0" />
               <span>Home</span>
 
               {(currentRoute === '/' || currentRoute === '/home') && (
@@ -861,22 +857,7 @@ export const TopBar: React.FC<TopBarProps> = ({
               title="Search"
               aria-label="Search"
             >
-              <img
-                src={EXPERIMENTAL_SEARCH_ICON_URL}
-                alt="Search"
-                referrerPolicy="no-referrer"
-                className="w-5 h-5 object-contain select-none"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                  const parent = e.currentTarget.parentElement;
-                  if (parent && !parent.querySelector('.fallback-search-icon')) {
-                    const fallback = document.createElement('span');
-                    fallback.className = 'fallback-search-icon text-[#0078d4] dark:text-[#4cc2ff] flex items-center justify-center';
-                    fallback.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>`;
-                    parent.appendChild(fallback);
-                  }
-                }}
-              />
+              <FluentSearchIcon className="w-5 h-5" />
             </button>
           ) : (settings.searchVisualExperimental || 'treatment-1') === 'treatment-3' ? (
             /* Treatment 3: Search button center - search icon in the center of the search bar area */
@@ -892,22 +873,7 @@ export const TopBar: React.FC<TopBarProps> = ({
               title="Search"
               aria-label="Search"
             >
-              <img
-                src={EXPERIMENTAL_SEARCH_ICON_URL}
-                alt="Search"
-                referrerPolicy="no-referrer"
-                className="w-5 h-5 object-contain select-none"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                  const parent = e.currentTarget.parentElement;
-                  if (parent && !parent.querySelector('.fallback-search-icon')) {
-                    const fallback = document.createElement('span');
-                    fallback.className = 'fallback-search-icon text-[#0078d4] dark:text-[#4cc2ff] flex items-center justify-center';
-                    fallback.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>`;
-                    parent.appendChild(fallback);
-                  }
-                }}
-              />
+              <FluentSearchIcon className="w-5 h-5" />
             </button>
           ) : (settings.searchVisualExperimental || 'treatment-1') === 'treatment-4' ? (
             /* Treatment 4: Search pill - shorter, pill-shaped button, borderless, turns blue gradient when clicked */
@@ -923,9 +889,7 @@ export const TopBar: React.FC<TopBarProps> = ({
               title="Search"
               aria-label="Search"
             >
-              <Search className={`w-4 h-4 shrink-0 transition-colors ${
-                isSearchFlyoutOpen ? 'text-white' : 'text-[#71717a] dark:text-[#a0a6b2] group-hover:text-black dark:group-hover:text-white'
-              }`} />
+              <FluentSearchIcon className="w-4 h-4 shrink-0" />
               <span className="truncate max-w-[120px] sm:max-w-[150px]">
                 {searchQuery.trim() || 'Search'}
               </span>
@@ -945,9 +909,7 @@ export const TopBar: React.FC<TopBarProps> = ({
               aria-label="Search highlights"
             >
               <div className="w-4 h-4 shrink-0 flex items-center justify-center">
-                <Search className={`w-4 h-4 shrink-0 transition-colors ${
-                  isSearchFlyoutOpen ? 'text-white' : 'text-[#71717a] dark:text-[#a0a6b2] group-hover:text-black dark:group-hover:text-white'
-                }`} />
+                <FluentSearchIcon className="w-4 h-4 shrink-0" />
               </div>
               <AnimatePresence mode="wait">
                 <motion.span
@@ -1226,12 +1188,11 @@ export const TopBar: React.FC<TopBarProps> = ({
                 : 'hover:bg-black/5 dark:hover:bg-white/10'
             }`}
             title="Settings"
+            aria-label="Settings"
           >
-            <img 
-              src={SETTINGS_ICON_SRC}
-              alt="Settings"
-              referrerPolicy="no-referrer"
-              className={`w-5 h-5 object-contain shrink-0 brightness-0 dark:brightness-0 dark:invert transition-opacity duration-200 ${
+            <AppTabIcon
+              name="settings"
+              className={`w-5 h-5 shrink-0 transition-opacity duration-200 ${
                 currentRoute === '/settings' ? 'opacity-100' : 'opacity-75 hover:opacity-100'
               }`}
             />

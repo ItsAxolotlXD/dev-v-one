@@ -1,18 +1,15 @@
 import React from 'react';
 import { 
   AppTabIcon,
-  FluentHomeIcon, 
   FluentWatchIcon,
   FluentLiveTvIcon, 
   FluentNewsIcon, 
   FluentNotesIcon, 
   FluentSearchIcon,
-  FluentSettingsIcon,
   FluentCraftmineIcon,
   FluentUpdatesIcon,
   FluentTaskManagerIcon,
   FluentWidgetsIcon,
-  FluentFileExplorerIcon,
   FluentPaintIcon,
   FluentPhotosIcon,
   FluentEdgeIcon,
@@ -52,13 +49,7 @@ export const TabLoadingScreen: React.FC<TabLoadingScreenProps> = ({ route = '', 
     if (cleanRoute === '/copilot') {
       return {
         title: 'Copilot',
-        icon: (
-          <img
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-7bX9C6ZMjpXAbn0eXLI2Wk6ZhwUwk0.png"
-            alt="Copilot"
-            className={`${iconClass} object-contain`}
-          />
-        )
+        icon: <AppTabIcon name="copilot" className={iconClass} />
       };
     }
 
