@@ -628,7 +628,7 @@ export const Settings: React.FC<SettingsProps> = ({
                 {/* 1. Fluent Design Master Toggle */}
                 <div 
                   id="setting-spatial-glass"
-                  className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 transition-colors hover:bg-black/[0.02] dark:hover:bg-white/[0.04]"
+                  className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 transition-colors hover:bg-black/[0.02] dark:hover:bg-white/[0.04]"
                 >
                   <div className="flex-1 min-w-0 pr-2">
                     <div className="font-semibold text-sm text-[#111827] dark:text-white">
@@ -778,7 +778,7 @@ export const Settings: React.FC<SettingsProps> = ({
                 className="rounded-[8px] bg-white dark:bg-[#38383d] border border-[#e5e5e5] dark:border-[#383838] shadow-xs overflow-hidden select-none"
               >
                 {/* 1. Thanh điều hướng */}
-                <div className="px-4 py-3 sm:py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors">
+                <div className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <div className="font-semibold text-sm text-[#111827] dark:text-white">Thanh điều hướng</div>
@@ -789,7 +789,7 @@ export const Settings: React.FC<SettingsProps> = ({
                       )}
                     </div>
                   </div>
-                  <div className="settings-segmented-group grid grid-cols-3 gap-1 rounded-md sm:rounded-lg bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/10 p-1 w-full sm:w-auto sm:min-w-[280px]" role="group" aria-label="Thanh điều hướng">
+                  <div className="settings-segmented-group grid grid-cols-3 gap-1 rounded-md sm:rounded-lg bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/10 p-1 w-full sm:min-w-[280px]" role="group" aria-label="Thanh điều hướng">
                     {([
                       ['sidebar', 'Side View'],
                       ['topbar', 'Top View'],
@@ -898,12 +898,12 @@ export const Settings: React.FC<SettingsProps> = ({
                     <div className="divider-line h-[1px] bg-black/5 dark:bg-white/10 ml-4 mr-4" />
                     <div
                       id="setting-sidebar-position"
-                      className="px-4 py-3 sm:py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                      className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                     >
                       <div className="min-w-0 flex-1">
                         <div className="font-semibold text-sm text-[#111827] dark:text-white">Vị trí thanh bên (Side View position)</div>
                       </div>
-                      <div className="settings-segmented-group grid grid-cols-2 gap-1 rounded-md sm:rounded-lg bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/10 p-1 w-full sm:w-auto sm:min-w-[180px]">
+                      <div className="settings-segmented-group grid grid-cols-2 gap-1 rounded-md sm:rounded-lg bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/10 p-1 w-full sm:min-w-[180px]">
                         {[
                           ['left', 'Trái'],
                           ['right', 'Phải'],
@@ -931,7 +931,7 @@ export const Settings: React.FC<SettingsProps> = ({
                 {/* 5. Siêu chế độ tối */}
                 <div
                   id="setting-super-dark-mode"
-                  className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 transition-colors hover:bg-black/[0.02] dark:hover:bg-white/[0.04]"
+                  className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 transition-colors hover:bg-black/[0.02] dark:hover:bg-white/[0.04]"
                 >
                   <div className="min-w-0 flex-1 pr-2">
                     <div className="font-semibold text-sm text-[#111827] dark:text-white">
@@ -963,7 +963,7 @@ export const Settings: React.FC<SettingsProps> = ({
                 className="rounded-[8px] bg-white dark:bg-[#38383d] border border-[#e5e5e5] dark:border-[#383838] shadow-xs overflow-hidden select-none"
               >
                 {/* 1. Tỉ lệ khung hình */}
-                <div className="px-4 py-3 sm:py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors">
+                <div className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <Tv className="w-4 h-4 text-[#6B7280] dark:text-[#9CA3AF]" />
@@ -972,7 +972,7 @@ export const Settings: React.FC<SettingsProps> = ({
                       </span>
                     </div>
                   </div>
-                  <div className="settings-segmented-group grid grid-cols-2 gap-1 rounded-md sm:rounded-lg bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/10 p-1 w-full sm:w-auto sm:min-w-[220px]">
+                  <div className="settings-segmented-group grid grid-cols-2 gap-1 rounded-md sm:rounded-lg bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/10 p-1 w-full sm:min-w-[220px]">
                     {[
                       { value: '16:9', label: '16:9 (chuẩn rộng)' },
                       { value: '4:3', label: '4:3 (chuẩn vuông)' },
@@ -998,7 +998,7 @@ export const Settings: React.FC<SettingsProps> = ({
                 <div className="divider-line h-[1px] bg-black/5 dark:bg-white/10 ml-4 mr-4" />
 
                 {/* 2. Tự động ẩn Side View */}
-                <div className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 transition-colors hover:bg-black/[0.02] dark:hover:bg-white/[0.04]">
+                <div className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 transition-colors hover:bg-black/[0.02] dark:hover:bg-white/[0.04]">
                   <div className="min-w-0 flex-1 pr-2">
                     <div className="font-semibold text-sm text-[#111827] dark:text-white">
                       Tự động ẩn Side View
@@ -1022,7 +1022,7 @@ export const Settings: React.FC<SettingsProps> = ({
                 <div className="divider-line h-[1px] bg-black/5 dark:bg-white/10 ml-4 mr-4" />
 
                 {/* 3. Sparkle (Dev) Notes */}
-                <div className="px-4 py-3 sm:py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors">
+                <div className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors">
                   <div className="min-w-0 flex-1">
                     <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
                       <span>Sparkle (Dev) Notes</span>
@@ -1060,7 +1060,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     <div 
                       id="setting-page-loading"
                       onClick={() => updateDraft('pageLoading', !draftSettings.pageLoading)}
-                      className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                      className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                     >
                       <div className="min-w-0 flex-1 pr-2">
                         <div className="font-semibold text-sm text-[#111827] dark:text-white">
@@ -1089,7 +1089,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     <div 
                       id="setting-load-pages-sequentially"
                       onClick={() => updateDraft('loadPagesSequentially', !draftSettings.loadPagesSequentially)}
-                      className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                      className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                     >
                       <div className="min-w-0 flex-1 pr-2">
                         <div className="font-semibold text-sm text-[#111827] dark:text-white">
@@ -1128,7 +1128,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     <div 
                       id="setting-motion-reduce-all"
                       onClick={() => updateDraft('reduceAllMotion', !draftSettings.reduceAllMotion)}
-                      className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                      className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                     >
                       <div className="min-w-0 flex-1 pr-2">
                         <div className="font-semibold text-sm text-[#111827] dark:text-white">
@@ -1169,7 +1169,7 @@ export const Settings: React.FC<SettingsProps> = ({
                             updateDraft('animateSidebar', !draftSettings.animateSidebar);
                           }
                         }}
-                        className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors pl-6 sm:pl-8"
+                        className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors pl-6 sm:pl-8"
                       >
                         <div className="min-w-0 flex-1 pr-2">
                           <div className="font-semibold text-sm text-[#111827] dark:text-white">
@@ -1202,7 +1202,7 @@ export const Settings: React.FC<SettingsProps> = ({
                             updateDraft('animateModals', !draftSettings.animateModals);
                           }
                         }}
-                        className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors pl-6 sm:pl-8"
+                        className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors pl-6 sm:pl-8"
                       >
                         <div className="min-w-0 flex-1 pr-2">
                           <div className="font-semibold text-sm text-[#111827] dark:text-white">
@@ -1235,7 +1235,7 @@ export const Settings: React.FC<SettingsProps> = ({
                             updateDraft('animatePageTransitions', !draftSettings.animatePageTransitions);
                           }
                         }}
-                        className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors pl-6 sm:pl-8"
+                        className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors pl-6 sm:pl-8"
                       >
                         <div className="min-w-0 flex-1 pr-2">
                           <div className="font-semibold text-sm text-[#111827] dark:text-white">
@@ -1275,7 +1275,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     <div 
                       id="setting-search-categories"
                       onClick={() => updateDraft('searchCategories', !draftSettings.searchCategories)}
-                      className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                      className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                     >
                       <div className="min-w-0 flex-1 pr-2">
                         <div className="font-semibold text-sm text-[#111827] dark:text-white">
@@ -1304,7 +1304,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     <div 
                       id="setting-search-news"
                       onClick={() => updateDraft('searchNews', !draftSettings.searchNews)}
-                      className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                      className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                     >
                       <div className="min-w-0 flex-1 pr-2">
                         <div className="font-semibold text-sm text-[#111827] dark:text-white">
@@ -1333,7 +1333,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     <div 
                       id="setting-search-tv"
                       onClick={() => updateDraft('searchTv', !draftSettings.searchTv)}
-                      className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                      className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                     >
                       <div className="min-w-0 flex-1 pr-2">
                         <div className="font-semibold text-sm text-[#111827] dark:text-white">
@@ -1362,7 +1362,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     <div 
                       id="setting-search-channel-number"
                       onClick={() => updateDraft('searchChannelNumber', !draftSettings.searchChannelNumber)}
-                      className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                      className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                     >
                       <div className="min-w-0 flex-1 pr-2">
                         <div className="flex items-center gap-2">
@@ -1396,7 +1396,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     <div 
                       id="setting-search-settings"
                       onClick={() => updateDraft('searchSettings', !draftSettings.searchSettings)}
-                      className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                      className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                     >
                       <div className="min-w-0 flex-1 pr-2">
                         <div className="font-semibold text-sm text-[#111827] dark:text-white">
@@ -1435,7 +1435,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     <div 
                       id="setting-keyboard-number-row"
                       onClick={() => updateDraft('keyboardNumberRow', !draftSettings.keyboardNumberRow)}
-                      className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                      className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                     >
                       <div className="min-w-0 flex-1 pr-2">
                         <div className="font-semibold text-sm text-[#111827] dark:text-white">
@@ -1464,7 +1464,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     <div 
                       id="setting-keyboard-clipboard"
                       onClick={() => updateDraft('keyboardClipboard', !draftSettings.keyboardClipboard)}
-                      className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                      className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                     >
                       <div className="min-w-0 flex-1 pr-2">
                         <div className="font-semibold text-sm text-[#111827] dark:text-white">
@@ -1493,7 +1493,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     <div 
                       id="setting-keyboard-sound"
                       onClick={() => updateDraft('keyboardSoundEnabled', !draftSettings.keyboardSoundEnabled)}
-                      className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                      className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                     >
                       <div className="min-w-0 flex-1 pr-2">
                         <div className="font-semibold text-sm text-[#111827] dark:text-white">
@@ -1556,7 +1556,7 @@ export const Settings: React.FC<SettingsProps> = ({
                             id={`keybind-row-${def.id}`}
                             className="px-4 py-3 sm:py-3.5 flex flex-col gap-2 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                           >
-                            <div className="flex items-center justify-between gap-3">
+                            <div className="flex flex-col items-start gap-2">
                               <div className="min-w-0 flex-1">
                                 <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
                                   <span>{def.label}</span>
@@ -1700,7 +1700,7 @@ export const Settings: React.FC<SettingsProps> = ({
                 <div 
                   id="setting-experimental-native-keyboard"
                   onClick={() => updateDraft('nativeKeyboard', !draftSettings.nativeKeyboard)}
-                  className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                  className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                 >
                   <div className="min-w-0 flex-1 pr-2">
                     <div className="font-semibold text-sm text-[#111827] dark:text-white">
@@ -1729,7 +1729,7 @@ export const Settings: React.FC<SettingsProps> = ({
                 <div 
                   id="setting-experimental-immersive-search"
                   onClick={() => updateDraft('immersiveSearch', !draftSettings.immersiveSearch)}
-                  className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                  className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                 >
                   <div className="min-w-0 flex-1 pr-2">
                     <div className="font-semibold text-sm text-[#111827] dark:text-white">
@@ -1758,7 +1758,7 @@ export const Settings: React.FC<SettingsProps> = ({
                 <div 
                   id="setting-experimental-triangle"
                   onClick={() => updateDraft('triangleExperiment', !draftSettings.triangleExperiment)}
-                  className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                  className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                 >
                   <div className="flex items-center gap-3 min-w-0 flex-1 pr-2">
                     <div className="w-9 h-9 flex items-center justify-center shrink-0">
@@ -1795,7 +1795,7 @@ export const Settings: React.FC<SettingsProps> = ({
                 <div
                   id="setting-experimental-legacy-progress-dots"
                   onClick={() => updateDraft('legacyProgressDots', !draftSettings.legacyProgressDots)}
-                  className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                  className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                 >
                   <div className="min-w-0 flex-1 pr-2">
                     <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
@@ -1828,7 +1828,7 @@ export const Settings: React.FC<SettingsProps> = ({
                 {/* Experimental search experience */}
                 <div 
                   id="setting-experimental-search-experience"
-                  className={`px-4 py-3 sm:py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors relative ${
+                  className={`px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors relative ${
                     isSearchExpDropdownOpen ? 'z-50' : 'z-20'
                   }`}
                 >
@@ -1842,12 +1842,12 @@ export const Settings: React.FC<SettingsProps> = ({
                   </div>
 
                   {/* Dropdown Menu - always on-top */}
-                  <div className="relative shrink-0 z-[100]" ref={searchExpDropdownRef}>
+                  <div className="relative w-full z-[100]" ref={searchExpDropdownRef}>
                     <button
                       id="btn-dropdown-search-experience"
                       type="button"
                       onClick={() => setIsSearchExpDropdownOpen((prev) => !prev)}
-                      className="min-w-[240px] sm:min-w-[270px] h-9 px-3 rounded-[6px] bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 border border-black/10 dark:border-white/15 text-xs text-[#111827] dark:text-white flex items-center justify-between gap-2 transition-all cursor-pointer font-medium select-none shadow-2xs"
+                      className="settings-dropdown-button windows-search-box w-full h-9 px-3 text-xs flex items-center justify-between gap-2 font-medium select-none"
                       aria-haspopup="listbox"
                       aria-expanded={isSearchExpDropdownOpen}
                     >
@@ -1912,7 +1912,7 @@ export const Settings: React.FC<SettingsProps> = ({
                 {/* Search visual experimental */}
                 <div 
                   id="setting-experimental-search-visual"
-                  className={`px-4 py-3 sm:py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors relative ${
+                  className={`px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors relative ${
                     isSearchVisualDropdownOpen ? 'z-50' : 'z-20'
                   }`}
                 >
@@ -1926,12 +1926,12 @@ export const Settings: React.FC<SettingsProps> = ({
                   </div>
 
                   {/* Dropdown Menu - always on-top */}
-                  <div className="relative shrink-0 z-[100]" ref={searchVisualDropdownRef}>
+                  <div className="relative w-full z-[100]" ref={searchVisualDropdownRef}>
                     <button
                       id="btn-dropdown-search-visual"
                       type="button"
                       onClick={() => setIsSearchVisualDropdownOpen((prev) => !prev)}
-                      className="min-w-[240px] sm:min-w-[270px] h-9 px-3 rounded-[6px] bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 border border-black/10 dark:border-white/15 text-xs text-[#111827] dark:text-white flex items-center justify-between gap-2 transition-all cursor-pointer font-medium select-none shadow-2xs"
+                      className="settings-dropdown-button windows-search-box w-full h-9 px-3 text-xs flex items-center justify-between gap-2 font-medium select-none"
                       aria-haspopup="listbox"
                       aria-expanded={isSearchVisualDropdownOpen}
                     >
@@ -1995,7 +1995,7 @@ export const Settings: React.FC<SettingsProps> = ({
                 <div 
                   id="setting-experimental-rounded-search-box"
                   onClick={() => updateDraft('roundedSearchBox', !draftSettings.roundedSearchBox)}
-                  className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                  className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                 >
                   <div className="min-w-0 flex-1 pr-2">
                     <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
@@ -2027,7 +2027,7 @@ export const Settings: React.FC<SettingsProps> = ({
                 <div 
                   id="setting-experimental-webview-sdk"
                   onClick={() => updateDraft('windowsAppSdkPreview', !draftSettings.windowsAppSdkPreview)}
-                  className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                  className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                 >
                   <div className="min-w-0 flex-1 pr-2">
                     <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
@@ -2059,7 +2059,7 @@ export const Settings: React.FC<SettingsProps> = ({
                 <div 
                   id="setting-experimental-sidebar-smart-layout"
                   onClick={() => updateDraft('sidebarSmartLayout', !draftSettings.sidebarSmartLayout)}
-                  className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                  className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                 >
                   <div className="min-w-0 flex-1 pr-2">
                     <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
@@ -2094,7 +2094,7 @@ export const Settings: React.FC<SettingsProps> = ({
                 <div 
                   id="setting-experimental-live-tiles-home"
                   onClick={() => updateDraft('liveTilesHome', !draftSettings.liveTilesHome)}
-                  className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                  className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                 >
                   <div className="min-w-0 flex-1 pr-2">
                     <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
@@ -2129,7 +2129,7 @@ export const Settings: React.FC<SettingsProps> = ({
                 <div 
                   id="setting-experimental-control-bar"
                   onClick={() => updateDraft('controlBar', !draftSettings.controlBar)}
-                  className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                  className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                 >
                   <div className="min-w-0 flex-1 pr-2">
                     <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
@@ -2164,7 +2164,7 @@ export const Settings: React.FC<SettingsProps> = ({
                 <div 
                   id="setting-experimental-search-on-sidebar"
                   onClick={() => updateDraft('searchOnSidebar', !draftSettings.searchOnSidebar)}
-                  className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                  className="px-4 py-3 sm:py-3.5 flex flex-col items-start gap-3 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                 >
                   <div className="min-w-0 flex-1 pr-2">
                     <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
