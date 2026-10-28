@@ -315,7 +315,7 @@ export const Settings: React.FC<SettingsProps> = ({
       {true ? (
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-normal text-[#111827] dark:text-white tracking-tight">
+            <h1 className="text-3xl font-bold text-[#111827] dark:text-white tracking-tight">
               Settings
             </h1>
           </div>
@@ -390,7 +390,7 @@ export const Settings: React.FC<SettingsProps> = ({
               type="button"
               id="btn-settings-back"
               onClick={() => setActiveCategory(null)}
-              className="inline-flex items-center gap-1.5 text-[#0078d4] dark:text-[#4cc2ff] hover:opacity-80 active:opacity-70 transition-all font-normal text-sm py-1 px-2.5 -ml-2.5 rounded-md hover:bg-black/5 dark:hover:bg-white/5 cursor-default select-none"
+              className="inline-flex items-center gap-1.5 text-[#0078d4] dark:text-[#4cc2ff] hover:opacity-80 active:opacity-70 transition-all font-semibold text-sm py-1 px-2.5 -ml-2.5 rounded-md hover:bg-black/5 dark:hover:bg-white/5 cursor-default select-none"
             >
               <ChevronLeft className="w-4 h-4 stroke-[2.25]" />
               <span>Settings</span>
@@ -402,7 +402,7 @@ export const Settings: React.FC<SettingsProps> = ({
                 <activeCatObj.icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#111827] dark:text-white stroke-[1.75]" />
               </div>
               <div className="min-w-0">
-                <h1 className="text-lg sm:text-xl font-normal font-square text-[#111827] dark:text-white tracking-tight leading-tight">
+                <h1 className="text-lg sm:text-xl font-bold font-square text-[#111827] dark:text-white tracking-tight leading-tight">
                   {activeCatObj.title}
                 </h1>
               </div>
@@ -428,7 +428,7 @@ export const Settings: React.FC<SettingsProps> = ({
           {/* Quick Search Jump Results if user typed a search query */}
           {searchQuery.trim() && (
             <div className="p-4 rounded-[8px] bg-white dark:bg-[#38383d] border border-[#e5e5e5] dark:border-[#383838] shadow-xs space-y-2">
-              <div className="text-xs font-normal text-[#8E8E93] uppercase tracking-wider px-1">
+              <div className="text-xs font-bold text-[#8E8E93] uppercase tracking-wider px-1">
                 Search results for "{searchQuery}"
               </div>
               <div className="grid grid-cols-1 gap-1">
@@ -448,7 +448,7 @@ export const Settings: React.FC<SettingsProps> = ({
                         <cat.icon className="w-5 h-5 text-[#111827] dark:text-white stroke-[1.75]" />
                       </div>
                       <div>
-                        <div className="text-sm font-normal text-[#111827] dark:text-white">{cat.title}</div>
+                        <div className="text-sm font-semibold text-[#111827] dark:text-white">{cat.title}</div>
                       </div>
                     </div>
                     <ChevronRight className="w-4 h-4 text-[#8E8E93]" />
@@ -474,7 +474,7 @@ export const Settings: React.FC<SettingsProps> = ({
 
                   {/* Label */}
                   <div className="flex-1 ml-3.5 sm:ml-4 min-w-0">
-                    <div className="text-[#111827] dark:text-white text-[15px] sm:text-[16px] font-normal leading-tight tracking-tight">
+                    <div className="text-[#111827] dark:text-white text-[15px] sm:text-[16px] font-semibold leading-tight tracking-tight">
                       {item.title}
                     </div>
                   </div>
@@ -505,7 +505,7 @@ export const Settings: React.FC<SettingsProps> = ({
 
                   {/* Label */}
                   <div className="flex-1 ml-3.5 sm:ml-4 min-w-0">
-                    <div className="text-[#111827] dark:text-white text-[15px] sm:text-[16px] font-normal leading-tight tracking-tight">
+                    <div className="text-[#111827] dark:text-white text-[15px] sm:text-[16px] font-semibold leading-tight tracking-tight">
                       {item.title}
                     </div>
                   </div>
@@ -528,18 +528,18 @@ export const Settings: React.FC<SettingsProps> = ({
           >
             <div className="p-3.5 sm:p-4 rounded-[18px] bg-black/[0.03] dark:bg-white/5 space-y-3 select-text">
               <div className="flex items-center justify-between text-xs sm:text-sm">
-                <span className="font-normal text-[#111827] dark:text-white">Software Update</span>
-                <span className="font-normal text-[#9CA3AF]">26.11</span>
+                <span className="font-medium text-[#111827] dark:text-white">Software Update</span>
+                <span className="font-semibold text-[#9CA3AF]">26.11</span>
               </div>
               <div className="flex items-center justify-between text-xs sm:text-sm">
-                <span className="font-normal text-[#111827] dark:text-white">Software Build</span>
-                <span className="font-normal text-[#9CA3AF]">261013</span>
+                <span className="font-medium text-[#111827] dark:text-white">Software Build</span>
+                <span className="font-semibold text-[#9CA3AF]">261013</span>
               </div>
               {/* Compatible with Fluent Design */}
               <div id="settings-compatible-spatial-glass" className="pt-2.5 mt-1 border-t border-black/10 dark:border-white/10 flex items-center">
-                <p className="text-sm sm:text-base font-normal tracking-tight text-[#111827] dark:text-white">
+                <p className="text-sm sm:text-base font-semibold tracking-tight text-[#111827] dark:text-white">
                   Compatible with{' '}
-                  <span className="text-[#4cc2ff] font-normal">
+                  <span className="text-[#4cc2ff] font-semibold">
                     Microsoft Fluent Design.
                   </span>
                 </p>
@@ -550,7 +550,7 @@ export const Settings: React.FC<SettingsProps> = ({
               {/* Test Sparkle (Dev) Option Card */}
               <div className="fluent-reveal-item setting-card p-3 sm:p-3.5 rounded-[18px] flex items-center justify-between gap-3 transition-colors hover:bg-black/5 dark:hover:bg-white/5">
                 <div>
-                  <div className="font-normal text-[#111827] dark:text-white text-xs sm:text-sm">
+                  <div className="font-bold text-[#111827] dark:text-white text-xs sm:text-sm">
                     Test Sparkle (Dev)
                   </div>
                 </div>
@@ -569,7 +569,7 @@ export const Settings: React.FC<SettingsProps> = ({
               {/* Changelogs Option Card */}
               <div className="fluent-reveal-item setting-card p-3 sm:p-3.5 rounded-[18px] flex items-center justify-between gap-3 transition-colors hover:bg-black/5 dark:hover:bg-white/5">
                 <div>
-                  <div className="font-normal text-[#111827] dark:text-white text-xs sm:text-sm">
+                  <div className="font-bold text-[#111827] dark:text-white text-xs sm:text-sm">
                     Changelogs
                   </div>
                 </div>
@@ -587,7 +587,7 @@ export const Settings: React.FC<SettingsProps> = ({
               {/* Update Sparkle (Dev) Option Card */}
               <div className="fluent-reveal-item setting-card p-3 sm:p-3.5 rounded-[18px] flex items-center justify-between gap-3 transition-colors hover:bg-black/5 dark:hover:bg-white/5">
                 <div>
-                  <div className="font-normal text-[#111827] dark:text-white text-xs sm:text-sm">
+                  <div className="font-bold text-[#111827] dark:text-white text-xs sm:text-sm">
                     Update Sparkle (Dev)
                   </div>
                 </div>
@@ -630,8 +630,8 @@ export const Settings: React.FC<SettingsProps> = ({
                   className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 transition-colors hover:bg-black/[0.02] dark:hover:bg-white/[0.04]"
                 >
                   <div className="flex-1 min-w-0 pr-2">
-                    <div className="font-normal text-sm text-[#111827] dark:text-white">
-                      <span className="text-[#0078d4] dark:text-[#4cc2ff] font-normal">
+                    <div className="font-semibold text-sm text-[#111827] dark:text-white">
+                      <span className="text-[#0078d4] dark:text-[#4cc2ff] font-semibold">
                         Fluent Design (Mica & Acrylic)
                       </span>
                     </div>
@@ -664,11 +664,11 @@ export const Settings: React.FC<SettingsProps> = ({
                 >
                   <div className="flex items-center justify-between gap-4">
                     <div className="min-w-0 flex-1">
-                      <div className="font-normal text-sm text-[#111827] dark:text-white">
+                      <div className="font-semibold text-sm text-[#111827] dark:text-white">
                         Độ trong suốt Acrylic (Opacity)
                       </div>
                     </div>
-                    <span className="text-xs font-mono font-normal text-[#0078d4] dark:text-[#4cc2ff] px-2 py-0.5 rounded bg-black/5 dark:bg-white/10 shrink-0 ml-2">
+                    <span className="text-xs font-mono font-semibold text-[#0078d4] dark:text-[#4cc2ff] px-2 py-0.5 rounded bg-black/5 dark:bg-white/10 shrink-0 ml-2">
                       {draftSettings.spatialGlassOpacity ?? 20}%
                     </span>
                   </div>
@@ -721,11 +721,11 @@ export const Settings: React.FC<SettingsProps> = ({
                 >
                   <div className="flex items-center justify-between gap-4">
                     <div className="min-w-0 flex-1">
-                      <div className="font-normal text-sm text-[#111827] dark:text-white">
+                      <div className="font-semibold text-sm text-[#111827] dark:text-white">
                         Độ mờ Acrylic (Blur)
                       </div>
                     </div>
-                    <span className="text-xs font-mono font-normal text-[#0078d4] dark:text-[#4cc2ff] px-2 py-0.5 rounded bg-black/5 dark:bg-white/10 shrink-0 ml-2">
+                    <span className="text-xs font-mono font-semibold text-[#0078d4] dark:text-[#4cc2ff] px-2 py-0.5 rounded bg-black/5 dark:bg-white/10 shrink-0 ml-2">
                       {draftSettings.spatialGlassBlur ?? 10}%
                     </span>
                   </div>
@@ -780,9 +780,9 @@ export const Settings: React.FC<SettingsProps> = ({
                 <div className="px-4 py-3 sm:py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <div className="font-normal text-sm text-[#111827] dark:text-white">Thanh điều hướng</div>
+                      <div className="font-semibold text-sm text-[#111827] dark:text-white">Thanh điều hướng</div>
                       {draftSettings.navigationMode === 'topbar' && (
-                        <span className="inline-flex items-center text-[10px] font-normal text-[#0078d4] dark:text-[#4cc2ff] bg-[#0078d4]/10 dark:bg-[#4cc2ff]/10 px-2 py-0.5 rounded-full">
+                        <span className="inline-flex items-center text-[10px] font-semibold text-[#0078d4] dark:text-[#4cc2ff] bg-[#0078d4]/10 dark:bg-[#4cc2ff]/10 px-2 py-0.5 rounded-full">
                           Top View
                         </span>
                       )}
@@ -823,7 +823,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-1.5">
                         <Type className="w-4 h-4 text-[#6B7280] dark:text-[#9CA3AF]" />
-                        <span className="font-normal text-sm text-[#111827] dark:text-white">
+                        <span className="font-semibold text-sm text-[#111827] dark:text-white">
                           Thu phóng giao diện
                         </span>
                       </div>
@@ -900,7 +900,7 @@ export const Settings: React.FC<SettingsProps> = ({
                       className="px-4 py-3 sm:py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                     >
                       <div className="min-w-0 flex-1">
-                        <div className="font-normal text-sm text-[#111827] dark:text-white">Vị trí thanh bên (Side View position)</div>
+                        <div className="font-semibold text-sm text-[#111827] dark:text-white">Vị trí thanh bên (Side View position)</div>
                       </div>
                       <div className="settings-segmented-group grid grid-cols-2 gap-1 rounded-md sm:rounded-lg bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/10 p-1 w-full sm:w-auto sm:min-w-[180px]">
                         {[
@@ -933,7 +933,7 @@ export const Settings: React.FC<SettingsProps> = ({
                   className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 transition-colors hover:bg-black/[0.02] dark:hover:bg-white/[0.04]"
                 >
                   <div className="min-w-0 flex-1 pr-2">
-                    <div className="font-normal text-sm text-[#111827] dark:text-white">
+                    <div className="font-semibold text-sm text-[#111827] dark:text-white">
                       Siêu chế độ tối (Super Dark Mode)
                     </div>
                   </div>
@@ -966,7 +966,7 @@ export const Settings: React.FC<SettingsProps> = ({
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <Tv className="w-4 h-4 text-[#6B7280] dark:text-[#9CA3AF]" />
-                      <span className="font-normal text-sm text-[#111827] dark:text-white">
+                      <span className="font-semibold text-sm text-[#111827] dark:text-white">
                         Tỉ lệ khung hình
                       </span>
                     </div>
@@ -981,7 +981,7 @@ export const Settings: React.FC<SettingsProps> = ({
                         type="button"
                         id={`btn-aspect-${value.replace(':', '-')}`}
                         onClick={() => updateDraft('streamAspectRatio', value as '16:9' | '4:3')}
-                        className={`rounded-sm sm:rounded-[6px] px-3 py-1.5 text-xs font-normal transition-all cursor-default text-center ${
+                        className={`rounded-sm sm:rounded-[6px] px-3 py-1.5 text-xs font-semibold transition-all cursor-default text-center ${
                           draftSettings.streamAspectRatio === value
                             ? 'bg-[#0078d4] dark:bg-[#4cc2ff] text-white dark:text-black shadow-xs font-normal'
                             : 'text-[#6B7280] dark:text-[#9CA3AF] hover:text-[#111827] dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
@@ -999,7 +999,7 @@ export const Settings: React.FC<SettingsProps> = ({
                 {/* 2. Tự động ẩn Side View */}
                 <div className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 transition-colors hover:bg-black/[0.02] dark:hover:bg-white/[0.04]">
                   <div className="min-w-0 flex-1 pr-2">
-                    <div className="font-normal text-sm text-[#111827] dark:text-white">
+                    <div className="font-semibold text-sm text-[#111827] dark:text-white">
                       Tự động ẩn Side View
                     </div>
                   </div>
@@ -1023,9 +1023,9 @@ export const Settings: React.FC<SettingsProps> = ({
                 {/* 3. Sparkle (Dev) Notes */}
                 <div className="px-4 py-3 sm:py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors">
                   <div className="min-w-0 flex-1">
-                    <div className="font-normal text-sm text-[#111827] dark:text-white flex items-center gap-2">
+                    <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
                       <span>Sparkle (Dev) Notes</span>
-                      <span className="text-[10px] px-2 py-0.5 rounded-full font-normal uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
+                      <span className="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
                         Ghi chú
                       </span>
                     </div>
@@ -1034,7 +1034,7 @@ export const Settings: React.FC<SettingsProps> = ({
                   <button
                     type="button"
                     onClick={() => onOpenOfficeTool?.('notes')}
-                    className="px-4 py-1.5 rounded-md font-normal text-xs text-white bg-[#0078d4] hover:bg-[#106ebe] dark:bg-[#4cc2ff] dark:text-black dark:hover:bg-[#6bd0ff] transition-all flex items-center gap-2 self-start sm:self-auto cursor-default shadow-xs"
+                    className="px-4 py-1.5 rounded-md font-semibold text-xs text-white bg-[#0078d4] hover:bg-[#106ebe] dark:bg-[#4cc2ff] dark:text-black dark:hover:bg-[#6bd0ff] transition-all flex items-center gap-2 self-start sm:self-auto cursor-default shadow-xs"
                   >
                     <span>Mở Sparkle (Dev) Notes</span>
                   </button>
@@ -1047,7 +1047,7 @@ export const Settings: React.FC<SettingsProps> = ({
               <div className="space-y-4 select-none">
                 {/* Section 1: Tải trang & Hiệu năng */}
                 <div className="space-y-1.5">
-                  <div className="text-xs font-normal text-[#6B7280] dark:text-[#9CA3AF] uppercase tracking-wider px-1">
+                  <div className="text-xs font-bold text-[#6B7280] dark:text-[#9CA3AF] uppercase tracking-wider px-1">
                     Tải trang & Hiệu năng (Page Loading & Performance)
                   </div>
                   <section 
@@ -1062,7 +1062,7 @@ export const Settings: React.FC<SettingsProps> = ({
                       className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                     >
                       <div className="min-w-0 flex-1 pr-2">
-                        <div className="font-normal text-sm text-[#111827] dark:text-white">
+                        <div className="font-semibold text-sm text-[#111827] dark:text-white">
                           Page loading
                         </div>
                       </div>
@@ -1091,7 +1091,7 @@ export const Settings: React.FC<SettingsProps> = ({
                       className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                     >
                       <div className="min-w-0 flex-1 pr-2">
-                        <div className="font-normal text-sm text-[#111827] dark:text-white">
+                        <div className="font-semibold text-sm text-[#111827] dark:text-white">
                           Load pages sequentially
                         </div>
                       </div>
@@ -1115,7 +1115,7 @@ export const Settings: React.FC<SettingsProps> = ({
 
                 {/* Section 2: Hiệu ứng chuyển động */}
                 <div className="space-y-1.5">
-                  <div className="text-xs font-normal text-[#6B7280] dark:text-[#9CA3AF] uppercase tracking-wider px-1">
+                  <div className="text-xs font-bold text-[#6B7280] dark:text-[#9CA3AF] uppercase tracking-wider px-1">
                     Hiệu ứng chuyển động (Motion)
                   </div>
                   <section 
@@ -1130,7 +1130,7 @@ export const Settings: React.FC<SettingsProps> = ({
                       className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                     >
                       <div className="min-w-0 flex-1 pr-2">
-                        <div className="font-normal text-sm text-[#111827] dark:text-white">
+                        <div className="font-semibold text-sm text-[#111827] dark:text-white">
                           Reduce all animation
                         </div>
                       </div>
@@ -1171,7 +1171,7 @@ export const Settings: React.FC<SettingsProps> = ({
                         className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors pl-6 sm:pl-8"
                       >
                         <div className="min-w-0 flex-1 pr-2">
-                          <div className="font-normal text-sm text-[#111827] dark:text-white">
+                          <div className="font-semibold text-sm text-[#111827] dark:text-white">
                             Side View
                           </div>
                         </div>
@@ -1204,7 +1204,7 @@ export const Settings: React.FC<SettingsProps> = ({
                         className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors pl-6 sm:pl-8"
                       >
                         <div className="min-w-0 flex-1 pr-2">
-                          <div className="font-normal text-sm text-[#111827] dark:text-white">
+                          <div className="font-semibold text-sm text-[#111827] dark:text-white">
                             Hộp thoại (Modal dialog)
                           </div>
                         </div>
@@ -1237,7 +1237,7 @@ export const Settings: React.FC<SettingsProps> = ({
                         className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors pl-6 sm:pl-8"
                       >
                         <div className="min-w-0 flex-1 pr-2">
-                          <div className="font-normal text-sm text-[#111827] dark:text-white">
+                          <div className="font-semibold text-sm text-[#111827] dark:text-white">
                             Chuyển trang trong Cài đặt
                           </div>
                         </div>
@@ -1262,7 +1262,7 @@ export const Settings: React.FC<SettingsProps> = ({
 
                 {/* Section 3: Nội dung Tìm kiếm */}
                 <div className="space-y-1.5">
-                  <div className="text-xs font-normal text-[#6B7280] dark:text-[#9CA3AF] uppercase tracking-wider px-1">
+                  <div className="text-xs font-bold text-[#6B7280] dark:text-[#9CA3AF] uppercase tracking-wider px-1">
                     Nội dung Tìm kiếm
                   </div>
                   <section 
@@ -1277,7 +1277,7 @@ export const Settings: React.FC<SettingsProps> = ({
                       className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                     >
                       <div className="min-w-0 flex-1 pr-2">
-                        <div className="font-normal text-sm text-[#111827] dark:text-white">
+                        <div className="font-semibold text-sm text-[#111827] dark:text-white">
                           Danh mục
                         </div>
                       </div>
@@ -1306,7 +1306,7 @@ export const Settings: React.FC<SettingsProps> = ({
                       className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                     >
                       <div className="min-w-0 flex-1 pr-2">
-                        <div className="font-normal text-sm text-[#111827] dark:text-white">
+                        <div className="font-semibold text-sm text-[#111827] dark:text-white">
                           Tin tức
                         </div>
                       </div>
@@ -1335,7 +1335,7 @@ export const Settings: React.FC<SettingsProps> = ({
                       className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                     >
                       <div className="min-w-0 flex-1 pr-2">
-                        <div className="font-normal text-sm text-[#111827] dark:text-white">
+                        <div className="font-semibold text-sm text-[#111827] dark:text-white">
                           Truyền hình
                         </div>
                       </div>
@@ -1365,10 +1365,10 @@ export const Settings: React.FC<SettingsProps> = ({
                     >
                       <div className="min-w-0 flex-1 pr-2">
                         <div className="flex items-center gap-2">
-                          <span className="font-normal text-sm text-[#111827] dark:text-white">
+                          <span className="font-semibold text-sm text-[#111827] dark:text-white">
                             Tìm kênh theo số hiệu kênh
                           </span>
-                          <span className="px-1.5 py-0.5 rounded text-[10px] font-normal bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff] tracking-wider">
+                          <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff] tracking-wider">
                             CH #
                           </span>
                         </div>
@@ -1398,7 +1398,7 @@ export const Settings: React.FC<SettingsProps> = ({
                       className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                     >
                       <div className="min-w-0 flex-1 pr-2">
-                        <div className="font-normal text-sm text-[#111827] dark:text-white">
+                        <div className="font-semibold text-sm text-[#111827] dark:text-white">
                           Cài đặt
                         </div>
                       </div>
@@ -1422,7 +1422,7 @@ export const Settings: React.FC<SettingsProps> = ({
 
                 {/* Section 4: Bàn phím & Âm thanh */}
                 <div className="space-y-1.5">
-                  <div className="text-xs font-normal text-[#6B7280] dark:text-[#9CA3AF] uppercase tracking-wider px-1">
+                  <div className="text-xs font-bold text-[#6B7280] dark:text-[#9CA3AF] uppercase tracking-wider px-1">
                     Bàn phím & Âm thanh
                   </div>
                   <section 
@@ -1437,7 +1437,7 @@ export const Settings: React.FC<SettingsProps> = ({
                       className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                     >
                       <div className="min-w-0 flex-1 pr-2">
-                        <div className="font-normal text-sm text-[#111827] dark:text-white">
+                        <div className="font-semibold text-sm text-[#111827] dark:text-white">
                           Bàn phím số
                         </div>
                       </div>
@@ -1466,7 +1466,7 @@ export const Settings: React.FC<SettingsProps> = ({
                       className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                     >
                       <div className="min-w-0 flex-1 pr-2">
-                        <div className="font-normal text-sm text-[#111827] dark:text-white">
+                        <div className="font-semibold text-sm text-[#111827] dark:text-white">
                           Clipboard
                         </div>
                       </div>
@@ -1495,7 +1495,7 @@ export const Settings: React.FC<SettingsProps> = ({
                       className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                     >
                       <div className="min-w-0 flex-1 pr-2">
-                        <div className="font-normal text-sm text-[#111827] dark:text-white">
+                        <div className="font-semibold text-sm text-[#111827] dark:text-white">
                           Âm bàn phím
                         </div>
                       </div>
@@ -1520,7 +1520,7 @@ export const Settings: React.FC<SettingsProps> = ({
                 {/* Section 5: Tổ hợp phím */}
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between px-1">
-                    <div className="text-xs font-normal text-[#6B7280] dark:text-[#9CA3AF] uppercase tracking-wider">
+                    <div className="text-xs font-bold text-[#6B7280] dark:text-[#9CA3AF] uppercase tracking-wider">
                       Tổ hợp phím
                     </div>
                     <button
@@ -1532,7 +1532,7 @@ export const Settings: React.FC<SettingsProps> = ({
                         setKeybindError(null);
                       }}
                       title="Đặt lại tất cả phím tắt về mặc định"
-                      className="px-2.5 py-1 rounded-md text-xs font-normal text-[#0078d4] dark:text-[#4cc2ff] hover:bg-black/5 dark:hover:bg-white/5 transition-colors flex items-center gap-1.5 shrink-0 cursor-default"
+                      className="px-2.5 py-1 rounded-md text-xs font-semibold text-[#0078d4] dark:text-[#4cc2ff] hover:bg-black/5 dark:hover:bg-white/5 transition-colors flex items-center gap-1.5 shrink-0 cursor-default"
                     >
                       <RotateCcw className="w-3.5 h-3.5" />
                       <span>Phím tắt mặc định</span>
@@ -1557,10 +1557,10 @@ export const Settings: React.FC<SettingsProps> = ({
                           >
                             <div className="flex items-center justify-between gap-3">
                               <div className="min-w-0 flex-1">
-                                <div className="font-normal text-sm text-[#111827] dark:text-white flex items-center gap-2">
+                                <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
                                   <span>{def.label}</span>
                                   {currentKey !== def.defaultKey && (
-                                    <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff] font-normal">
+                                    <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff] font-medium">
                                       Đã đổi
                                     </span>
                                   )}
@@ -1619,7 +1619,7 @@ export const Settings: React.FC<SettingsProps> = ({
                                       onBlur={() => {
                                         setEditingKeybindId(null);
                                       }}
-                                      className="px-3 py-1.5 text-xs rounded-md bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 border border-[#0078d4] dark:border-[#4cc2ff] text-[#0078d4] dark:text-[#4cc2ff] font-mono animate-pulse text-center w-36 cursor-default outline-none select-none font-normal"
+                                      className="px-3 py-1.5 text-xs rounded-md bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 border border-[#0078d4] dark:border-[#4cc2ff] text-[#0078d4] dark:text-[#4cc2ff] font-mono animate-pulse text-center w-36 cursor-default outline-none select-none font-semibold"
                                     />
                                     <button
                                       type="button"
@@ -1642,7 +1642,7 @@ export const Settings: React.FC<SettingsProps> = ({
                                         setEditingKeybindId(def.id);
                                         setKeybindError(null);
                                       }}
-                                      className="px-2.5 py-1 rounded-md bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 border border-black/10 dark:border-white/15 text-[#111827] dark:text-white font-mono text-xs font-normal transition-all active:scale-95 cursor-default"
+                                      className="px-2.5 py-1 rounded-md bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 border border-black/10 dark:border-white/15 text-[#111827] dark:text-white font-mono text-xs font-semibold transition-all active:scale-95 cursor-default"
                                       title="Nhấp để thay đổi phím tắt"
                                     >
                                       {currentKey}
@@ -1702,7 +1702,7 @@ export const Settings: React.FC<SettingsProps> = ({
                   className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                 >
                   <div className="min-w-0 flex-1 pr-2">
-                    <div className="font-normal text-sm text-[#111827] dark:text-white">
+                    <div className="font-semibold text-sm text-[#111827] dark:text-white">
                       Native keyboard
                     </div>
                   </div>
@@ -1731,7 +1731,7 @@ export const Settings: React.FC<SettingsProps> = ({
                   className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                 >
                   <div className="min-w-0 flex-1 pr-2">
-                    <div className="font-normal text-sm text-[#111827] dark:text-white">
+                    <div className="font-semibold text-sm text-[#111827] dark:text-white">
                       Immersive search experience
                     </div>
                   </div>
@@ -1764,9 +1764,9 @@ export const Settings: React.FC<SettingsProps> = ({
                       <TriangleLoader size={30} glow={false} />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <div className="font-normal text-sm text-[#111827] dark:text-white flex items-center gap-2">
+                      <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
                         <span>Tam giác</span>
-                        <span className="text-[10px] px-1.5 py-0.2 rounded font-normal uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
+                        <span className="text-[10px] px-1.5 py-0.2 rounded font-bold uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
                           Mới
                         </span>
                       </div>
@@ -1797,9 +1797,9 @@ export const Settings: React.FC<SettingsProps> = ({
                   className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                 >
                   <div className="min-w-0 flex-1 pr-2">
-                    <div className="font-normal text-sm text-[#111827] dark:text-white flex items-center gap-2">
+                    <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
                       <span>Legacy progress dots</span>
-                      <span className="text-[10px] px-1.5 py-0.2 rounded font-normal uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
+                      <span className="text-[10px] px-1.5 py-0.2 rounded font-bold uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
                         Insider Flag
                       </span>
                     </div>
@@ -1832,9 +1832,9 @@ export const Settings: React.FC<SettingsProps> = ({
                   }`}
                 >
                   <div className="min-w-0 flex-1 pr-2">
-                    <div className="font-normal text-sm text-[#111827] dark:text-white flex items-center gap-2">
+                    <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
                       <span>Experimental search experience</span>
-                      <span className="text-[10px] px-1.5 py-0.2 rounded font-normal uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
+                      <span className="text-[10px] px-1.5 py-0.2 rounded font-bold uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
                         Dropdown
                       </span>
                     </div>
@@ -1846,7 +1846,7 @@ export const Settings: React.FC<SettingsProps> = ({
                       id="btn-dropdown-search-experience"
                       type="button"
                       onClick={() => setIsSearchExpDropdownOpen((prev) => !prev)}
-                      className="min-w-[240px] sm:min-w-[270px] h-9 px-3 rounded-[6px] bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 border border-black/10 dark:border-white/15 text-xs text-[#111827] dark:text-white flex items-center justify-between gap-2 transition-all cursor-pointer font-normal select-none shadow-2xs"
+                      className="min-w-[240px] sm:min-w-[270px] h-9 px-3 rounded-[6px] bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 border border-black/10 dark:border-white/15 text-xs text-[#111827] dark:text-white flex items-center justify-between gap-2 transition-all cursor-pointer font-medium select-none shadow-2xs"
                       aria-haspopup="listbox"
                       aria-expanded={isSearchExpDropdownOpen}
                     >
@@ -1892,7 +1892,7 @@ export const Settings: React.FC<SettingsProps> = ({
                                 <div className="w-4 h-4 shrink-0 flex items-center justify-center">
                                   {isSelected && <Check className="w-4 h-4 text-[#0078d4] dark:text-[#4cc2ff]" />}
                                 </div>
-                                <div className="min-w-0 flex-1 font-normal text-xs leading-snug">
+                                <div className="min-w-0 flex-1 font-semibold text-xs leading-snug">
                                   {opt.label}
                                 </div>
                               </button>
@@ -1916,9 +1916,9 @@ export const Settings: React.FC<SettingsProps> = ({
                   }`}
                 >
                   <div className="min-w-0 flex-1 pr-2">
-                    <div className="font-normal text-sm text-[#111827] dark:text-white flex items-center gap-2">
+                    <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
                       <span>Search visual experimental</span>
-                      <span className="text-[10px] px-1.5 py-0.2 rounded font-normal uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
+                      <span className="text-[10px] px-1.5 py-0.2 rounded font-bold uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
                         Dropdown
                       </span>
                     </div>
@@ -1930,11 +1930,11 @@ export const Settings: React.FC<SettingsProps> = ({
                       id="btn-dropdown-search-visual"
                       type="button"
                       onClick={() => setIsSearchVisualDropdownOpen((prev) => !prev)}
-                      className="min-w-[240px] sm:min-w-[270px] h-9 px-3 rounded-[6px] bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 border border-black/10 dark:border-white/15 text-xs text-[#111827] dark:text-white flex items-center justify-between gap-2 transition-all cursor-pointer font-normal select-none shadow-2xs"
+                      className="min-w-[240px] sm:min-w-[270px] h-9 px-3 rounded-[6px] bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 border border-black/10 dark:border-white/15 text-xs text-[#111827] dark:text-white flex items-center justify-between gap-2 transition-all cursor-pointer font-medium select-none shadow-2xs"
                       aria-haspopup="listbox"
                       aria-expanded={isSearchVisualDropdownOpen}
                     >
-                      <span className="truncate text-left font-normal">
+                      <span className="truncate text-left font-medium">
                         {SEARCH_VISUAL_OPTIONS.find((o) => o.value === (draftSettings.searchVisualExperimental || 'treatment-1'))?.label || 'Treatment 1: Search box (default)'}
                       </span>
                       <ChevronDown
@@ -1976,7 +1976,7 @@ export const Settings: React.FC<SettingsProps> = ({
                                 <div className="w-4 h-4 shrink-0 flex items-center justify-center">
                                   {isSelected && <Check className="w-4 h-4 text-[#0078d4] dark:text-[#4cc2ff]" />}
                                 </div>
-                                <div className="min-w-0 flex-1 font-normal text-xs leading-snug">
+                                <div className="min-w-0 flex-1 font-semibold text-xs leading-snug">
                                   {opt.label}
                                 </div>
                               </button>
@@ -1997,9 +1997,9 @@ export const Settings: React.FC<SettingsProps> = ({
                   className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                 >
                   <div className="min-w-0 flex-1 pr-2">
-                    <div className="font-normal text-sm text-[#111827] dark:text-white flex items-center gap-2">
+                    <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
                       <span>Rounded search box</span>
-                      <span className="text-[10px] px-1.5 py-0.2 rounded font-normal uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
+                      <span className="text-[10px] px-1.5 py-0.2 rounded font-bold uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
                         Mới
                       </span>
                     </div>
@@ -2029,9 +2029,9 @@ export const Settings: React.FC<SettingsProps> = ({
                   className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                 >
                   <div className="min-w-0 flex-1 pr-2">
-                    <div className="font-normal text-sm text-[#111827] dark:text-white flex items-center gap-2">
+                    <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
                       <span>WebView SDK Test Preview</span>
-                      <span className="text-[10px] px-1.5 py-0.2 rounded font-normal uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
+                      <span className="text-[10px] px-1.5 py-0.2 rounded font-bold uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
                         Preview
                       </span>
                     </div>
@@ -2061,9 +2061,9 @@ export const Settings: React.FC<SettingsProps> = ({
                   className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                 >
                   <div className="min-w-0 flex-1 pr-2">
-                    <div className="font-normal text-sm text-[#111827] dark:text-white flex items-center gap-2">
+                    <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
                       <span>Sidebar smart layout arrangement</span>
-                      <span className="text-[10px] px-1.5 py-0.2 rounded font-normal uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
+                      <span className="text-[10px] px-1.5 py-0.2 rounded font-bold uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
                         Mới
                       </span>
                     </div>
@@ -2096,9 +2096,9 @@ export const Settings: React.FC<SettingsProps> = ({
                   className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                 >
                   <div className="min-w-0 flex-1 pr-2">
-                    <div className="font-normal text-sm text-[#111827] dark:text-white flex items-center gap-2">
+                    <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
                       <span>Live Tiles Home</span>
-                      <span className="text-[10px] px-1.5 py-0.2 rounded font-normal uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
+                      <span className="text-[10px] px-1.5 py-0.2 rounded font-bold uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
                         Insider Flag
                       </span>
                     </div>
@@ -2131,9 +2131,9 @@ export const Settings: React.FC<SettingsProps> = ({
                   className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                 >
                   <div className="min-w-0 flex-1 pr-2">
-                    <div className="font-normal text-sm text-[#111827] dark:text-white flex items-center gap-2">
+                    <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
                       <span>Control bar</span>
-                      <span className="text-[10px] px-1.5 py-0.2 rounded font-normal uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
+                      <span className="text-[10px] px-1.5 py-0.2 rounded font-bold uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
                         Insider Flag
                       </span>
                     </div>
@@ -2166,9 +2166,9 @@ export const Settings: React.FC<SettingsProps> = ({
                   className="px-4 py-3 sm:py-3.5 flex items-center justify-between gap-4 cursor-default hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                 >
                   <div className="min-w-0 flex-1 pr-2">
-                    <div className="font-normal text-sm text-[#111827] dark:text-white flex items-center gap-2">
+                    <div className="font-semibold text-sm text-[#111827] dark:text-white flex items-center gap-2">
                       <span>Search on sidebar</span>
-                      <span className="text-[10px] px-1.5 py-0.2 rounded font-normal uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
+                      <span className="text-[10px] px-1.5 py-0.2 rounded font-bold uppercase tracking-wider bg-[#0078d4]/10 dark:bg-[#4cc2ff]/20 text-[#0078d4] dark:text-[#4cc2ff]">
                         Insider Flag
                       </span>
                     </div>
@@ -2210,7 +2210,7 @@ export const Settings: React.FC<SettingsProps> = ({
             initial={{ opacity: 0, y: 16, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.95 }}
-            className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-[#1E1D24] border border-[#4cc2ff]/60 text-white text-xs sm:text-sm font-normal shadow-2xl "
+            className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-[#1E1D24] border border-[#4cc2ff]/60 text-white text-xs sm:text-sm font-semibold shadow-2xl "
           >
             <div className="w-5 h-5 rounded-full bg-[#4cc2ff] flex items-center justify-center shrink-0">
               <SfCheckmark className="w-3 h-3" />
