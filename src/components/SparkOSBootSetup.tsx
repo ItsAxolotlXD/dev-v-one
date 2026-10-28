@@ -35,19 +35,19 @@ export function hasSparkOSSetup(): boolean {
 
 export function SparkOSBootScreen() {
   return (
-    <main aria-label="SparkOS starting" className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-[#05070b] text-white">
+    <main aria-label="Core OS starting" className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-[#05070b] text-white">
       <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(21,40,74,.38),transparent_50%)]" />
       <motion.div initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7 }} className="relative flex flex-col items-center gap-10">
         <div aria-hidden="true" className="grid size-12 grid-cols-2 gap-[3px]">
           <span className="bg-[#5bb9ff]" /><span className="bg-[#2d9cf2]" /><span className="bg-[#2d9cf2]" /><span className="bg-[#1685dc]" />
         </div>
         <div className="flex flex-col items-center gap-3">
-          <p className="text-[13px] font-medium tracking-[0.24em] text-white/80">SPARKOS</p>
+          <p className="text-[13px] font-medium tracking-[0.24em] text-white/80">CORE OS</p>
           <div aria-label="Loading" role="status" className="flex h-6 items-center gap-1.5">
             {Array.from({ length: 5 }, (_, index) => (
               <motion.span key={index} className="size-1.5 rounded-full bg-white/70" animate={{ opacity: [0.25, 1, 0.25], y: [0, -2, 0] }} transition={{ duration: 1, repeat: Infinity, delay: index * 0.12 }} />
             ))}
-            <span className="sr-only">Starting SparkOS</span>
+            <span className="sr-only">Starting Core OS</span>
           </div>
         </div>
       </motion.div>
@@ -61,7 +61,7 @@ export function SparkOSBootSetup({ onComplete }: SparkOSBootSetupProps) {
   const [keyboard, setKeyboard] = useState('US');
   const [network, setNetwork] = useState('Connect later');
   const [userName, setUserName] = useState('Alex');
-  const [deviceName, setDeviceName] = useState('SparkOS-PC');
+  const [deviceName, setDeviceName] = useState('CoreOS-PC');
   const [experience, setExperience] = useState('Personal');
   const [privacy, setPrivacy] = useState({ location: true, diagnostics: true, tailored: false });
 
@@ -85,7 +85,7 @@ export function SparkOSBootSetup({ onComplete }: SparkOSBootSetupProps) {
   };
 
   return (
-    <main aria-label="SparkOS first-run setup" className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-[#8fa8ce] p-3 text-[#17191d] sm:p-6">
+    <main aria-label="Core OS first-run setup" className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-[#8fa8ce] p-3 text-[#17191d] sm:p-6">
       <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(ellipse_at_15%_10%,rgba(145,204,237,.9),transparent_45%),radial-gradient(ellipse_at_85%_85%,rgba(178,207,231,.9),transparent_44%),linear-gradient(135deg,#8eb5d4,#95a3c5)]" />
       <motion.section initial={{ opacity: 0, y: 14, scale: 0.99 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.45, ease: 'easeOut' }} className="relative grid h-[min(720px,calc(100dvh-24px))] w-full max-w-[1450px] grid-cols-1 overflow-hidden rounded-[18px] bg-[#f8faff]/95 shadow-[0_28px_80px_rgba(31,55,91,.24)] sm:h-[min(780px,calc(100dvh-48px))] sm:rounded-[22px] lg:grid-cols-[0.82fr_1.18fr]">
         <aside aria-hidden="true" className="relative hidden items-center justify-center overflow-hidden bg-gradient-to-br from-[#f4f8ff] via-[#edf4ff] to-[#e6f0ff] lg:flex">
@@ -118,7 +118,7 @@ export function SparkOSBootSetup({ onComplete }: SparkOSBootSetupProps) {
           <div className="mb-5 flex items-center justify-between gap-4 sm:mb-7">
             <div className="flex items-center gap-2.5">
               <span aria-hidden="true" className="grid size-6 grid-cols-2 gap-[2px]"><i className="bg-[#54aef0]" /><i className="bg-[#3297e2]" /><i className="bg-[#3297e2]" /><i className="bg-[#1378c5]" /></span>
-              <span className="text-[12px] font-semibold tracking-[0.15em] text-[#4a5664]">SPARKOS</span>
+              <span className="text-[12px] font-semibold tracking-[0.15em] text-[#4a5664]">CORE OS</span>
             </div>
             <span className="text-[11px] text-[#737d89]">Step {step + 1} of {setupSteps.length}</span>
           </div>
@@ -134,7 +134,7 @@ export function SparkOSBootSetup({ onComplete }: SparkOSBootSetupProps) {
                   <section aria-labelledby="setup-heading">
                     <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.13em] text-[#087bd1]">Let&apos;s get started</p>
                     <h1 id="setup-heading" className="mb-2 text-[clamp(24px,3vw,34px)] font-semibold leading-tight tracking-[-0.035em] text-[#17191d]">Is this the right country or region?</h1>
-                    <p className="mb-4 max-w-lg text-[13px] leading-5 text-[#697481]">Your region helps SparkOS set the right language, time, and local preferences.</p>
+                    <p className="mb-4 max-w-lg text-[13px] leading-5 text-[#697481]">Your region helps Core OS set the right language, time, and local preferences.</p>
                     <div role="radiogroup" aria-label="Country or region" className="max-h-[min(36dvh,290px)] overflow-y-auto rounded-lg border border-[#dce2e9] bg-white/70 p-1.5">
                       {regions.map((item) => (
                         <button key={item} role="radio" aria-checked={region === item} type="button" onClick={() => setRegion(item)} className={`flex min-h-10 w-full items-center justify-between rounded-md px-3.5 text-left text-[14px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087bd1] ${region === item ? 'bg-[#087bd1] text-white shadow-sm' : 'text-[#262d35] hover:bg-[#eaf3fb]'}`}>
@@ -163,9 +163,9 @@ export function SparkOSBootSetup({ onComplete }: SparkOSBootSetupProps) {
                   <section aria-labelledby="setup-heading">
                     <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.13em] text-[#087bd1]">Let&apos;s connect you</p>
                     <h1 id="setup-heading" className="mb-2 text-[clamp(24px,3vw,34px)] font-semibold leading-tight tracking-[-0.035em]">Let&apos;s connect to a network</h1>
-                    <p className="mb-5 max-w-lg text-[13px] leading-5 text-[#697481]">A connection helps you get updates and sync your SparkOS experience.</p>
+                    <p className="mb-5 max-w-lg text-[13px] leading-5 text-[#697481]">A connection helps you get updates and sync your Core OS experience.</p>
                     <div className="grid gap-2.5">
-                      {[{ name: 'SparkOS Wi-Fi', detail: 'Secured · Excellent signal' }, { name: 'Connect later', detail: 'Continue setup without internet' }].map((item) => (
+                      {[{ name: 'Core OS Wi-Fi', detail: 'Secured · Excellent signal' }, { name: 'Connect later', detail: 'Continue setup without internet' }].map((item) => (
                         <button key={item.name} type="button" onClick={() => setNetwork(item.name)} aria-pressed={network === item.name} className={`flex min-h-[68px] items-center gap-3 rounded-xl border px-4 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087bd1] ${network === item.name ? 'border-[#087bd1] bg-[#e9f4ff]' : 'border-[#dce2e9] bg-white/70 hover:bg-white'}`}>
                           {item.name === 'Connect later' ? <Globe aria-hidden="true" className="size-5 text-[#087bd1]" /> : <Wifi aria-hidden="true" className="size-5 text-[#087bd1]" />}
                           <span className="flex-1"><span className="block text-[14px] font-medium text-[#20252b]">{item.name}</span><span className="mt-1 block text-[11px] text-[#75808d]">{item.detail}</span></span>
@@ -179,7 +179,7 @@ export function SparkOSBootSetup({ onComplete }: SparkOSBootSetupProps) {
                   <section aria-labelledby="setup-heading">
                     <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.13em] text-[#087bd1]">Personalize your device</p>
                     <h1 id="setup-heading" className="mb-2 text-[clamp(24px,3vw,34px)] font-semibold leading-tight tracking-[-0.035em]">Who&apos;s going to use this device?</h1>
-                    <p className="mb-5 max-w-lg text-[13px] leading-5 text-[#697481]">Create a local profile name for your SparkOS desktop.</p>
+                    <p className="mb-5 max-w-lg text-[13px] leading-5 text-[#697481]">Create a local profile name for your Core OS desktop.</p>
                     <label htmlFor="sparkos-account-name" className="mb-2 block text-[12px] font-medium text-[#404a55]">Your name</label>
                     <div className="flex max-w-md items-center gap-3 rounded-xl border border-[#dce2e9] bg-white/80 px-4 py-3 focus-within:border-[#087bd1] focus-within:ring-2 focus-within:ring-[#087bd1]/15">
                       <UserRound aria-hidden="true" className="size-5 shrink-0 text-[#087bd1]" />
@@ -195,7 +195,7 @@ export function SparkOSBootSetup({ onComplete }: SparkOSBootSetupProps) {
                     <label htmlFor="sparkos-device-name" className="mb-2 block text-[12px] font-medium text-[#404a55]">Device name</label>
                     <div className="flex max-w-md items-center gap-3 rounded-xl border border-[#dce2e9] bg-white/80 px-4 py-3 focus-within:border-[#087bd1] focus-within:ring-2 focus-within:ring-[#087bd1]/15">
                       <Monitor aria-hidden="true" className="size-5 shrink-0 text-[#087bd1]" />
-                      <input id="sparkos-device-name" value={deviceName} onChange={(event) => setDeviceName(event.target.value.replace(/[^a-zA-Z0-9-]/g, '').slice(0, 24))} maxLength={24} className="w-full bg-transparent text-[14px] text-[#20252b] outline-none" placeholder="SparkOS-PC" />
+                      <input id="sparkos-device-name" value={deviceName} onChange={(event) => setDeviceName(event.target.value.replace(/[^a-zA-Z0-9-]/g, '').slice(0, 24))} maxLength={24} className="w-full bg-transparent text-[14px] text-[#20252b] outline-none" placeholder="CoreOS-PC" />
                     </div>
                     <p className="mt-2 text-[11px] text-[#75808d]">Use up to 24 letters, numbers, or hyphens.</p>
                   </section>
@@ -204,7 +204,7 @@ export function SparkOSBootSetup({ onComplete }: SparkOSBootSetupProps) {
                   <section aria-labelledby="setup-heading">
                     <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.13em] text-[#087bd1]">Make it yours</p>
                     <h1 id="setup-heading" className="mb-2 text-[clamp(24px,3vw,34px)] font-semibold leading-tight tracking-[-0.035em] text-[#17191d]">How will you use this device?</h1>
-                    <p className="mb-5 max-w-lg text-[13px] leading-5 text-[#697481]">Choose an experience to personalize your SparkOS setup.</p>
+                    <p className="mb-5 max-w-lg text-[13px] leading-5 text-[#697481]">Choose an experience to personalize your Core OS setup.</p>
                     <div className="grid gap-2.5 sm:grid-cols-2">
                       {experiences.map((item) => (
                         <button key={item.name} type="button" onClick={() => setExperience(item.name)} aria-pressed={experience === item.name} className={`flex min-h-[92px] items-start justify-between gap-3 rounded-xl border p-4 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087bd1] ${experience === item.name ? 'border-[#087bd1] bg-[#e9f4ff]' : 'border-[#dce2e9] bg-white/70 hover:bg-white'}`}>
@@ -219,11 +219,11 @@ export function SparkOSBootSetup({ onComplete }: SparkOSBootSetupProps) {
                   <section aria-labelledby="setup-heading">
                     <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.13em] text-[#087bd1]">Choose your privacy settings</p>
                     <h1 id="setup-heading" className="mb-2 text-[clamp(24px,3vw,34px)] font-semibold leading-tight tracking-[-0.035em]">You&apos;re in control</h1>
-                    <p className="mb-5 max-w-lg text-[13px] leading-5 text-[#697481]">Choose what SparkOS can use. You can change these options at any time.</p>
+                    <p className="mb-5 max-w-lg text-[13px] leading-5 text-[#697481]">Choose what Core OS can use. You can change these options at any time.</p>
                     <div className="divide-y divide-[#e2e7ed] rounded-xl border border-[#dce2e9] bg-white/75 px-4">
                       {[
                         { key: 'location' as const, title: 'Location services', description: 'Let apps use your approximate location.' },
-                        { key: 'diagnostics' as const, title: 'Send optional diagnostics', description: 'Help improve SparkOS by sharing usage details.' },
+                        { key: 'diagnostics' as const, title: 'Send optional diagnostics', description: 'Help improve Core OS by sharing usage details.' },
                         { key: 'tailored' as const, title: 'Personalized experiences', description: 'Use diagnostics to make suggestions more relevant.' },
                       ].map((item) => (
                         <div key={item.key} className="flex min-h-[68px] items-center justify-between gap-4 py-3">
@@ -238,7 +238,7 @@ export function SparkOSBootSetup({ onComplete }: SparkOSBootSetupProps) {
                 {step === 7 && (
                   <section aria-labelledby="setup-heading">
                     <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.13em] text-[#087bd1]">Almost there</p>
-                    <h1 id="setup-heading" className="mb-2 text-[clamp(24px,3vw,34px)] font-semibold leading-tight tracking-[-0.035em] text-[#17191d]">Your SparkOS is ready</h1>
+                    <h1 id="setup-heading" className="mb-2 text-[clamp(24px,3vw,34px)] font-semibold leading-tight tracking-[-0.035em] text-[#17191d]">Your Core OS is ready</h1>
                     <p className="mb-5 max-w-lg text-[13px] leading-5 text-[#697481]">Take a moment to review your setup before heading to the desktop.</p>
                     <dl className="divide-y divide-[#e2e7ed] rounded-xl border border-[#dce2e9] bg-white/75 px-4">
                       {[
@@ -264,8 +264,8 @@ export function SparkOSBootSetup({ onComplete }: SparkOSBootSetupProps) {
           <footer className="mt-5 flex shrink-0 items-center justify-between border-t border-[#e4e9ef] pt-4 sm:mt-6 sm:pt-5">
             {step > 0 ? (
               <button type="button" onClick={() => setStep((current) => current - 1)} className="inline-flex h-10 items-center gap-2 rounded-lg px-3 text-[13px] font-medium text-[#4c5966] transition-colors hover:bg-[#eaf0f6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087bd1]"><ArrowLeft aria-hidden="true" className="size-4" />Back</button>
-            ) : <span className="text-[11px] text-[#86909b]">SparkOS setup</span>}
-            <button type="button" onClick={continueSetup} disabled={(step === 3 && !userName.trim()) || (step === 4 && !deviceName.trim())} className="inline-flex h-10 min-w-[124px] items-center justify-center gap-2 rounded-lg bg-[#087bd1] px-5 text-[13px] font-medium text-white shadow-[0_4px_12px_rgba(8,123,209,.18)] transition-colors hover:bg-[#006fbe] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087bd1] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">{step === setupSteps.length - 1 ? 'Start SparkOS' : 'Continue'}{step < setupSteps.length - 1 && <ArrowRight aria-hidden="true" className="size-4" />}</button>
+            ) : <span className="text-[11px] text-[#86909b]">Core OS setup</span>}
+            <button type="button" onClick={continueSetup} disabled={(step === 3 && !userName.trim()) || (step === 4 && !deviceName.trim())} className="inline-flex h-10 min-w-[124px] items-center justify-center gap-2 rounded-lg bg-[#087bd1] px-5 text-[13px] font-medium text-white shadow-[0_4px_12px_rgba(8,123,209,.18)] transition-colors hover:bg-[#006fbe] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087bd1] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">{step === setupSteps.length - 1 ? 'Start Core OS' : 'Continue'}{step < setupSteps.length - 1 && <ArrowRight aria-hidden="true" className="size-4" />}</button>
           </footer>
         </div>
       </motion.section>

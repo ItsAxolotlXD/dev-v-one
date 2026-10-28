@@ -357,7 +357,8 @@ export default function App() {
     if (targetRoute && targetRoute !== '/recall') {
       const routeTypeMap: Record<string, { type: 'tab' | 'sparkos' | 'notes' | 'paint' | 'ink' | 'gallery' | 'settings' | 'search' | 'article'; name: string; badge: string }> = {
         '/store': { type: 'tab', name: 'Microsoft Store', badge: 'Microsoft Store' },
-        '/sparkos': { type: 'sparkos', name: 'SparkOS', badge: 'SparkOS Session' },
+        '/sparkos': { type: 'sparkos', name: 'Core OS', badge: 'Core OS Session' },
+        '/core-os-emulator': { type: 'sparkos', name: 'Core OS Emulator', badge: 'Core OS Emulator Session' },
         '/notes': { type: 'notes', name: 'Notes', badge: 'Sticky Notes' },
         '/write': { type: 'notes', name: 'Notes', badge: 'Sticky Notes' },
         '/ms-paint': { type: 'paint', name: 'Paint', badge: 'Untitled - Paint' },
@@ -522,7 +523,7 @@ export default function App() {
     }
   };
 
-  const isSparkOSRoute = currentRoute === '/sparkos';
+  const isSparkOSRoute = currentRoute === '/sparkos' || currentRoute === '/core-os-emulator';
 
   // Render Page Content based on currentRoute
   const renderContentForRoute = (route: string, appNavigate: (path: string) => void = navigate, inSparkOSWindow = false) => {
@@ -536,6 +537,9 @@ export default function App() {
     switch (route) {
       case '/sparkos':
         return <SparkOS navigate={navigate} installedApps={installedApps} renderApp={(appRoute, windowNavigate) => renderContentForRoute(appRoute, windowNavigate, true)} />;
+
+      case '/core-os-emulator':
+        return <SparkOS navigate={navigate} installedApps={installedApps} emulated renderApp={(appRoute, windowNavigate) => renderContentForRoute(appRoute, windowNavigate, true)} />;
 
       case '/pc-settings':
         return <SparkOSSettings />;

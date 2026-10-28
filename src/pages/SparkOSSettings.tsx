@@ -50,7 +50,7 @@ const defaultSettings: PcSettingsState = {
   notifications: true,
   gameMode: true,
   location: false,
-  deviceName: 'SparkOS-PC',
+  deviceName: 'CoreOS-PC',
   scale: '100%',
   resolution: '1920 × 1080',
   timeZone: 'UTC+07:00',
@@ -85,7 +85,13 @@ const accents: { id: PcSettingsState['accent']; label: string; color: string }[]
 function readSettings(): PcSettingsState {
   try {
     const saved = window.localStorage.getItem(STORAGE_KEY);
-    return saved ? { ...defaultSettings, ...JSON.parse(saved) } : defaultSettings;
+    if (!saved) return defaultSettings;
+    const parsed = JSON.parse(saved) as Partial<PcSettingsState>;
+    return {
+      ...defaultSettings,
+      ...parsed,
+      deviceName: parsed.deviceName === 'SparkOS-PC' ? defaultSettings.deviceName : parsed.deviceName ?? defaultSettings.deviceName,
+    };
   } catch {
     return defaultSettings;
   }
@@ -206,7 +212,7 @@ export function SparkOSSettings() {
           <SettingRow title="Get the latest updates as soon as they&apos;re available" light={settings.appearance === 'light'}><SettingToggle label="Get the latest updates" checked={settings.latestUpdates} onChange={(value) => update('latestUpdates', value)} accentColor={accentColor} /></SettingRow>
         </>;
       default:
-        return <div className="rounded-xl border border-white/[0.07] bg-white/[0.025] p-4 text-xs leading-5 text-slate-400">Manage {activeCategory.label.toLowerCase()} preferences for SparkOS on this device.</div>;
+        return <div className="rounded-xl border border-white/[0.07] bg-white/[0.025] p-4 text-xs leading-5 text-slate-400">Manage {activeCategory.label.toLowerCase()} preferences for Core OS on this device.</div>;
     }
   };
 
@@ -232,7 +238,7 @@ export function SparkOSSettings() {
         <div className="mb-5 flex items-center justify-between gap-3"><div className="min-w-0"><p className="text-[10px] font-medium uppercase tracking-[0.16em] text-slate-400">Settings</p><h1 className="mt-1 truncate text-xl font-semibold tracking-tight sm:text-2xl">{activeCategory.label}</h1></div></div>
 
         <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <div className={`rounded-xl border p-3.5 ${cardClass}`}><p className="text-[10px] text-slate-400">Device name</p><p className="mt-1 truncate text-sm font-medium">{settings.deviceName || 'SparkOS-PC'}</p></div>
+          <div className={`rounded-xl border p-3.5 ${cardClass}`}><p className="text-[10px] text-slate-400">Device name</p><p className="mt-1 truncate text-sm font-medium">{settings.deviceName || 'CoreOS-PC'}</p></div>
           <div className={`rounded-xl border p-3.5 ${cardClass}`}><p className="text-[10px] text-slate-400">Status</p><p className="mt-1 text-sm font-medium">Everything is running smoothly</p></div>
         </div>
         <div className={`rounded-xl border px-4 sm:px-5 ${cardClass}`}>

@@ -56,7 +56,7 @@ const quickAccess = [
   { label: 'Widgets', route: '/widgets', icon: 'widgets' as const },
   { label: 'Store', route: '/store', icon: 'store' as const },
   { label: 'Live Tiles', route: '/live-tiles', icon: 'sparkos' as const },
-  { label: 'SparkOS', route: '/sparkos', icon: 'sparkos' as const },
+  { label: 'Core OS', route: '/sparkos', icon: 'sparkos' as const },
   { label: 'Settings', route: '/settings', icon: 'settings' as const },
 ];
 

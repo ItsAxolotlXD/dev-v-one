@@ -1304,15 +1304,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </button>
         </div>
 
-        {/* 6. SparkOS */}
+        {/* 6. Core OS */}
         <div className="shrink-0">
           <button
             type="button"
             id={isMobile ? 'mobile-nav-sparkos' : 'sidebar-nav-sparkos'}
             data-nav-active={currentRoute === '/sparkos' ? 'true' : undefined}
             onClick={() => handleNavClick('/sparkos')}
-            title="SparkOS"
-            aria-label="SparkOS"
+            title="Core OS"
+            aria-label="Core OS"
             className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${
               currentRoute === '/sparkos'
                 ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
@@ -1320,7 +1320,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             }`}
           >
             <Monitor aria-hidden="true" className="size-5 shrink-0 text-black dark:text-white" />
-            <span className="truncate text-[13.5px]">SparkOS</span>
+            <span className="truncate text-[13.5px]">Core OS</span>
           </button>
         </div>
 
@@ -1511,15 +1511,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <AppTabIcon name="recall" className="w-5 h-5" />
         </button>
 
-        {/* SparkOS Icon */}
+        {/* Core OS Icon */}
         <button
           type="button"
           id="sidebar-collapsed-sparkos"
           data-nav-active={currentRoute === '/sparkos' ? 'true' : undefined}
           onClick={() => handleNavClick('/sparkos')}
-          onMouseEnter={(e) => handleTooltipEnter(e, 'SparkOS')}
+          onMouseEnter={(e) => handleTooltipEnter(e, 'Core OS')}
           onMouseLeave={handleTooltipLeave}
-          aria-label="SparkOS"
+          aria-label="Core OS"
           className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${
             currentRoute === '/sparkos'
               ? 'bg-transparent hover:bg-black/5 dark:hover:bg-white/[0.05]'
@@ -1867,12 +1867,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
               id={isMobile ? 'mobile-nav-sparkos' : 'sidebar-nav-sparkos'}
               data-nav-active={currentRoute === '/sparkos' ? 'true' : undefined}
               onClick={() => handleNavClick('/sparkos')}
-              title="SparkOS"
-              aria-label="SparkOS"
+              title="Core OS"
+              aria-label="Core OS"
               className={`sidebar-nav-item w-full h-[38px] flex items-center gap-3.5 px-4 cursor-default relative text-left rounded-none transition-colors ${currentRoute === '/sparkos' ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]' : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'}`}
             >
               <Monitor aria-hidden="true" className="size-5 shrink-0 text-black dark:text-white" />
-              <span className="truncate text-[13.5px]">SparkOS</span>
+              <span className="truncate text-[13.5px]">Core OS</span>
             </button>
           </div>
 
@@ -2685,15 +2685,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   <Store aria-hidden="true" className="size-5" />
                 </button>
 
-                {/* SparkOS Icon */}
+                {/* Core OS Icon */}
                 <button
                   type="button"
                   id="sidebar-collapsed-sparkos"
                   data-nav-active={currentRoute === '/sparkos' ? 'true' : undefined}
                   onClick={() => handleNavClick('/sparkos')}
-                  onMouseEnter={(e) => handleTooltipEnter(e, 'SparkOS')}
+                  onMouseEnter={(e) => handleTooltipEnter(e, 'Core OS')}
                   onMouseLeave={handleTooltipLeave}
-                  aria-label="SparkOS"
+                  aria-label="Core OS"
                   className={`sidebar-nav-item w-full h-[38px] shrink-0 rounded-none flex items-center justify-center relative transition-colors cursor-default ${currentRoute === '/sparkos' ? 'bg-transparent hover:bg-black/5 dark:hover:bg-white/[0.05]' : 'hover:bg-black/5 dark:hover:bg-white/[0.05]'}`}
                 >
                   <Monitor aria-hidden="true" className="size-5 text-black dark:text-white" />

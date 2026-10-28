@@ -45,6 +45,7 @@ interface SparkOSProps {
   navigate: (path: string) => void;
   renderApp: (route: string, navigate: (route: string) => void) => ReactNode;
   installedApps: string[];
+  emulated?: boolean;
 }
 
 interface AppWindow {
@@ -79,6 +80,7 @@ const CHAT_ICON_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/C
 
 const apps: DesktopApp[] = [
   { name: 'Microsoft Edge', route: '/edge', icon: Globe, color: 'text-cyan-300', surface: 'bg-cyan-500/20' },
+  { name: 'Core OS Emulator', route: '/core-os-emulator', icon: Monitor, color: 'text-sky-200', surface: 'bg-sky-500/20' },
   { name: 'Mail', route: '/mail', icon: Mail, color: 'text-sky-300', surface: 'bg-sky-500/20' },
   { name: 'Calendar', route: '/calendar', icon: CalendarDays, color: 'text-blue-300', surface: 'bg-blue-500/20' },
   { name: 'OneNote', route: '/notes', icon: StickyNote, color: 'text-fuchsia-300', surface: 'bg-fuchsia-500/20' },
@@ -89,7 +91,7 @@ const apps: DesktopApp[] = [
   { name: 'News', route: '/news', icon: Newspaper, color: 'text-rose-200', surface: 'bg-rose-500/20' },
   { name: 'Files', route: '/file-explorer', icon: Folder, color: 'text-amber-200', surface: 'bg-amber-400/20' },
   { name: 'Snip & Sketch', route: '/snipping-tool', icon: Scissors, color: 'text-orange-200', surface: 'bg-orange-500/20' },
-  { name: 'PC Settings', route: '/pc-settings', icon: Settings, color: 'text-slate-200', surface: 'bg-slate-400/20' },
+  { name: 'PC Settings', route: '/pc-settings', icon: Settings, color: 'text-white', surface: 'bg-slate-400/20' },
   { name: 'Calculator', route: '/calculator', icon: Calculator, color: 'text-cyan-200', surface: 'bg-cyan-500/20' },
   { name: 'Clock', route: '/clock', icon: Clock3, color: 'text-violet-200', surface: 'bg-violet-500/20' },
   { name: 'Paint', route: '/ms-paint', icon: Paintbrush, color: 'text-rose-200', surface: 'bg-rose-500/20' },
@@ -115,6 +117,8 @@ const sidebarIconNames: Record<string, AppTabIconName> = {
 
 function renderDesktopIcon(route: string, className = 'size-6') {
   if (route === '/store') return <img src={STORE_ICON_URL} alt="" className={`${className} object-contain`} />;
+  if (route === '/pc-settings') return <Settings aria-hidden="true" className={`${className} text-white`} />;
+  if (route === '/core-os-emulator') return <Monitor aria-hidden="true" className={`${className} text-sky-200`} />;
   if (route === '/clock') return <FluentClockIcon className={className} />;
   if (route === '/snipping-tool') return <FluentSnippingToolIcon className={className} />;
   const iconName = sidebarIconNames[route];
@@ -132,11 +136,11 @@ function WindowsMark({ className = 'size-[18px]' }: { className?: string }) {
   );
 }
 
-export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
+export function SparkOS({ navigate, renderApp, installedApps, emulated = false }: SparkOSProps) {
   const isMobile = useIsMobile();
-  const [bootFinished, setBootFinished] = useState(false);
-  const [setupComplete, setSetupComplete] = useState(false);
-  const [startOpen, setStartOpen] = useState(true);
+  const [bootFinished, setBootFinished] = useState(emulated);
+  const [setupComplete, setSetupComplete] = useState(emulated);
+  const [startOpen, setStartOpen] = useState(!emulated);
   const [showAllApps, setShowAllApps] = useState(false);
   const [query, setQuery] = useState('');
   const [now, setNow] = useState(() => new Date());
@@ -150,17 +154,18 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
   const [activeDesktop, setActiveDesktop] = useState(1);
   const [quickSettings, setQuickSettings] = useState({ wifi: true, bluetooth: true, batterySaver: false, focusAssist: false });
   const searchRef = useRef<HTMLInputElement>(null);
+  const desktopRef = useRef<HTMLElement | null>(null);
   const dragRef = useRef<{ id: string; startX: number; startY: number; originX: number; originY: number } | null>(null);
   const splashTimersRef = useRef<Map<string, number>>(new Map());
 
   useEffect(() => {
-    if (isMobile) return;
+    if (isMobile || emulated) return;
     const timer = window.setTimeout(() => {
       setSetupComplete(hasSparkOSSetup());
       setBootFinished(true);
     }, 1800);
     return () => window.clearTimeout(timer);
-  }, [isMobile]);
+  }, [isMobile, emulated]);
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(new Date()), 30_000);
@@ -197,8 +202,11 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
     const handlePointerMove = (event: globalThis.PointerEvent) => {
       const drag = dragRef.current;
       if (!drag) return;
+      const desktopBounds = emulated ? desktopRef.current?.getBoundingClientRect() : undefined;
+      const availableWidth = desktopBounds?.width ?? window.innerWidth;
+      const availableHeight = desktopBounds?.height ?? window.innerHeight;
       setWindows((current) => current.map((appWindow) => appWindow.id === drag.id
-        ? { ...appWindow, x: Math.max(0, Math.min(window.innerWidth - 300, drag.originX + event.clientX - drag.startX)), y: Math.max(0, Math.min(window.innerHeight - 100, drag.originY + event.clientY - drag.startY)) }
+        ? { ...appWindow, x: Math.max(0, Math.min(availableWidth - 300, drag.originX + event.clientX - drag.startX)), y: Math.max(0, Math.min(availableHeight - 100, drag.originY + event.clientY - drag.startY)) }
         : appWindow));
     };
     const handlePointerUp = () => { dragRef.current = null; };
@@ -210,15 +218,16 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerup', handlePointerUp);
     };
-  }, []);
+  }, [emulated]);
 
   const visibleApps = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
+    const availableApps = emulated ? apps.filter((app) => app.route !== '/core-os-emulator') : apps;
     const filtered = normalizedQuery
-      ? apps.filter((app) => app.name.toLowerCase().includes(normalizedQuery))
-      : apps;
+      ? availableApps.filter((app) => app.name.toLowerCase().includes(normalizedQuery))
+      : availableApps;
     return showAllApps || normalizedQuery ? filtered : filtered.slice(0, 15);
-  }, [query, showAllApps]);
+  }, [query, showAllApps, emulated]);
 
   const launch = (route: string, newWindow = false, forcedName?: string) => {
     const storeApp = getStoreAppForRoute(route);
@@ -243,12 +252,21 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
       setWindows((current) => current.map((item) => item.id === existing.id ? { ...item, minimized: false } : item));
       return;
     }
+    const desktopBounds = emulated ? desktopRef.current?.getBoundingClientRect() : undefined;
+    const availableWidth = desktopBounds?.width ?? window.innerWidth;
+    const availableHeight = desktopBounds?.height ?? window.innerHeight;
+    const isEmulatorWindow = route === '/core-os-emulator' && !emulated;
+    const windowWidth = Math.min(emulated ? 700 : 860, availableWidth - 24);
+    const windowHeight = Math.min(
+      availableHeight * (emulated ? 0.8 : isEmulatorWindow ? 0.82 : 0.7),
+      emulated ? 420 : isEmulatorWindow ? 610 : 560,
+    );
     const id = `${route}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     const offset = windows.length * 24;
     setWindows((current) => [...current, {
       id, name, route,
-      x: Math.max(12, Math.min((window.innerWidth - 720) / 2 + offset, window.innerWidth - 320)),
-      y: Math.max(16, Math.min((window.innerHeight - 480) / 2 + offset, window.innerHeight - 120)),
+      x: Math.max(12, Math.min((availableWidth - windowWidth) / 2 + offset, availableWidth - windowWidth - 12)),
+      y: Math.max(16, Math.min((availableHeight - windowHeight) / 2 + offset, availableHeight - 100)),
       minimized: false, maximized: false, loading: true, desktopId: activeDesktop,
     }]);
     setActiveWindowId(id);
@@ -256,14 +274,14 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
     try {
       logRecallActivity({
         type: 'sparkos',
-        appName: 'SparkOS',
-        title: `SparkOS - ${name}`,
+        appName: 'Core OS',
+        title: `Core OS - ${name}`,
         subtitle: `Cửa sổ đa nhiệm Desktop: ${name}`,
         durationText: 'You spent < 1m on this activity recently',
-        badgeText: `SparkOS: ${name}`,
+        badgeText: `Core OS: ${name}`,
         thumbnail: '/sparkos-wallpaper.png',
         route: `/sparkos`,
-        searchKeywords: `sparkos desktop window ${name}`.toLowerCase()
+        searchKeywords: `core os desktop window ${name}`.toLowerCase()
       });
     } catch {}
 
@@ -324,7 +342,7 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
             <Monitor className="size-7" />
           </div>
           <h1 id="sparkos-mobile-title" className="text-xl font-semibold tracking-tight">Get a Bộ PC, silly</h1>
-          <p id="sparkos-mobile-description" className="mt-3 text-sm leading-6 text-slate-300">SparkOS only available for those who use computers 🤓👆</p>
+          <p id="sparkos-mobile-description" className="mt-3 text-sm leading-6 text-slate-300">Core OS is only available on desktop devices.</p>
           <button type="button" onClick={() => navigate('/')} className="mt-6 w-full rounded-xl bg-sky-500 px-4 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-sky-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#17191f]">Back to home</button>
         </section>
       </div>
@@ -336,25 +354,28 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
 
   return (
     <main
-      aria-label="SparkOS desktop"
+      ref={desktopRef}
+      aria-label={emulated ? 'Core OS Emulator desktop' : 'Core OS desktop'}
       onClick={() => { setStartOpen(false); setContextMenu(null); setActivePanel(null); }}
       onContextMenu={(event) => openContextMenu(event)}
-      className="relative isolate h-[100dvh] min-h-[420px] w-full overflow-hidden bg-[#17232b] font-sans text-white"
+      className={`relative isolate ${emulated ? 'h-full min-h-[280px]' : 'h-[100dvh] min-h-[420px]'} w-full overflow-hidden bg-[#17232b] font-sans text-white`}
       style={{ backgroundImage: "linear-gradient(180deg,rgba(8,12,18,.08),rgba(4,12,16,.18)),url('/sparkos-wallpaper.png')", backgroundPosition: 'center', backgroundSize: 'cover' }}
     >
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
 
-      <div className="absolute left-4 top-4 flex flex-col items-start gap-5 sm:left-7 sm:top-7">
-        <button
-          type="button"
-          onClick={(event) => { event.stopPropagation(); navigate('/'); }}
-          className="group flex w-[76px] flex-col items-center gap-2 rounded-md p-2 text-center text-[11px] text-white drop-shadow-md transition-colors hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
-          aria-label="Return to vOne"
-        >
-          <span className="flex size-10 items-center justify-center rounded-xl border border-white/15 bg-white/15 shadow-lg backdrop-blur-sm"><WindowsMark /></span>
-          <span>vOne</span>
-        </button>
-      </div>
+      {!emulated && (
+        <div className="absolute left-4 top-4 flex flex-col items-start gap-5 sm:left-7 sm:top-7">
+          <button
+            type="button"
+            onClick={(event) => { event.stopPropagation(); navigate('/'); }}
+            className="group flex w-[76px] flex-col items-center gap-2 rounded-md p-2 text-center text-[11px] text-white drop-shadow-md transition-colors hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+            aria-label="Return to vOne"
+          >
+            <span className="flex size-10 items-center justify-center rounded-xl border border-white/15 bg-white/15 shadow-lg backdrop-blur-sm"><WindowsMark /></span>
+            <span>vOne</span>
+          </button>
+        </div>
+      )}
 
       <AnimatePresence>
         {windows.filter((appWindow) => !appWindow.minimized && appWindow.desktopId === activeDesktop).map((appWindow) => (
@@ -367,7 +388,7 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.84, y: 18 }}
             transition={{ duration: 0.2, ease: [0.2, 0.8, 0.2, 1] }}
-            className={`dark absolute z-10 flex min-h-[260px] min-w-[300px] flex-col overflow-hidden border border-white/10 bg-[#111318] text-slate-100 shadow-[0_24px_72px_rgba(0,0,0,.48)] ${appWindow.maximized ? 'inset-x-0 top-0 bottom-[46px] w-auto rounded-none' : 'h-[min(70dvh,560px)] w-[min(860px,calc(100vw-24px))] rounded-lg'}`}
+            className={`dark absolute z-10 flex min-h-[260px] min-w-[300px] flex-col overflow-hidden border border-white/10 bg-[#111318] text-slate-100 shadow-[0_24px_72px_rgba(0,0,0,.48)] ${appWindow.maximized ? 'inset-x-0 top-0 bottom-[46px] w-auto rounded-none' : emulated ? 'h-[min(80%,420px)] w-[min(700px,calc(100%-24px))] rounded-lg' : appWindow.route === '/core-os-emulator' ? 'h-[min(82dvh,610px)] w-[min(860px,calc(100vw-24px))] rounded-lg' : 'h-[min(70dvh,560px)] w-[min(860px,calc(100vw-24px))] rounded-lg'}`}
             style={appWindow.maximized ? { zIndex: appWindow.id === activeWindowId ? 20 : 10 } : { left: appWindow.x, top: appWindow.y, zIndex: appWindow.id === activeWindowId ? 20 : 10 }}
           >
             <div
@@ -420,7 +441,7 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 38, scale: 0.98 }}
           transition={{ type: 'spring', stiffness: 420, damping: 23, mass: 0.72 }}
-          className="absolute left-1/2 top-1/2 z-20 flex h-[min(82dvh,610px)] w-[min(710px,calc(100vw-24px))] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-[8px] border border-white/10 bg-[#111c22]/75 shadow-[0_28px_90px_rgba(0,0,0,.5)] backdrop-blur-2xl"
+          className={`absolute left-1/2 top-1/2 z-20 flex ${emulated ? 'h-[min(82%,610px)] w-[min(710px,calc(100%-24px))]' : 'h-[min(82dvh,610px)] w-[min(710px,calc(100vw-24px))]'} -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-[8px] border border-white/10 bg-[#111c22]/75 shadow-[0_28px_90px_rgba(0,0,0,.5)] backdrop-blur-2xl`}
         >
           <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-5 pb-2 pt-[clamp(12px,4dvh,32px)] sm:px-9">
             <div className="flex h-[clamp(40px,5.5dvh,44px)] shrink-0 items-center gap-3 border border-white/10 bg-white/[0.09] px-3.5 shadow-inner focus-within:border-sky-300/70 focus-within:bg-white/[0.13]">
@@ -457,11 +478,11 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
                     type="button"
                     onClick={() => launch(route)}
                     onContextMenu={(event) => openContextMenu(event, apps.find((app) => app.route === route))}
-                    className="group flex min-h-[clamp(56px,7dvh,78px)] flex-col items-center justify-center gap-1.5 rounded-md px-1 py-1.5 text-center transition-colors hover:bg-white/10 focus-visible:bg-white/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50"
+                    className={`group flex ${emulated ? 'min-h-12 gap-1 px-1 py-1' : 'min-h-[clamp(56px,7dvh,78px)] gap-1.5 px-1 py-1.5'} flex-col items-center justify-center rounded-md text-center transition-colors hover:bg-white/10 focus-visible:bg-white/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50`}
                     aria-label={`Open ${name}`}
                   >
-                    <span className="flex size-[clamp(36px,6dvh,48px)] items-center justify-center transition-transform group-hover:scale-110">
-                      {renderDesktopIcon(route, 'size-[30px]')}
+                    <span className={`flex ${emulated ? 'size-7' : 'size-[clamp(36px,6dvh,48px)]'} items-center justify-center transition-transform group-hover:scale-110`}>
+                      {renderDesktopIcon(route, emulated ? 'size-6' : 'size-[30px]')}
                     </span>
                     <span className="max-w-full truncate text-[10px] leading-tight text-slate-100 sm:text-[11px]">{name}</span>
                   </button>
@@ -612,7 +633,7 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
                     </div>
                   </div>
                 )}
-                <footer className="border-t border-white/10 px-4 py-3 text-xs text-slate-500">SparkOS · Desktop {activeDesktop}</footer>
+                <footer className="border-t border-white/10 px-4 py-3 text-xs text-slate-500">Core OS · Desktop {activeDesktop}</footer>
               </>
             )}
           </motion.aside>
@@ -663,7 +684,7 @@ export function SparkOS({ navigate, renderApp, installedApps }: SparkOSProps) {
                 <span className="flex size-12 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.06]">{renderDesktopIcon(storePrompt.route, 'size-7')}</span>
                 <div className="min-w-0 flex-1">
                   <h2 id="sparkos-store-dialog-title" className="text-lg font-semibold">{storePrompt.name} isn&apos;t installed</h2>
-                  <p id="sparkos-store-dialog-description" className="mt-2 text-sm leading-6 text-slate-300">Install this app from Microsoft Store before opening it in SparkOS.</p>
+                  <p id="sparkos-store-dialog-description" className="mt-2 text-sm leading-6 text-slate-300">Install this app from Microsoft Store before opening it in Core OS.</p>
                   <p className="mt-3 text-xs text-slate-400">{storePrompt.publisher} · {storePrompt.size}</p>
                 </div>
                 <button type="button" onClick={() => setStorePrompt(null)} aria-label="Close install dialog" className="-mr-1 -mt-1 rounded-md p-1.5 text-slate-400 hover:bg-white/10 hover:text-white"><X aria-hidden="true" className="size-4" /></button>

@@ -316,7 +316,7 @@ export const RecallApp: React.FC<RecallAppProps> = ({ navigate }) => {
                 { id: 'livetv', label: 'Live TV' },
                 { id: 'paint', label: 'Paint & Ink' },
                 { id: 'notes', label: 'Notes' },
-                { id: 'sparkos', label: 'SparkOS' },
+                { id: 'sparkos', label: 'Core OS' },
                 { id: 'tab', label: 'Apps & Store' },
                 { id: 'article', label: 'Articles' },
                 { id: 'search', label: 'Searches' },
