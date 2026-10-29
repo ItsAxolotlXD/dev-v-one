@@ -63,7 +63,7 @@
   header h1, header h2, header h3, header h4, header h5, header h6,
   [role="heading"],
   .title,
-  [class*="title"]:not([id*="modal-title"]):not([id*="dialog-title"]):not(.modal-title),
+  [class*="title"]:not([id*="modal-title"]):not([id*="dialog-title"]):not(.modal-title):not(.sidebar-brand-name):not(.sidebar-brand-title):not([data-brand-title="true"]),
   [id*="title"]:not([id*="modal-title"]):not([id*="dialog-title"]):not(#new-folder-dialog-title),
   .heading,
   [class*="heading"],
@@ -98,7 +98,7 @@
   header h1, header h2, header h3, header h4, header h5, header h6,
   [role="heading"]:not(.fluent-modal-dialog *):not([role="dialog"] *),
   .title,
-  [class*="title"]:not([id*="modal-title"]):not([id*="dialog-title"]):not(.modal-title),
+  [class*="title"]:not([id*="modal-title"]):not([id*="dialog-title"]):not(.modal-title):not(.sidebar-brand-name):not(.sidebar-brand-title):not([data-brand-title="true"]),
   [id*="title"]:not([id*="modal-title"]):not([id*="dialog-title"]):not(#new-folder-dialog-title),
   .heading,
   [class*="heading"],
@@ -443,6 +443,77 @@ html.light-mode .sidebar-nav-item::after {
 
 /* Keep icon and label content on top of reveal layer */
 .sidebar-nav-item > * {
+  position: relative;
+  z-index: 3;
+}
+
+/* ========================================================
+   HOME PAGE REVEAL EFFECT (MATCHING SIDEBAR REVEAL)
+   ======================================================== */
+.home-reveal-item {
+  position: relative !important;
+  overflow: hidden !important;
+  cursor: default !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  transition: background-color 0.12s ease-out, color 0.12s ease-out !important;
+}
+
+.home-reveal-item:hover {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+  cursor: default !important;
+}
+
+html.light-mode .home-reveal-item:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+  cursor: default !important;
+}
+
+/* Reveal Highlight Surface Glow (Pure surface glow, no borders, identical to sidebar) */
+.home-reveal-item::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute;
+  inset: 0;
+  border: none !important;
+  outline: none !important;
+  pointer-events: none;
+  opacity: var(--home-reveal-surface-opacity, 0);
+  transition: opacity 0.12s ease-out;
+  background: radial-gradient(
+    circle 130px at var(--home-reveal-x, 50%) var(--home-reveal-y, 50%),
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(255, 255, 255, 0.10) 40%,
+    rgba(255, 255, 255, 0.02) 65%,
+    transparent 80%
+  ) !important;
+  z-index: 1;
+}
+
+html.light-mode .home-reveal-item::before {
+  background: radial-gradient(
+    circle 130px at var(--home-reveal-x, 50%) var(--home-reveal-y, 50%),
+    rgba(0, 0, 0, 0.12) 0%,
+    rgba(0, 0, 0, 0.05) 40%,
+    rgba(0, 0, 0, 0.01) 65%,
+    transparent 80%
+  ) !important;
+}
+
+.home-reveal-item:hover::before {
+  opacity: 1 !important;
+}
+
+.home-reveal-item::after {
+  display: none !important;
+  content: none !important;
+  border: none !important;
+  outline: none !important;
+}
+
+/* Keep icon and label content on top of reveal layer */
+.home-reveal-item > * {
   position: relative;
   z-index: 3;
 }
@@ -4036,12 +4107,15 @@ html:not(.light-mode) .signin-flyout-panel {
 #waves-mobile-sidebar a:active,
 #waves-mobile-sidebar [role="button"]:active,
 .sidebar-nav-item:active,
+.home-reveal-item:active,
 [id^="sidebar-nav-"]:active,
 [id^="mobile-nav-"]:active,
 [id^="nav-item-"]:active,
 [id^="mobile-nav-item-"]:active {
-  transform: none !important;
-  scale: 1 !important;
+  transform: scale(0.96) !important;
+  transition: none !important;
+  animation: none !important;
+  transform-origin: center center !important;
 }
 
 /* THICK FOCUS BORDER ON SEARCH BOX CONTAINER ONLY (3px Solid Reddish Magenta, No Outer Ring) */
@@ -5360,6 +5434,10 @@ html.light-mode .fluent-modal-footer {
 [role="dialog"] .fluent-btn-secondary:active {
   background-color: #262626 !important;
   color: #FFFFFF !important;
+  transform: scale(0.96) !important;
+  transition: none !important;
+  animation: none !important;
+  transform-origin: center center !important;
 }
 
 /* ContentDialog Flat Buttons (Light Mode) with Reveal Highlight Effect */
@@ -5462,6 +5540,10 @@ html.light-mode [role="dialog"] .fluent-btn-primary:active,
 html.light-mode [role="dialog"] .fluent-btn-secondary:active {
   background-color: #b8b8b8 !important;
   color: #000000 !important;
+  transform: scale(0.96) !important;
+  transition: none !important;
+  animation: none !important;
+  transform-origin: center center !important;
 }
 
 /* Fluent Primary Button (Accent Blue #4cc2ff - Windows 11) */
@@ -8428,16 +8510,22 @@ html.no-shiny-outline .hero-carousel-slide * {
   border: none !important;
 }
 
-/* Fluent Settings Icon ease-in/ease-out 360deg spin on hover */
+/* Fluent Settings Icon: NO spin animation on hover/click */
 .settings-spin-icon {
   transform-origin: center center;
-  transition: transform 0.65s cubic-bezier(0.42, 0, 0.58, 1);
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
 }
 button:hover .settings-spin-icon,
+button:active .settings-spin-icon,
 .group:hover .settings-spin-icon,
 a:hover .settings-spin-icon,
-.settings-spin-icon:hover {
-  transform: rotate(360deg);
+.settings-spin-icon:hover,
+.settings-spin-icon:active {
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
 }
 
 /* Windows Context Menu Slide Down Animation */
@@ -8872,6 +8960,10 @@ html.light-mode #example-content-dialog {
   background-color: #262626 !important;
   color: #FFFFFF !important;
   border-color: transparent !important;
+  transform: scale(0.96) !important;
+  transition: none !important;
+  animation: none !important;
+  transform-origin: center center !important;
 }
 
 html.light-mode .fluent-modal-dialog .fluent-modal-footer button,
@@ -8910,6 +9002,10 @@ html.light-mode #example-content-dialog button:active {
   background-color: #b8b8b8 !important;
   color: #000000 !important;
   border-color: transparent !important;
+  transform: scale(0.96) !important;
+  transition: none !important;
+  animation: none !important;
+  transform-origin: center center !important;
 }
 
 
@@ -8923,9 +9019,9 @@ button[role="switch"],
 [id^="toggle-"],
 [class*="toggle-switch-btn"],
 [class*="toggle-switch-track"] {
-  width: 40px !important;
+  width: 46px !important;
   height: 20px !important;
-  min-width: 40px !important;
+  min-width: 46px !important;
   min-height: 20px !important;
   box-sizing: border-box !important;
   border-radius: 9999px !important;
@@ -9034,10 +9130,10 @@ button[role="switch"][aria-checked="false"]:hover span,
   background-color: #ffffff !important;
 }
 
-/* ON state Thumb: White knob at right */
+/* ON state Thumb: White knob at right (adjusted for 46px elongated switch) */
 button[role="switch"][aria-checked="true"] span,
 .toggle-switch-btn[aria-checked="true"] .toggle-switch-thumb {
-  left: 21px !important;
+  left: 27px !important;
   right: auto !important;
   background-color: #ffffff !important;
   border: none !important;
@@ -9072,6 +9168,15 @@ button[role="switch"] span:hover,
 #root .settings-page [id^="settings-section-"] [id^="setting-"]:hover {
   background-color: transparent !important;
   background-image: none !important;
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+#root .settings-page .setting-card {
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
 }
 
 #root .settings-page [id^="settings-section-"] div:has(> [role="switch"]),
@@ -9088,7 +9193,7 @@ button[role="switch"] span:hover,
   flex-direction: column !important;
   align-items: flex-start !important;
   justify-content: flex-start !important;
-  gap: 0.75rem !important;
+  gap: 0.25rem !important;
 }
 
 #root .settings-page [id^="settings-section-"] [role="switch"],
@@ -9143,3 +9248,26 @@ dialog.fluent-modal-dialog::backdrop {
 #root #install-first-dialog .fluent-modal-footer button {
   border-radius: 0 !important;
 }
+
+/* Sidebar Title: Sparkle Insider Dev - Regular font weight (400) */
+#waves-desktop-sidebar .sidebar-brand-title,
+#waves-mobile-sidebar .sidebar-brand-title,
+.sidebar-brand-title,
+#waves-desktop-sidebar .sidebar-brand-name,
+#waves-mobile-sidebar .sidebar-brand-name,
+.sidebar-brand-name,
+[data-brand-title="true"] {
+  font-weight: 400 !important;
+  font-family: 'Segoe UI Variable Text', 'Segoe UI', system-ui, -apple-system, sans-serif !important;
+}
+
+/* Settings Icon: White monochrome overlay */
+.settings-spin-icon,
+[data-icon="settings"],
+#waves-desktop-sidebar [id*="settings"] img,
+#waves-mobile-sidebar [id*="settings"] img,
+#btn-top-settings-gear img,
+#dock-settings img {
+  filter: brightness(0) invert(1) !important;
+}
+

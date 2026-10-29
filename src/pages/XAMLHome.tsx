@@ -121,8 +121,91 @@ export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, o
     setCurrentNewsIndex((prev) => (prev + 1) % newsArticles.length);
   };
 
+  const handleItemPointerMove = (e: React.PointerEvent<HTMLElement>) => {
+    const item = (e.target as HTMLElement).closest('.home-reveal-item') as HTMLElement | null;
+    if (item) {
+      const rect = item.getBoundingClientRect();
+      const x = Math.round(e.clientX - rect.left);
+      const y = Math.round(e.clientY - rect.top);
+      item.style.setProperty('--home-reveal-x', `${x}px`);
+      item.style.setProperty('--home-reveal-y', `${y}px`);
+      item.style.setProperty('--home-reveal-surface-opacity', '1');
+    }
+  };
+
+  const handleItemPointerLeave = (e: React.PointerEvent<HTMLElement>) => {
+    const item = (e.target as HTMLElement).closest('.home-reveal-item') as HTMLElement | null;
+    if (item) {
+      item.style.setProperty('--home-reveal-surface-opacity', '0');
+    }
+  };
+
+  // Real-time Fluent Reveal Effect cursor coordinate tracking on Home Page items (identical to sidebar)
+  useEffect(() => {
+    let currentItem: HTMLElement | null = null;
+    let rafId: number | null = null;
+    let lastEvent: PointerEvent | null = null;
+
+    const updateReveal = () => {
+      rafId = null;
+      if (!lastEvent) return;
+      const e = lastEvent;
+
+      const item = (e.target as HTMLElement)?.closest('.home-reveal-item') as HTMLElement | null;
+      if (item) {
+        if (currentItem && currentItem !== item) {
+          currentItem.style.setProperty('--home-reveal-surface-opacity', '0');
+        }
+        currentItem = item;
+        const rect = item.getBoundingClientRect();
+        const x = Math.round(e.clientX - rect.left);
+        const y = Math.round(e.clientY - rect.top);
+
+        item.style.setProperty('--home-reveal-x', `${x}px`);
+        item.style.setProperty('--home-reveal-y', `${y}px`);
+        item.style.setProperty('--home-reveal-surface-opacity', '1');
+      } else if (currentItem) {
+        currentItem.style.setProperty('--home-reveal-surface-opacity', '0');
+        currentItem = null;
+      }
+    };
+
+    const onPointerMove = (e: PointerEvent) => {
+      lastEvent = e;
+      if (rafId === null) {
+        rafId = requestAnimationFrame(updateReveal);
+      }
+    };
+
+    const onPointerLeave = () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = null;
+      if (currentItem) {
+        currentItem.style.setProperty('--home-reveal-surface-opacity', '0');
+        currentItem = null;
+      }
+      const activeItems = document.querySelectorAll<HTMLElement>('.home-reveal-item[style*="--home-reveal"]');
+      activeItems.forEach((el) => {
+        el.style.setProperty('--home-reveal-surface-opacity', '0');
+      });
+    };
+
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    window.addEventListener('pointerleave', onPointerLeave, { passive: true });
+
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerleave', onPointerLeave);
+    };
+  }, []);
+
   return (
-    <section className="min-h-[calc(100vh-3.5rem)] w-full bg-transparent px-1 pb-10 text-neutral-900 dark:text-[#e8e8e8] font-sans">
+    <section
+      onPointerMove={handleItemPointerMove}
+      onPointerLeave={handleItemPointerLeave}
+      className="min-h-[calc(100vh-3.5rem)] w-full bg-transparent px-1 pb-10 text-neutral-900 dark:text-[#e8e8e8] font-sans"
+    >
       <div className="mx-auto w-full max-w-5xl px-2 sm:px-4 pt-3 space-y-4">
         {/* Tab Title: Home (Font Regular, shifted down slightly) */}
         <div className="pt-2 sm:pt-3 pb-1">
@@ -133,7 +216,11 @@ export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, o
 
         {/* Quick Access Section */}
         <div>
-          <button type="button" onClick={() => toggleCategory('quickAccess')} className="flex cursor-pointer items-center gap-1 py-1 text-[13px] font-normal hover:text-white transition-colors">
+          <button
+            type="button"
+            onClick={() => toggleCategory('quickAccess')}
+            className="home-reveal-item flex cursor-pointer items-center gap-1 py-1 px-1.5 text-[13px] font-normal hover:text-white transition-colors rounded-[4px]"
+          >
             {expanded.quickAccess ? <ChevronDown className="size-3 text-[#bdbdbd]" /> : <ChevronRight className="size-3 text-[#bdbdbd]" />}
             <span>Quick access</span>
           </button>
@@ -154,7 +241,7 @@ export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, o
                       key={label}
                       type="button"
                       onClick={() => onNavigate(route)}
-                      className="grid min-h-9 cursor-pointer grid-cols-[1fr_155px] items-center px-1 text-left text-[13px] hover:bg-white/10 transition-colors rounded-[4px]"
+                      className="home-reveal-item grid min-h-9 cursor-pointer grid-cols-[1fr_155px] items-center px-2 text-left text-[13px] rounded-[4px]"
                     >
                       <div className="flex items-center gap-2">
                         <AppTabIcon name={icon} className="size-4 shrink-0" />
@@ -171,7 +258,11 @@ export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, o
 
         {/* Favorites Section */}
         <div>
-          <button type="button" onClick={() => toggleCategory('favorites')} className="mt-2 flex cursor-pointer items-center gap-1 text-[13px] hover:text-white transition-colors">
+          <button
+            type="button"
+            onClick={() => toggleCategory('favorites')}
+            className="home-reveal-item mt-2 flex cursor-pointer items-center gap-1 py-1 px-1.5 text-[13px] hover:text-white transition-colors rounded-[4px]"
+          >
             {expanded.favorites ? <ChevronDown className="size-3 text-[#bdbdbd]" /> : <ChevronRight className="size-3 text-[#bdbdbd]" />}
             <span>Favorites</span>
           </button>
@@ -185,7 +276,7 @@ export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, o
                 transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
                 className="overflow-hidden"
               >
-                <div className="xaml-category-items flex min-h-8 items-center gap-2 px-1 text-[13px]">
+                <div className="xaml-category-items flex min-h-8 items-center gap-2 px-2 text-[13px]">
                   <img src="https://winaero.com/blog/wp-content/uploads/2014/12/folder_win10.png" alt="Folder" className="size-4 object-contain" />
                   <span className="text-[#dedede]">No Items</span>
                 </div>
@@ -196,7 +287,11 @@ export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, o
 
         {/* Recent Section */}
         <div>
-          <button type="button" onClick={() => toggleCategory('recent')} className="mt-2 flex cursor-pointer items-center gap-1 text-[13px] hover:text-white transition-colors">
+          <button
+            type="button"
+            onClick={() => toggleCategory('recent')}
+            className="home-reveal-item mt-2 flex cursor-pointer items-center gap-1 py-1 px-1.5 text-[13px] hover:text-white transition-colors rounded-[4px]"
+          >
             {expanded.recent ? <ChevronDown className="size-3 text-[#bdbdbd]" /> : <ChevronRight className="size-3 text-[#bdbdbd]" />}
             <span>Recent</span>
           </button>
@@ -208,7 +303,7 @@ export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, o
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
                 transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-                className="xaml-category-items min-h-8 overflow-hidden px-1 text-[13px] text-[#777]"
+                className="xaml-category-items min-h-8 overflow-hidden px-2 text-[13px] text-[#777]"
               >
                 No Items
               </motion.div>
@@ -218,7 +313,11 @@ export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, o
 
         {/* Live Channels Section */}
         <div className="mt-5 border-t border-white/10 pt-3">
-          <button type="button" onClick={() => toggleCategory('liveChannels')} className="mb-1 flex cursor-pointer items-center gap-1 text-[13px] hover:text-white transition-colors">
+          <button
+            type="button"
+            onClick={() => toggleCategory('liveChannels')}
+            className="home-reveal-item mb-1 flex cursor-pointer items-center gap-1 py-1 px-1.5 text-[13px] hover:text-white transition-colors rounded-[4px]"
+          >
             {expanded.liveChannels ? <ChevronDown className="size-3 text-[#bdbdbd]" /> : <ChevronRight className="size-3 text-[#bdbdbd]" />}
             <span>Live channels</span>
             <span className="ml-1 text-[11px] text-[#777]">{channels.length}</span>
@@ -239,7 +338,7 @@ export const XAMLHome: React.FC<XAMLHomeProps> = ({ channels, onSelectChannel, o
                       key={channel.id}
                       type="button"
                       onClick={() => onSelectChannel(channel)}
-                      className="grid min-h-11 cursor-pointer grid-cols-[34px_1fr_155px] items-center gap-1 px-1 text-left text-[13px] hover:bg-white/10 transition-colors rounded-[4px]"
+                      className="home-reveal-item grid min-h-11 cursor-pointer grid-cols-[34px_1fr_155px] items-center gap-1 px-2 text-left text-[13px] rounded-[4px]"
                     >
                       <span className="flex size-7 items-center justify-center">
                         <img src={channel.logo} alt="" className="max-h-6 max-w-7 object-contain" referrerPolicy="no-referrer" />

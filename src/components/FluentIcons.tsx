@@ -40,7 +40,7 @@ export const APP_TAB_ICON_URLS = {
 
 export type AppTabIconName = keyof typeof APP_TAB_ICON_URLS;
 
-const WHITE_MONOCHROME_ICON_NAMES = new Set<AppTabIconName>(['home', 'fileExplorer', 'copilot', 'recall']);
+const WHITE_MONOCHROME_ICON_NAMES = new Set<AppTabIconName>(['home', 'fileExplorer', 'copilot', 'recall', 'settings']);
 
 export const AppTabIcon: React.FC<{
   name: AppTabIconName;

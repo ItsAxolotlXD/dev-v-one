@@ -185,36 +185,16 @@ const MorphingVerticalIndicator: React.FC<MorphingIndicatorProps> = ({
   const INDICATOR_HEIGHT = 24;
   const centeredTop = bounds.top + Math.round((bounds.height - INDICATOR_HEIGHT) / 2);
 
-  // WebView SDK: Selected sidebar tab retains the vertical blue pill, but with NO motion animation across tabs
-  if (isWebViewSdk) {
-    return (
-      <div
-        className="sidebar-static-indicator absolute w-[2px] h-[24px] bg-[#005fb8] dark:bg-[#0078d4] z-30 pointer-events-none rounded-none shadow-none"
-        style={{
-          top: centeredTop,
-          left: bounds.left,
-          opacity: bounds.visible ? 1 : 0,
-          transition: 'none',
-          animation: 'none',
-        }}
-      />
-    );
-  }
-
+  // Selected sidebar tab vertical blue indicator with NO motion/sliding animation across tabs
   return (
-    <motion.div
-      className="absolute w-[2px] h-[24px] bg-[#005fb8] dark:bg-[#0078d4] z-30 pointer-events-none rounded-none shadow-none"
-      initial={false}
-      animate={{
+    <div
+      className="sidebar-static-indicator absolute w-[2px] h-[24px] bg-[#005fb8] dark:bg-[#0078d4] z-30 pointer-events-none rounded-none shadow-none"
+      style={{
         top: centeredTop,
-        left: bounds.left,
+        left: 0,
         opacity: bounds.visible ? 1 : 0,
-      }}
-      transition={{
-        type: 'spring',
-        stiffness: 500,
-        damping: 35,
-        mass: 0.5,
+        transition: 'none',
+        animation: 'none',
       }}
     />
   );
@@ -1611,21 +1591,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
           aria-hidden="true"
         />
 
-        {/* Top Header: Left Arrow (Back) + Hamburger Toggle + Vplay Logo placed right beside it */}
-        <div className="px-3.5 pt-3 pb-2 flex items-center justify-start gap-1 shrink-0">
-          {/* Back button with left arrow */}
-          <button
-            type="button"
-            id={isMobile ? 'btn-mobile-sidebar-back' : 'btn-desktop-sidebar-back'}
-            onClick={handleGoBack}
-            onMouseEnter={(e) => handleTooltipEnter(e, 'Quay lại', true)}
-            onMouseLeave={handleTooltipLeave}
-            aria-label="Quay lại"
-            className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-[6px] flex items-center justify-center text-black dark:text-white hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 cursor-default transition-colors shrink-0"
-          >
-            <ArrowLeft className="w-4.5 h-4.5 stroke-[1.75] text-black dark:text-white" />
-          </button>
-
+        {/* Top Header: Hamburger Toggle + Title */}
+        <div className="px-3.5 pt-3 pb-2 flex items-center justify-start gap-2 shrink-0">
           {/* Hamburger Menu Icon */}
           <button
             type="button"
@@ -1639,42 +1606,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
             {isMobile ? <X className="w-4.5 h-4.5 stroke-[1.75] text-black dark:text-white" /> : <Menu className="w-4.5 h-4.5 stroke-[1.75] text-black dark:text-white" />}
           </button>
 
-          {/* Sidebar title */}
+          {/* Sidebar title with font regular */}
           <button
             type="button"
             onClick={() => handleNavClick('/')}
             className="flex min-w-0 flex-1 cursor-pointer items-center border-0 bg-transparent p-0 text-left transition-opacity hover:opacity-85"
             title="Home"
           >
-            <span className="truncate text-[12px] font-semibold tracking-wide text-black dark:text-white sm:text-[13px]">
+            <span
+              data-brand-title="true"
+              className="sidebar-brand-name sidebar-brand-title truncate text-[12px] font-normal tracking-wide text-black dark:text-white sm:text-[13px]"
+              style={{ fontWeight: 400, fontFamily: "'Segoe UI Variable Text', 'Segoe UI', system-ui, -apple-system, sans-serif" }}
+            >
               Sparkle Insider Dev
             </span>
-          </button>
-        </div>
-
-        {/* Home tab stays above the sidebar search */}
-        <div className="shrink-0">
-          <button
-            type="button"
-            id={isMobile ? 'mobile-nav-xaml-home' : 'sidebar-nav-xaml-home'}
-            data-nav-active={isHomeActive ? 'true' : undefined}
-            aria-current={isHomeActive ? 'page' : undefined}
-            onClick={() => handleNavClick('/')}
-            title="Home"
-            className={`sidebar-nav-item relative flex h-[38px] w-full items-center gap-3.5 rounded-none px-4 text-left transition-colors ${
-              isHomeActive
-                ? 'bg-transparent font-medium text-black hover:bg-black/5 dark:text-white dark:hover:bg-white/[0.05]'
-                : 'text-black hover:bg-black/5 hover:text-black dark:text-[#cccccc] dark:hover:bg-white/[0.05] dark:hover:text-white'
-            }`}
-          >
-            {isHomeActive && (
-              <span
-                aria-hidden="true"
-                className="sidebar-static-indicator pointer-events-none absolute left-0 top-1/2 z-30 h-6 w-[2px] -translate-y-1/2 rounded-none bg-[#005fb8] dark:bg-[#0078d4]"
-              />
-            )}
-            <SidebarAppIcon name="home" className="h-5 w-5 shrink-0 text-black dark:text-white" />
-            <span className="truncate text-[13.5px]">Home</span>
           </button>
         </div>
 
@@ -1767,7 +1712,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
         )}
 
-        {/* Unified Navigation List inside common scroll container */}
+        {/* Scrollable Navigation Items Container (Home is directly below search box, at the top of the container) */}
         <div 
           ref={containerRef}
           key="sidebar-nav-expanded"
@@ -1775,13 +1720,33 @@ export const Sidebar: React.FC<SidebarProps> = ({
             settings.windowsAppSdkPreview ? 'space-y-[2px]' : 'space-y-1'
           } px-0 font-normal relative`}
         >
-          {/* Morphing Vertical Blue Accent Bar */}
+          {/* Static Vertical Blue Accent Bar with NO animation */}
           <MorphingVerticalIndicator
             containerRef={containerRef}
             currentRoute={currentRoute}
             dependencyKey={`${navItems.length}-${isLiveTvExpanded}-${currentRoute}-${settings.sidebarSmartLayout}-${JSON.stringify(openFolders)}`}
             isWebViewSdk={settings.windowsAppSdkPreview}
           />
+
+          {/* Home tab - placed below the search box, first item in navigation container */}
+          <div className="shrink-0">
+            <button
+              type="button"
+              id={isMobile ? 'mobile-nav-xaml-home' : 'sidebar-nav-xaml-home'}
+              data-nav-active={isHomeActive ? 'true' : undefined}
+              aria-current={isHomeActive ? 'page' : undefined}
+              onClick={() => handleNavClick('/')}
+              title="Home"
+              className={`sidebar-nav-item relative flex h-[38px] w-full items-center gap-3.5 rounded-none px-4 text-left transition-colors ${
+                isHomeActive
+                  ? 'bg-transparent font-medium text-black hover:bg-black/5 dark:text-white dark:hover:bg-white/[0.05]'
+                  : 'text-black hover:bg-black/5 hover:text-black dark:text-[#cccccc] dark:hover:bg-white/[0.05] dark:hover:text-white'
+              }`}
+            >
+              <SidebarAppIcon name="home" className="h-5 w-5 shrink-0 text-black dark:text-white" />
+              <span className="truncate text-[13.5px]">Home</span>
+            </button>
+          </div>
 
           {settings.sidebarSmartLayout ? (
             renderSmartSidebarNav(isMobile)
@@ -2553,19 +2518,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               {/* Pinned Top Navigation Controls */}
               <div className="shrink-0 flex flex-col items-center space-y-1 pb-1 w-full">
-                {/* Back Button with Left Arrow */}
-                <button 
-                  id="btn-sidebar-collapsed-back"
-                  type="button"
-                  onClick={handleGoBack} 
-                  onMouseEnter={(e) => handleTooltipEnter(e, 'Quay lại')}
-                  onMouseLeave={handleTooltipLeave}
-                  className="w-9 h-9 shrink-0 rounded-[6px] flex items-center justify-center text-black dark:text-white/90 hover:bg-black/5 dark:hover:bg-white/10 hover:text-black dark:hover:text-white cursor-default transition-colors"
-                  aria-label="Quay lại"
-                >
-                  <ArrowLeft className="w-5 h-5 stroke-[1.75] text-black dark:text-white" />
-                </button>
-
                 {/* Hamburger Button to Expand */}
                 <button 
                   id="btn-sidebar-expand-toggle"
@@ -3259,23 +3211,27 @@ export const Sidebar: React.FC<SidebarProps> = ({
         onClose={() => setIsDiscordModalOpen(false)}
       />
 
-      {/* Sidebar Tooltip (No animation, solid dark gray background, gray border, no blur, no opacity, square corners) */}
-      {activeTooltip && (
-        <div
-          key="sidebar-solid-tooltip"
-          style={{
-            top: activeTooltip.y,
-            ...(settings.sidebarPosition === 'right'
-              ? { right: `${Math.max(0, window.innerWidth - activeTooltip.x)}px` }
-              : { left: `${activeTooltip.x}px` }),
-            transition: 'none',
-            animation: 'none',
-          }}
-          className="fixed z-50 -translate-y-1/2 rounded-none bg-[#242424] border border-[#444444] text-white text-[12px] font-normal px-2.5 py-1 pointer-events-none select-none shadow-md tracking-wide whitespace-nowrap"
-        >
-          {activeTooltip.label}
-        </div>
-      )}
+      {/* Sidebar Tooltip (Smooth fade in/out animation, brighter border, taller height) */}
+      <AnimatePresence>
+        {activeTooltip && (
+          <motion.div
+            key="sidebar-solid-tooltip"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15, ease: 'easeOut' }}
+            style={{
+              top: activeTooltip.y,
+              ...(settings.sidebarPosition === 'right'
+                ? { right: `${Math.max(0, window.innerWidth - activeTooltip.x)}px` }
+                : { left: `${activeTooltip.x}px` }),
+            }}
+            className="fixed z-50 -translate-y-1/2 rounded-none bg-[#242424] border border-[#888888] text-white text-[12px] font-normal px-3 py-1.5 min-h-[30px] flex items-center pointer-events-none select-none shadow-md tracking-wide whitespace-nowrap"
+          >
+            {activeTooltip.label}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };
