@@ -101,6 +101,7 @@ export default function App() {
     }
   }, []);
   const [routeState, setRouteState] = useState<any>(null);
+  const [isInitialSplashVisible, setIsInitialSplashVisible] = useState(true);
   const [isTabSplashVisible, setIsTabSplashVisible] = useState(true);
   const isSettingsRoute = currentRoute === '/settings';
 
@@ -326,6 +327,7 @@ export default function App() {
 
   // Perform actual navigation
   const executeNavigation = useCallback((path: string, state?: any) => {
+    setIsTabSplashVisible(true);
     const requestedApp = getStoreAppForRoute(path);
     const targetPath = requestedApp && !installedApps.includes(requestedApp.id)
       ? `/store?app=${requestedApp.id}`
@@ -1026,8 +1028,7 @@ export default function App() {
             <TabSplashScreen
               key={`tab-splash-${currentRoute}-${routeState?.storeAppId ?? ''}`}
               route={currentRoute}
-              label={currentRoute === '/search' ? 'Find and search' : 'Loading'}
-              duration={350}
+              duration={2000}
               onFinish={() => setIsTabSplashVisible(false)}
             />
           )}
@@ -1156,6 +1157,16 @@ export default function App() {
 
       {/* App Native Virtual Keyboard for Touch Devices */}
       <NativeKeyboard />
+
+      {/* App Initial Startup Splash Screen */}
+      {isInitialSplashVisible && (
+        <SplashScreen
+          duration={5600}
+          subtitle="Sparkle (Dev)"
+          isClosable={true}
+          onFinish={() => setIsInitialSplashVisible(false)}
+        />
+      )}
 
       {/* Update Sparkle (Dev) Splash Screen */}
       {isUpdating && (

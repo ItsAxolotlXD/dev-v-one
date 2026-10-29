@@ -1,69 +1,36 @@
 import React, { useEffect } from 'react';
-import { LayoutGrid, type LucideIcon } from 'lucide-react';
-import {
-  FluentArticlesIcon,
-  FluentCraftmineIcon,
-  FluentNotesIcon,
-  FluentPhotosIcon,
-  FluentSearchIcon,
-  FluentTilesIcon,
-  FluentWatchIcon,
-} from './FluentIcons';
-import { AppTabIcon, type AppTabIconName } from './FluentIcons';
-import { SpinningRing } from './SpinningRing';
+import { WINDOWS_LOADING_GIF } from '../constants/assets';
 
-interface TabSplashScreenProps {
-  route: string;
+export interface TabSplashScreenProps {
+  route?: string;
   label?: string;
   onFinish: () => void;
   duration?: number;
 }
 
-type SplashIcon = React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
-
-const appSplashIcon = (name: AppTabIconName): SplashIcon => ({ className, style }) => (
-  <AppTabIcon name={name} className={className} style={style} />
-);
-
-const routeIcons: Array<[string, SplashIcon]> = [
-  ['/search', FluentSearchIcon],
-  ['/settings', appSplashIcon('settings')],
-  ['/home', appSplashIcon('home')],
-  ['/', appSplashIcon('home')],
-  ['/feed', FluentArticlesIcon],
-  ['/watch', FluentWatchIcon],
-  ['/gallery', FluentPhotosIcon],
-  ['/photos', FluentPhotosIcon],
-  ['/files', appSplashIcon('fileExplorer')],
-  ['/file-explorer', appSplashIcon('fileExplorer')],
-  ['/notes', FluentNotesIcon],
-  ['/craftmine', FluentCraftmineIcon],
-  ['/tiles', FluentTilesIcon],
-];
-
-function getRouteIcon(route: string): SplashIcon {
-  return routeIcons.find(([prefix]) => route === prefix || route.startsWith(`${prefix}/`))?.[1] ?? LayoutGrid;
-}
-
 export const TabSplashScreen: React.FC<TabSplashScreenProps> = ({
-  route,
-  label = 'Loading',
   onFinish,
-  duration = 350,
+  duration = 2000,
 }) => {
   useEffect(() => {
     const timer = window.setTimeout(onFinish, duration);
     return () => window.clearTimeout(timer);
   }, [duration, onFinish]);
 
-  const Icon = getRouteIcon(route);
-
   return (
-    <div className="absolute inset-0 z-50 flex items-center justify-center bg-inherit text-white pointer-events-auto" aria-label={`${label} loading`}>
-      <div className="flex flex-col items-center gap-5 text-center">
-        <Icon className="size-12 shrink-0" aria-hidden="true" />
-        <SpinningRing size={42} strokeWidth={3.5} color="#ff2bbd" />
-        <span className="text-sm font-medium tracking-wide text-white/70">{label}</span>
+    <div
+      role="status"
+      aria-live="polite"
+      aria-label="Loading..."
+      className="absolute inset-0 z-50 flex items-center justify-center bg-black/95 dark:bg-[#141414] select-none pointer-events-auto transition-opacity duration-200"
+    >
+      <div className="flex items-center justify-center">
+        <img
+          src={WINDOWS_LOADING_GIF}
+          alt="Loading..."
+          className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 object-contain select-none pointer-events-none drop-shadow-md"
+          style={{ filter: 'hue-rotate(275deg) saturate(2.8) brightness(1.15)' }}
+        />
       </div>
     </div>
   );

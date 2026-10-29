@@ -1326,7 +1326,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 }`}
               >
                 <div className="flex items-center gap-3.5 truncate">
-                  <Folder aria-hidden="true" className="w-5 h-5 shrink-0" />
+                  <SidebarAppIcon name="fileExplorer" className="w-5 h-5 shrink-0 text-black dark:text-white" />
                   <span className="truncate text-[13.5px]">{folder.name}</span>
                 </div>
                 <div className="flex items-center gap-1.5 shrink-0 text-neutral-500 dark:text-neutral-400">
@@ -1342,7 +1342,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </button>
 
               {isOpen && (
-                <div className="pl-3.5 flex flex-col gap-0.5 py-0.5 border-l border-black/10 dark:border-white/10 ml-5 my-0.5">
+                <div className="flex flex-col w-full my-0.5">
                   {folder.items.map((item) => {
                     const active = item.isActive(currentRoute);
                     return (
@@ -1353,15 +1353,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         data-nav-active={active ? 'true' : undefined}
                         onClick={() => handleNavClick(item.route)}
                         title={item.label}
-                        className={`sidebar-nav-item w-full h-[36px] flex items-center justify-between px-4 cursor-default relative text-left rounded-none transition-colors ${
+                        className={`sidebar-nav-item w-full h-[38px] flex items-center justify-between px-4 cursor-default relative text-left rounded-none transition-colors ${
                           active
                             ? 'bg-transparent text-black dark:text-white font-medium hover:bg-black/5 dark:hover:bg-white/[0.05]'
                             : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                         }`}
                       >
-                        <div className="flex items-center gap-3 truncate">
+                        <div className="flex items-center gap-3.5 truncate">
                           {item.renderIcon(false)}
-                          <span className="truncate text-[13px]">{item.label}</span>
+                          <span className="truncate text-[13.5px]">{item.label}</span>
                         </div>
                         {item.hasDownloadIndicator && getDownloadIndicator(item.route, false)}
                       </button>
@@ -1532,7 +1532,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     : 'text-black dark:text-[#cccccc] hover:bg-black/5 dark:hover:bg-white/[0.05] hover:text-black dark:hover:text-white'
                 }`}
               >
-                <Folder aria-hidden="true" className="w-5 h-5" />
+                <SidebarAppIcon name="fileExplorer" className="w-5 h-5 text-black dark:text-white" />
                 {!isOpen && hasActiveChild && (
                   <span className="absolute bottom-1 right-1 w-1.5 h-1.5 rounded-full bg-[#0078d4] dark:bg-[#4cc2ff]" />
                 )}

@@ -4,15 +4,17 @@ import { SpinningRing } from './SpinningRing';
 const LOGO_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-7bX9C6ZMjpXAbn0eXLI2Wk6ZhwUwk0.png';
 const MICROSOFT_LOGO_SRC = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-r1SabPVCokA68COSioto4rPEgZkHxF.png';
 
+const WINDOWS_LOADING_GIF = 'https://upload.wikimedia.org/wikipedia/commons/3/3f/Windows-loading-cargando.gif?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original';
+
 interface SplashScreenProps {
-  duration?: number; // duration in ms, defaults to 3 seconds
+  duration?: number; // duration in ms, defaults to 5600ms (2 loops of 2.8s loading gif)
   onFinish?: () => void;
   subtitle?: string;
   isClosable?: boolean;
 }
 
 export const SplashScreen: React.FC<SplashScreenProps> = ({
-  duration = 3000,
+  duration = 5600,
   onFinish,
   subtitle,
   isClosable = true
@@ -71,9 +73,16 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
           )}
         </div>
 
-        {/* Spinning ring and subtitle centered with generous spacing below logo */}
+        {/* Windows loading gif running exactly for 2 loops (5.6s) */}
         <div className="flex flex-col items-center justify-center gap-3 text-center px-4">
-          <SpinningRing size={34} strokeWidth={4} color="#ff2bbd" />
+          <div className="w-9 h-9 flex items-center justify-center">
+            <img
+              src={WINDOWS_LOADING_GIF}
+              alt="Loading"
+              className="w-8 h-8 object-contain"
+              style={{ filter: 'hue-rotate(275deg) saturate(2.8) brightness(1.15)' }}
+            />
+          </div>
           {subtitle && (
             <p className="text-[12.5px] sm:text-[13.5px] text-[#FFFFFF]/90 dark:text-[#FFFFFF]/90 font-normal tracking-wide max-w-md">
               {subtitle}

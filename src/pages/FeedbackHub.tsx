@@ -1,563 +1,889 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { 
-  MessageSquare, 
-  ThumbsUp, 
-  Plus, 
-  Search, 
-  Filter, 
-  CheckCircle2, 
-  Clock, 
-  AlertTriangle, 
-  Lightbulb, 
-  Send, 
-  Sparkles, 
-  ChevronRight, 
-  X, 
-  Paperclip, 
-  Camera, 
-  ShieldCheck, 
-  User, 
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import {
+  Lightbulb,
+  Bug,
+  Image as ImageIcon,
+  Paperclip,
+  Star,
+  Send,
+  Clock,
+  X,
+  Check,
+  Trash2,
+  FileText,
+  ThumbsUp,
+  Users,
+  ShieldCheck,
   MessageCircle,
-  TrendingUp,
-  Share2,
-  Check
+  Filter
 } from 'lucide-react';
-import { FluentFeedbackHubIcon, FluentFeedbackHubColorIcon, FluentSearchIcon } from '../components/FluentIcons';
+import { logRecallActivity } from '../services/recallService';
+import { FluentSearchIcon } from '../components/FluentIcons';
+import {
+  COMMUNITY_FEEDBACKS_DATA,
+  type CommunityFeedbackItem,
+} from '../data/communityFeedbacks';
 
-interface FeedbackItem {
+export type { CommunityFeedbackItem };
+
+export interface FeedbackSubmission {
   id: string;
-  type: 'problem' | 'suggestion';
-  title: string;
-  description: string;
-  category: 'Apps & Tools' | 'Live TV & Streaming' | 'Fluent Design & Mica' | 'Performance & Crash' | 'Audio & Video';
+  type: 'suggestion' | 'bug';
+  heading: string;
+  email: string;
+  details: string;
+  rating: number; // 1 to 5
+  saveLocalDiagnostics: boolean;
+  diagnostics?: {
+    userAgent: string;
+    screenResolution: string;
+    timestamp: string;
+    route: string;
+  };
+  attachments: {
+    name: string;
+    size: string;
+    type: 'media' | 'file';
+    previewUrl?: string;
+  }[];
+  createdAt: string;
   upvotes: number;
   hasUpvoted?: boolean;
-  status: 'investigating' | 'received' | 'resolved';
-  author: string;
-  date: string;
-  commentsCount: number;
-  officialResponse?: string;
-  severity?: 'low' | 'medium' | 'high' | 'blocker';
+  status: 'received' | 'investigating' | 'resolved';
 }
 
-const DEFAULT_FEEDBACKS: FeedbackItem[] = [
-  {
-    id: 'fb-1',
-    type: 'suggestion',
-    title: 'Hỗ trợ thêm tùy chọn Insider Flags "WebView SDK Test Preview" để đổi nền màu xám tối',
-    description: 'Mong muốn có thêm flag thử nghiệm WebView SDK để giao diện main tab page, thanh bên và thanh trên cùng hiển thị tông màu xám tối chuẩn WebView desktop hiện đại.',
-    category: 'Fluent Design & Mica',
-    upvotes: 142,
-    hasUpvoted: true,
-    status: 'resolved',
-    author: 'hoangnam.dev',
-    date: '15/10/2026',
-    commentsCount: 18,
-    officialResponse: 'Đội ngũ phát triển Sparkle (Dev) đã hoàn thiện và đưa tính năng này vào bản cập nhật mới nhất!',
-    severity: 'medium'
-  },
-  {
-    id: 'fb-2',
-    type: 'problem',
-    title: 'Thêm ứng dụng Calculator tính toán khoa học và chuyển đổi tiền tệ VND/USD',
-    description: 'Cần có ứng dụng máy tính đa năng tích hợp đầy đủ chế độ cơ bản, khoa học (sin, cos, tan, log) và bảng chuyển đổi đơn vị đo lường.',
-    category: 'Apps & Tools',
-    upvotes: 98,
-    hasUpvoted: false,
-    status: 'resolved',
-    author: 'tuankhoi_vtv',
-    date: '14/10/2026',
-    commentsCount: 12,
-    officialResponse: 'Đã phát hành tab Calculator chuẩn Fluent Design với đầy đủ các bộ tính toán và lưu lịch sử.',
-    severity: 'low'
-  },
-  {
-    id: 'fb-3',
-    type: 'suggestion',
-    title: 'Bổ sung công cụ Snipping Tool với con trỏ cắt màn hình chữ nhật và bút vẽ chú thích',
-    description: 'Rất cần công cụ chụp nhanh màn hình Snipping Tool để cắt từng khung hình phóng sự thời sự và chú thích nhanh bằng bút dạ quang highlighter.',
-    category: 'Apps & Tools',
-    upvotes: 85,
-    hasUpvoted: false,
-    status: 'resolved',
-    author: 'bichngoc.design',
-    date: '14/10/2026',
-    commentsCount: 9,
-    officialResponse: 'Snipping Tool đã sẵn sàng với chế độ cắt tương tác trực tiếp và công cụ trích xuất văn bản OCR.',
-    severity: 'low'
-  },
-  {
-    id: 'fb-4',
-    type: 'suggestion',
-    title: 'Tăng cường tốc độ tải luồng HLS cho các kênh VTV1 HD và HTV7 HD trong giờ cao điểm',
-    description: 'Các luồng phát sóng vào lúc 19h thời sự đôi khi cần bộ đệm nhanh hơn để chống giật hình khi kết nối mạng chập chờn.',
-    category: 'Live TV & Streaming',
-    upvotes: 64,
-    hasUpvoted: false,
-    status: 'investigating',
-    author: 'quang_minh_news',
-    date: '13/10/2026',
-    commentsCount: 7,
-    officialResponse: 'Kỹ sư hạ tầng mạng đang điều phối máy chủ CDN sao lưu để đảm bảo độ trễ thấp nhất.',
-    severity: 'high'
-  },
-  {
-    id: 'fb-5',
-    type: 'suggestion',
-    title: 'Hỗ trợ thêm tùy chọn xuất ghi chú ra file PDF và PowerPoint trong Notes App',
-    description: 'Giao diện soạn thảo hiện tại rất mượt, hy vọng có thêm nút xuất trực tiếp sang slide thuyết trình PPTX.',
-    category: 'Apps & Tools',
-    upvotes: 47,
-    hasUpvoted: false,
-    status: 'received',
-    author: 'linhdan.cute',
-    date: '12/10/2026',
-    commentsCount: 4,
-    severity: 'medium'
-  }
-];
+const STORAGE_KEY = 'vone_feedback_hub_submissions_v2';
+const COMMUNITY_STORAGE_KEY = 'vone_feedback_hub_community_v2';
 
 interface FeedbackHubProps {
   navigate?: (route: string) => void;
 }
 
 export const FeedbackHub: React.FC<FeedbackHubProps> = ({ navigate }) => {
-  const [activeTab, setActiveTab] = useState<'home' | 'feedback' | 'new'>('home');
-  const [feedbacks, setFeedbacks] = useState<FeedbackItem[]>(() => {
+  // Tabs: 'suggestion' | 'bug' | 'community'
+  const [activeTab, setActiveTab] = useState<'suggestion' | 'bug' | 'community'>('suggestion');
+
+  // Form Fields matching user image layout
+  const [heading, setHeading] = useState('');
+  const [email, setEmail] = useState('');
+  const [details, setDetails] = useState('');
+  const [attachments, setAttachments] = useState<FeedbackSubmission['attachments']>([]);
+  const [rating, setRating] = useState<number>(5);
+  const [hoverRating, setHoverRating] = useState<number | null>(null);
+  const [saveLocalCopy, setSaveLocalCopy] = useState<boolean>(true);
+
+  // Submissions list
+  const [submissions, setSubmissions] = useState<FeedbackSubmission[]>(() => {
     try {
-      const saved = localStorage.getItem('vone_feedback_hub_items');
-      return saved ? JSON.parse(saved) : DEFAULT_FEEDBACKS;
-    } catch {
-      return DEFAULT_FEEDBACKS;
-    }
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return [];
   });
 
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [categoryFilter, setCategoryFilter] = useState<string>('All');
-  const [typeFilter, setTypeFilter] = useState<'all' | 'problem' | 'suggestion'>('all');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [sortBy, setSortBy] = useState<'trending' | 'upvotes' | 'recent'>('trending');
+  // Community feedback items list (initialized with 100 diverse community feedbacks)
+  const [communityFeedbacks, setCommunityFeedbacks] = useState<CommunityFeedbackItem[]>(() => {
+    try {
+      const saved = localStorage.getItem(COMMUNITY_STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length >= 100) {
+          return parsed;
+        }
+      }
+    } catch {}
+    return COMMUNITY_FEEDBACKS_DATA;
+  });
 
-  // Selected item modal
-  const [selectedFeedback, setSelectedFeedback] = useState<FeedbackItem | null>(null);
+  // Community search and filter state
+  const [communitySearch, setCommunitySearch] = useState('');
+  const [communityCategory, setCommunityCategory] = useState<string>('All');
+  const [communityStatus, setCommunityStatus] = useState<string>('all');
 
-  // New feedback form state
-  const [newType, setNewType] = useState<'problem' | 'suggestion'>('problem');
-  const [newTitle, setNewTitle] = useState<string>('');
-  const [newDesc, setNewDesc] = useState<string>('');
-  const [newCategory, setNewCategory] = useState<FeedbackItem['category']>('Apps & Tools');
-  const [newSeverity, setNewSeverity] = useState<'low' | 'medium' | 'high' | 'blocker'>('medium');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const toastTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Hidden file inputs
+  const mediaInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const showToast = (msg: string) => {
+    if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
     setToastMessage(msg);
-    setTimeout(() => setToastMessage(null), 3000);
+    toastTimeoutRef.current = setTimeout(() => setToastMessage(null), 3200);
   };
 
+  // Sync submissions to localStorage
   useEffect(() => {
     try {
-      localStorage.setItem('vone_feedback_hub_items', JSON.stringify(feedbacks));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(submissions));
     } catch {}
-  }, [feedbacks]);
+  }, [submissions]);
 
-  // Upvote toggle
-  const toggleUpvote = (id: string, e?: React.MouseEvent) => {
-    e?.stopPropagation();
-    setFeedbacks((prev) =>
+  // Sync community feedbacks to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem(COMMUNITY_STORAGE_KEY, JSON.stringify(communityFeedbacks));
+    } catch {}
+  }, [communityFeedbacks]);
+
+  // Log to Recall activity
+  useEffect(() => {
+    const subtitleMap = {
+      suggestion: 'Feature Suggestion Portal',
+      bug: 'Bugs Report Portal',
+      community: 'Community Feedback Portal'
+    };
+    logRecallActivity({
+      type: 'tab',
+      appName: 'Feedback Hub',
+      appId: 'feedback-hub',
+      title: 'Feedback Hub - Sparkle (Dev)',
+      subtitle: subtitleMap[activeTab],
+      durationText: 'You spent < 1m on this activity recently',
+      badgeText: 'Feedback Hub',
+      thumbnail: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-7bX9C6ZMjpXAbn0eXLI2Wk6ZhwUwk0.png',
+      route: '/feedback-hub',
+      searchKeywords: 'feedback hub bug report feature suggestion community feedback sparkle dev'.toLowerCase()
+    });
+  }, [activeTab]);
+
+  // File handling helpers
+  const formatFileSize = (bytes: number): string => {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  };
+
+  const handleMediaUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    const newAttachments: FeedbackSubmission['attachments'] = [];
+    (Array.from(files) as File[]).forEach((file: File) => {
+      const isImg = file.type.startsWith('image/');
+      const previewUrl = isImg ? URL.createObjectURL(file) : undefined;
+      newAttachments.push({
+        name: file.name,
+        size: formatFileSize(file.size),
+        type: 'media',
+        previewUrl
+      });
+    });
+
+    setAttachments((prev) => [...prev, ...newAttachments]);
+    showToast(`Đã đính kèm ${newAttachments.length} tệp đa phương tiện`);
+    if (mediaInputRef.current) mediaInputRef.current.value = '';
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    const newAttachments: FeedbackSubmission['attachments'] = [];
+    (Array.from(files) as File[]).forEach((file: File) => {
+      newAttachments.push({
+        name: file.name,
+        size: formatFileSize(file.size),
+        type: 'file'
+      });
+    });
+
+    setAttachments((prev) => [...prev, ...newAttachments]);
+    showToast(`Đã đính kèm ${newAttachments.length} tệp tài liệu`);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const removeAttachment = (index: number) => {
+    setAttachments((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  // Submit Handler
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!heading.trim()) {
+      showToast('Vui lòng nhập tóm tắt phản hồi (Heading)');
+      return;
+    }
+    if (!details.trim()) {
+      showToast('Vui lòng nhập chi tiết phản hồi (Details)');
+      return;
+    }
+
+    const newSubmission: FeedbackSubmission = {
+      id: `fb-${Date.now()}`,
+      type: activeTab === 'bug' ? 'bug' : 'suggestion',
+      heading: heading.trim(),
+      email: email.trim(),
+      details: details.trim(),
+      rating,
+      saveLocalDiagnostics: saveLocalCopy,
+      diagnostics: saveLocalCopy
+        ? {
+            userAgent: navigator.userAgent,
+            screenResolution: `${window.screen.width}x${window.screen.height}`,
+            timestamp: new Date().toISOString(),
+            route: window.location.pathname
+          }
+        : undefined,
+      attachments: [...attachments],
+      createdAt: new Date().toLocaleString('vi-VN', {
+        hour: '2-digit',
+        minute: '2-digit',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      }),
+      upvotes: 1,
+      hasUpvoted: true,
+      status: 'received'
+    };
+
+    setSubmissions((prev) => [newSubmission, ...prev]);
+
+    // Also share into community feed so others can see it
+    const newCommunityItem: CommunityFeedbackItem = {
+      id: `cf-${Date.now()}`,
+      type: activeTab === 'bug' ? 'problem' : 'suggestion',
+      title: heading.trim(),
+      description: details.trim(),
+      category: 'Apps & Tools',
+      upvotes: 1,
+      hasUpvoted: true,
+      status: 'received',
+      author: email.trim() || 'Người dùng hiện tại',
+      date: new Date().toLocaleDateString('vi-VN'),
+      commentsCount: 0,
+      officialResponse: 'Đội ngũ phát triển Sparkle (Dev) đã tiếp nhận phản hồi của bạn.'
+    };
+    setCommunityFeedbacks((prev) => [newCommunityItem, ...prev]);
+
+    // Reset Form
+    setHeading('');
+    setEmail('');
+    setDetails('');
+    setAttachments([]);
+    setRating(5);
+
+    showToast('Phản hồi của bạn đã được gửi thành công!');
+  };
+
+  const handleDeleteSubmission = (id: string) => {
+    setSubmissions((prev) => prev.filter((s) => s.id !== id));
+    showToast('Đã xóa phản hồi');
+  };
+
+  const handleToggleUpvote = (id: string) => {
+    setSubmissions((prev) =>
+      prev.map((s) => {
+        if (s.id === id) {
+          const nextUpvoted = !s.hasUpvoted;
+          return {
+            ...s,
+            hasUpvoted: nextUpvoted,
+            upvotes: nextUpvoted ? s.upvotes + 1 : s.upvotes - 1
+          };
+        }
+        return s;
+      })
+    );
+  };
+
+  const handleToggleCommunityUpvote = (id: string) => {
+    setCommunityFeedbacks((prev) =>
       prev.map((item) => {
         if (item.id === id) {
-          const nextState = !item.hasUpvoted;
-          const nextCount = nextState ? item.upvotes + 1 : item.upvotes - 1;
-          showToast(nextState ? 'Đã ủng hộ (Upvoted) phản hồi!' : 'Đã bỏ bình chọn');
-          return { ...item, hasUpvoted: nextState, upvotes: nextCount };
+          const nextUpvoted = !item.hasUpvoted;
+          showToast(nextUpvoted ? 'Đã ủng hộ đề xuất cộng đồng!' : 'Đã bỏ bình chọn');
+          return {
+            ...item,
+            hasUpvoted: nextUpvoted,
+            upvotes: nextUpvoted ? item.upvotes + 1 : item.upvotes - 1
+          };
         }
         return item;
       })
     );
   };
 
-  // Submit feedback
-  const handleSubmitFeedback = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newTitle.trim() || !newDesc.trim()) {
-      showToast('Vui lòng điền đầy đủ tiêu đề và nội dung phản hồi.');
-      return;
-    }
+  // Filtered Community Feedbacks
+  const filteredCommunity = useMemo(() => {
+    return communityFeedbacks.filter((item) => {
+      const q = communitySearch.toLowerCase().trim();
+      const matchesSearch =
+        !q ||
+        item.title.toLowerCase().includes(q) ||
+        item.description.toLowerCase().includes(q) ||
+        item.author.toLowerCase().includes(q);
 
-    const newItem: FeedbackItem = {
-      id: `fb-${Date.now()}`,
-      type: newType,
-      title: newTitle.trim(),
-      description: newDesc.trim(),
-      category: newCategory,
-      upvotes: 1,
-      hasUpvoted: true,
-      status: 'received',
-      author: 'Tôi (Người dùng hiện tại)',
-      date: new Date().toLocaleDateString('vi-VN'),
-      commentsCount: 0,
-      severity: newSeverity,
-      officialResponse: 'Cảm ơn bạn đã đóng góp! Đội ngũ phát triển Sparkle (Dev) đã tiếp nhận phản hồi của bạn.'
-    };
+      const matchesCat = communityCategory === 'All' || item.category === communityCategory;
+      const matchesStatus = communityStatus === 'all' || item.status === communityStatus;
 
-    setFeedbacks([newItem, ...feedbacks]);
-    setNewTitle('');
-    setNewDesc('');
-    setActiveTab('feedback');
-    showToast('Phản hồi của bạn đã được gửi thành công đến đội ngũ kỹ sư!');
-  };
-
-  // Filtered & Sorted Feedbacks
-  const filteredFeedbacks = useMemo(() => {
-    return feedbacks
-      .filter((item) => {
-        const q = searchQuery.toLowerCase().trim();
-        const matchesQuery =
-          !q ||
-          item.title.toLowerCase().includes(q) ||
-          item.description.toLowerCase().includes(q) ||
-          item.category.toLowerCase().includes(q);
-
-        const matchesCategory = categoryFilter === 'All' || item.category === categoryFilter;
-        const matchesType = typeFilter === 'all' || item.type === typeFilter;
-        const matchesStatus = statusFilter === 'all' || item.status === statusFilter;
-
-        return matchesQuery && matchesCategory && matchesType && matchesStatus;
-      })
-      .sort((a, b) => {
-        if (sortBy === 'upvotes') return b.upvotes - a.upvotes;
-        if (sortBy === 'recent') return parseInt(b.id.replace('fb-', '') || '0') - parseInt(a.id.replace('fb-', '') || '0');
-        return b.upvotes * 1.5 + b.commentsCount - (a.upvotes * 1.5 + a.commentsCount);
-      });
-  }, [feedbacks, searchQuery, categoryFilter, typeFilter, statusFilter, sortBy]);
+      return matchesSearch && matchesCat && matchesStatus;
+    });
+  }, [communityFeedbacks, communitySearch, communityCategory, communityStatus]);
 
   return (
-    <div className="w-full min-h-[calc(100vh-64px)] flex flex-col bg-[#f9f9f9] dark:bg-[#1a1c20] text-black dark:text-white select-none">
+    <div className="w-full min-h-[calc(100vh-64px)] flex flex-col bg-[#1a1a1a] dark:bg-[#1a1a1a] text-[#F3F4F6] select-none font-sans relative">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed top-16 right-6 z-50 px-4 py-2 rounded-full bg-black/90 dark:bg-white/95 text-white dark:text-black text-xs font-semibold shadow-2xl flex items-center gap-2 border border-white/20 animate-fade-in">
+        <div className="fixed top-16 right-6 z-50 px-4 py-2 rounded-none bg-[#262626] text-white text-xs font-normal shadow-2xl flex items-center gap-2 border border-white/20 animate-fade-in">
           <Check className="w-4 h-4 text-emerald-400" />
           <span>{toastMessage}</span>
         </div>
       )}
 
-      {/* Tab Title: Feedback Hub (Font Regular, shifted down slightly) */}
-      <div className="px-4 sm:px-6 pt-3 pb-2">
-        <h1 className="text-2xl sm:text-3xl font-normal text-white tracking-tight">
-          Feedback Hub
-        </h1>
-      </div>
+      {/* Hidden File Inputs */}
+      <input
+        ref={mediaInputRef}
+        type="file"
+        accept="image/*,video/*"
+        multiple
+        className="hidden"
+        onChange={handleMediaUpload}
+      />
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="*/*"
+        multiple
+        className="hidden"
+        onChange={handleFileUpload}
+      />
 
-      {/* Top Application Ribbon Header */}
-      <div className="bg-white dark:bg-[#22252a] border-b border-black/10 dark:border-white/10 px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3 shadow-xs">
-        <div className="flex items-center gap-3">
-          <FluentFeedbackHubColorIcon className="w-8 h-8 shrink-0 drop-shadow-sm" />
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-base sm:text-lg font-normal tracking-tight text-neutral-900 dark:text-white">
-                Trung tâm phản hồi
-              </h2>
-              <span className="px-2 py-0.5 rounded-full bg-[#0078d4]/15 text-[#0078d4] dark:text-[#4cc2ff] text-[10px] font-bold uppercase tracking-wider">
-                Insider Preview
-              </span>
-            </div>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400">
-              Cầu nối trực tiếp giữa người dùng và đội ngũ phát triển Sparkle (Dev) & Fluent Design
-            </p>
-          </div>
+      <div className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-4 sm:py-6 space-y-5">
+        {/* Tab Title: Feedback Hub with position and font regular (400) like tab Settings */}
+        <div className="pt-1 sm:pt-2 pb-1">
+          <h1
+            className="text-2xl sm:text-3xl font-normal text-white tracking-tight"
+            style={{ fontWeight: 400, fontFamily: "'Segoe UI', 'Segoe UI Variable Text', system-ui, sans-serif" }}
+          >
+            Feedback Hub
+          </h1>
         </div>
 
-        {/* Action Tabs */}
-        <div className="flex items-center gap-1.5 bg-black/5 dark:bg-white/10 p-1 rounded-xl">
+        {/* Top Navigation Tabs: Feature Suggestion vs Bugs Report vs Community Feedback */}
+        <div className="flex items-center gap-6 sm:gap-8 pt-1 border-b border-white/10 pb-2">
+          {/* Feature Suggestion Tab */}
           <button
             type="button"
-            onClick={() => setActiveTab('home')}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-              activeTab === 'home'
-                ? 'bg-white dark:bg-[#2e3238] text-[#0078d4] dark:text-[#4cc2ff] shadow-xs'
-                : 'text-neutral-600 dark:text-neutral-300 hover:text-black dark:hover:text-white'
+            onClick={() => setActiveTab('suggestion')}
+            className={`group relative flex items-center gap-2 pb-2 text-sm sm:text-base font-normal transition-colors cursor-pointer ${
+              activeTab === 'suggestion'
+                ? 'text-white'
+                : 'text-neutral-400 hover:text-neutral-200'
             }`}
           >
-            Trang chủ
+            <Lightbulb
+              className={`w-4 h-4 sm:w-4.5 sm:h-4.5 transition-colors ${
+                activeTab === 'suggestion' ? 'text-[#ff2bbd]' : 'text-neutral-400 group-hover:text-neutral-200'
+              }`}
+            />
+            <span>Feature Suggestion</span>
+
+            {/* Active Indicator Bar */}
+            {activeTab === 'suggestion' && (
+              <span className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-[#ff2bbd] rounded-none shadow-[0_0_8px_#ff2bbd]" />
+            )}
           </button>
+
+          {/* Bugs Report Tab */}
           <button
             type="button"
-            onClick={() => setActiveTab('feedback')}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-              activeTab === 'feedback'
-                ? 'bg-white dark:bg-[#2e3238] text-[#0078d4] dark:text-[#4cc2ff] shadow-xs'
-                : 'text-neutral-600 dark:text-neutral-300 hover:text-black dark:hover:text-white'
+            onClick={() => setActiveTab('bug')}
+            className={`group relative flex items-center gap-2 pb-2 text-sm sm:text-base font-normal transition-colors cursor-pointer ${
+              activeTab === 'bug'
+                ? 'text-white'
+                : 'text-neutral-400 hover:text-neutral-200'
             }`}
           >
-            Xem phản hồi ({feedbacks.length})
+            <Bug
+              className={`w-4 h-4 sm:w-4.5 sm:h-4.5 transition-colors ${
+                activeTab === 'bug' ? 'text-[#ff2bbd]' : 'text-neutral-400 group-hover:text-neutral-200'
+              }`}
+            />
+            <span>Bugs Report</span>
+
+            {/* Active Indicator Bar */}
+            {activeTab === 'bug' && (
+              <span className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-[#ff2bbd] rounded-none shadow-[0_0_8px_#ff2bbd]" />
+            )}
           </button>
+
+          {/* Community Feedback Tab (newly added next to Bugs Report) */}
           <button
             type="button"
-            onClick={() => setActiveTab('new')}
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-              activeTab === 'new'
-                ? 'bg-[#0078d4] text-white shadow-xs'
-                : 'bg-[#0078d4]/15 text-[#0078d4] dark:text-[#4cc2ff] hover:bg-[#0078d4]/25'
+            onClick={() => setActiveTab('community')}
+            className={`group relative flex items-center gap-2 pb-2 text-sm sm:text-base font-normal transition-colors cursor-pointer ${
+              activeTab === 'community'
+                ? 'text-white'
+                : 'text-neutral-400 hover:text-neutral-200'
             }`}
           >
-            <Plus className="w-3.5 h-3.5" />
-            <span>Gửi phản hồi mới</span>
+            <Users
+              className={`w-4 h-4 sm:w-4.5 sm:h-4.5 transition-colors ${
+                activeTab === 'community' ? 'text-[#ff2bbd]' : 'text-neutral-400 group-hover:text-neutral-200'
+              }`}
+            />
+            <span>Community Feedback</span>
+
+            {/* Active Indicator Bar */}
+            {activeTab === 'community' && (
+              <span className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-[#ff2bbd] rounded-none shadow-[0_0_8px_#ff2bbd]" />
+            )}
           </button>
         </div>
-      </div>
 
-      {/* Main Content Area */}
-      <div className="flex-1 max-w-6xl mx-auto w-full p-4 sm:p-6 space-y-6">
-        {/* TAB 1: HOME OVERVIEW */}
-        {activeTab === 'home' && (
-          <div className="space-y-6 animate-fade-in">
-            {/* Hero Welcome Card */}
-            <div className="p-6 rounded-2xl bg-gradient-to-r from-[#0078d4]/15 via-[#8764b8]/10 to-transparent border border-[#0078d4]/20 flex flex-col md:flex-row items-center justify-between gap-6">
-              <div className="space-y-2 max-w-2xl">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#0078d4]/20 text-[#0078d4] dark:text-[#4cc2ff] text-xs font-bold">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>Xây dựng Sparkle (Dev) cùng cộng đồng</span>
-                </div>
-                <h2 className="text-xl sm:text-2xl font-bold tracking-tight">
-                  Ý kiến của bạn giúp chúng tôi hoàn thiện ứng dụng tốt hơn mỗi ngày
-                </h2>
-                <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed">
-                  Gửi báo cáo sự cố kỹ thuật, đóng góp ý tưởng tính năng mới, hoặc bình chọn cho các đề xuất mà bạn yêu thích. Các kỹ sư của chúng tôi luôn lắng nghe và phản hồi trực tiếp.
-                </p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-3 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setNewType('problem');
-                    setActiveTab('new');
-                  }}
-                  className="px-4 py-2.5 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold shadow-md flex items-center gap-2 cursor-pointer transition-transform active:scale-95"
-                >
-                  <AlertTriangle className="w-4 h-4" />
-                  <span>Báo cáo sự cố</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setNewType('suggestion');
-                    setActiveTab('new');
-                  }}
-                  className="px-4 py-2.5 rounded-xl bg-[#0078d4] hover:bg-[#006cbd] text-white text-xs font-bold shadow-md flex items-center gap-2 cursor-pointer transition-transform active:scale-95"
-                >
-                  <Lightbulb className="w-4 h-4" />
-                  <span>Đề xuất tính năng</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Quick Stats Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="p-4 rounded-xl bg-white dark:bg-[#23272d] border border-black/10 dark:border-white/10 shadow-xs">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-neutral-500 font-semibold">Tổng số phản hồi</span>
-                  <MessageSquare className="w-4 h-4 text-[#0078d4]" />
-                </div>
-                <div className="text-2xl font-bold mt-2">{feedbacks.length}</div>
-                <span className="text-[11px] text-emerald-500 font-medium">100% được tiếp nhận</span>
-              </div>
-              <div className="p-4 rounded-xl bg-white dark:bg-[#23272d] border border-black/10 dark:border-white/10 shadow-xs">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-neutral-500 font-semibold">Đã khắc phục & Phát hành</span>
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                </div>
-                <div className="text-2xl font-bold mt-2">
-                  {feedbacks.filter((f) => f.status === 'resolved').length}
-                </div>
-                <span className="text-[11px] text-neutral-500 font-medium">Bao gồm WebView SDK, Calculator, Snipping Tool</span>
-              </div>
-              <div className="p-4 rounded-xl bg-white dark:bg-[#23272d] border border-black/10 dark:border-white/10 shadow-xs">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-neutral-500 font-semibold">Lượt ủng hộ cộng đồng</span>
-                  <ThumbsUp className="w-4 h-4 text-amber-500" />
-                </div>
-                <div className="text-2xl font-bold mt-2">
-                  {feedbacks.reduce((acc, f) => acc + f.upvotes, 0)}
-                </div>
-                <span className="text-[11px] text-amber-500 font-medium">Tương tác sôi nổi</span>
-              </div>
-            </div>
-
-            {/* Top Trending Feedback Preview */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-[#0078d4]" />
-                  <h3 className="text-sm font-bold uppercase tracking-wider">Phản hồi thịnh hành nhất</h3>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('feedback')}
-                  className="text-xs text-[#0078d4] dark:text-[#4cc2ff] hover:underline font-semibold"
-                >
-                  Xem tất cả ({feedbacks.length}) →
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {feedbacks.slice(0, 4).map((item) => (
-                  <div
-                    key={item.id}
-                    onClick={() => setSelectedFeedback(item)}
-                    className="p-4 rounded-xl bg-white dark:bg-[#23272d] border border-black/10 dark:border-white/10 hover:border-[#0078d4]/40 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between"
-                  >
-                    <div>
-                      <div className="flex items-center justify-between gap-2 mb-2">
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
-                          item.type === 'problem' ? 'bg-rose-500/15 text-rose-500' : 'bg-emerald-500/15 text-emerald-500'
-                        }`}>
-                          {item.type === 'problem' ? 'Sự cố' : 'Đề xuất'}
-                        </span>
-                        <span className="text-[11px] text-neutral-400 font-medium">{item.category}</span>
-                      </div>
-                      <h4 className="text-sm font-bold text-neutral-900 dark:text-white line-clamp-1">{item.title}</h4>
-                      <p className="text-xs text-neutral-500 dark:text-neutral-400 line-clamp-2 mt-1 leading-relaxed">
-                        {item.description}
-                      </p>
-                    </div>
-
-                    <div className="flex items-center justify-between pt-3 mt-3 border-t border-black/5 dark:border-white/5 text-xs text-neutral-400">
-                      <div className="flex items-center gap-2">
-                        <User className="w-3.5 h-3.5" />
-                        <span>{item.author}</span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={(e) => toggleUpvote(item.id, e)}
-                        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold transition-colors ${
-                          item.hasUpvoted
-                            ? 'bg-[#0078d4] text-white'
-                            : 'bg-black/5 dark:bg-white/10 text-neutral-700 dark:text-neutral-200 hover:bg-black/10'
-                        }`}
-                      >
-                        <ThumbsUp className="w-3.5 h-3.5" />
-                        <span>{item.upvotes}</span>
-                      </button>
-                    </div>
+        {/* TAB 1 & 2: SUGGESTION & BUG FORM VIEW */}
+        {(activeTab === 'suggestion' || activeTab === 'bug') && (
+          <>
+            {/* Main Form Block (No background on the main Suggestion block, seamless with gray background) */}
+            <div className="bg-transparent border-0 shadow-none p-0 space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-5">
+                {/* Field 1: Heading * (Search box style, no search icon) */}
+                <div className="space-y-1.5">
+                  <label className="text-xs sm:text-sm font-normal text-neutral-200 flex items-center gap-1">
+                    <span>Heading</span>
+                    <span className="text-[#ff2bbd]">*</span>
+                  </label>
+                  <div className="windows-search-box w-full rounded-none px-3 py-1.5 flex items-center transition-all">
+                    <input
+                      type="text"
+                      required
+                      value={heading}
+                      onChange={(e) => setHeading(e.target.value)}
+                      placeholder={activeTab === 'bug' ? 'Summarize the bug issue' : 'Summarize your feedback'}
+                      className="w-full bg-transparent text-xs sm:text-[13.5px] text-neutral-100 placeholder:text-[#a6a6a6] outline-none border-none py-1 no-fluent-line"
+                    />
                   </div>
-                ))}
-              </div>
+                </div>
+
+                {/* Field 2: Email (Search box style, no search icon) */}
+                <div className="space-y-1.5">
+                  <label className="text-xs sm:text-sm font-normal text-neutral-200">
+                    Email
+                  </label>
+                  <div className="windows-search-box w-full rounded-none px-3 py-1.5 flex items-center transition-all">
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Replies will return to your email"
+                      className="w-full bg-transparent text-xs sm:text-[13.5px] text-neutral-100 placeholder:text-[#a6a6a6] outline-none border-none py-1 no-fluent-line"
+                    />
+                  </div>
+                </div>
+
+                {/* Field 3: Details * (Search box style, no search icon) */}
+                <div className="space-y-1.5">
+                  <label className="text-xs sm:text-sm font-normal text-neutral-200 flex items-center gap-1">
+                    <span>Details</span>
+                    <span className="text-[#ff2bbd]">*</span>
+                  </label>
+                  <div className="windows-search-box w-full rounded-none p-2.5 transition-all">
+                    <textarea
+                      required
+                      rows={5}
+                      value={details}
+                      onChange={(e) => setDetails(e.target.value)}
+                      placeholder={activeTab === 'bug' ? 'Explain the bug and steps to reproduce' : 'Write and explain your feedback in more details'}
+                      className="w-full bg-transparent text-xs sm:text-[13.5px] text-neutral-100 placeholder:text-[#a6a6a6] outline-none border-none resize-y leading-relaxed no-fluent-line"
+                    />
+                  </div>
+                </div>
+
+                {/* Field 4: Attachments (optional) - Buttons styled with sharp corner matching modal dialog "Delete these files" */}
+                <div className="space-y-2">
+                  <label className="text-xs sm:text-sm font-normal text-neutral-200">
+                    Attachments (optional)
+                  </label>
+                  <div className="flex flex-wrap items-center gap-2.5">
+                    <button
+                      type="button"
+                      onClick={() => mediaInputRef.current?.click()}
+                      className="fluent-btn-secondary min-w-[100px] h-[32px] px-4 bg-[#cccccc] dark:bg-[#383838] text-black dark:text-white hover:bg-[#d6d6d6] dark:hover:bg-[#454545] active:bg-[#b8b8b8] dark:active:bg-[#262626] rounded-none text-[13px] font-normal transition-colors cursor-pointer border-0 inline-flex items-center justify-center gap-1.5 shadow-none select-none"
+                    >
+                      <ImageIcon className="w-3.5 h-3.5" />
+                      <span>Attach media</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="fluent-btn-secondary min-w-[100px] h-[32px] px-4 bg-[#cccccc] dark:bg-[#383838] text-black dark:text-white hover:bg-[#d6d6d6] dark:hover:bg-[#454545] active:bg-[#b8b8b8] dark:active:bg-[#262626] rounded-none text-[13px] font-normal transition-colors cursor-pointer border-0 inline-flex items-center justify-center gap-1.5 shadow-none select-none"
+                    >
+                      <Paperclip className="w-3.5 h-3.5" />
+                      <span>Attach files</span>
+                    </button>
+                  </div>
+
+                  {/* Attachments preview list */}
+                  {attachments.length > 0 && (
+                    <div className="flex flex-wrap gap-2 pt-2">
+                      {attachments.map((item, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-center gap-2 px-2.5 py-1.5 rounded-none bg-[#262626] border border-white/20 text-xs text-neutral-200"
+                        >
+                          {item.previewUrl ? (
+                            <img
+                              src={item.previewUrl}
+                              alt={item.name}
+                              className="w-5 h-5 rounded-none object-cover"
+                            />
+                          ) : (
+                            <FileText className="w-3.5 h-3.5 text-neutral-400" />
+                          )}
+                          <span className="max-w-[160px] truncate font-normal">{item.name}</span>
+                          <span className="text-[10px] text-neutral-400">({item.size})</span>
+                          <button
+                            type="button"
+                            onClick={() => removeAttachment(idx)}
+                            className="text-neutral-400 hover:text-rose-400 transition-colors p-0.5 cursor-pointer"
+                            title="Remove file"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Field 5: How do you rate Sparkle? */}
+                <div className="space-y-1.5 pt-1">
+                  <label className="text-xs sm:text-sm font-normal text-neutral-200">
+                    How do you rate Sparkle?
+                  </label>
+                  <div className="flex items-center gap-1.5">
+                    {[1, 2, 3, 4, 5].map((starIdx) => {
+                      const isFilled = (hoverRating !== null ? hoverRating : rating) >= starIdx;
+                      return (
+                        <button
+                          key={starIdx}
+                          type="button"
+                          onMouseEnter={() => setHoverRating(starIdx)}
+                          onMouseLeave={() => setHoverRating(null)}
+                          onClick={() => setRating(starIdx)}
+                          aria-label={`Rate ${starIdx} stars`}
+                          className="p-1 transition-transform hover:scale-110 active:scale-95 cursor-pointer text-neutral-600 focus:outline-none"
+                        >
+                          <Star
+                            className={`w-6 h-6 transition-colors ${
+                              isFilled
+                                ? 'text-amber-400 fill-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.5)]'
+                                : 'text-neutral-600 fill-none'
+                            }`}
+                          />
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Field 6: Checkbox for diagnostics */}
+                <div className="pt-1">
+                  <label className="inline-flex items-center gap-2.5 cursor-pointer select-none group">
+                    <input
+                      type="checkbox"
+                      checked={saveLocalCopy}
+                      onChange={(e) => setSaveLocalCopy(e.target.checked)}
+                      className="sr-only"
+                    />
+                    <div
+                      className={`w-4.5 h-4.5 rounded-none border flex items-center justify-center transition-all ${
+                        saveLocalCopy
+                          ? 'bg-[#ff2bbd] border-[#ff2bbd] text-white shadow-[0_0_8px_rgba(255,43,189,0.4)]'
+                          : 'bg-[rgba(26,26,26,0.5)] border-white/40 text-transparent group-hover:border-white/60'
+                      }`}
+                    >
+                      <Check className="w-3.5 h-3.5 stroke-[3]" />
+                    </div>
+                    <span className="text-xs sm:text-sm text-neutral-300 group-hover:text-white transition-colors font-normal">
+                      Save a local copy of diagnostics and attachments created when submitting feedback
+                    </span>
+                  </label>
+                </div>
+
+                {/* Field 7: Submit Button - Styled like delete button in modal dialog "Delete these files" */}
+                <div className="pt-2">
+                  <button
+                    type="submit"
+                    className="fluent-btn-primary min-w-[130px] h-[32px] px-5 bg-[#cccccc] dark:bg-[#383838] text-black dark:text-white hover:bg-[#d6d6d6] dark:hover:bg-[#454545] active:bg-[#b8b8b8] dark:active:bg-[#262626] rounded-none text-[13px] font-normal transition-colors cursor-pointer border-0 inline-flex items-center justify-center gap-2 select-none shadow-none"
+                  >
+                    <Send className="w-3.5 h-3.5" />
+                    <span>Submit Feedback</span>
+                  </button>
+                </div>
+              </form>
             </div>
-          </div>
-        )}
 
-        {/* TAB 2: BROWSE FEEDBACKS */}
-        {activeTab === 'feedback' && (
-          <div className="space-y-4 animate-fade-in">
-            {/* Search & Filter Bar */}
-            <div className="flex flex-col sm:flex-row items-center gap-3">
-              <div className="relative flex-1 w-full">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Tìm Kiếm Phản Hồi, Sự Cố Hoặc Ý Tưởng..."
-                  className="w-full pl-4 pr-10 py-2 rounded-xl bg-white dark:bg-[#23272d] border border-black/10 dark:border-white/10 text-xs outline-none focus:border-[#0078d4]"
-                />
-                <FluentSearchIcon className="w-4 h-4 absolute right-3 top-2.5 pointer-events-none" />
+            {/* Bottom Section: Recent submissions (N) - Using sharp corner instead of rounded corner */}
+            <div className="space-y-3 pt-3 border-t border-white/10">
+              {/* Header */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-white">
+                  <Clock className="w-4 h-4 text-[#ff2bbd]" />
+                  <h2
+                    className="text-sm sm:text-base font-normal tracking-tight"
+                    style={{ fontWeight: 400 }}
+                  >
+                    Recent submissions ({submissions.length})
+                  </h2>
+                </div>
+                {submissions.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSubmissions([]);
+                      showToast('Đã xóa tất cả các bản ghi phản hồi');
+                    }}
+                    className="text-xs text-neutral-400 hover:text-rose-400 transition-colors cursor-pointer font-normal"
+                  >
+                    Clear all
+                  </button>
+                )}
               </div>
 
-              {/* Category Filter */}
-              <select
-                value={categoryFilter}
-                onChange={(e) => setCategoryFilter(e.target.value)}
-                className="px-3 py-2 rounded-xl bg-white dark:bg-[#23272d] border border-black/10 dark:border-white/10 text-xs font-semibold outline-none cursor-pointer"
-              >
-                <option value="All">Tất cả danh mục</option>
-                <option value="Apps & Tools">Apps & Tools</option>
-                <option value="Live TV & Streaming">Live TV & Streaming</option>
-                <option value="Fluent Design & Mica">Fluent Design & Mica</option>
-                <option value="Performance & Crash">Performance & Crash</option>
-                <option value="Audio & Video">Audio & Video</option>
-              </select>
-
-              {/* Type Filter */}
-              <select
-                value={typeFilter}
-                onChange={(e) => setTypeFilter(e.target.value as any)}
-                className="px-3 py-2 rounded-xl bg-white dark:bg-[#23272d] border border-black/10 dark:border-white/10 text-xs font-semibold outline-none cursor-pointer"
-              >
-                <option value="all">Tất cả loại</option>
-                <option value="problem">Chỉ sự cố</option>
-                <option value="suggestion">Chỉ đề xuất</option>
-              </select>
-
-              {/* Sort By */}
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
-                className="px-3 py-2 rounded-xl bg-white dark:bg-[#23272d] border border-black/10 dark:border-white/10 text-xs font-semibold outline-none cursor-pointer"
-              >
-                <option value="trending">Thịnh hành</option>
-                <option value="upvotes">Nhiều vote nhất</option>
-                <option value="recent">Mới nhất</option>
-              </select>
-            </div>
-
-            {/* Feedback List */}
-            <div className="space-y-3">
-              {filteredFeedbacks.length === 0 ? (
-                <div className="text-center py-16 bg-white dark:bg-[#23272d] rounded-2xl border border-black/10 dark:border-white/10">
-                  <p className="text-sm font-semibold text-neutral-500">Không tìm thấy phản hồi nào phù hợp</p>
+              {/* Submissions Container Card with Sharp Corner */}
+              {submissions.length === 0 ? (
+                <div className="w-full rounded-none bg-[rgba(26,26,26,0.5)] border border-white/20 p-8 text-center text-neutral-400 text-xs sm:text-sm font-normal">
+                  No submissions recorded yet.
                 </div>
               ) : (
-                filteredFeedbacks.map((item) => (
-                  <div
-                    key={item.id}
-                    onClick={() => setSelectedFeedback(item)}
-                    className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#23272d] border border-black/10 dark:border-white/10 hover:border-[#0078d4]/40 hover:shadow-md transition-all cursor-pointer flex items-start justify-between gap-4"
-                  >
-                    <div className="space-y-2 flex-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
-                          item.type === 'problem' ? 'bg-rose-500/15 text-rose-500' : 'bg-emerald-500/15 text-emerald-500'
-                        }`}>
-                          {item.type === 'problem' ? 'Sự cố' : 'Đề xuất'}
-                        </span>
+                <div className="space-y-3">
+                  {submissions.map((sub) => (
+                    <div
+                      key={sub.id}
+                      className="rounded-none bg-[rgba(26,26,26,0.6)] border border-white/20 p-4 sm:p-5 space-y-3 shadow-none hover:border-white/40 transition-all"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="space-y-1">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span
+                              className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-none text-[10px] font-normal uppercase tracking-wider ${
+                                sub.type === 'bug'
+                                  ? 'bg-rose-500/15 text-rose-300 border border-rose-500/30'
+                                  : 'bg-[#ff2bbd]/15 text-[#ff72d0] border border-[#ff2bbd]/30'
+                              }`}
+                            >
+                              {sub.type === 'bug' ? (
+                                <>
+                                  <Bug className="w-3 h-3" />
+                                  <span>Bug Report</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Lightbulb className="w-3 h-3" />
+                                  <span>Suggestion</span>
+                                </>
+                              )}
+                            </span>
 
-                        <span className="text-[11px] px-2 py-0.5 rounded bg-black/5 dark:bg-white/5 font-semibold text-neutral-500">
-                          {item.category}
-                        </span>
+                            <span className="text-[11px] text-neutral-400 font-normal">
+                              {sub.createdAt}
+                            </span>
 
-                        {item.status === 'resolved' && (
-                          <span className="flex items-center gap-1 text-[11px] text-emerald-500 font-bold">
-                            <CheckCircle2 className="w-3.5 h-3.5" />
-                            <span>Đã khắc phục</span>
+                            {sub.saveLocalDiagnostics && (
+                              <span className="text-[10px] px-1.5 py-0.5 rounded-none bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-normal">
+                                Diagnostics saved
+                              </span>
+                            )}
+                          </div>
+
+                          <h3 className="text-sm sm:text-base font-normal text-white">
+                            {sub.heading}
+                          </h3>
+                        </div>
+
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          <button
+                            type="button"
+                            onClick={() => handleToggleUpvote(sub.id)}
+                            className={`fluent-btn-secondary h-[28px] px-2.5 rounded-none text-xs font-normal transition-colors cursor-pointer inline-flex items-center gap-1 ${
+                              sub.hasUpvoted
+                                ? 'bg-[#ff2bbd] text-white'
+                                : 'bg-[#383838] text-white hover:bg-[#454545]'
+                            }`}
+                          >
+                            <ThumbsUp className="w-3 h-3" />
+                            <span>{sub.upvotes}</span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteSubmission(sub.id)}
+                            className="h-[28px] px-2 rounded-none bg-[#383838] text-neutral-300 hover:text-rose-400 hover:bg-rose-500/15 transition-colors cursor-pointer"
+                            title="Delete submission"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+
+                      <p className="text-xs sm:text-sm text-neutral-300 whitespace-pre-wrap leading-relaxed font-normal">
+                        {sub.details}
+                      </p>
+
+                      {/* Rating Stars and metadata */}
+                      <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-white/10 text-xs text-neutral-400 font-normal">
+                        <div className="flex items-center gap-1">
+                          <span className="text-neutral-400 mr-1">Rating:</span>
+                          {[1, 2, 3, 4, 5].map((s) => (
+                            <Star
+                              key={s}
+                              className={`w-3.5 h-3.5 ${
+                                s <= sub.rating
+                                  ? 'text-amber-400 fill-amber-400'
+                                  : 'text-neutral-600'
+                              }`}
+                            />
+                          ))}
+                        </div>
+
+                        {sub.email && (
+                          <span className="truncate max-w-[220px]">
+                            From: <span className="text-neutral-300">{sub.email}</span>
                           </span>
                         )}
-                        {item.status === 'investigating' && (
-                          <span className="flex items-center gap-1 text-[11px] text-amber-500 font-bold">
-                            <Clock className="w-3.5 h-3.5" />
-                            <span>Đang điều tra</span>
+
+                        {sub.attachments && sub.attachments.length > 0 && (
+                          <span className="flex items-center gap-1 text-[#ff72d0]">
+                            <Paperclip className="w-3 h-3" />
+                            <span>{sub.attachments.length} attachment(s)</span>
                           </span>
                         )}
                       </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </>
+        )}
 
-                      <h3 className="text-sm sm:text-base font-bold text-neutral-900 dark:text-white leading-snug">
+        {/* TAB 3: COMMUNITY FEEDBACK VIEW */}
+        {activeTab === 'community' && (
+          <div className="space-y-4 pt-1 animate-fade-in">
+            {/* Filter Bar with windows-search-box style */}
+            <div className="flex flex-col sm:flex-row items-center gap-2.5">
+              <div className="windows-search-box flex-1 w-full rounded-none px-3 py-1.5 flex items-center gap-2 transition-all">
+                <FluentSearchIcon className="w-4 h-4 text-neutral-400 shrink-0 pointer-events-none" />
+                <input
+                  type="text"
+                  value={communitySearch}
+                  onChange={(e) => setCommunitySearch(e.target.value)}
+                  placeholder="Search for feedback"
+                  className="w-full bg-transparent text-xs sm:text-[13px] text-neutral-100 placeholder:text-[#a6a6a6] outline-none border-none py-1 no-fluent-line"
+                />
+                {communitySearch && (
+                  <button
+                    type="button"
+                    onClick={() => setCommunitySearch('')}
+                    className="p-0.5 text-neutral-400 hover:text-white transition-colors cursor-pointer"
+                    title="Clear"
+                    aria-label="Clear search"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+
+              <select
+                value={communityCategory}
+                onChange={(e) => setCommunityCategory(e.target.value)}
+                className="windows-search-box h-[34px] px-3 rounded-none text-xs text-neutral-100 outline-none cursor-pointer bg-[rgba(26,26,26,0.5)] border border-white/40"
+              >
+                <option value="All" className="bg-[#262626] text-white">All Categories</option>
+                <option value="Apps & Tools" className="bg-[#262626] text-white">Apps & Tools</option>
+                <option value="Live TV & Streaming" className="bg-[#262626] text-white">Live TV & Streaming</option>
+                <option value="Fluent Design & Mica" className="bg-[#262626] text-white">Fluent Design & Mica</option>
+                <option value="Performance & Crash" className="bg-[#262626] text-white">Performance & Crash</option>
+                <option value="Audio & Video" className="bg-[#262626] text-white">Audio & Video</option>
+              </select>
+
+              <select
+                value={communityStatus}
+                onChange={(e) => setCommunityStatus(e.target.value)}
+                className="windows-search-box h-[34px] px-3 rounded-none text-xs text-neutral-100 outline-none cursor-pointer bg-[rgba(26,26,26,0.5)] border border-white/40"
+              >
+                <option value="all" className="bg-[#262626] text-white">All Statuses</option>
+                <option value="resolved" className="bg-[#262626] text-white">Resolved</option>
+                <option value="investigating" className="bg-[#262626] text-white">Investigating</option>
+                <option value="received" className="bg-[#262626] text-white">Received</option>
+              </select>
+            </div>
+
+            {/* Total / Filtered Count Summary */}
+            <div className="flex items-center justify-between text-xs text-neutral-400 px-0.5">
+              <span>Showing {filteredCommunity.length} of {communityFeedbacks.length} community feedbacks</span>
+            </div>
+
+            {/* List of Community Items with sharp corners */}
+            {filteredCommunity.length === 0 ? (
+              <div className="w-full rounded-none bg-[rgba(26,26,26,0.5)] border border-white/20 p-8 text-center text-neutral-400 text-xs sm:text-sm font-normal">
+                No matching community feedback found.
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {filteredCommunity.map((item) => (
+                  <div
+                    key={item.id}
+                    className="rounded-none bg-[rgba(26,26,26,0.6)] border border-white/20 p-4 sm:p-5 space-y-3 shadow-none hover:border-white/40 transition-all flex flex-col justify-between"
+                  >
+                    <div className="space-y-2">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex items-center gap-2">
+                          <span
+                            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-none text-[10px] font-normal uppercase tracking-wider ${
+                              item.type === 'problem'
+                                ? 'bg-rose-500/15 text-rose-300 border border-rose-500/30'
+                                : 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+                            }`}
+                          >
+                            {item.type === 'problem' ? 'Sự cố' : 'Đề xuất'}
+                          </span>
+
+                          <span className="text-[11px] text-neutral-400 font-normal">
+                            {item.category}
+                          </span>
+                        </div>
+
+                        <span
+                          className={`text-[11px] px-2 py-0.5 rounded-none font-normal ${
+                            item.status === 'resolved'
+                              ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
+                              : item.status === 'investigating'
+                                ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
+                                : 'bg-blue-500/15 text-blue-300 border border-blue-500/30'
+                          }`}
+                        >
+                          {item.status === 'resolved' ? 'Đã khắc phục' : item.status === 'investigating' ? 'Đang điều tra' : 'Đã tiếp nhận'}
+                        </span>
+                      </div>
+
+                      <h3 className="text-sm sm:text-base font-normal text-white">
                         {item.title}
                       </h3>
 
-                      <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 line-clamp-2 leading-relaxed">
+                      <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed font-normal">
                         {item.description}
                       </p>
 
                       {item.officialResponse && (
-                        <div className="p-2.5 rounded-xl bg-[#0078d4]/10 border border-[#0078d4]/20 text-xs text-[#0078d4] dark:text-[#4cc2ff] flex items-start gap-2 mt-2">
-                          <ShieldCheck className="w-4 h-4 shrink-0 mt-0.5" />
+                        <div className="p-3 bg-white/5 border border-white/10 rounded-none text-xs text-neutral-200 flex items-start gap-2 mt-2">
+                          <ShieldCheck className="w-4 h-4 text-[#ff2bbd] shrink-0 mt-0.5" />
                           <div>
-                            <span className="font-bold">Kỹ sư Microsoft Sparkle Team: </span>
-                            <span>{item.officialResponse}</span>
+                            <span className="font-normal text-[#ff72d0]">Kỹ sư Sparkle (Dev): </span>
+                            <span className="text-neutral-300">{item.officialResponse}</span>
                           </div>
                         </div>
                       )}
+                    </div>
 
-                      <div className="flex items-center gap-4 text-xs text-neutral-400 pt-1">
+                    <div className="flex items-center justify-between pt-3 mt-1 border-t border-white/10 text-xs text-neutral-400 font-normal">
+                      <div className="flex items-center gap-3">
                         <span>Đăng bởi {item.author}</span>
                         <span>•</span>
                         <span>{item.date}</span>
@@ -567,226 +893,27 @@ export const FeedbackHub: React.FC<FeedbackHubProps> = ({ navigate }) => {
                           <span>{item.commentsCount} phản hồi</span>
                         </span>
                       </div>
-                    </div>
 
-                    {/* Upvote Button Column */}
-                    <div className="flex flex-col items-center shrink-0">
                       <button
                         type="button"
-                        onClick={(e) => toggleUpvote(item.id, e)}
-                        className={`flex flex-col items-center justify-center w-14 h-14 rounded-2xl transition-all cursor-pointer ${
+                        onClick={() => handleToggleCommunityUpvote(item.id)}
+                        className={`fluent-btn-secondary h-[28px] px-3 rounded-none text-xs font-normal transition-colors cursor-pointer inline-flex items-center gap-1.5 ${
                           item.hasUpvoted
-                            ? 'bg-[#0078d4] text-white shadow-md scale-105'
-                            : 'bg-black/5 dark:bg-white/10 hover:bg-black/10 text-neutral-700 dark:text-neutral-200'
+                            ? 'bg-[#ff2bbd] text-white'
+                            : 'bg-[#383838] text-white hover:bg-[#454545]'
                         }`}
                       >
-                        <ThumbsUp className="w-5 h-5 mb-0.5" />
-                        <span className="text-xs font-bold font-mono">{item.upvotes}</span>
+                        <ThumbsUp className="w-3.5 h-3.5" />
+                        <span>{item.upvotes}</span>
                       </button>
                     </div>
                   </div>
-                ))
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* TAB 3: SUBMIT NEW FEEDBACK */}
-        {activeTab === 'new' && (
-          <div className="max-w-2xl mx-auto bg-white dark:bg-[#23272d] border border-black/10 dark:border-white/10 rounded-2xl p-6 shadow-xl animate-fade-in space-y-5">
-            <div>
-              <h2 className="text-lg font-bold text-neutral-900 dark:text-white">Gửi phản hồi cho nhóm phát triển</h2>
-              <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                Mô tả chi tiết sự cố hoặc ý tưởng của bạn để chúng tôi có thể tái hiện và hỗ trợ nhanh chóng nhất.
-              </p>
-            </div>
-
-            <form onSubmit={handleSubmitFeedback} className="space-y-4">
-              {/* Type Switcher */}
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setNewType('problem')}
-                  className={`p-3 rounded-xl border flex items-center justify-center gap-2 text-xs font-bold transition-all cursor-pointer ${
-                    newType === 'problem'
-                      ? 'border-rose-500 bg-rose-500/10 text-rose-500 ring-2 ring-rose-500/20'
-                      : 'border-black/10 dark:border-white/10 text-neutral-600 dark:text-neutral-300'
-                  }`}
-                >
-                  <AlertTriangle className="w-4 h-4" />
-                  <span>Báo cáo sự cố (Problem)</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setNewType('suggestion')}
-                  className={`p-3 rounded-xl border flex items-center justify-center gap-2 text-xs font-bold transition-all cursor-pointer ${
-                    newType === 'suggestion'
-                      ? 'border-[#0078d4] bg-[#0078d4]/10 text-[#0078d4] dark:text-[#4cc2ff] ring-2 ring-[#0078d4]/20'
-                      : 'border-black/10 dark:border-white/10 text-neutral-600 dark:text-neutral-300'
-                  }`}
-                >
-                  <Lightbulb className="w-4 h-4" />
-                  <span>Đề xuất tính năng (Suggestion)</span>
-                </button>
+                ))}
               </div>
-
-              {/* Title */}
-              <div className="space-y-1">
-                <label className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                  Tóm tắt phản hồi (Tiêu đề):
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={newTitle}
-                  onChange={(e) => setNewTitle(e.target.value)}
-                  placeholder="Ví dụ: Cần thêm tính năng xem lại EPG 7 ngày trước..."
-                  className="w-full px-4 py-2.5 rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs font-medium outline-none focus:border-[#0078d4]"
-                />
-              </div>
-
-              {/* Category & Severity */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">Danh mục:</label>
-                  <select
-                    value={newCategory}
-                    onChange={(e) => setNewCategory(e.target.value as any)}
-                    className="w-full px-3 py-2.5 rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs font-medium outline-none"
-                  >
-                    <option value="Apps & Tools">Apps & Tools</option>
-                    <option value="Live TV & Streaming">Live TV & Streaming</option>
-                    <option value="Fluent Design & Mica">Fluent Design & Mica</option>
-                    <option value="Performance & Crash">Performance & Crash</option>
-                    <option value="Audio & Video">Audio & Video</option>
-                  </select>
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">Mức độ ảnh hưởng:</label>
-                  <select
-                    value={newSeverity}
-                    onChange={(e) => setNewSeverity(e.target.value as any)}
-                    className="w-full px-3 py-2.5 rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs font-medium outline-none"
-                  >
-                    <option value="low">Thấp (Góp ý nhỏ)</option>
-                    <option value="medium">Trung bình (Bất tiện)</option>
-                    <option value="high">Cao (Lỗi chức năng quan trọng)</option>
-                    <option value="blocker">Nghiêm trọng (Ứng dụng bị sập)</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Description */}
-              <div className="space-y-1">
-                <label className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                  Mô tả chi tiết và các bước tái hiện:
-                </label>
-                <textarea
-                  required
-                  rows={5}
-                  value={newDesc}
-                  onChange={(e) => setNewDesc(e.target.value)}
-                  placeholder="Hãy giải thích cụ thể điều gì đã xảy ra hoặc tính năng này sẽ hoạt động như thế nào..."
-                  className="w-full p-4 rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs outline-none focus:border-[#0078d4] resize-none leading-relaxed"
-                />
-              </div>
-
-              {/* Attach Screenshot via Snipping Tool */}
-              <div className="p-3.5 rounded-xl bg-black/5 dark:bg-white/5 border border-dashed border-black/20 dark:border-white/20 flex items-center justify-between">
-                <div className="flex items-center gap-2 text-xs text-neutral-500">
-                  <Camera className="w-4 h-4 text-[#0078d4]" />
-                  <span>Đính kèm ảnh chụp màn hình minh họa</span>
-                </div>
-                {navigate && (
-                  <button
-                    type="button"
-                    onClick={() => navigate('/snipping-tool')}
-                    className="px-3 py-1.5 rounded-lg bg-[#0078d4]/15 text-[#0078d4] dark:text-[#4cc2ff] text-xs font-semibold hover:bg-[#0078d4]/25 cursor-pointer"
-                  >
-                    Mở Snipping Tool
-                  </button>
-                )}
-              </div>
-
-              {/* Submit Button */}
-              <div className="flex items-center justify-end gap-3 pt-3">
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('feedback')}
-                  className="px-4 py-2.5 rounded-xl hover:bg-black/5 dark:hover:bg-white/10 text-xs font-semibold"
-                >
-                  Hủy
-                </button>
-                <button
-                  type="submit"
-                  className="px-6 py-2.5 rounded-xl bg-[#0078d4] hover:bg-[#006cbd] text-white text-xs font-bold shadow-md flex items-center gap-2 cursor-pointer transition-transform active:scale-95"
-                >
-                  <Send className="w-3.5 h-3.5" />
-                  <span>Gửi phản hồi</span>
-                </button>
-              </div>
-            </form>
+            )}
           </div>
         )}
       </div>
-
-      {/* Detail Modal Dialog */}
-      {selectedFeedback && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
-          <div className="w-full max-w-xl bg-white dark:bg-[#23272d] border border-black/10 dark:border-white/10 rounded-2xl p-6 shadow-2xl animate-fade-in space-y-4">
-            <div className="flex items-start justify-between gap-3 pb-3 border-b border-black/10 dark:border-white/10">
-              <div>
-                <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
-                  selectedFeedback.type === 'problem' ? 'bg-rose-500/15 text-rose-500' : 'bg-emerald-500/15 text-emerald-500'
-                }`}>
-                  {selectedFeedback.type === 'problem' ? 'Sự cố kỹ thuật' : 'Đề xuất cải tiến'}
-                </span>
-                <h3 className="text-base font-bold text-neutral-900 dark:text-white mt-2">
-                  {selectedFeedback.title}
-                </h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setSelectedFeedback(null)}
-                className="p-1.5 rounded-md hover:bg-black/5 dark:hover:bg-white/10 text-neutral-400"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed whitespace-pre-wrap">
-              {selectedFeedback.description}
-            </p>
-
-            {selectedFeedback.officialResponse && (
-              <div className="p-3.5 rounded-xl bg-[#0078d4]/10 border border-[#0078d4]/20 text-xs text-[#0078d4] dark:text-[#4cc2ff]">
-                <div className="font-bold mb-1 flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4" />
-                  <span>Phản hồi chính thức từ Kỹ sư Microsoft Sparkle:</span>
-                </div>
-                <p className="leading-relaxed">{selectedFeedback.officialResponse}</p>
-              </div>
-            )}
-
-            <div className="flex items-center justify-between pt-3 border-t border-black/10 dark:border-white/10 text-xs">
-              <span className="text-neutral-400">Đăng bởi {selectedFeedback.author} • {selectedFeedback.date}</span>
-              <button
-                type="button"
-                onClick={() => toggleUpvote(selectedFeedback.id)}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold transition-colors ${
-                  selectedFeedback.hasUpvoted
-                    ? 'bg-[#0078d4] text-white shadow-md'
-                    : 'bg-black/5 dark:bg-white/10 text-neutral-700 dark:text-neutral-200'
-                }`}
-              >
-                <ThumbsUp className="w-4 h-4" />
-                <span>Ủng hộ ({selectedFeedback.upvotes})</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
